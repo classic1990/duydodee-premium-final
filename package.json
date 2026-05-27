@@ -1,0 +1,39 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "> แพลตฟอร์มบริหารจัดการทรัพยากรกราฟิกฟุตบอลระดับพรีเมียม (Cinematic Sport Edition)",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "jest",
+    "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
+    "lint": "eslint public/js/**/*.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.5",
+    "autoprefixer": "^10.4.20",
+    "babel-jest": "^30.4.1",
+    "cssnano": "^7.0.6",
+    "eslint": "^8.57.0",
+    "eslint-plugin-html": "^8.1.1",
+    "imagemin-cli": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^3.4.14",
+    "vite": "^8.0.14"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.10.0"
+  }
+}

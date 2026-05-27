@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>ระบบจัดการหลังบ้าน | DUYดูDEE</title>
+
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <!-- 📈 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- Mobile Overlay for Sidebar -->
+    <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            <a href="/admin/admin-vip-payments.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">การเงิน / รายได้ VIP</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class3="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-6 md:p-8 relative z-10">
+        
+        <!-- Mobile Sidebar Toggle -->
+        <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <!-- 👑 Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div>
+                <h1 class="text-h1 heading-highlight">แดชบอร์ด <span class="text-brand-primary">สรุปผล</span></h1>
+                <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ภาพรวมสถิติและกิจกรรมสำคัญ</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+                    <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest Thai-font">สมาชิกทั้งหมด:</span>
+                    <span id="user-count" class="text-lg font-black text-white">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 📈 Stat Cards -->
+        <div class="admin-card-stats grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="glass-premium p-6 relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                        <i data-lucide="eye" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                    <span class="text-label">ยอดเข้าชมทั้งหมด</span>
+                </div>
+                <div class="flex items-baseline gap-3">
+                    <span id="stat-views" class="text-4xl font-black text-white tracking-tighter italic leading-none">0</span>
+                    <span class="text-[10px] font-black text-blue-500 uppercase italic Thai-font">ครั้ง</span>
+                </div>
+            </div>
+
+            <div class="glass-premium p-6 relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                        <i data-lucide="film" class="w-5 h-5 text-purple-400"></i>
+                    </div>
+                    <span class="text-label">จำนวนหนังและซีรีส์</span>
+                </div>
+                <div class="flex items-baseline gap-3">
+                    <span id="stat-content" class="text-4xl font-black text-white tracking-tighter italic leading-none">0</span>
+                    <span class="text-[10px] font-black text-purple-500 uppercase italic Thai-font">เรื่อง</span>
+                </div>
+            </div>
+
+            <div class="glass-premium p-6 relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
+                        <i data-lucide="users" class="w-5 h-5 text-brand-primary"></i>
+                    </div>
+                    <span class="text-label">สมาชิกในระบบ</span>
+                </div>
+                <div class="flex items-baseline gap-3">
+                    <span id="stat-users" class="text-4xl font-black text-white tracking-tighter italic leading-none">0</span>
+                    <span class="text-[10px] font-black text-brand-primary uppercase italic Thai-font">คน</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📈 Analytics & Trends Section -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-8">
+            <div class="glass-premium p-6">
+                <h2 class="text-h2 heading-highlight mb-4">สถิติยอดการเข้าชม</h2>
+                <div class="h-[250px] w-full"><canvas id="viewsChart"></canvas></div>
+            </div>
+            <div class="glass-premium p-6">
+                <h2 class="text-h2 heading-highlight mb-4">10 อันดับหนังยอดนิยม</h2>
+                <div class="h-[250px] w-full"><canvas id="topContentChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- 💳 Payment Account Settings Widget -->
+        <div class="glass-premium p-6 mb-8 border-brand-primary/20">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
+                    <i data-lucide="wallet" class="w-5 h-5 text-brand-primary"></i>
+                </div>
+                <div>
+                    <h2 class="text-h3">ข้อมูลบัญชีรับเงิน (ปัจจุบัน)</h2>
+                    <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest Thai-font">อัปเดตข้อมูลการชำระเงิน VIP</p>
+                </div>
+            </div>
+            <form id="dashboard-payment-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div class="space-y-1">
+                    <label class="text-label ml-1">เลขบัญชี/วอลเล็ต</label>
+                    <input type="text" id="dash-wallet-number" class="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-4 text-white text-xs outline-none focus:border-brand-primary transition-all" placeholder="097xxxxxxx">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-label ml-1">ชื่อบัญชี</label>
+                    <input type="text" id="dash-account-name" class="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-4 text-white text-xs outline-none focus:border-brand-primary transition-all" placeholder="ชื่อบัญชี">
+                </div>
+                <button type="submit" class="btn-primary !py-2.5">อัปเดตข้อมูลบัญชี</button>
+            </form>
+        </div>
+
+        <!-- 🏁 Content Synchronization & Management -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between gap-4">
+                <h2 class="text-h2 heading-highlight">ตรวจสอบการชำระเงิน VIP</h2>
+            </div>
+
+            <section class="glass-premium rounded-2xl overflow-hidden border border-white/5">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-white/[0.02] border-b border-white/5 text-[9px] font-black text-gray-500 uppercase tracking-widest Thai-font">
+                            <th class="p-4">ข้อมูลผู้โอน</th>
+                            <th class="p-4 text-center">จำนวนเงิน</th>
+                            <th class="p-4 text-center">สถานะ</th>
+                            <th class="p-4 text-right">ดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vip-payment-list" class="divide-y divide-white/[0.03]">
+                        <!-- Payment data will be injected here -->
+                        <tr>
+                            <td class="p-4 text-xs font-bold text-white">ตัวอย่าง: สมชาย ใจดี</td>
+                            <td class="p-4 text-center text-xs text-brand-primary">199.00</td>
+                            <td class="p-4 text-center"><span class="armor-badge !bg-yellow-500/20 !text-yellow-500">รอตรวจสอบ</span></td>
+                            <td class="p-4 text-right">
+                                <button class="btn-primary !py-2 !px-4">ยืนยัน</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+
+        <section class="space-y-4 mt-12">
+            <div class="flex items-center justify-between gap-4">
+                <h2 class="text-h2 heading-highlight">คลังเนื้อหาล่าสุด</h2>
+                <select id="category-filter" class="w-48 bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-[10px] font-black text-white uppercase tracking-widest outline-none focus:border-brand-primary transition-all">
+                    <option value="ALL">ทุกหมวดหมู่</option>
+                    <option value="ซีรีส์แนวตั้ง">ซีรีส์แนวตั้ง</option>
+                    <option value="ซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</option>
+                </select>
+            </div>
+
+            <div id="admin-asset-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-[300px]">
+                <!-- Data Stream -->
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module" src="/js/admin/admin-manage.js"></script>
+</body>
+</html>

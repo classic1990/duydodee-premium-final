@@ -1,0 +1,49 @@
+@import "./fonts.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#050507] text-gray-300 antialiased overflow-x-hidden;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  h1, h2, h3, h4, .Thai-font {
+    font-family: var(--font-heading);
+  }
+  h1 { @apply text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic; }
+  h2 { @apply text-2xl md:text-4xl font-black text-white uppercase tracking-tight; }
+  h3 { @apply text-lg font-bold text-white uppercase tracking-widest; }
+  
+  .text-label { @apply text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]; }
+  .text-body { @apply text-sm text-gray-400 font-medium; }
+}
+
+@layer components {
+  /* 🧊 Modern Containers & Glass */
+  .layout-container { @apply max-w-7xl mx-auto px-6 py-10; }
+  .glass-premium { 
+    @apply bg-[#0e0e12]/80 backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-2xl;
+  }
+  
+  /* 🎬 Movie Card Modernized */
+  .movie-poster-wrapper {
+    @apply relative w-full aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-lg transition-transform duration-500 hover:scale-[1.03];
+  }
+  .movie-poster-img {
+    @apply absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110;
+  }
+  
+  /* 📱 Device Player Frame */
+  .device-frame { @apply relative mx-auto transition-all duration-500 z-10; width: 280px; aspect-ratio: 9/19; }
+  .device-frame.landscape { width: 100%; max-width: 800px; aspect-ratio: 16/9; }
+  .device-chassis { @apply absolute inset-0 rounded-[40px] border-4 border-neutral-800 bg-black shadow-2xl; }
+  .device-screen { @apply absolute inset-[8px] rounded-[32px] overflow-hidden bg-black z-10; }
+  .device-home-bar { @apply absolute bottom-3 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-white/20 rounded-full z-50; }
+}
+
+/* 🧊 Scrollbar UI */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

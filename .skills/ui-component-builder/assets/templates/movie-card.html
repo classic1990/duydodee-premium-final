@@ -1,0 +1,30 @@
+<!-- DUYDODEE Movie Card Template -->
+<div class="group relative snap-start animate-fade-in">
+    <div class="movie-poster-wrapper group-hover:scale-105 group-hover:border-brand-primary/30 transition-all duration-500">
+        <img src="{{poster_url}}" 
+             class="movie-poster-img transition-transform duration-[3s] group-hover:scale-110" 
+             loading="lazy" 
+             alt="{{title}}"
+             onerror="this.src='/assets/logo/DUYDODEE.png';">
+        
+        <!-- Premium Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80"></div>
+
+        <!-- Hover Play Action -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-brand-black/20 backdrop-blur-[2px]">
+            <div class="w-12 h-12 rounded-full bg-brand-primary/90 flex items-center justify-center text-black scale-75 group-hover:scale-100 transition-transform duration-500">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Section -->
+    <div class="mt-3 space-y-1">
+        <div class="flex items-center gap-2">
+            <span class="text-[10px] font-black text-brand-primary uppercase tracking-[0.2em] Thai-font">{{category}}</span>
+            <span class="w-1 h-1 rounded-full bg-white/20"></span>
+            <span class="text-[10px] text-gray-500 Thai-font">{{year}}</span>
+        </div>
+        <h4 class="text-sm font-bold text-white Thai-font line-clamp-1 group-hover:text-brand-primary transition-colors">{{title}}</h4>
+    </div>
+</div>

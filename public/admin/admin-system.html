@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>ความปลอดภัยระบบ | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- Mobile Overlay for Sidebar -->
+    <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-white">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="mb-8">
+            <h1 class="text-h1 heading-highlight">ความปลอดภัย <span class="text-brand-primary">ระบบ</span></h1>
+            <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">การตั้งค่าความปลอดภัยและดูแลรักษาฐานข้อมูล</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 🛡️ Purge Logic -->
+            <div class="glass-premium p-8 space-y-6 border-red-900/20">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                        <i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-h3">ล้างข้อมูลทั้งหมด (Purge)</h2>
+                        <p class="text-[9px] font-black text-red-500/50 uppercase tracking-widest Thai-font">ไม่สามารถย้อนคืนได้</p>
+                    </div>
+                </div>
+                <button id="purge-btn" class="w-full py-4 rounded-xl bg-red-600 text-white text-xs font-black uppercase tracking-widest hover:bg-red-500 transition-all shadow-xl shadow-red-900/20 Thai-font">
+                    ยืนยันการล้างข้อมูลระบบ
+                </button>
+            </div>
+
+            <!-- 💳 Payment Account Settings -->
+            <div class="glass-premium p-8 space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
+                        <i data-lucide="wallet" class="w-5 h-5 text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-h3">ข้อมูลบัญชีรับเงิน</h2>
+                        <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest Thai-font">จัดการเลขบัญชี/วอลเล็ต</p>
+                    </div>
+                </div>
+                
+                <form id="payment-settings-form" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-label ml-1">เลขบัญชี/วอลเล็ต</label>
+                        <input type="text" id="wallet-number" class="w-full bg-black/40 border border-white/10 rounded-lg py-3 px-4 text-white text-xs outline-none focus:border-brand-primary transition-all" placeholder="097xxxxxxx">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-label ml-1">ชื่อบัญชี</label>
+                        <input type="text" id="account-name" class="w-full bg-black/40 border border-white/10 rounded-lg py-3 px-4 text-white text-xs outline-none focus:border-brand-primary transition-all" placeholder="ชื่อบัญชีรับเงิน">
+                    </div>
+                    <button type="submit" class="btn-primary w-full !mt-6">บันทึกข้อมูลบัญชี</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/admin/admin-system.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://duydodeesport.web.app", "https://duydodeesport.firebaseapp.com"],
+    "method": ["GET"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

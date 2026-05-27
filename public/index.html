@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DUYดูDEE PREMIUM | ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR</title>
+    <meta name="description" content="สัมผัสประสบการณ์การรับชมภาพยนตร์และซีรีส์แนวตั้งคุณภาพสูงระดับ 4K HDR ที่ดีที่สุดบน DUYดูDEE PREMIUM ออกแบบมาเพื่อความหรูหราและรสนิยมที่เหนือระดับ">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duydodeesport.web.app/">
+    <meta property="og:title" content="DUYดูDEE PREMIUM | ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR">
+    <meta property="og:description" content="ก้าวข้ามขีดจำกัดเดิมๆ สู่โลกความบันเทิงระดับมาสเตอร์พีซ คมชัดทุกอณูบนทุกอุปกรณ์">
+    <meta property="og:image" content="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
+
+    <!-- ⚡ PERFORMANCE: Critical Asset Preloading -->
+    <link rel="icon" type="image/png" href="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30">
+
+    <!-- 🧭 Modern Navbar -->
+    <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0" id="main-nav">
+        <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between gap-4">
+            
+            <a href="/" class="flex items-center gap-2 md:gap-3 group flex-shrink-0">
+                <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
+                <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-brand-primary">ดูDEE</span></span>
+            </a>
+
+            <div class="hidden lg:flex items-center gap-8 text-sm font-bold text-gray-300">
+                <a href="/" class="hover:text-brand-primary transition-colors Thai-font">หน้าแรก</a>
+                <a href="/category.html?cat=vertical" class="hover:text-brand-primary transition-colors flex items-center gap-2 Thai-font">
+                    ซีรีส์แนวตั้ง 
+                    <span class="relative px-2 py-0.5 text-[8px] bg-brand-primary text-black rounded-sm uppercase tracking-wider font-black overflow-hidden">
+                        Hot<div class="border-beam"></div>
+                    </span>
+                </a>
+                <a href="/category.html?cat=chinese" class="hover:text-brand-primary transition-colors Thai-font">ซีรีส์จีนพากย์ไทย</a>
+            </div>
+
+            <div class="flex items-center gap-4 md:gap-6 flex-1 justify-end lg:flex-none">
+                <button onclick="UI.renderVIPUpgradeModal()" class="btn-primary !py-2 !px-4 hidden md:flex animate-pulse">สมัคร VIP</button>
+                <div class="hidden md:flex relative items-center w-full max-w-sm group">
+                    <i data-lucide="search" class="absolute left-4 w-4 h-4 text-gray-500 group-focus-within:text-brand-primary transition-colors"></i>
+                    <input type="text" id="global-search" placeholder="ค้นหาเนื้อหา..." class="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl py-2 md:py-2.5 pl-10 md:pl-12 pr-4 text-xs md:text-sm text-white placeholder-gray-500 outline-none focus:bg-white/10 focus:border-brand-primary/50 transition-all shadow-inner">
+                </div>
+                <div id="user-profile-area"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 📱 Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">หน้าแรก</span>
+            </a>
+            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">แนวตั้ง</span>
+            </a>
+            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
+            </a>
+            <div id="user-profile-area-mobile"></div>
+        </div>
+    </nav>
+
+    <!-- 🎭 MASTER BRANDING HERO -->
+    <header id="master-hero" class="relative w-full aspect-video md:aspect-[21/9] lg:h-[45vh] flex items-center overflow-hidden bg-brand-black pt-16 md:pt-0">
+        <div class="absolute inset-0 z-0">
+            <img src="/assets/B1.png" class="w-full h-full object-cover object-center animate-fade-in" alt="DUYODEE-HD MASTER BRANDING">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-transparent to-transparent opacity-60"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10" id="hero-slider-container"></div>
+    </header>
+
+    <!-- 🚀 Main Content -->
+    <main class="layout-container py-10 min-h-screen relative z-10">
+        
+        <!-- 🕒 1. WATCH HISTORY -->
+        <section id="history-section" class="space-y-6 hidden animate-fade-in">
+            <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-6 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981]"></div>
+                    <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">รับชมค้างไว้ <span class="text-emerald-500/50 italic ml-2">Continue</span></h2>
+                </div>
+            </div>
+            <div id="history-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- 🔥 2. TRENDING -->
+        <section id="trending-section" class="space-y-8 hidden animate-fade-in">
+            <div class="flex items-center justify-between border-b border-white/5 pb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-cyan-400"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-tight Thai-font">ยอดนิยมสูงสุด</h2>
+                        <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">Trending Master List</span>
+                    </div>
+                </div>
+            </div>
+            <div id="trending-grid" class="flex gap-8 overflow-x-auto pb-10 scrollbar-hide snap-x snap-mandatory px-2"></div>
+        </section>
+
+        <!-- 🏮 4. CHINESE SERIES -->
+        <section class="space-y-8 hidden animate-fade-in">
+            <div class="flex items-center justify-between border-b border-white/5 pb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-1.5 h-10 bg-accent rounded-full shadow-[0_0_20px_#ef4444]"></div>
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight Thai-font">ซีรีส์จีนพากย์ไทย</h2>
+                        <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">Premium Chinese Selection</span>
+                    </div>
+                </div>
+                <a href="/category.html?cat=chinese" class="btn-secondary Thai-font">ดูทั้งหมด</a>
+            </div>
+            <div id="chinese-series-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6 md:gap-10"></div>
+        </section>
+        
+        <!-- 🎬 5. GLOBAL DISCOVERY -->
+        <section id="vertical-section" class="space-y-12 pt-10 border-t border-white/5">
+            <div class="flex flex-col md:flex-row items-end justify-between gap-6 pb-8">
+                <div class="space-y-4">
+                    <div class="inline-block px-4 py-1.5 bg-white/5 text-gray-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-full border border-white/10">The Grand Library</div>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none Thai-font">ภาพยนตร์และซีรีส์ทั้งหมด</h2>
+                    <p class="text-gray-500 text-xs md:text-lg font-medium Thai-font opacity-80">เพราะการดูหนัง ไม่ใช่แค่การมองเห็น... แต่คือการสัมผัสความหรูหราที่เหนือระดับ</p>
+                </div>
+                
+                <div class="flex items-center bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
+                    <button data-type="all" class="type-filter active px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-brand-primary text-black">ทั้งหมด</button>
+                    <button data-type="movie" class="type-filter px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">หนัง</button>
+                    <button data-type="series" class="type-filter px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">ซีรีส์</button>
+                </div>
+            </div>
+
+            <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-8 md:gap-12 min-h-[600px]"></div>
+            
+            <div id="pagination-container" class="flex items-center justify-center gap-6 pt-12">
+                <button id="prev-page" class="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-10" onclick="changePage(-1)">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <div id="page-numbers" class="text-sm font-black text-white Thai-font min-w-[80px] text-center">หน้า 1</div>
+                <button id="next-page" class="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-10" onclick="changePage(1)">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 bg-brand-black/50 pt-24 pb-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex flex-col items-center gap-8">
+                <div class="flex items-center gap-4">
+                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-12 h-12 rounded-xl">
+                    <span class="text-3xl font-black text-white tracking-tighter uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
+                    <a href="#" class="hover:text-brand-primary transition-all">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-primary transition-all">Terms of Service</a>
+                    <a href="#" class="hover:text-brand-primary transition-all">Contact Us</a>
+                </div>
+                <p class="text-gray-700 text-[9px] font-black uppercase tracking-[0.5em]">© 2026 DUYดูDEE ENTERTAINMENT. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/js/pages/home.js"></script>
+</body>
+</html>
