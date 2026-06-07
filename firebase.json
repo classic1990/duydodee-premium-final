@@ -19,7 +19,9 @@
       "README.md",
       "Ship.bat",
       "deploy.ps1",
-      "docs/**"
+      "docs/**",
+      "serviceAccountKey.json",
+      "*.cjs"
     ],
     "headers": [
       {
@@ -27,7 +29,7 @@
         "headers": [
           {
             "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin-allow-popups"
+            "value": "unsafe-none"
           }
         ]
       },

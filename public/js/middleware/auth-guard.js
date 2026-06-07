@@ -16,11 +16,13 @@ export async function checkAdminAccess() {
             try {
                 const isAdmin = await AuthService.checkIsAdmin(user);
                 if (!isAdmin) {
+                    console.error('Auth Guard: Access Denied. User does not have administrative rights.');
                     window.location.href = '/';
                     return reject('Access Denied: Administrative rights required.');
                 }
                 resolve({ user, role: 'authorized' });
             } catch (err) {
+                console.error('Auth Guard Error:', err);
                 window.location.href = '/';
                 reject(err);
             }

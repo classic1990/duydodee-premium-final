@@ -92,7 +92,7 @@ async function loadTrendingMovies() {
         const { items: trending } = await ContentService.fetchItems('movie', { pageSize: 10, sortBy: 'views', direction: 'desc' });
         if (trending.length === 0) return;
         document.getElementById('trending-section')?.classList.remove('hidden');
-        container.innerHTML = trending.map((item, i) => createTrendingCard(item, i + 1)).join('');
+        container.innerHTML = trending.map((item, i) => UI.createTrendingCard(item, i + 1)).join('');
         UI.refreshIcons();
     } catch (e) { console.error(e); }
 }
@@ -120,10 +120,20 @@ async function loadDiscoveryContent(reset = false) {
 
         const cursor = pageCursors[pageNumber];
 
-        const res = await ContentService.fetchItems(currentType === 'all' ? 'movie' : currentType, { 
-            pageSize: UI_CONFIG.PAGE_SIZE, 
-            lastDoc: cursor 
-        });
+        let res;
+        if (currentType === 'all') {
+            res = await ContentService.fetchItemsByCategory(['movie', 'series'], null, { 
+                pageSize: UI_CONFIG.PAGE_SIZE, 
+                lastDoc: cursor,
+                isAllCategories: true 
+            });
+        } else {
+            res = await ContentService.fetchItems(currentType, { 
+                pageSize: UI_CONFIG.PAGE_SIZE, 
+                lastDoc: cursor 
+            });
+        }
+        
         items = res.items;
         newLastDoc = res.lastDoc;
         empty = res.empty;
@@ -242,39 +252,6 @@ async function initSearchSystem() {
 }
 
 // --- 5. UTILS ---
-function createTrendingCard(movie, rank) {
-    const watchUrl = UI.getMediaWatchPath(movie.category, movie.type, movie.id);
-    return `
-        <div class="min-w-[280px] md:min-w-[450px] snap-start group animate-fade-in cursor-pointer" onclick="location.href='${watchUrl}'">
-            <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-brand-surface shadow-2xl">
-                <img src="${UI.getSafePoster(movie.poster || movie.posterURL)}" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" loading="lazy" alt="${UI.escapeHTML(movie.title)}" onerror="this.src='/assets/logo/DUYDODEE.png';">
-                
-                <!-- 🌑 Deep Cinematic Gradient -->
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent opacity-90"></div>
-                
-                <!-- 🏆 Rank Badge -->
-                <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-brand-primary text-black font-black text-2xl italic flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.5)] z-10 Thai-font">
-                    ${rank}
-                </div>
-
-                <!-- 📝 Content Info (Always Visible) -->
-                <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
-                    <div class="space-y-1 md:space-y-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                        <span class="text-[10px] md:text-xs font-black text-brand-primary uppercase tracking-[0.3em] Thai-font block drop-shadow-md">${movie.category || 'Trending Now'}</span>
-                        <h4 class="text-xl md:text-3xl font-black text-white Thai-font line-clamp-1 drop-shadow-lg">${UI.escapeHTML(movie.title)}</h4>
-                    </div>
-                </div>
-
-                <!-- 🎬 Hover Play Icon -->
-                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20 backdrop-blur-[1px]">
-                    <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500">
-                        <i data-lucide="play" class="w-8 h-8 fill-current"></i>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-}
-
 async function loadUserHistory(userId) {
     const container = document.getElementById('history-grid'), section = document.getElementById('history-section');
     if (!container) return;

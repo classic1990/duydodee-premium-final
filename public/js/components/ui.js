@@ -136,11 +136,68 @@ export const UI = {
                     <img src="${UI.getSafePoster(item.poster || item.posterURL)}" class="movie-poster-img" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
                 </div>
-                <div class="mt-5 px-1">
+                <div class="mt-3 px-1">
                     <h4 class="text-sm md:text-md font-black text-white Thai-font leading-tight line-clamp-2 group-hover:text-brand-primary transition-colors">
                         ${UI.escapeHTML(item.title)}
                     </h4>
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1.5">${item.category || 'VOD'}</p>
+                    <p class="text-[9px] font-bold text-gray-600 uppercase tracking-widest mt-1">${item.category || 'VOD'}</p>
+                </div>
+            </div>`;
+    },
+
+    createTrendingCard: (movie, rank) => {
+        const watchUrl = UI.getMediaWatchPath(movie.category, movie.type, movie.id);
+        return `
+            <div class="min-w-[280px] md:min-w-[450px] snap-start group animate-fade-in cursor-pointer" onclick="location.href='${watchUrl}'">
+                <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-brand-surface shadow-2xl">
+                    <img src="${UI.getSafePoster(movie.poster || movie.posterURL)}" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" loading="lazy" alt="${UI.escapeHTML(movie.title)}" onerror="this.src='/assets/logo/DUYDODEE.png';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent opacity-90"></div>
+                    <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-brand-primary text-black font-black text-2xl italic flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.5)] z-10 Thai-font">
+                        ${rank}
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
+                        <div class="space-y-1 md:space-y-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                            <span class="text-[10px] md:text-xs font-black text-brand-primary uppercase tracking-[0.3em] Thai-font block drop-shadow-md">${movie.category || 'Trending Now'}</span>
+                            <h4 class="text-xl md:text-3xl font-black text-white Thai-font line-clamp-1 drop-shadow-lg">${UI.escapeHTML(movie.title)}</h4>
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20 backdrop-blur-[1px]">
+                        <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500">
+                            <i data-lucide="play" class="w-8 h-8 fill-current"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    },
+
+    createAdminAssetCard: (data) => {
+        const safeTitle = UI.escapeHTML(data.title);
+        const watchUrl = UI.getMediaWatchPath(data.category, data.type, data.id);
+        const editUrl = `/admin/admin-edit-${data.type}.html?id=${data.id}`;
+        const typeLabel = data.type === 'movie' ? 'ภาพยนตร์' : 'ซีรีส์';
+        const safePoster = UI.getSafePoster(data.poster || data.posterURL);
+        
+        return `
+            <div class="movie-card group animate-fade-in">
+                <div class="movie-poster-wrapper !rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl relative aspect-[2/3] max-w-[180px] mx-auto">
+                    <img src="${safePoster}" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';" class="movie-poster-img w-full h-full object-cover" loading="lazy">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-brand-black/90 backdrop-blur-md rounded-lg text-[7px] font-black text-brand-primary border border-white/10 uppercase tracking-widest z-40">
+                        ${typeLabel}
+                    </div>
+                    <div class="movie-card-overlay flex flex-row justify-center items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/70 backdrop-blur-[3px]">
+                         <button onclick="window.open('${watchUrl}', '_blank')" class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 text-black haptic-btn" title="ดูตัวอย่างเนื้อหา">
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                         </button>
+                         <button onclick="location.href='${editUrl}'" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl hover:bg-white hover:text-black transition-all duration-300 haptic-btn" title="แก้ไขข้อมูล">
+                            <i data-lucide="edit-3" class="w-5 h-5"></i>
+                         </button>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-1.5 text-center max-w-[180px] mx-auto">
+                    <h4 class="text-[11px] font-black text-white group-hover:text-brand-primary transition-colors line-clamp-1 Thai-font uppercase tracking-tighter">${safeTitle}</h4>
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="text-[8px] font-black text-gray-600 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded border border-white/5">${data.category || 'พรีเมียม'}</span>
+                    </div>
                 </div>
             </div>`;
     },
@@ -155,7 +212,7 @@ export const UI = {
             <div class="min-w-[280px] md:min-w-[360px] group cursor-pointer animate-fade-in snap-start" onclick="location.href='${watchUrl}'">
                 <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:border-brand-primary/30">
                     <!-- Image with subtle zoom -->
-                    <img src="${poster}" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-[3s]">
+                    <img src="${poster}" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-[3s]" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
                     
                     <!-- Premium Overlays -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
@@ -227,6 +284,37 @@ export const UI = {
         const desc = data.description || 'รับชมภาพยนตร์และซีรีส์คุณภาพระดับ 4K HDR บน DUYดูDEE';
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) metaDesc.setAttribute('content', desc);
+    },
+
+    showErrorPage: (message = 'ขออภัย ไม่พบหน้าที่คุณต้องการ') => {
+        const container = document.getElementById('watch-container') || document.querySelector('main');
+        if (!container) return;
+        
+        UI.injectStarfield();
+        container.innerHTML = `
+            <div class="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 animate-fade-in">
+                <div class="relative mb-12">
+                    <div class="absolute inset-0 bg-brand-primary/20 blur-[100px] rounded-full"></div>
+                    <div class="w-32 h-32 rounded-[2.5rem] bg-brand-obsidian border border-white/10 flex items-center justify-center relative z-10">
+                        <i data-lucide="ghost" class="w-16 h-16 text-brand-primary"></i>
+                    </div>
+                </div>
+                <h1 class="text-3xl md:text-5xl font-black text-white uppercase italic tracking-tighter Thai-font mb-4">
+                    CONTENT <span class="text-brand-primary text-glow">NOT FOUND</span>
+                </h1>
+                <p class="text-gray-400 Thai-font text-lg max-w-md mx-auto mb-10 leading-relaxed">
+                    ${UI.escapeHTML(message)}
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/index.html" class="btn-primary px-10 py-4 text-xs font-black uppercase tracking-widest">
+                        กลับสู่หน้าหลัก
+                    </a>
+                    <button onclick="location.reload()" class="px-10 py-4 bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">
+                        ลองใหม่อีกครั้ง
+                    </button>
+                </div>
+            </div>`;
+        UI.refreshIcons();
     },
 
     renderRelatedGrid: (container, items, type) => {

@@ -1,4 +1,4 @@
-import { db, collection, getDocs, query, orderBy, limit, SCHEMA, getCountFromServer, getAggregateFromServer, sum, getMediaWatchPath, where } from '/js/services/firebase.js';
+import { db, collection, getDocs, query, orderBy, limit, SCHEMA, getCountFromServer, getAggregateFromServer, sum, where } from '/js/services/firebase.js';
 import { checkAdminAccess } from '/js/middleware/auth-guard.js';
 import { UI } from '/js/components/ui.js';
 
@@ -222,11 +222,22 @@ async function fetchRecentAssets(filterCat = 'ALL') {
 
         const [mSnap, sSnap] = await Promise.all([getDocs(mQuery), getDocs(sQuery)]);
 
+        const getMillis = (ts) => {
+            if (!ts) return 0;
+            if (typeof ts.toMillis === 'function') return ts.toMillis();
+            if (typeof ts.toDate === 'function') return ts.toDate().getTime();
+            if (ts instanceof Date) return ts.getTime();
+            if (typeof ts === 'number') return ts;
+            if (ts.seconds) return ts.seconds * 1000 + Math.floor((ts.nanoseconds || 0) / 1000000);
+            const parsed = Date.parse(ts);
+            return isNaN(parsed) ? 0 : parsed;
+        };
+
         let all = [
             ...mSnap.docs.map(d => ({ id: d.id, ...d.data(), type: 'movie' })),
             ...sSnap.docs.map(d => ({ id: d.id, ...d.data(), type: 'series' }))
         ]
-        .sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0))
+        .sort((a, b) => getMillis(b.createdAt) - getMillis(a.createdAt))
         .slice(0, 12);
 
         if (all.length === 0) {
@@ -234,37 +245,7 @@ async function fetchRecentAssets(filterCat = 'ALL') {
             return;
         }
 
-        container.innerHTML = all.map(data => {
-            const safeTitle = UI.escapeHTML(data.title);
-            const watchUrl = getMediaWatchPath(data.category, data.type, data.id);
-            const editUrl = `/admin/admin-edit-${data.type}.html?id=${data.id}`;
-            const typeLabel = data.type === 'movie' ? 'ภาพยนตร์' : 'ซีรีส์';
-            const safePoster = UI.getSafePoster(data.poster || data.posterURL);
-            
-            return `
-                <div class="movie-card group animate-fade-in">
-                    <div class="movie-poster-wrapper !rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl relative aspect-[2/3] max-w-[180px] mx-auto">
-                        <img src="${safePoster}" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';" class="movie-poster-img w-full h-full object-cover" loading="lazy">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 bg-brand-black/90 backdrop-blur-md rounded-lg text-[7px] font-black text-brand-primary border border-white/10 uppercase tracking-widest z-40">
-                            ${typeLabel}
-                        </div>
-                        <div class="movie-card-overlay flex flex-row justify-center items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/70 backdrop-blur-[3px]">
-                             <button onclick="window.open('${watchUrl}', '_blank')" class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 text-black haptic-btn" title="ดูตัวอย่างเนื้อหา">
-                                <i data-lucide="external-link" class="w-5 h-5"></i>
-                             </button>
-                             <button onclick="location.href='${editUrl}'" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl hover:bg-white hover:text-black transition-all duration-300 haptic-btn" title="แก้ไขข้อมูล">
-                                <i data-lucide="edit-3" class="w-5 h-5"></i>
-                             </button>
-                        </div>
-                    </div>
-                    <div class="mt-4 space-y-1.5 text-center max-w-[180px] mx-auto">
-                        <h4 class="text-[11px] font-black text-white group-hover:text-brand-primary transition-colors line-clamp-1 Thai-font uppercase tracking-tighter">${safeTitle}</h4>
-                        <div class="flex items-center justify-center gap-2">
-                            <span class="text-[8px] font-black text-gray-600 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded border border-white/5">${data.category || 'พรีเมียม'}</span>
-                        </div>
-                    </div>
-                </div>`;
-        }).join('');
+        container.innerHTML = all.map(data => UI.createAdminAssetCard(data)).join('');
         
         UI.refreshIcons();
     } catch (err) {

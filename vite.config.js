@@ -1,37 +1,41 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   root: 'public',
   server: {
-    open: '/index.html'
+    open: '/index.html',
+    headers: {
+      'Cross-Origin-Opener-Policy': 'unsafe-none'
+    }
   },
   build: {
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: './index.html',
-        category: './category.html',
-        login: './login.html',
-        register: './register.html',
-        profile: './profile.html',
-        'edit-profile': './edit-profile.html',
-        'watch-movie': './watch-movie.html',
-        'watch-series': './watch-series.html',
-        'forgot-password': './forgot-password.html',
-        'vip-upgrade': './vip-upgrade.html',
-        '404': './404.html',
-        'admin-manage': './admin/admin-manage.html',
-        'admin-add-movie': './admin/admin-add-movie.html',
-        'admin-add-series': './admin/admin-add-series.html',
-        'admin-edit-movie': './admin/admin-edit-movie.html',
-        'admin-edit-series': './admin/admin-edit-series.html',
-        'admin-hero-slider': './admin/admin-hero-slider.html',
-        'admin-manage-movies': './admin/admin-manage-movies.html',
-        'admin-manage-series': './admin/admin-manage-series.html',
-        'admin-system': './admin/admin-system.html',
-        'admin-users': './admin/admin-users.html',
-        'admin-vip-payments': './admin/admin-vip-payments.html'
+        main: resolve('public/index.html'),
+        category: resolve('public/category.html'),
+        login: resolve('public/login.html'),
+        register: resolve('public/register.html'),
+        profile: resolve('public/profile.html'),
+        'edit-profile': resolve('public/edit-profile.html'),
+        'watch-movie': resolve('public/watch-movie.html'),
+        'watch-series': resolve('public/watch-series.html'),
+        'forgot-password': resolve('public/forgot-password.html'),
+        'vip-upgrade': resolve('public/vip-upgrade.html'),
+        '404': resolve('public/404.html'),
+        'admin-manage': resolve('public/admin/admin-manage.html'),
+        'admin-add-movie': resolve('public/admin/admin-add-movie.html'),
+        'admin-add-series': resolve('public/admin/admin-add-series.html'),
+        'admin-edit-movie': resolve('public/admin/admin-edit-movie.html'),
+        'admin-edit-series': resolve('public/admin/admin-edit-series.html'),
+        'admin-hero-slider': resolve('public/admin/admin-hero-slider.html'),
+        'admin-manage-movies': resolve('public/admin/admin-manage-movies.html'),
+        'admin-manage-series': resolve('public/admin/admin-manage-series.html'),
+        'admin-system': resolve('public/admin/admin-system.html'),
+        'admin-users': resolve('public/admin/admin-users.html'),
+        'admin-vip-payments': resolve('public/admin/admin-vip-payments.html')
       }
     }
   }

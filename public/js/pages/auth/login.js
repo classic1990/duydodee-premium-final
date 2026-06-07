@@ -17,24 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function handleEmailLogin(e) {
     e.preventDefault();
-    const btn = document.getElementById('login-btn');
     const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('password').value;
 
     if (!email || !pass) return UI.showToast('กรุณากรอกอีเมลและรหัสผ่าน', 'error');
 
-    UI.setLoading(btn, true);
+    UI.setLoading(true);
 
     try {
         const user = await AuthService.loginWithEmail(email, pass);
-        await postLogin(user, btn);
+        await postLogin(user);
     } catch (error) {
         console.error('Email Login Error:', error);
         let msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
         if (error.code === 'auth/user-not-found') msg = 'ไม่พบผู้ใช้งานนี้';
         if (error.code === 'auth/wrong-password') msg = 'รหัสผ่านไม่ถูกต้อง';
         UI.showToast(msg, 'error');
-        UI.setLoading(btn, false);
+        UI.setLoading(false);
     }
 }
 
@@ -47,7 +46,7 @@ async function handleGoogleLogin() {
 
     try {
         const user = await AuthService.loginWithGoogle();
-        await postLogin(user, btn);
+        await postLogin(user);
     } catch (error) {
         console.error('🚨 Login Error:', error);
         if (error.code !== 'auth/popup-closed-by-user') {
@@ -58,13 +57,13 @@ async function handleGoogleLogin() {
     }
 }
 
-async function postLogin(user, btn) {
+async function postLogin(user) {
     // Check if user is Banned
     const isBanned = await AuthService.isUserBanned(user.uid);
     if (isBanned) {
         await AuthService.logout();
         UI.showToast('บัญชีของคุณถูกระงับการใช้งาน โปรดติดต่อเจ้าหน้าที่', 'error');
-        if (btn) UI.setLoading(btn, false);
+        UI.setLoading(false);
         return;
     }
 

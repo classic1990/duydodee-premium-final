@@ -29,10 +29,8 @@ export const AuthService = {
         try {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
             if (!snap.exists()) return false;
-            const role = (snap.data().role || '').toUpperCase();
-            const masterRole = (SCHEMA.ROLES.MASTER || 'master').toUpperCase();
-            const adminRole = (SCHEMA.ROLES.ADMIN || 'admin').toUpperCase();
-            return role === masterRole || role === adminRole;
+            const role = (snap.data().role || '').toLowerCase();
+            return role === SCHEMA.ROLES.MASTER.toLowerCase() || role === SCHEMA.ROLES.ADMIN.toLowerCase();
         } catch (e) { 
             console.error('Admin check failed:', e);
             return false; 

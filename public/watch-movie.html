@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>รับชมภาพยนตร์ | DUYดูDEE PREMIUM</title>
     <meta name="description" content="รับชมภาพยนตร์คุณภาพระดับ 4K HDR บน DUYดูDEE แพลตฟอร์มสตรีมมิ่งที่ให้ประสบการณ์การรับชมที่เหนือระดับ">
 
@@ -13,29 +13,21 @@
     <meta property="og:description" content="สัมผัสประสบการณ์การรับชมภาพยนตร์คุณภาพสูง">
     <meta property="og:image" content="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.youtube.com">
+    <!-- ⚡ PERFORMANCE: Critical Asset Preloading -->
+    <link rel="apple-touch-icon" href="/assets/logo/DUYDODEE.png">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
-    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png?v=2">
     
     <!-- 🎨 Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
 </head>
-<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30 overflow-x-hidden">
-
-    <!-- 🌈 Mesh Background -->
-    <div class="mesh-gradient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
     <!-- 🧭 Modern Navbar -->
     <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0" id="main-nav">
         <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between gap-4">
-            
             <a href="/" class="flex items-center gap-2 md:gap-3 group flex-shrink-0">
                 <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
                 <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-brand-primary">ดูDEE</span></span>
@@ -62,7 +54,7 @@
         </div>
     </nav>
 
-    <!-- 📱 Mobile Nav -->
+    <!-- 📱 Mobile Bottom Navigation -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
         <div class="flex items-center justify-around px-2 py-2">
             <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
@@ -81,34 +73,52 @@
         </div>
     </nav>
 
-    <main class="layout-container py-10 min-h-screen relative z-10">
+    <!-- 🌌 Cinematic Background -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1574267432553-4b4628081c31?q=80&w=2066&auto=format&fit=crop')] bg-cover bg-center opacity-10 grayscale-[0.5]"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-black via-brand-black/90 to-transparent"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.05),transparent_70%)]"></div>
+    </div>
+
+    <main class="relative z-10 flex-grow layout-container py-6 md:py-10">
         <div id="watch-container">
-            <!-- 📱 Precise iPhone Skeleton -->
-            <div class="max-w-7xl mx-auto py-24">
-                <div class="flex flex-col lg:flex-row items-center justify-center gap-24">
-                    <div class="skeleton-iphone hidden lg:block"></div>
-                    <div class="flex-1 space-y-12">
-                        <div class="w-48 h-10 bg-white/5 rounded-xl animate-pulse"></div>
+            <!-- Loading State / Skeleton -->
+            <div class="max-w-7xl mx-auto py-12 md:py-20">
+                <div class="flex flex-col lg:flex-row items-center justify-center gap-12 md:gap-20 animate-pulse">
+                    <div class="w-[280px] h-[580px] bg-white/5 rounded-[3rem] border border-white/10 hidden lg:block"></div>
+                    <div class="flex-1 w-full space-y-8">
+                        <div class="w-32 h-8 bg-white/5 rounded-lg"></div>
                         <div class="space-y-4">
-                            <div class="w-full h-20 bg-white/5 rounded-2xl animate-pulse"></div>
-                            <div class="w-3/4 h-20 bg-white/5 rounded-2xl animate-pulse"></div>
+                            <div class="w-full h-16 bg-white/5 rounded-xl"></div>
+                            <div class="w-2/3 h-16 bg-white/5 rounded-xl"></div>
                         </div>
-                        <div class="w-full h-40 bg-white/5 rounded-[2.5rem] animate-pulse"></div>
+                        <div class="w-full h-64 bg-white/5 rounded-[2.5rem]"></div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 🏆 Footer -->
-    <footer class="border-t border-white/5 bg-brand-black/50 py-16 text-center">
-        <div class="flex items-center justify-center gap-4 mb-6">
-            <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE" class="w-8 h-8 rounded-lg opacity-40 grayscale">
-            <span class="text-xl font-black text-gray-700 tracking-tighter uppercase">DUY<span class="text-gray-800">ดูDEE</span></span>
+    <footer class="border-t border-white/5 bg-brand-black/50 pt-12 pb-8 mt-auto relative z-10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex flex-col items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-10 h-10 rounded-xl">
+                    <span class="text-2xl font-black text-white tracking-tighter uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-gray-600">
+                    <a href="#" class="hover:text-brand-primary transition-all">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-primary transition-all">Terms of Service</a>
+                    <a href="#" class="hover:text-brand-primary transition-all">Contact Us</a>
+                </div>
+                <p class="text-gray-800 text-[8px] font-black uppercase tracking-[0.4em]">© 2026 DUYดูDEE ENTERTAINMENT. ALL RIGHTS RESERVED.</p>
+            </div>
         </div>
-        <p class="text-[9px] font-black text-gray-700 uppercase tracking-[0.5em]">© 2026 DUYดูDEE ENTERTAINMENT. ALL RIGHTS RESERVED.</p>
     </footer>
 
-    <script type="module" src="/js/pages/movie/watch.js?v=57.0"></script>
+    <script type="module" src="/js/pages/movie/watch.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

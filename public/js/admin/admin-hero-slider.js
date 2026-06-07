@@ -7,7 +7,7 @@ import { checkAdminAccess } from '/js/middleware/auth-guard.js';
  * Unified Logic for High-Impact Hero Slider Management
  */
 
-let modal, form, container;
+let modal, form, container, slidesCache = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -48,6 +48,7 @@ async function loadHeroSlides() {
         const q = query(collection(db, SCHEMA.COLLECTIONS.HERO), orderBy('order', 'asc'));
         const snap = await getDocs(q);
         const slides = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        slidesCache = slides;
         renderSlides(slides);
     } catch (err) {
         console.error(err);
@@ -75,7 +76,7 @@ function renderSlides(slides) {
                 </div>
             </div>
             <div class="p-4 flex gap-2">
-                <button onclick='window.editHero("${slide.id}", ${JSON.stringify(JSON.stringify(slide))})' class="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs font-bold hover:bg-brand-primary hover:text-black transition-all Thai-font">แก้ไข</button>
+                <button onclick="window.editHero('${slide.id}')" class="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs font-bold hover:bg-brand-primary hover:text-black transition-all Thai-font">แก้ไข</button>
                 <button onclick="window.deleteHero('${slide.id}')" class="px-3 py-2.5 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
         </div>
@@ -83,8 +84,9 @@ function renderSlides(slides) {
     UI.refreshIcons();
 }
 
-window.editHero = (id, dataStr) => {
-    const data = JSON.parse(dataStr);
+window.editHero = (id) => {
+    const data = slidesCache.find(s => s.id === id);
+    if (!data) return;
     document.getElementById('hero-id').value = id;
     document.getElementById('hero-title').value = data.title;
     document.getElementById('hero-desc').value = data.description;

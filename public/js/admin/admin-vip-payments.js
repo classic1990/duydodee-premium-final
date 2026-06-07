@@ -1,48 +1,30 @@
-import { db, auth } from '../services/firebase.js';
-import { AuthService } from '../services/auth-service.js';
-import { SCHEMA } from '../constants.js';
-import { collection, query, orderBy, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { UI } from '../components/ui.js';
-
-const paymentList = document.getElementById('payment-history-list');
-let currentPayments = [];
+import { db, collection, query, orderBy, getDocs, doc, updateDoc, getDoc, SCHEMA } from '/js/services/firebase.js';
+import { UI } from '/js/components/ui.js';
+import { checkAdminAccess } from '/js/middleware/auth-guard.js';
 
 /**
- * 🛰️ VIP PAYMENT MANAGEMENT (ADMIN)
+ * 🛰️ DUYดูDEE VIP PAYMENT MANAGEMENT ENGINE
  */
 
-const renderTable = (payments) => {
-    if (!paymentList) return;
-    if (payments.length === 0) {
-        paymentList.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-xs text-gray-500">ไม่พบรายการชำระเงิน</td></tr>';
-        return;
+let currentPayments = [];
+
+async function init() {
+    try {
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
+        UI.initAdminSidebar();
+        
+        await fetchPayments();
+    } catch (err) {
+        console.error('VIP Management Init Failed:', err);
     }
+}
 
-    paymentList.innerHTML = payments.map(data => {
-        const statusClass = data.status === 'confirmed' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500';
-        return `
-            <tr class="hover:bg-white/[0.02] transition-colors">
-                <td class="p-4">
-                    <div class="text-xs font-bold text-white">${data.senderName || 'ไม่ระบุชื่อ'}</div>
-                    <div class="text-[9px] text-gray-500">${data.userId || 'Guest'}</div>
-                </td>
-                <td class="p-4 text-center text-xs text-gray-300">Wallet</td>
-                <td class="p-4 text-center text-xs font-bold text-brand-primary">${data.amount || 0}</td>
-                <td class="p-4 text-center">
-                    <span class="armor-badge !border-none ${statusClass}">${data.status || 'pending'}</span>
-                </td>
-                <td class="p-4 text-right">
-                    ${data.status !== 'confirmed' ? `
-                        <button onclick="verifyPayment('${data.id}', '${data.userId}')" class="btn-primary !py-1 !px-3">ยืนยัน VIP</button>
-                    ` : '<span class="text-[10px] text-gray-600">ได้รับสิทธิ์แล้ว</span>'}
-                </td>
-            </tr>
-        `;
-    }).join('');
-    UI.refreshIcons();
-};
+async function fetchPayments() {
+    const paymentList = document.getElementById('payment-history-list');
+    if (!paymentList) return;
 
-const fetchPayments = async () => {
+    UI.setLoading(true);
     try {
         const q = query(collection(db, 'vip_payments'), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
@@ -50,23 +32,102 @@ const fetchPayments = async () => {
         renderTable(currentPayments);
     } catch (e) {
         console.error('Error fetching payments:', e);
+        UI.showToast('ไม่สามารถโหลดข้อมูลการชำระเงินได้', 'error');
+    } finally {
+        UI.setLoading(false);
     }
-};
+}
+
+function renderTable(payments) {
+    const paymentList = document.getElementById('payment-history-list');
+    if (!paymentList) return;
+
+    if (payments.length === 0) {
+        paymentList.innerHTML = '<tr><td colspan="6" class="p-20 text-center text-xs text-gray-500 Thai-font opacity-40">ไม่พบรายการชำระเงินในระบบ</td></tr>';
+        return;
+    }
+
+    paymentList.innerHTML = payments.map(data => {
+        const isConfirmed = data.status === 'confirmed';
+        const statusClass = isConfirmed ? 'text-green-500 bg-green-500/10 border-green-500/20' : 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
+        
+        return `
+            <tr class="group hover:bg-white/[0.02] transition-all border-b border-white/5">
+                <td class="p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                            <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-white Thai-font">${UI.escapeHTML(data.senderName || 'ไม่ระบุชื่อ')}</span>
+                            <span class="text-[9px] text-gray-600 font-medium">${data.userId || 'Guest'}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-6 text-center">
+                    <span class="px-3 py-1 rounded-lg text-[10px] font-bold text-gray-300 bg-white/5 border border-white/10 Thai-font">Wallet</span>
+                </td>
+                <td class="p-6 text-center text-sm font-black text-brand-primary">
+                    ฿${(data.amount || 0).toLocaleString()}
+                </td>
+                <td class="p-6 text-center">
+                    <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${statusClass} Thai-font">
+                        ${isConfirmed ? 'ยืนยันแล้ว' : 'รอการตรวจสอบ'}
+                    </span>
+                </td>
+                <td class="p-6 text-center text-[10px] font-bold text-gray-500 Thai-font">
+                    ${UI.formatDate(data.createdAt)}
+                </td>
+                <td class="p-6 text-right">
+                    ${!isConfirmed ? `
+                        <button onclick="window.verifyPayment('${data.id}', '${data.userId}')" class="px-4 py-2 bg-brand-primary text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20 Thai-font">
+                            อนุมัติ VIP
+                        </button>
+                    ` : `
+                        <div class="flex items-center justify-end gap-2 text-gray-600">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">เสร็จสมบูรณ์</span>
+                        </div>
+                    `}
+                </td>
+            </tr>
+        `;
+    }).join('');
+    UI.refreshIcons();
+}
 
 window.verifyPayment = async (id, userId) => {
-    const isAdmin = await AuthService.checkIsAdmin(auth.currentUser);
-    if (!isAdmin) return UI.showToast('คุณไม่มีสิทธิ์ดำเนินการนี้', 'error');
+    if (!confirm('ยืนยันการปรับสถานะสมาชิกรายนี้เป็น VIP?')) return;
 
+    UI.setLoading(true);
     try {
+        // 1. อัปเดตสถานะการชำระเงิน
         await updateDoc(doc(db, 'vip_payments', id), { status: 'confirmed' });
+        
+        // 2. อัปเดต Role ของผู้ใช้ (เฉพาะถ้าไม่ใช่ Admin/Master อยู่แล้ว)
         if (userId && userId !== 'guest') {
-            await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, userId), { role: 'vip' });
+            const userRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId);
+            const userSnap = await getDoc(userRef);
+            const currentRole = userSnap.exists() ? (userSnap.data().role || '').toLowerCase() : '';
+
+            // ป้องกันการทับสิทธิ์แอดมิน: ถ้าเป็น admin หรือ super-admin อยู่แล้ว ไม่ต้องเปลี่ยน role เป็น vip
+            if (currentRole === SCHEMA.ROLES.MASTER.toLowerCase() || currentRole === SCHEMA.ROLES.ADMIN.toLowerCase() || currentRole === 'master') {
+                UI.showToast('ยืนยันรายการแล้ว (รักษาสิทธิ์แอดมินเดิม)', 'success');
+            } else {
+                await updateDoc(userRef, { role: 'vip' });
+                UI.showToast('อัปเดตสถานะสมาชิกเป็น VIP เรียบร้อยแล้ว', 'success');
+            }
+        } else {
+            UI.showToast('ยืนยันรายการชำระเงินเรียบร้อยแล้ว', 'success');
         }
-        UI.showToast('ยืนยันสถานะ VIP เรียบร้อยแล้ว');
-        fetchPayments();
+        
+        await fetchPayments();
     } catch (e) {
-        UI.showToast('เกิดข้อผิดพลาดในการยืนยัน', 'error');
+        console.error('Verify Payment Error:', e);
+        UI.showToast('เกิดข้อผิดพลาดในการดำเนินการ', 'error');
+    } finally {
+        UI.setLoading(false);
     }
 };
 
-document.addEventListener('DOMContentLoaded', fetchPayments);
+document.addEventListener('DOMContentLoaded', init);
