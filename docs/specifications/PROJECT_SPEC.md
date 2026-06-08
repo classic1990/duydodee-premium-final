@@ -1,6 +1,6 @@
 # 📑 Project Specification: DUYดูDEE (Movie & Series Streaming Platform)
 
-**Version:** 3.0.0 (Entertainment Edition)
+**Version:** V41.3-PREMIUM (Master Edition)
 
 **Tech Stack:** HTML5, Tailwind CSS, Vanilla JavaScript (ES6 Modules), Firebase v10+, YouTube Iframe API
 
@@ -21,9 +21,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA",
   authDomain: "duydodeesport.firebaseapp.com",
   projectId: "duydodeesport",
-  storageBucket: "duydodeesport.firebasestorage.app",
-  messagingSenderId: "435929814225",
-  appId: "1:435929814225:web:81e149cfb597513040e1f0",
+  storageBucket: "duydodeesport.appspot.com",
+  messagingSenderId: "30514101130",
+  appId: "1:30514101130:web:1ec44f2b09367468132e49",
   measurementId: "G-7EC2RQZH22"
 };
 ```
@@ -55,9 +55,21 @@ const firebaseConfig = {
 
 ไฟล์: `firestore.rules`
 
-- **Master Admin:** UID `fpjTWGXIFCYZNWIubqhUGuSFvZk1` มีสิทธิ์สูงสุด
-- **Public Read:** อนุญาตให้ทุกคนอ่านข้อมูล `movies` และ `series` ได้
-- **Admin Write:** เฉพาะ Master หรือ Admin เท่านั้นที่เขียนข้อมูลได้
+### 🛡️ 2.1 นโยบายการเข้าถึงข้อมูล (Access Control Policy)
+
+| Collection | Read Access | Write Access | เงื่อนไขเพิ่มเติม |
+| :--- | :--- | :--- | :--- |
+| `movies` / `series` | Public (ทุกคน) | Admin / Master | แอดมินจัดการเนื้อหาได้ทั้งหมด |
+| `users` | Signed In | Owner (เจ้าของ) | สมาชิกแก้ไขโปรไฟล์ตัวเองได้เท่านั้น |
+| `users/{id}/history`| Owner | Owner | บันทึกประวัติการดูส่วนตัว |
+| `users/{id}/bookmarks`| Owner | Owner | รายการโปรดส่วนตัว |
+| `daily_stats` | Admin | Signed In | User ทั่วไปส่งยอดวิวได้ แต่แอดมินดูสรุปได้ |
+| `activity_logs` | Admin / Master | Admin / Master | บันทึกหลักฐานการทำงานของแอดมิน |
+| `vip_payments` | Admin / Master | Signed In (Create) | User แจ้งโอนได้ แอดมินตรวจสอบสิทธิ์ |
+
+### 🔑 2.2 สิทธิ์พิเศษ (Privileged Accounts)
+- **Master Admin:** อีเมล `duyclassic191@gmail.com` มีสิทธิ์เข้าถึงทุกส่วนผ่าน Cloud Logic
+- **Super Admin:** สมาชิกที่ได้รับการตั้งค่า `role: "master"` ใน Firestore
 
 ---
 

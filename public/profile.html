@@ -103,19 +103,46 @@
                         <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
                             <a href="/edit-profile.html" class="btn-primary !py-2 !px-5 text-[10px] Thai-font">แก้ไขโปรไฟล์</a>
                             <button onclick="UI.renderVIPUpgradeModal()" class="px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:border-brand-primary/50 transition-all Thai-font">อัปเกรด VIP</button>
+                            <button onclick="UI.renderTicketModal()" class="px-5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-all Thai-font">แจ้งปัญหา</button>
                             <button id="logout-btn" class="px-5 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-all Thai-font">ออกจากระบบ</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- ❤️ My List (Bookmarks) -->
+            <section id="bookmarks-section" class="space-y-6 hidden">
+                <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1 h-6 bg-brand-primary rounded-full shadow-[0_0_15px_#fbbf24]"></div>
+                        <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">รายการโปรดของฉัน</h2>
+                    </div>
+                </div>
+                <div id="bookmarks-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"></div>
+            </section>
+
+            <!-- 🎫 My Tickets -->
+            <section id="tickets-section" class="space-y-6 hidden">
+                <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1 h-6 bg-cyan-500 rounded-full shadow-[0_0_15px_#22d3ee]"></div>
+                        <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">การแจ้งปัญหาของฉัน</h2>
+                    </div>
+                </div>
+                <div id="user-tickets-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"></div>
+            </section>
+
             <!-- 🕒 Watch History -->
             <section class="space-y-6">
                 <div class="flex items-center justify-between border-b border-white/5 pb-4">
                     <div class="flex items-center gap-3">
                         <div class="w-1 h-6 bg-brand-primary rounded-full shadow-[0_0_15px_#fbbf24]"></div>
-                        <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">ประวัติการรับชม</h2>
+                        <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">ประวัติการรับชม <span class="text-gray-600 text-xs italic ml-2">History</span></h2>
                     </div>
+                    <button id="clear-history-btn" class="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all Thai-font">
+                        <i data-lucide="trash-2" class="w-3 h-3"></i>
+                        ล้างประวัติ
+                    </button>
                 </div>
                 <div id="history-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                     <!-- History items will be injected here -->
@@ -141,7 +168,7 @@
         </div>
     </footer>
 
-    <script type="module" src="/js/pages/auth/profile.js"></script>
+    <script type="module" src="/src/pages/auth/profile.js"></script>
     <script>
         lucide.createIcons();
     </script>

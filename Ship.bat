@@ -2,7 +2,7 @@
 SETLOCAL EnableDelayedExpansion
 
 :: ================================================================
-:: 🛰️ DUYดูDEE - MASTER SHIP PROTOCOL [MASTER EDITION]
+:: 🛰️ DUYดูDEE - MASTER SHIP PROTOCOL [V41.3 PREMIUM]
 :: ================================================================
 set "PROJECT_ID=duydodeesport"
 set "LIVE_URL=https://duydodeesport.web.app"
@@ -24,17 +24,20 @@ cls
 echo.
 powershell -Command "Write-Host ' 🚀 DUYดูDEE MASTER SHIP PROTOCOL ' -ForegroundColor White -BackgroundColor DarkCyan"
 powershell -Command "Write-Host ' ================================================================' -ForegroundColor Cyan"
-%P_INFO% "Project:  %PROJECT_ID%" -ForegroundColor White
-%P_INFO% "Version:  %VERSION%" -ForegroundColor White
-%P_INFO% "Target:   %LIVE_URL%" -ForegroundColor White
+echo   Project: %PROJECT_ID% ^| Version: %VERSION%
 powershell -Command "Write-Host ' ================================================================' -ForegroundColor Cyan"
 echo.
 
 :: 1. ENVIRONMENT VALIDATION
 %P_TASK% "Step 1/8: Validating System Integrity..." -ForegroundColor Cyan
 if not exist "package.json" (%P_ERR% "Critical Error: package.json missing" -ForegroundColor Red & goto :FAILED)
-where /q firebase || (%P_ERR% "Critical Error: Firebase CLI missing" -ForegroundColor Red & goto :FAILED)
-where /q npm || (%P_ERR% "Critical Error: NPM missing" -ForegroundColor Red & goto :FAILED)
+where firebase >nul 2>nul || (%P_ERR% "Critical Error: Firebase CLI missing" -ForegroundColor Red & goto :FAILED)
+where npm >nul 2>nul || (%P_ERR% "Critical Error: NPM missing" -ForegroundColor Red & goto :FAILED)
+
+:: Ensure we are on main branch
+for /f "tokens=*" %%i in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%i
+if not "%BRANCH%"=="main" (%P_ERR% "Error: Must be on 'main' branch to ship (Current: %BRANCH%)" -ForegroundColor Red & goto :FAILED)
+
 %P_OK% "Environment Healthy."
 
 :: 2. DEPENDENCY SYNC
@@ -50,7 +53,12 @@ call npm run lint || (%P_ERR% "Linting Failed. Quality standards not met." -Fore
 :: 4. SECURITY AUDIT
 %P_TASK% "Step 4/8: Performing Security Vulnerability Audit..." -ForegroundColor Cyan
 if exist ".skills\security-auditor\scripts\scan_secrets.py" (
-    python .skills\security-auditor\scripts\scan_secrets.py || (%P_ERR% "Security concerns identified during scan." -ForegroundColor Yellow)
+    powershell -Command "if (Get-Command python -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }"
+    if %errorlevel% equ 0 (
+        python .skills\security-auditor\scripts\scan_secrets.py || (%P_ERR% "Security concerns identified during scan." -ForegroundColor Yellow)
+    ) else (
+        %P_INFO% "Python environment not detected. Skipping Secret Scan..." -ForegroundColor Yellow
+    )
 ) else (
     %P_INFO% "Security script not found. Proceeding with caution..." -ForegroundColor Yellow
 )

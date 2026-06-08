@@ -1,67 +1,25 @@
----
-name: karpathy-guidelines
-description: Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.
-license: MIT
----
+# 🤖 DUYดูDEE AI Development Guidelines
 
-# Karpathy Guidelines
+คู่มือสำหรับ AI ในการช่วยเขียนโค้ดและปรับปรุงระบบให้คงมาตรฐาน "Master Edition"
 
-Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.
+## 1. Architectural Patterns
+- **Firebase Bridge:** ห้าม Import Firebase SDK ลงในหน้า Page โดยตรง ให้ใช้ผ่าน `src/services/firebase.js` เท่านั้น เพื่อรักษา Compatibility
+- **Service Layer:** Logic เกี่ยวกับข้อมูลให้เก็บไว้ใน `content-service.js` หรือ `auth-service.js`
+- **UI Consistency:** ใช้ Object `UI` จาก `src/components/ui.js` ในการแสดงผล Toast, Loading และการสร้าง Card
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## 2. UI/UX Standards (Cinematic Edition)
+- **Color Palette:** พื้นหลัง `#050507`, สีหลัก `#fbbf24`.
+- **Effects:** เน้นการใช้ `backdrop-blur`, `animate-pulse`, และ `glass-premium`.
+- **Icons:** ใช้ Lucide Icons (`data-lucide`) และต้องเรียก `UI.refreshIcons()` ทุกครั้งหลัง Render HTML แบบ Dynamic.
+- **Responsiveness:** ต้องรองรับ Mobile (Portrait) สำหรับซีรีส์แนวตั้งเสมอ.
 
-## 1. Think Before Coding
+## 3. Data Integrity
+- **View Counts:** ทุกการเพิ่มยอดวิวต้องบันทึกลงทั้ง Document ของหนัง และ `daily_stats`.
+- **Security:** ตรวจสอบสิทธิ์ `isAdmin` ในหน้า Admin เสมอ และใช้ Firestore Rules ที่กำหนดไว้.
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+## 4. Deployment
+- ทุกครั้งก่อนแนะนำให้ Deploy ต้องเตือนผู้ใช้ให้รัน `Ship.bat` เพื่อตรวจสอบความปลอดภัยและ Linting.
 
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
-
-## 2. Simplicity First
-
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-## 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+## 5. File Naming & Conventions
+- ใช้ `kebab-case` สำหรับชื่อไฟล์ (เช่น `admin-stats.js`).
+- ห้ามใช้ Inline Script ในไฟล์ HTML ให้ใช้ `type="module"` และดึงจากไฟล์แยกเสมอ.

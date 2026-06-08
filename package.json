@@ -6,11 +6,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run build:css && vite",
     "build": "vite build",
     "test": "jest",
     "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
-    "lint": "eslint public/js/**/*.js"
+    "lint": "eslint public/src/**/*.js"
   },
   "keywords": [],
   "author": "",
