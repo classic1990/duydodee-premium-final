@@ -1,5 +1,5 @@
 // 💠 Firebase Configuration - DUYDOODEE Master Edition
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -11,7 +11,7 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   sendEmailVerification,
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
   getFirestore,
   collection,
@@ -37,27 +37,27 @@ import {
   getAggregateFromServer,
   sum,
   onSnapshot,
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import {
   getStorage,
   ref,
   getDownloadURL,
   uploadBytes,
   deleteObject,
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 import {
   getFunctions,
   httpsCallable,
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA",
-  authDomain: "duydodeesport.firebaseapp.com",
-  projectId: "duydodeesport",
-  storageBucket: "duydodeesport.appspot.com",
-  messagingSenderId: "30514101130",
-  appId: "1:30514101130:web:1ec44f2b09367468132e49",
-  measurementId: "G-7EC2RQZH22",
+  apiKey: 'AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA',
+  authDomain: 'duydodeesport.firebaseapp.com',
+  projectId: 'duydodeesport',
+  storageBucket: 'duydodeesport.appspot.com',
+  messagingSenderId: '30514101130',
+  appId: '1:30514101130:web:1ec44f2b09367468132e49',
+  measurementId: 'G-7EC2RQZH22',
 };
 
 const app = initializeApp(firebaseConfig);
