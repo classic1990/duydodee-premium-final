@@ -6,6 +6,7 @@ import {
   query,
   collection,
   where,
+  orderBy,
   checkIsAdmin,
   onAuthStateChanged,
 } from '../services/firebase.js';
