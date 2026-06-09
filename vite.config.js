@@ -13,6 +13,9 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'unsafe-none'
     }
   },
+  define: {
+    'import.meta.env.VITE_ADMIN_EMAIL': JSON.stringify('duyclassic191@gmail.com')
+  },
   css: {
     postcss: './postcss.config.cjs',
     devSourcemap: true, // ช่วยในการ Debug CSS ใน Developer Tools
