@@ -1,15 +1,76 @@
-import { db, collection, addDoc, serverTimestamp, SCHEMA, logActivity } from './services/firebase.js';
-import { ContentService } from './services/content-service.js';
-import { UI } from './components/ui.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
+import { db, collection, addDoc, serverTimestamp, SCHEMA, logActivity } from '../services/firebase.js';
+import { ContentService } from '../services/content-service.js';
+import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE REGISTRATION ENGINE
  * Unified Logic for High-Impact Content Onboarding
+ * @module admin-add-movie
  */
 
 // Module-scoped variables
 let videoUrlInput, titleInput, descInput, posterPreview, selectedPosterUrlInput, thumbnailOptionsContainer, noPreview, previewTitle;
+
+/**
+ * Validates YouTube URL format
+ * @param {string} url - URL to validate
+ * @returns {boolean} True if valid YouTube URL
+ */
+function isValidYouTubeUrl(url) {
+    if (!url || typeof url !== 'string') return false;
+    const patterns = [
+        /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]+/,
+        /^(https?:\/\/)?(www\.)?youtu\.be\/[\w-]+/,
+        /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/[\w-]+/
+    ];
+    return patterns.some(pattern => pattern.test(url.trim()));
+}
+
+/**
+ * Sanitizes user input to prevent XSS
+ * @param {string} input - Raw input string
+ * @returns {string} Sanitized string
+ */
+function sanitizeInput(input) {
+    if (!input || typeof input !== 'string') return '';
+    return input
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .trim();
+}
+
+/**
+ * Validates form data before submission
+ * @param {Object} formData - Form data object
+ * @returns {Object} Validation result with isValid and errors
+ */
+function validateFormData(formData) {
+    const errors = [];
+
+    if (!formData.videoUrl || !isValidYouTubeUrl(formData.videoUrl)) {
+        errors.push('กรุณาระบุลิงก์ YouTube ที่ถูกต้อง');
+    }
+
+    if (!formData.title || formData.title.length < 2) {
+        errors.push('กรุณาระบุชื่อเรื่องอย่างน้อย 2 ตัวอักษร');
+    }
+
+    if (formData.title.length > 200) {
+        errors.push('ชื่อเรื่องต้องไม่เกิน 200 ตัวอักษร');
+    }
+
+    if (formData.description && formData.description.length > 1000) {
+        errors.push('คำอธิบายต้องไม่เกิน 1000 ตัวอักษร');
+    }
+
+    return {
+        isValid: errors.length === 0,
+        errors
+    };
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -36,7 +97,7 @@ function initForm() {
     if (!form || !videoUrlInput) return;
 
     videoUrlInput.addEventListener('input', (e) => handleLinkProcess(e.target.value.trim()));
-    
+
     titleInput?.addEventListener('input', (e) => {
         const value = e.target.value.trim();
         if (value.startsWith('http') || value.includes('youtube.com') || value.includes('youtu.be')) {
@@ -94,33 +155,61 @@ const handleLinkProcess = UI.debounce(async (url) => {
     } catch (err) { if (previewTitle) previewTitle.innerText = 'ไม่พบชื่อเรื่องอัตโนมัติ'; }
 }, 800);
 
+/**
+ * Renders thumbnail selection options
+ * @param {Array} thumbnails - Array of thumbnail objects with url and label
+ * @param {string} currentSelectedUrl - Currently selected thumbnail URL
+ */
 function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
     if (!thumbnailOptionsContainer) return;
     thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
-        <div onclick="window.UI.selectPoster('${thumb.url}', this)" class="relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
+        <div data-url="${thumb.url}" class="thumbnail-option relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
             <img src="${thumb.url}" class="w-full h-full object-cover">
             <span class="absolute bottom-1 right-1 px-1 py-0.5 bg-black/70 text-white text-[8px] rounded-md Thai-font">${thumb.label}</span>
         </div>`).join('');
+
+    // Add event listeners using event delegation
+    thumbnailOptionsContainer.querySelectorAll('.thumbnail-option').forEach(el => {
+        el.addEventListener('click', () => selectPoster(el.dataset.url, el));
+    });
 }
 
-window.UI.selectPoster = (url, el) => {
+/**
+ * Selects a poster thumbnail
+ * @param {string} url - Thumbnail URL to select
+ * @param {HTMLElement} el - Clicked element
+ */
+function selectPoster(url, el) {
     if (posterPreview) posterPreview.src = url;
     if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
-};
+}
 
+/**
+ * Handles movie addition form submission
+ * @param {Event} e - Form submit event
+ * @returns {Promise<void>}
+ */
 async function handleAddMovie(e) {
     e.preventDefault();
     UI.setLoading(true);
 
     const formData = {
-        videoUrl: videoUrlInput?.value.trim() || '',
-        title: titleInput?.value.trim() || 'Untitled',
+        videoUrl: sanitizeInput(videoUrlInput?.value || ''),
+        title: sanitizeInput(titleInput?.value || ''),
         category: document.getElementById('category').value,
-        badge: document.getElementById('badge')?.value.trim() || 'HD',
-        description: descInput?.value.trim() || ''
+        badge: sanitizeInput(document.getElementById('badge')?.value || 'HD'),
+        description: sanitizeInput(descInput?.value || '')
     };
+
+    // Validate form data
+    const validation = validateFormData(formData);
+    if (!validation.isValid) {
+        UI.showToast(validation.errors.join(', '), 'error');
+        UI.setLoading(false);
+        return;
+    }
 
     if (await isDuplicateContent(formData.videoUrl)) {
         UI.showToast('ขออภัย ลิงก์นี้มีอยู่ในระบบแล้ว', 'error');
@@ -143,7 +232,7 @@ async function handleAddMovie(e) {
             views: 0,
             createdAt: serverTimestamp()
         });
-        
+
         await logActivity('ADD_MOVIE', `เพิ่มหนังเรื่อง: ${formData.title}`);
         UI.showToast('บันทึกและเผยแพร่ข้อมูลสำเร็จ', 'success');
         setTimeout(() => window.location.href = './admin-manage-movies.html', 1500);

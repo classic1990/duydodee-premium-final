@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
+/**
+ * Vite Configuration for DUYดูDEE
+ * Implements code splitting for admin and user bundles
+ */
 export default defineConfig({
   root: 'public',
   server: {
@@ -28,22 +32,40 @@ export default defineConfig({
         'watch-movie': resolve('public/watch-movie.html'),
         'watch-series': resolve('public/watch-series.html'),
         'forgot-password': resolve('public/forgot-password.html'),
-        'vip-upgrade': resolve('public/vip-upgrade.html'),
         '404': resolve('public/404.html'),
-        'admin-manage': resolve('public/src/pages/admin/admin-manage.html'),
-        'admin-add-movie': resolve('public/src/pages/admin/admin-add-movie.html'),
-        'admin-add-series': resolve('public/src/pages/admin/admin-add-series.html'),
-        'admin-edit-movie': resolve('public/src/pages/admin/admin-edit-movie.html'),
-        'admin-edit-series': resolve('public/src/pages/admin/admin-edit-series.html'),
-        'admin-hero-slider': resolve('public/src/pages/admin/admin-hero-slider.html'),
-        'admin-manage-movies': resolve('public/src/pages/admin/admin-manage-movies.html'),
-        'admin-manage-series': resolve('public/src/pages/admin/admin-manage-series.html'),
-        'admin-system': resolve('public/src/pages/admin/admin-system.html'),
-        'admin-users': resolve('public/src/pages/admin/admin-users.html'),
-        'admin-vip-payments': resolve('public/src/pages/admin/admin-vip-payments.html'),
-        'admin-activity-logs': resolve('public/src/pages/admin/admin-activity-logs.html'),
-        'admin-stats': resolve('public/src/pages/admin/admin-stats.html')
+        'admin-manage': resolve('public/admin/admin-manage.html'),
+        'admin-add-movie': resolve('public/admin/admin-add-movie.html'),
+        'admin-add-series': resolve('public/admin/admin-add-series.html'),
+        'admin-edit-movie': resolve('public/admin/admin-edit-movie.html'),
+        'admin-edit-series': resolve('public/admin/admin-edit-series.html'),
+        'admin-hero-slider': resolve('public/admin/admin-hero-slider.html'),
+        'admin-manage-movies': resolve('public/admin/admin-manage-movies.html'),
+        'admin-manage-series': resolve('public/admin/admin-manage-series.html'),
+        'admin-system': resolve('public/admin/admin-system.html'),
+        'admin-users': resolve('public/admin/admin-users.html'),
+        'admin-vip-payments': resolve('public/admin/admin-vip-payments.html'),
+        'admin-activity-logs': resolve('public/admin/admin-activity-logs.html'),
+        'admin-stats': resolve('public/admin/admin-stats.html'),
+        'admin-tickets': resolve('public/admin/admin-tickets.html'),
+        'admin-user-vip': resolve('public/admin/admin-user-vip.html')
+      },
+      output: {
+        manualChunks(id) {
+          // Firebase SDK chunk
+          if (id.includes('firebase')) {
+            return 'firebase-vendor';
+          }
+          // UI components chunk
+          if (id.includes('/src/components/ui.js')) {
+            return 'ui-components';
+          }
+          // Services chunk
+          if (id.includes('/src/services/')) {
+            return 'services';
+          }
+        }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000
   }
 });

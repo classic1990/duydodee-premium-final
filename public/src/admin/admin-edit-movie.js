@@ -1,7 +1,7 @@
-import { db, doc, getDoc, updateDoc, deleteDoc, SCHEMA, collection, query, where, getDocs, limit } from './services/firebase.js';
-import { ContentService } from './services/content-service.js';
-import { UI } from './components/ui.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
+import { db, doc, getDoc, updateDoc, deleteDoc, SCHEMA, collection, query, where, getDocs, limit } from '../services/firebase.js';
+import { ContentService } from '../services/content-service.js';
+import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE EDIT ENGINE
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
         UI.initAdminSidebar();
-        
+
         const params = new URLSearchParams(window.location.search);
         movieId = params.get('id');
 
@@ -58,10 +58,10 @@ async function initForm() {
                 posterPreview.src = data.poster || '';
                 if (data.poster) posterPreview.classList.remove('opacity-0');
             }
-            if (selectedPosterUrlInput) selectedPosterUrlInput.value = data.poster || ''; 
-            
+            if (selectedPosterUrlInput) selectedPosterUrlInput.value = data.poster || '';
+
             videoUrlInput?.addEventListener('input', UI.debounce((e) => handleSmartFetch(e.target.value.trim()), 600));
-            handleSmartFetch(data.videoUrl); 
+            handleSmartFetch(data.videoUrl);
         } else {
             UI.showToast('ไม่พบข้อมูลภาพยนตร์', 'error');
             window.location.href = './admin-manage-movies.html';
@@ -76,7 +76,7 @@ async function initForm() {
     document.getElementById('delete-btn')?.addEventListener('click', handleDeleteMovie);
 }
 
-async function handleSmartFetch(url) { 
+async function handleSmartFetch(url) {
     const videoId = UI.extractYouTubeId(url);
     if (!videoId) return;
 
@@ -90,11 +90,11 @@ async function handleSmartFetch(url) {
         posterPreview.src = thumbnailSizes[0].url;
         posterPreview.classList.remove('opacity-0');
     }
-    
+
     if (selectedPosterUrlInput && !selectedPosterUrlInput.value) {
         selectedPosterUrlInput.value = thumbnailSizes[0].url;
     }
-    
+
     renderThumbnailOptions(thumbnailSizes, selectedPosterUrlInput?.value || thumbnailSizes[0].url);
 
     const result = await ContentService.checkDuplicateLink(url);
@@ -106,21 +106,36 @@ async function handleSmartFetch(url) {
     }
 }
 
-function renderThumbnailOptions(thumbnails, currentSelectedUrl) { 
+/**
+ * Renders thumbnail selection options
+ * @param {Array} thumbnails - Array of thumbnail objects with url and label
+ * @param {string} currentSelectedUrl - Currently selected thumbnail URL
+ */
+function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
     if (!thumbnailOptionsContainer) return;
     thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
-        <div onclick="window.UI.selectPoster('${thumb.url}', this)" class="relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
+        <div data-url="${thumb.url}" class="thumbnail-option relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
             <img src="${thumb.url}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
             <span class="absolute bottom-1 right-1 px-1 py-0.5 bg-black/70 text-white text-[8px] rounded-md">${thumb.label}</span>
         </div>`).join('');
+
+    // Add event listeners using event delegation
+    thumbnailOptionsContainer.querySelectorAll('.thumbnail-option').forEach(el => {
+        el.addEventListener('click', () => selectPoster(el.dataset.url, el));
+    });
 }
 
-window.UI.selectPoster = (url, el) => {
+/**
+ * Selects a poster thumbnail
+ * @param {string} url - Thumbnail URL to select
+ * @param {HTMLElement} el - Clicked element
+ */
+function selectPoster(url, el) {
     if (posterPreview) posterPreview.src = url;
     if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
-};
+}
 
 async function handleUpdateMovie(e) {
     e.preventDefault();

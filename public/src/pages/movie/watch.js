@@ -1,6 +1,6 @@
-import { ContentService } from './services/content-service.js';
-import { AuthService } from './services/auth-service.js';
-import { UI } from './components/ui.js';
+import { ContentService } from '../../services/content-service.js';
+import { AuthService } from '../../services/auth-service.js';
+import { UI } from '../../components/ui.js';
 
 let isRendering = false;
 
@@ -32,17 +32,49 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (container) container.innerHTML = '';
 
             // 1. Render Player
-            UI.renderiPhonePlayer(movie, [], 0, false);
+            const player = await UI.renderiPhonePlayer(movie, [], 0, false);
+            
+            // Setup periodic progress saving (every 15s)
+            if (player) {
+                AuthService.onStateChanged(user => {
+                    if (user) {
+                        setInterval(async () => {
+                            if (typeof player.getCurrentTime === 'function' && typeof player.getDuration === 'function') {
+                                const currentTime = player.getCurrentTime();
+                                const duration = player.getDuration();
+                                const progress = duration > 0 ? Math.round((currentTime / duration) * 100) : 0;
+                                AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' }, progress);
+                            }
+                        }, 15000);
+                    }
+                });
+            }
 
             // 2. Increment View Count
             ContentService.incrementViewCount('movie', movieId);
 
-            // 3. Save History
+            // 3. Save History (initial entry)
             AuthService.onStateChanged(user => {
-                if (user) AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' });
+                if (user) AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' }, 0);
             });
 
-            // 4. Load Related
+            // 4. Bookmark Button Handler
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            const bookmarkIcon = document.getElementById('bookmark-icon');
+            if (bookmarkBtn) {
+                bookmarkBtn.onclick = async () => {
+                    const status = await ContentService.toggleWatchlist(movieId, movie, 'movie');
+                    if (status.status === 'added') {
+                        UI.showToast('เพิ่มลงในรายการรับชมแล้ว', 'success');
+                        bookmarkIcon.classList.add('fill-brand-primary', 'text-brand-primary');
+                    } else if (status.status === 'removed') {
+                        UI.showToast('ลบออกจากรายการรับชมแล้ว', 'info');
+                        bookmarkIcon.classList.remove('fill-brand-primary', 'text-brand-primary');
+                    }
+                };
+            }
+
+            // 5. Load Related
             loadRelated(movie.category, movieId);
         } else {
             // Fallback to series check

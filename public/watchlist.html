@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>รายการโปรดของฉัน | DUYดูDEE PREMIUM</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30 min-h-screen flex flex-col overflow-x-hidden">
+
+    <!-- 🧭 Navbar (Simplified) -->
+    <nav class="nav-glass h-16 z-[500] sticky top-0" id="main-nav">
+        <div class="container mx-auto px-4 h-full flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2">
+                <img src="/assets/logo/DUYDODEE.png" alt="Logo" class="w-8 h-8 rounded-lg">
+                <span class="text-xl font-black text-white uppercase tracking-tighter">DUYดูDEE</span>
+            </a>
+            <div id="user-profile-area"></div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 flex-grow p-section">
+        <header class="mb-10 animate-slide-up">
+            <h1 class="text-h1">รายการของฉัน</h1>
+            <p class="text-body">ภาพยนตร์และซีรีส์ที่คุณบันทึกไว้</p>
+        </header>
+
+        <div id="watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 md:gap-6 min-h-[400px]">
+            <!-- Watchlist items will be injected here -->
+        </div>
+
+        <div id="empty-state" class="hidden py-32 text-center opacity-40">
+            <i data-lucide="heart" class="w-16 h-16 mx-auto mb-4 text-gray-600"></i>
+            <p class="Thai-font font-black text-lg uppercase tracking-widest text-gray-500">ยังไม่มีรายการที่บันทึกไว้</p>
+        </div>
+    </main>
+
+    <script type="module" src="/src/pages/watchlist.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

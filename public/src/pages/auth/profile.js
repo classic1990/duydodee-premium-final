@@ -98,7 +98,7 @@ async function loadBookmarks(user) {
   try {
     const q = query(
       collection(db, SCHEMA.COLLECTIONS.USERS, user.uid, 'bookmarks'),
-      orderBy('bookmarkedAt', 'desc'),
+      orderBy('addedAt', 'desc'),
     );
     const snap = await getDocs(q);
 

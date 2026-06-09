@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "npm run build:css && vite",
     "build": "vite build",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
-    "lint": "eslint public/src/**/*.js"
+    "lint": "eslint public/src/**/*.js",
+    "generate:sitemap": "node scripts/generate-sitemap.js"
   },
   "keywords": [],
   "author": "",

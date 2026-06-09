@@ -1,6 +1,6 @@
-import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from './services/firebase.js';
-import { UI } from './components/ui.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
+import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE MANAGEMENT ENGINE
@@ -9,9 +9,9 @@ import { checkAdminAccess } from './middleware/auth-guard.js';
 
 const PAGE_SIZE = 10;
 let currentPage = 1;
-let cursors = [null]; 
+let cursors = [null];
 let totalMovies = 0;
-let allMoviesCache = []; 
+let allMoviesCache = [];
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function initManageMovies() {
     UI.setLoading(true);
-    
+
     await updateMovieCount();
     loadMovies();
-    
+
     const searchInput = document.getElementById('movie-search');
     if (searchInput) {
         searchInput.addEventListener('input', UI.debounce((e) => {
@@ -48,7 +48,7 @@ async function updateMovieCount() {
 
 async function loadMovies() {
     if (isSearchMode) return;
-    
+
     const tableBody = document.getElementById('movies-full-list');
     if (!tableBody) return;
 
@@ -59,7 +59,7 @@ async function loadMovies() {
         if (cursors[currentPage - 1]) q = query(q, startAfter(cursors[currentPage - 1]));
 
         const snap = await getDocs(q);
-        
+
         if (!snap.empty) {
             cursors[currentPage] = snap.docs[snap.docs.length - 1];
             renderMovies(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -100,8 +100,8 @@ async function handleSearch(term) {
             allMoviesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         }
 
-        const filtered = allMoviesCache.filter(m => 
-            m.title?.toLowerCase().includes(term) || 
+        const filtered = allMoviesCache.filter(m =>
+            m.title?.toLowerCase().includes(term) ||
             m.category?.toLowerCase().includes(term) ||
             m.id.toLowerCase().includes(term)
         );
@@ -162,18 +162,18 @@ function renderMovies(movies) {
             </td>
             <td class="py-4 text-right px-10">
                 <div class="flex items-center justify-end gap-2.5">
-                    <button onclick="window.open('${getMediaWatchPath(movie.category, 'movie', movie.id)}', '_blank')"
-                       class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
+                    <button data-action="preview" data-url="${getMediaWatchPath(movie.category, 'movie', movie.id)}"
+                       class="movie-action-btn w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
                        title="ดูตัวอย่าง">
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </button>
-                    <a href="./admin-edit-movie.html?id=${movie.id}" 
+                    <a href="./admin-edit-movie.html?id=${movie.id}"
                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all border border-blue-500/20"
                        title="แก้ไขข้อมูล">
                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                     </a>
-                    <button onclick="deleteMovie('${movie.id}')" 
-                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
+                    <button data-action="delete-movie" data-id="${movie.id}"
+                            class="movie-action-btn w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
                             title="ลบหนัง">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     </button>
@@ -183,17 +183,43 @@ function renderMovies(movies) {
     `).join('');
 
     UI.refreshIcons();
+
+    // Setup event delegation for movie action buttons
+    setupMovieActionListeners();
+}
+
+/**
+ * Sets up event delegation for movie action buttons
+ */
+function setupMovieActionListeners() {
+    const tableBody = document.getElementById('movies-full-list');
+    if (!tableBody) return;
+
+    tableBody.addEventListener('click', (e) => {
+        const btn = e.target.closest('.movie-action-btn');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const url = btn.dataset.url;
+        const id = btn.dataset.id;
+
+        if (action === 'preview' && url) {
+            window.open(url, '_blank');
+        } else if (action === 'delete-movie') {
+            deleteMovie(id);
+        }
+    });
 }
 
 function updatePaginationUI() {
     const container = document.getElementById('pagination-container');
     if (!container || isSearchMode) {
-        if(container) container.innerHTML = '';
+        if (container) container.innerHTML = '';
         return;
     }
 
     const totalPages = Math.ceil(totalMovies / PAGE_SIZE) || 1;
-    
+
     container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md">
             <button id="prev-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-20 disabled:pointer-events-none" ${currentPage === 1 ? 'disabled' : ''}>
@@ -216,14 +242,19 @@ function updatePaginationUI() {
     UI.refreshIcons();
 }
 
-window.deleteMovie = async (id) => {
+/**
+ * Deletes a movie
+ * @param {string} id - Movie ID
+ * @returns {Promise<void>}
+ */
+async function deleteMovie(id) {
     if (!confirm('ยืนยันการลบข้อมูลหนังเรื่องนี้? การกระทำนี้ไม่สามารถย้อนคืนได้')) return;
 
     UI.setLoading(true);
     try {
         await deleteDoc(doc(db, SCHEMA.COLLECTIONS.MOVIES, id));
         UI.showToast('ลบข้อมูลเรียบร้อยแล้ว', 'success');
-        
+
         await updateMovieCount();
         loadMovies();
     } catch (error) {
@@ -232,6 +263,6 @@ window.deleteMovie = async (id) => {
     } finally {
         UI.setLoading(false);
     }
-};
+}
 
 

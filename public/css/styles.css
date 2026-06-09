@@ -5,245 +5,36 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* 🎨 DUYDOODEE Master Color Tokens */
-    --brand-primary: #fbbf24;
-    --brand-primary-glow: rgba(251, 191, 36, 0.4);
-    --brand-black: #050507;
-    --brand-obsidian: #0b0b0f;
-    --brand-surface: #121218;
-    --text-main: #d1d5db;
-    --text-muted: #6b7280;
-    --badge-bg: var(--brand-primary);
-    --badge-text: #000000;
-  }
-
-  [data-theme="light"] {
-    --brand-primary: #d97706; /* เข้มขึ้นเล็กน้อยเพื่อ Contrast บนพื้นขาว */
-    --brand-primary-glow: rgba(217, 119, 6, 0.2);
-    --brand-black: #ffffff;
-    --brand-obsidian: #f9fafb;
-    --brand-surface: #f3f4f6;
-    --text-main: #1f2937;
-    --text-muted: #4b5563;
-    --badge-bg: #d97706;
-    --badge-text: #ffffff;
-  }
-
   body {
-    @apply antialiased overflow-x-hidden;
-    background-color: var(--brand-black);
-    color: var(--text-main);
-    font-size: 14px;
-    line-height: 1.7;
-    
-    /* ✨ Smooth Theme Transition */
-    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    @apply bg-brand-black text-text-main font-body selection:bg-brand-primary/30;
   }
-
-  /* 🍯 Premium Gold Scrollbar */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--brand-black);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, var(--brand-primary), #d97706);
-    border-radius: 10px;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #ffffff;
-    box-shadow: 0 0 15px var(--brand-primary);
-  }
-
-  h1, h2, h3, h4, .Thai-font {
-    font-family: var(--font-heading);
-  }
-  h1 { @apply text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic; }
-  h2 { @apply text-2xl md:text-4xl font-black text-white uppercase tracking-tight; }
-  h3 { @apply text-lg font-bold text-white uppercase tracking-widest; }
-  
-  .text-label { @apply text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]; }
-  .text-body { @apply text-sm text-gray-400 font-medium; }
 }
 
-@layer components {
-  /* 🧊 Modern Containers & Glass */
-  .layout-container { @apply max-w-7xl mx-auto px-6 py-6 md:py-8; }
+@layer utilities {
+  /* 📏 Layout & Spacing */
+  .p-section { @apply py-12 md:py-20 px-4 md:px-8 max-w-[1600px] mx-auto; }
   
-  .glass-premium { 
-    @apply backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-2xl;
-    background-color: rgba(11, 11, 15, 0.85);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
-    
-    /* ✨ Smooth Transition for Containers */
-    transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
-  }
-
-  .nav-glass {
-    @apply backdrop-blur-xl border-b border-white/10;
-    background-color: rgba(5, 5, 7, 0.75);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-    transition: background-color 0.6s ease, border-color 0.6s ease, padding 0.5s ease;
-  }
+  /* ✒️ Typography Hierarchy */
+  .text-h1 { @apply text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter; }
+  .text-h2 { @apply text-2xl md:text-4xl font-black text-white uppercase tracking-tight; }
+  .text-h3 { @apply text-lg font-bold text-white uppercase tracking-widest; }
+  .text-meta { @apply text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]; }
+  .text-body { @apply text-sm text-gray-400 font-medium leading-relaxed; }
   
-  /* 🎬 Buttons with Neon Luxury Glow */
-  .btn-primary {
-    @apply px-6 py-3 text-black text-[10px] font-heading font-black uppercase tracking-widest rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
-    background-color: var(--brand-primary);
-    box-shadow: 0 0 15px var(--brand-primary-glow), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-  }
-  .btn-primary:hover {
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-  }
+  /* 🌟 Cinematic Components */
+  .glass-premium { @apply bg-brand-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl; }
+  .btn-primary { @apply bg-brand-primary text-black font-black uppercase tracking-widest hover:scale-[1.02] transition-transform rounded-xl px-6 py-3; }
 
-  .btn-secondary {
-    @apply px-6 py-3 bg-white/5 text-white text-[10px] font-heading font-black uppercase tracking-widest rounded-xl border border-white/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
-  }
-  .btn-secondary:hover {
-    @apply bg-white/10 border-brand-primary/50 text-brand-primary;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
-  }
+  /* 🎥 Cinematic Device Frame */
+  .device-frame { @apply relative mx-auto bg-gray-900 border-[8px] border-gray-800 rounded-[3rem] overflow-hidden; }
+  .device-frame.landscape { @apply aspect-video max-w-4xl; }
+  .device-frame:not(.landscape) { @apply aspect-[9/19] max-w-[300px]; }
   
-  /* 🎬 Movie Card Modernized */
-  .movie-poster-wrapper {
-    @apply relative w-full aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-lg transition-all duration-500 hover:scale-[1.03] hover:border-brand-primary/40;
-  }
-  .movie-poster-wrapper:hover {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
-  }
-  .movie-poster-img {
-    @apply absolute inset-0 w-full h-full object-cover transform hover:scale-110;
-    
-    /* 🖼️ Smart Brightness Logic */
-    transition: transform 0.7s ease, filter 0.6s ease;
-    filter: brightness(0.85) contrast(1.05); /* Dimmed in Dark Mode for Premium Look */
-  }
-
-  [data-theme="light"] .movie-poster-img {
-    filter: brightness(1.05) contrast(1); /* Full clarity in Light Mode */
-  }
-
-  /* 🏷️ Smart Badge System */
-  .badge-premium {
-    @apply px-2 py-0.5 rounded shadow-lg font-black uppercase inline-block Thai-font;
-    background-color: var(--badge-bg);
-    color: var(--badge-text);
-    font-size: 9px;
-    transition: filter 0.6s ease, background-color 0.6s ease;
-    filter: brightness(0.9); /* Slightly dimmed in Dark mode for premium feel */
-  }
-
-  [data-theme="light"] .badge-premium {
-    filter: brightness(1.1); /* Vibrant in Light mode */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  /* ✨ Border Beam Badge (เฉพาะตัว NEW) */
-  .badge-new {
-    @apply relative overflow-hidden;
-    border: 1px solid rgba(251, 191, 36, 0.3);
-  }
-  .badge-new:after {
-    content: '';
-    @apply border-beam;
-  }
-
-  /* 🌙 Theme Toggle Neon Glow */
-  #theme-toggle-btn {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  :root:not([data-theme="light"]) #theme-toggle-btn {
-    box-shadow: 0 0 15px var(--brand-primary-glow);
-    border-color: rgba(251, 191, 36, 0.3);
-  }
+  .device-chassis { @apply absolute inset-0 rounded-[2.5rem] border-[4px] border-white/5 pointer-events-none; }
+  .device-screen { @apply w-full h-full bg-black relative z-10; }
   
-  /* 📱 Device Player Frame */
-  .device-frame { 
-    @apply relative mx-auto transition-all duration-500 z-10 rounded-[40px] border border-white/10; 
-    width: 280px; 
-    aspect-ratio: 9/19; 
-    box-shadow: 0 0 50px rgba(251, 191, 36, 0.1);
-  }
-  .device-frame.landscape { 
-    @apply rounded-3xl border border-white/10;
-    width: 100%; 
-    max-width: 800px; 
-    aspect-ratio: 16/9; 
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-  }
-  .device-chassis { @apply absolute inset-0 rounded-[40px] border-4 border-neutral-800 bg-black shadow-2xl; }
-  .device-chassis:after {
-    content: '';
-    @apply absolute inset-0 rounded-[36px] border border-white/5 pointer-events-none;
-  }
-  .device-frame.landscape .device-chassis { @apply rounded-3xl border-4; }
-  .device-screen { @apply absolute inset-[8px] rounded-[32px] overflow-hidden bg-black z-10; }
-  .device-frame.landscape .device-screen { @apply rounded-2xl inset-[6px]; }
-  .device-home-bar { @apply absolute bottom-3 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-white/20 rounded-full z-50; }
-
-  /* 🌌 Starfield, Neon Blobs & Shimmers */
-  .star-field {
-    @apply fixed inset-0 pointer-events-none overflow-hidden;
-    z-index: 0;
-  }
-  .mesh-gradient-bg {
-    @apply absolute inset-0 bg-[#050507] opacity-95;
-    z-index: -2;
-  }
-  .blob {
-    @apply absolute rounded-full opacity-15 pointer-events-none mix-blend-screen;
-    width: 600px;
-    height: 600px;
-    filter: blur(140px);
-    animation: blob-float 25s infinite alternate ease-in-out;
-  }
-  .blob-1 {
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
-    top: -10%;
-    left: -10%;
-  }
-  .blob-2 {
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
-    bottom: -10%;
-    right: -10%;
-    animation-delay: -12s;
-  }
-  @keyframes blob-float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(120px, 60px) scale(1.15); }
-  }
-
-  .skeleton-shimmer {
-    @apply rounded-2xl;
-    background: linear-gradient(90deg, #101014 25%, #1a1a24 37%, #101014 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.4s ease infinite;
-  }
-  @keyframes shimmer {
-    0% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* 💫 Neon Glow Borders / Elements */
-  
-  .border-beam {
-    @apply absolute pointer-events-none rounded-sm;
-    inset: 0;
-    border: 1px solid #fbbf24;
-    box-shadow: 0 0 8px #fbbf24, inset 0 0 4px #fbbf24;
-    animation: border-beam-anim 8s linear infinite;
-  }
-  @keyframes border-beam-anim {
-    0%, 100% { clip-path: inset(0 0 92% 0); }
-    25% { clip-path: inset(0 0 0 92%); }
-    50% { clip-path: inset(92% 0 0 0); }
-    75% { clip-path: inset(0 92% 0 0); }
-  }
+  .device-island { @apply absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-30; }
+  .device-home-bar { @apply absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full z-30; }
 }
 
 /* 🧊 Scrollbar UI */

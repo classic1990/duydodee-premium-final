@@ -1,6 +1,6 @@
-import { db, collection, getDocs, writeBatch } from './services/firebase.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
-import { UI } from './components/ui.js';
+import { db, collection, getDocs, writeBatch } from '../services/firebase.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { UI } from '../components/ui.js';
 
 /**
  * 🛡️ DUYดูDEE SYSTEM SAFETY ENGINE

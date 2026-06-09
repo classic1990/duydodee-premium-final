@@ -13,12 +13,16 @@ module.exports = {
       },
       colors: {
         brand: {
-          black: '#050507',     // Obsidian Black
-          obsidian: '#0d0d12',  // Deep Indigo-Black
-          surface: '#121218',   // Studio Gray
-          primary: '#fbbf24',   // Royal Amber (Gold)
+          black: '#030305',     // Deep Obsidian Black
+          obsidian: '#0a0a0e',  // Deep Indigo-Black
+          surface: '#111116',   // Studio Gray
+          primary: '#eab308',   // Premium Gold
           accent: '#a78bfa',    // Soft Amethyst (Violet)
           muted: '#71717a',     // Stone Muted
+        },
+        text: {
+          main: '#e5e7eb',
+          muted: '#6b7280',
         }
       },
       fontSize: {

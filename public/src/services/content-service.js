@@ -1,4 +1,4 @@
-import { db } from './firebase-config.js';
+import { db, toggleWatchlist } from './firebase.js';
 import { SCHEMA } from '../constants.js';
 import { UI } from '../components/ui.js';
 import { 
@@ -11,6 +11,7 @@ import {
  * 🚀 DUYดูDEE CONTENT SERVICE (Refactored)
  */
 export const ContentService = {
+    toggleWatchlist, // Expose watchlist toggle method
 
     async checkDuplicateLink(videoUrl) {
         if (!videoUrl) return { exists: false };

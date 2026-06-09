@@ -1,6 +1,6 @@
-import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from './services/firebase.js';
-import { UI } from './components/ui.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
+import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 📺 DUYดูDEE SERIES MANAGEMENT ENGINE
@@ -9,9 +9,9 @@ import { checkAdminAccess } from './middleware/auth-guard.js';
 
 const PAGE_SIZE = 10;
 let currentPage = 1;
-let cursors = [null]; 
+let cursors = [null];
 let totalSeries = 0;
-let allSeriesCache = []; 
+let allSeriesCache = [];
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -29,7 +29,7 @@ async function initManageSeries() {
     UI.setLoading(true);
     await updateSeriesCount();
     loadSeries();
-    
+
     const searchInput = document.getElementById('series-search');
     if (searchInput) {
         searchInput.addEventListener('input', UI.debounce((e) => {
@@ -47,7 +47,7 @@ async function updateSeriesCount() {
 
 async function loadSeries() {
     if (isSearchMode) return;
-    
+
     const tableBody = document.getElementById('series-full-list');
     if (!tableBody) return;
 
@@ -59,7 +59,7 @@ async function loadSeries() {
         if (cursor) q = query(q, startAfter(cursor));
 
         const snap = await getDocs(q);
-        
+
         if (!snap.empty) {
             cursors[currentPage] = snap.docs[snap.docs.length - 1];
             renderSeries(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -100,8 +100,8 @@ async function handleSearch(term) {
             allSeriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         }
 
-        const filtered = allSeriesCache.filter(s => 
-            s.title?.toLowerCase().includes(term) || 
+        const filtered = allSeriesCache.filter(s =>
+            s.title?.toLowerCase().includes(term) ||
             s.category?.toLowerCase().includes(term) ||
             s.id.toLowerCase().includes(term)
         );
@@ -162,18 +162,18 @@ function renderSeries(seriesList) {
             </td>
             <td class="py-4 text-right px-10">
                 <div class="flex items-center justify-end gap-2.5">
-                    <button onclick="window.open('${getMediaWatchPath(series.category, 'series', series.id)}', '_blank')"
-                       class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
+                    <button data-action="preview" data-url="${getMediaWatchPath(series.category, 'series', series.id)}"
+                       class="series-action-btn w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
                        title="ดูตัวอย่าง">
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </button>
-                    <a href="./admin-edit-series.html?id=${series.id}" 
+                    <a href="./admin-edit-series.html?id=${series.id}"
                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all border border-blue-500/20"
                        title="แก้ไขข้อมูล">
                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                     </a>
-                    <button onclick="deleteSeries('${series.id}')" 
-                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
+                    <button data-action="delete-series" data-id="${series.id}"
+                            class="series-action-btn w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
                             title="ลบซีรีส์">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     </button>
@@ -183,17 +183,43 @@ function renderSeries(seriesList) {
     `).join('');
 
     UI.refreshIcons();
+
+    // Setup event delegation for series action buttons
+    setupSeriesActionListeners();
+}
+
+/**
+ * Sets up event delegation for series action buttons
+ */
+function setupSeriesActionListeners() {
+    const tableBody = document.getElementById('series-full-list');
+    if (!tableBody) return;
+
+    tableBody.addEventListener('click', (e) => {
+        const btn = e.target.closest('.series-action-btn');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const url = btn.dataset.url;
+        const id = btn.dataset.id;
+
+        if (action === 'preview' && url) {
+            window.open(url, '_blank');
+        } else if (action === 'delete-series') {
+            deleteSeries(id);
+        }
+    });
 }
 
 function updatePaginationUI() {
     const container = document.getElementById('pagination-container');
     if (!container || isSearchMode) {
-        if(container) container.innerHTML = '';
+        if (container) container.innerHTML = '';
         return;
     }
 
     const totalPages = Math.ceil(totalSeries / PAGE_SIZE) || 1;
-    
+
     container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md">
             <button id="prev-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary hover:border-brand-primary/50 transition-all disabled:opacity-20 disabled:pointer-events-none" ${currentPage === 1 ? 'disabled' : ''}>
@@ -216,14 +242,19 @@ function updatePaginationUI() {
     UI.refreshIcons();
 }
 
-window.deleteSeries = async (id) => {
+/**
+ * Deletes a series and all its episodes
+ * @param {string} id - Series ID
+ * @returns {Promise<void>}
+ */
+async function deleteSeries(id) {
     if (!confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')) return;
 
     UI.setLoading(true);
     try {
         await deleteDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, id));
         UI.showToast('ลบซีรีส์เรียบร้อยแล้ว', 'success');
-        
+
         await updateSeriesCount();
         loadSeries();
     } catch (error) {
@@ -232,6 +263,6 @@ window.deleteSeries = async (id) => {
     } finally {
         UI.setLoading(false);
     }
-};
+}
 
 

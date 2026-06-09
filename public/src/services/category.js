@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let activeCol = '',
   activeCat = '',
-  activeYear = '',
   isAllCategories = false,
   lastVisible = null;
 
@@ -71,7 +70,6 @@ async function initCategoryPage() {
   const yearSelector = document.getElementById('year-selector');
 
   const handleFilterChange = () => {
-    activeYear = yearSelector?.value || '';
     loadCategoryContent(
       activeCol,
       activeCat,
@@ -126,7 +124,6 @@ async function loadCategoryContent(
         sortBy: sortField,
         direction,
         isAllCategories,
-        year: activeYear,
       },
     );
 

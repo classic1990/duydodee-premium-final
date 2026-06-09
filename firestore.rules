@@ -9,55 +9,51 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() && 
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super-admin', 'admin', 'master'] ||
-         request.auth.token.email == 'duyclassic191@gmail.com');
+      return isSignedIn() &&
+        (request.auth.token.email == 'duyclassic191@gmail.com' ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super-admin', 'admin', 'master'] ||
+         exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
     }
 
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // 👤 User Profiles: เจ้าของแก้ไขได้เอง แต่ทุกคนที่ Login แล้วเห็น Profile เบื้องต้นได้
+    // 👤 User Profiles
     match /users/{userId} {
       allow read: if isSignedIn();
-      allow write: if isOwner(userId);
+      allow write: if isOwner(userId) || isAdmin();
       
-      // 📜 Watch History: เฉพาะเจ้าของเท่านั้นที่จัดการได้
       match /history/{historyId} {
-        allow read, write: if isOwner(userId);
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if isOwner(userId) || isAdmin();
       }
     }
 
-    // 🎬 Content Collections: คนทั่วไปอ่านได้ แอดมินเท่านั้นที่เขียนได้
+    // 🎬 Global Admin Access for all content and logs
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // 🎬 Content Collections (Public read)
     match /movies/{movieId} {
       allow read: if true;
-      allow write: if isAdmin();
     }
 
     match /series/{seriesId} {
       allow read: if true;
-      allow write: if isAdmin();
     }
 
     match /hero_slides/{slideId} {
       allow read: if true;
-      allow write: if isAdmin();
     }
 
-    // 📊 Stats: ต้องเข้าระบบถึงจะบันทึกสถิติได้
+    // 📊 Stats: Public read
     match /daily_stats/{statId} {
-      allow read, write: if isSignedIn();
-    }
-
-    // 🛡️ Activity Logs: ระบบบันทึกหลักฐานการทำงาน แอดมินเท่านั้นที่จัดการได้
-    match /activity_logs/{logId} {
-      allow read, write: if isAdmin();
-    }
-
-    // 💳 VIP Payments: แอดมินตรวจสอบได้เท่านั้น
-    match /vip_payments/{paymentId} {
-      allow read, write: if isAdmin();
+      allow read: if true;
     }
   }
 }

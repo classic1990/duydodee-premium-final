@@ -1,148 +1,211 @@
-import { db, collection, getDocs, query, orderBy, limit, startAfter, SCHEMA, auth, onAuthStateChanged, doc, getDoc, where, getWatchHistory } from '../services/firebase.js';
+import { auth, onAuthStateChanged, getWatchHistory, db, doc, getDoc, SCHEMA } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
+import { ContentService } from '../services/content-service.js';
 
 /**
- * 🎬 DUYดูDEE HOME ENGINE - Content Renderer
+ * 🎬 DUYดูDEE HOME ENGINE - Premium Master Edition
  */
 let lastVisibleDoc = null;
 let isFetching = false;
 let hasMore = true;
+let currentFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.injectStarfield();
     UI.initNavbar();
     
-    const movieGrid = document.getElementById('movie-grid');
-    if (movieGrid) {
-        await loadMovies(movieGrid);
-        setupInfiniteScroll(movieGrid);
-    }
+    // 1. Initial Data Loading
+    loadTrending();
+    loadChineseSeries();
+    loadLibrary();
 
-    // 🧭 Load Recommendations when user is logged in
+    // 2. Auth-based Sections
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const recGrid = document.getElementById('recommend-grid');
-            if (recGrid) await loadRecommendations(user, recGrid);
+            loadHistory(user.uid);
+            loadPersonalizedContent(user.uid); // Add this
+        } else {
+            document.getElementById('history-section')?.classList.add('hidden');
         }
     });
+
+    // 4. Global Search Redirect
+    const searchInput = document.getElementById('global-search');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && searchInput.value.trim()) {
+                window.location.href = `/search.html?q=${encodeURIComponent(searchInput.value.trim())}`;
+            }
+        });
+    }
 });
 
 /**
- * 🧠 ระบบแนะนำหนังฉลาด (Recommendation Engine)
+ * 💡 Load Personalized Content
  */
-async function loadRecommendations(user, container) {
+async function loadPersonalizedContent(uid) {
+    const section = document.getElementById('personalized-section');
+    const grid = document.getElementById('personalized-grid');
+    const titleEl = document.getElementById('personalized-title');
+    if (!grid) return;
+
     try {
-        // 1. ดึงข้อมูล Profile เพื่อดูหมวดหมู่ที่ชอบ
-        const userDoc = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
-        const prefs = userDoc.data()?.preferredCategories || {};
+        const userSnap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid));
+        if (!userSnap.exists()) return;
         
-        // 2. ดึงประวัติการรับชมล่าสุดเพื่อเอาไว้กรองเรื่องที่ดูแล้วออก
-        const history = await getWatchHistory(user.uid, 20);
-        const watchedIds = new Set(history.map(item => item.id));
+        const prefs = userSnap.data().preferredCategories || {};
+        const categories = Object.keys(prefs);
+        if (categories.length === 0) return;
+
+        // Find top category
+        const topCategory = categories.reduce((a, b) => prefs[a] > prefs[b] ? a : b);
         
-        // หาหมวดหมู่ที่ดูบ่อยที่สุด 2 อันดับแรก
-        const topCategories = Object.entries(prefs)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 2)
-            .map(([cat]) => cat);
-
-        if (topCategories.length === 0) return; // ถ้ายังไม่มีพฤติกรรม ไม่ต้องแสดง
-
-        // 3. Query หนังในหมวดหมู่นั้น (ดึงมาเผื่อ 12 เรื่อง เพื่อกรองออก)
-        const q = query(
-            collection(db, SCHEMA.COLLECTIONS.MOVIES),
-            where('category', 'in', topCategories),
-            orderBy('rating', 'desc'), // 🏆 จัดอันดับตามเรตติ้ง
-            limit(12)
-        );
-
-        const snap = await getDocs(q);
-        
-        // 4. กรองเรื่องที่ดูแล้วออก และเลือกมาแสดงแค่ 6 เรื่อง
-        const recommendedItems = snap.docs
-            .map(docSnap => ({ id: docSnap.id, ...docSnap.data(), type: 'movie' }))
-            .filter(movie => !watchedIds.has(movie.id))
-            .slice(0, 6);
-
-        if (recommendedItems.length === 0) return;
-
-        document.getElementById('recommend-section').classList.remove('hidden');
-        container.innerHTML = '';
-
-        recommendedItems.forEach(movie => {
-            container.insertAdjacentHTML('beforeend', UI.createMovieCard(movie));
+        const { items } = await ContentService.fetchItemsByCategory(['movie', 'series'], topCategory, {
+            pageSize: 7
         });
 
-        if (window.lucide) window.lucide.createIcons();
-
+        if (items.length > 0) {
+            section.classList.remove('hidden');
+            titleEl.innerText = `แนะนำจากความชอบของคุณ: ${topCategory}`;
+            grid.innerHTML = items.map(item => UI.createMovieCard(item)).join('');
+            UI.refreshIcons();
+        }
     } catch (error) {
-        console.error('Recommendation Engine Error:', error);
+        console.error('Personalized Load Error:', error);
     }
 }
 
 /**
- * ♾️ Infinite Scroll Setup
+ * 🕒 Load Watch History
  */
-function setupInfiniteScroll(container) {
-    const observer = new IntersectionObserver(async (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isFetching) {
-            await loadMovies(container, true);
-        }
-    }, { rootMargin: '300px' });
+async function loadHistory(uid) {
+    const section = document.getElementById('history-section');
+    const grid = document.getElementById('history-grid');
+    if (!grid) return;
 
-    const sentinel = document.createElement('div');
-    sentinel.id = 'scroll-sentinel';
-    sentinel.className = 'col-span-full h-1 w-full';
-    container.after(sentinel);
-    observer.observe(sentinel);
+    try {
+        const history = await getWatchHistory(uid, 8);
+        if (history && history.length > 0) {
+            section.classList.remove('hidden');
+            grid.innerHTML = history.map(item => UI.createHistoryCard(item)).join('');
+            UI.refreshIcons();
+        } else {
+            section.classList.add('hidden');
+        }
+    } catch (error) {
+        console.error('History Load Error:', error);
+    }
 }
 
 /**
- * โหลดข้อมูลหนังพร้อม Skeleton Loading
+ * 🔥 Load Trending Content
  */
-async function loadMovies(container, isAppend = false) {
-    if (isFetching || !hasMore) return;
-    isFetching = true;
-
-    if (isAppend) UI.renderSkeleton(container, 4, 'poster', true);
-    else UI.renderSkeleton(container, UI_CONFIG.PAGE_SIZE);
+async function loadTrending() {
+    const section = document.getElementById('trending-section');
+    const grid = document.getElementById('trending-grid');
+    if (!grid) return;
 
     try {
-        let q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), orderBy('createdAt', 'desc'), limit(UI_CONFIG.PAGE_SIZE));
-        if (isAppend && lastVisibleDoc) q = query(q, startAfter(lastVisibleDoc));
-
-        const querySnapshot = await getDocs(q);
-        
-        // ลบ Skeletons ออกก่อนแสดงผลจริง
-        if (isAppend) container.querySelectorAll('.skeleton-item').forEach(el => el.remove());
-        else container.innerHTML = '';
-
-        if (querySnapshot.empty) {
-            if (!isAppend) container.innerHTML = '<p class="text-center text-gray-500 col-span-full py-20">ไม่พบข้อมูลในขณะนี้</p>';
-            hasMore = false;
-            return;
-        }
-
-        lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-        if (querySnapshot.docs.length < UI_CONFIG.PAGE_SIZE) hasMore = false;
-
-        querySnapshot.forEach((doc) => {
-            const movieData = doc.data();
-            // สร้าง Object ที่มีทั้ง ID และข้อมูลอื่นๆ เพื่อส่งให้ UI Component
-            const movie = { id: doc.id, ...movieData, type: 'movie' };
-            const cardHTML = UI.createMovieCard(movie);
-            container.insertAdjacentHTML('beforeend', cardHTML);
+        // Query TOP Rated/Viewed from both movies & series
+        const { items } = await ContentService.fetchItemsByCategory(['movie', 'series'], null, {
+            pageSize: 10,
+            sortBy: 'views',
+            direction: 'desc',
+            isAllCategories: true
         });
 
-        // 2. รีเฟรช Lucide Icons หลังจาก Render เสร็จ
-        if (window.lucide) {
-            window.lucide.createIcons();
+        if (items.length > 0) {
+            section.classList.remove('hidden');
+            grid.innerHTML = items.map((item, index) => UI.createTrendingCard(item, index + 1)).join('');
+            UI.refreshIcons();
         }
     } catch (error) {
-        console.error('🚨 Error loading movies:', error);
-        if (!isAppend) container.innerHTML = '<p class="text-center text-red-500 col-span-full py-20">เกิดข้อผิดพลาด</p>';
+        console.error('Trending Load Error:', error);
+    }
+}
+
+/**
+ * 🏮 Load Chinese Series
+ */
+async function loadChineseSeries() {
+    const grid = document.getElementById('chinese-series-grid');
+    if (!grid) return;
+
+    try {
+        const { items } = await ContentService.fetchItemsByCategory('series', ['ซีรีส์จีน', 'Chinese', 'ซีรีส์จีนพากย์ไทย'], {
+            pageSize: 7,
+            sortBy: 'createdAt',
+            direction: 'desc'
+        });
+
+        if (items.length > 0) {
+            grid.closest('section').classList.remove('hidden');
+            grid.innerHTML = items.map(item => UI.createMovieCard(item)).join('');
+            UI.refreshIcons();
+        }
+    } catch (error) {
+        console.error('Chinese Series Load Error:', error);
+    }
+}
+
+/**
+ * 🎬 Load Global Library with Pagination & Filters
+ */
+async function loadLibrary(isAppend = false) {
+    if (isFetching || (!hasMore && isAppend)) return;
+    
+    const grid = document.getElementById('library-grid');
+    if (!grid) return;
+
+    isFetching = true;
+    
+    if (isAppend) UI.renderSkeleton(grid, 4, 'poster', true);
+    else UI.renderSkeleton(grid, UI_CONFIG.PAGE_SIZE || 12);
+
+    try {
+        const collections = currentFilter === 'all' ? ['movie', 'series'] : [currentFilter];
+        
+        const { items, lastDoc, empty } = await ContentService.fetchItemsByCategory(collections, null, {
+            pageSize: UI_CONFIG.PAGE_SIZE || 12,
+            lastDoc: lastVisibleDoc,
+            sortBy: 'createdAt',
+            direction: 'desc',
+            isAllCategories: true
+        });
+
+        if (isAppend) {
+            grid.querySelectorAll('.skeleton-item').forEach(el => el.remove());
+        } else {
+            grid.innerHTML = '';
+        }
+
+        if (empty && !isAppend) {
+            grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500 Thai-font">ไม่พบเนื้อหาในขณะนี้</div>';
+            hasMore = false;
+        } else {
+            lastVisibleDoc = lastDoc;
+            if (items.length < (UI_CONFIG.PAGE_SIZE || 12)) hasMore = false;
+            
+            grid.insertAdjacentHTML('beforeend', items.map(item => UI.createMovieCard(item)).join(''));
+            UI.refreshIcons();
+        }
+
+        // Update pagination UI
+        const nextBtn = document.getElementById('next-page');
+        if (nextBtn) nextBtn.disabled = !hasMore;
+
+    } catch (error) {
+        console.error('Library Load Error:', error);
+        grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 Thai-font">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     } finally {
         isFetching = false;
     }
 }
+
+// Global scope for HTML onclick
+window.changePage = (dir) => {
+    if (dir === 1 && hasMore) {
+        loadLibrary(true);
+    }
+};

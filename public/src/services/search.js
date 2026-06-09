@@ -32,16 +32,21 @@ async function performSearch(keyword) {
     UI.renderSkeleton(grid, 6);
 
     try {
-        // ดึงข้อมูลผ่าน ContentService ตาม AI GUIDELINES
-        const results = await ContentService.searchItems('movie', keyword, 12);
+        // ดึงข้อมูลผ่าน ContentService ตาม AI GUIDELINES - ค้นหาทั้ง movies และ series
+        const movieResults = await ContentService.searchItems('movie', keyword, 12);
+        const seriesResults = await ContentService.searchItems('series', keyword, 12);
+        
+        // รวมผลลัพธ์และเรียงตาม relevance
+        const allResults = [...movieResults, ...seriesResults];
+        
         grid.innerHTML = '';
 
-        if (results.length === 0) {
+        if (allResults.length === 0) {
             UI.renderEmptyState(grid, `ไม่พบผลลัพธ์สำหรับ "${keyword}"`);
             return;
         }
 
-        grid.innerHTML = results.map(item => UI.createMovieCard(item)).join('');
+        grid.innerHTML = allResults.map(item => UI.createMovieCard(item)).join('');
         UI.refreshIcons();
 
     } catch (error) {

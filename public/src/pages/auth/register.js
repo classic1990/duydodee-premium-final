@@ -1,5 +1,5 @@
-import { AuthService } from './services/auth-service.js';
-import { UI } from './components/ui.js';
+import { AuthService } from '../../services/auth-service.js';
+import { UI } from '../../components/ui.js';
 
 /**
  * 📝 DUYดูDEE REGISTER ENGINE (V2.2 - Security & Social Edition)

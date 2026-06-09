@@ -1,9 +1,9 @@
-import { 
+import {
     auth, db, doc, getDoc, setDoc, addDoc, serverTimestamp,
     collection, query, orderBy, limit, getDocs, googleProvider,
     updateProfile, updateDoc, increment
 } from './firebase-config.js';
-import { 
+import {
     onAuthStateChanged, signOut, signInWithPopup, signInWithEmailAndPassword,
     createUserWithEmailAndPassword, sendEmailVerification
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
@@ -26,21 +26,24 @@ export const AuthService = {
      */
     async checkIsAdmin(user) {
         if (!user) return false;
+        // Admin access for the main developer
+        if (user.email === 'duyclassic191@gmail.com') return true;
+
         try {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
             if (!snap.exists()) return false;
             const role = (snap.data().role || '').toLowerCase();
             return role === SCHEMA.ROLES.MASTER.toLowerCase() || role === SCHEMA.ROLES.ADMIN.toLowerCase();
-        } catch (e) { 
+        } catch (e) {
             console.error('Admin check failed:', e);
-            return false; 
+            return false;
         }
     },
 
     /**
      * Save watch history
      */
-    async saveWatchHistory(userId, item) {
+    async saveWatchHistory(userId, item, progress = 0) {
         if (!userId || !item.id) return;
         try {
             const historyRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId, 'history', item.id);
@@ -50,6 +53,8 @@ export const AuthService = {
                 poster: item.poster,
                 category: item.category || 'Premium',
                 type: item.type || 'movie',
+                progress: progress,
+                epIndex: item.epIndex || 0,
                 watchedAt: serverTimestamp()
             };
             await setDoc(historyRef, data, { merge: true });
@@ -78,8 +83,8 @@ export const AuthService = {
             );
             const snap = await getDocs(q);
             return snap.docs.map(d => d.data());
-        } catch (e) { 
-            console.error('History Fetch Error:', e); 
+        } catch (e) {
+            console.error('History Fetch Error:', e);
             return [];
         }
     },
@@ -183,8 +188,8 @@ export const AuthService = {
             } else {
                 await setDoc(userRef, data, { merge: true });
             }
-        } catch (err) { 
-            console.error('Sync User Error:', err); 
+        } catch (err) {
+            console.error('Sync User Error:', err);
         }
     },
 

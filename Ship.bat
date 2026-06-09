@@ -4,9 +4,18 @@ SETLOCAL EnableDelayedExpansion
 :: ================================================================
 :: 🛰️ DUYดูDEE - MASTER SHIP PROTOCOL [V41.3 PREMIUM]
 :: ================================================================
-set "PROJECT_ID=duydodeesport"
-set "LIVE_URL=https://duydodeesport.web.app"
-set "VERSION=V41.3-PREMIUM"
+
+REM Load environment variables from .env file if exists
+if exist .env (
+    for /f "tokens=1,2 delims==" %%a in ('type .env ^| findstr /v "^#"') do (
+        set "%%a=%%b"
+    )
+)
+
+REM Set defaults if not provided in .env
+if "%PROJECT_ID%"=="" set "PROJECT_ID=duydodeesport"
+if "%LIVE_URL%"=="" set "LIVE_URL=https://duydodeesport.web.app"
+if "%VERSION%"=="" set "VERSION=V41.3-PREMIUM"
 set "START_TIME=%TIME%"
 
 title DUYดูDEE SHIP [%VERSION%] - PRODUCTION

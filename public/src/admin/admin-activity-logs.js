@@ -1,5 +1,5 @@
-import { db, collection, getDocs, query, orderBy, limit, startAfter, SCHEMA, where } from '../../services/firebase.js';
-import { UI } from '../../components/ui.js';
+import { db, collection, getDocs, query, orderBy, limit, startAfter, SCHEMA, where } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
 
 let lastVisible = null;
 let currentKeyword = '';
@@ -109,4 +109,8 @@ async function loadActivityLogs(isAppend = false) {
         else tbody.innerHTML = html;
 
     } catch (e) { console.error('Load Logs Error:', e); }
+}
+
+async function exportLogsToCSV() {
+    UI.showToast('ฟีเจอร์นี้กำลังอยู่ในการพัฒนา', 'info');
 }

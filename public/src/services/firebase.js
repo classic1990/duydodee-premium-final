@@ -16,7 +16,8 @@ export const {
 export const {
     collection, collectionGroup, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
     query, where, orderBy, limit, serverTimestamp, increment, startAfter, writeBatch, arrayUnion,
-    getCountFromServer, getAggregateFromServer, ref, getDownloadURL, uploadBytes, deleteObject, runTransaction
+    getCountFromServer, getAggregateFromServer, sum, onSnapshot,
+    ref, getDownloadURL, uploadBytes, deleteObject, runTransaction
 } = FirebaseConfig;
 
 // 🚀 3. DUYDOODEE SHARED SERVICES
@@ -28,20 +29,20 @@ export const saveWatchHistory = AuthService.saveWatchHistory;
 export const getWatchHistory = AuthService.getWatchHistory;
 
 /**
- * ❤️ ระบบ Bookmark & Rating (Refactored for Cleanliness)
+ * ❤️ ระบบ Watchlist (เดิมคือ Bookmark)
  */
-export const toggleBookmark = async (contentId, data, type = 'movie') => {
+export const toggleWatchlist = async (contentId, data, type = 'movie') => {
     if (!auth.currentUser) return { error: 'กรุณาเข้าสู่ระบบ' };
-    const bookmarkRef = doc(db, 'users', auth.currentUser.uid, 'bookmarks', contentId);
-    const snap = await getDoc(bookmarkRef);
+    const watchlistRef = doc(db, 'users', auth.currentUser.uid, 'bookmarks', contentId);
+    const snap = await getDoc(watchlistRef);
     const contentRef = doc(db, type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES, contentId);
     
     if (snap.exists()) {
-        await deleteDoc(bookmarkRef);
+        await deleteDoc(watchlistRef);
         await updateDoc(contentRef, { trendingScore: increment(-0.7) });
         return { status: 'removed' };
     } else {
-        await setDoc(bookmarkRef, { ...data, bookmarkedAt: serverTimestamp() });
+        await setDoc(watchlistRef, { ...data, addedAt: serverTimestamp() });
         await updateDoc(contentRef, { trendingScore: increment(0.7) });
         return { status: 'added' };
     }

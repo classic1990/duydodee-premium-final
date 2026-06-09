@@ -1,6 +1,6 @@
-import { db, collection, query, orderBy, getDocs, doc, updateDoc, getDoc, SCHEMA } from './services/firebase.js';
-import { UI } from './components/ui.js';
-import { checkAdminAccess } from './middleware/auth-guard.js';
+import { db, collection, query, orderBy, getDocs, doc, updateDoc, getDoc, SCHEMA } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 🛰️ DUYดูDEE VIP PAYMENT MANAGEMENT ENGINE
@@ -13,7 +13,7 @@ async function init() {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
         UI.initAdminSidebar();
-        
+
         await fetchPayments();
     } catch (err) {
         console.error('VIP Management Init Failed:', err);
@@ -50,7 +50,7 @@ function renderTable(payments) {
     paymentList.innerHTML = payments.map(data => {
         const isConfirmed = data.status === 'confirmed';
         const statusClass = isConfirmed ? 'text-green-500 bg-green-500/10 border-green-500/20' : 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
-        
+
         return `
             <tr class="group hover:bg-white/[0.02] transition-all border-b border-white/5">
                 <td class="p-6">
@@ -80,7 +80,7 @@ function renderTable(payments) {
                 </td>
                 <td class="p-6 text-right">
                     ${!isConfirmed ? `
-                        <button onclick="window.verifyPayment('${data.id}', '${data.userId}')" class="px-4 py-2 bg-brand-primary text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20 Thai-font">
+                        <button data-action="verify-payment" data-id="${data.id}" data-user-id="${data.userId}" class="payment-action-btn px-4 py-2 bg-brand-primary text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20 Thai-font">
                             อนุมัติ VIP
                         </button>
                     ` : `
@@ -94,16 +94,46 @@ function renderTable(payments) {
         `;
     }).join('');
     UI.refreshIcons();
+
+    // Setup event delegation for payment action buttons
+    setupPaymentActionListeners();
 }
 
-window.verifyPayment = async (id, userId) => {
+/**
+ * Sets up event delegation for payment action buttons
+ */
+function setupPaymentActionListeners() {
+    const paymentList = document.getElementById('payment-history-list');
+    if (!paymentList) return;
+
+    paymentList.addEventListener('click', (e) => {
+        const btn = e.target.closest('.payment-action-btn');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        const userId = btn.dataset.userId;
+
+        if (action === 'verify-payment') {
+            verifyPayment(id, userId);
+        }
+    });
+}
+
+/**
+ * Verifies and approves a VIP payment
+ * @param {string} id - Payment ID
+ * @param {string} userId - User ID
+ * @returns {Promise<void>}
+ */
+async function verifyPayment(id, userId) {
     if (!confirm('ยืนยันการปรับสถานะสมาชิกรายนี้เป็น VIP?')) return;
 
     UI.setLoading(true);
     try {
         // 1. อัปเดตสถานะการชำระเงิน
         await updateDoc(doc(db, 'vip_payments', id), { status: 'confirmed' });
-        
+
         // 2. อัปเดต Role ของผู้ใช้ (เฉพาะถ้าไม่ใช่ Admin/Master อยู่แล้ว)
         if (userId && userId !== 'guest') {
             const userRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId);
@@ -120,7 +150,7 @@ window.verifyPayment = async (id, userId) => {
         } else {
             UI.showToast('ยืนยันรายการชำระเงินเรียบร้อยแล้ว', 'success');
         }
-        
+
         await fetchPayments();
     } catch (e) {
         console.error('Verify Payment Error:', e);
@@ -128,7 +158,7 @@ window.verifyPayment = async (id, userId) => {
     } finally {
         UI.setLoading(false);
     }
-};
+}
 
 document.addEventListener('DOMContentLoaded', init);
 

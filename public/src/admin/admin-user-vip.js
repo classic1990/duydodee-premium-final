@@ -1,5 +1,5 @@
-import { db, collection, getDocs, query, where, orderBy, doc, getDoc, updateDoc, serverTimestamp, SCHEMA, auth, logActivity } from '../../services/firebase.js';
-import { UI } from '../../components/ui.js';
+import { db, collection, getDocs, query, where, orderBy, doc, getDoc, updateDoc, serverTimestamp, SCHEMA, auth, logActivity, checkIsAdmin } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
 
 /**
  * 💎 ADMIN INDIVIDUAL VIP REPORT - Page Controller
@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. ตรวจสอบสิทธิ์ผู้ใช้งาน (ต้องเป็น Admin/Master เท่านั้น)
     const user = auth.currentUser;
-    const isAdmin = await UI.AuthService.checkIsAdmin(user);
+    // ปรับปรุง: ใช้ checkIsAdmin ที่ import มาโดยตรง
+    const isAdmin = await checkIsAdmin(user);
     if (!isAdmin) {
         window.location.href = '/';
         return;

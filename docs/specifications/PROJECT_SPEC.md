@@ -18,7 +18,7 @@
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA",
+  apiKey: "PLACEHOLDER_CHANGE_ME",
   authDomain: "duydodeesport.firebaseapp.com",
   projectId: "duydodeesport",
   storageBucket: "duydodeesport.appspot.com",

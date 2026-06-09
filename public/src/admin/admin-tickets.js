@@ -1,5 +1,5 @@
-import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp } from '../../services/firebase.js';
-import { UI } from '../../components/ui.js';
+import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp } from '../services/firebase.js';
+import { UI } from '../components/ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.initAdminSidebar();

@@ -1,5 +1,5 @@
-import { AuthService } from './services/auth-service.js';
-import { UI } from './components/ui.js';
+import { AuthService } from '../../services/auth-service.js';
+import { UI } from '../../components/ui.js';
 
 /**
  * 🔐 DUYDOODEE LOGIN ENGINE - MASTER EDITION (V2.1 Secure)

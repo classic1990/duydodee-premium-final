@@ -1,3 +1,4 @@
+/* global YT */
 import {
   db,
   auth,
@@ -23,7 +24,6 @@ export const UI = {
   setCounter: (id, count) => {
     const el = document.getElementById(id);
     if (el) {
-      // Cinematic counter animation
       let current = 0;
       const target = parseInt(count);
       const step = Math.ceil(target / 20);
@@ -104,14 +104,12 @@ export const UI = {
       }
     });
 
-    // 🎫 Support Ticket Real-time Badge Listener
     const q = query(
       collection(db, SCHEMA.COLLECTIONS.TICKETS),
       where('status', '==', 'open'),
     );
     onSnapshot(q, (snap) => {
       const count = snap.size;
-      // ค้นหาลิงก์เมนูที่มีคำว่า tickets
       const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
       if (ticketLink) {
         let badge = ticketLink.querySelector('.ticket-notif-badge');
@@ -130,9 +128,6 @@ export const UI = {
     });
   },
 
-  /**
-   * 🖼️ Cinematic Image Lightbox
-   */
   showImageLightbox: (url) => {
     const lightbox = document.createElement('div');
     lightbox.className =
@@ -187,7 +182,7 @@ export const UI = {
         nav.classList.remove('nav-glass', 'py-3');
         nav.classList.add('py-6');
       }
-    });
+    }, { passive: true });
     UI.highlightActiveNav();
     UI.initAuthStatus();
   },
@@ -206,7 +201,7 @@ export const UI = {
             dArea.innerHTML = `
                         <div class="flex items-center gap-4">
                             ${isAdmin ? '<a href="/admin/admin-manage.html" class="hidden md:flex items-center gap-2 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-xl text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all"><i data-lucide="layout-dashboard" class="w-3 h-3"></i> Dashboard</a>' : ''}
-                            <a href="/profile.html" class="w-10 h-10 rounded-xl border border-white/10 overflow-hidden"><img src="${userData.photoURL || '/assets/DUYDODEE.png'}" class="w-full h-full object-cover"></a>
+                            <a href="/profile.html" class="w-10 h-10 rounded-xl border border-white/10 overflow-hidden"><img src="${userData.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-full h-full object-cover"></a>
                         </div>`;
         } catch (e) {
           console.error(e);
@@ -226,7 +221,7 @@ export const UI = {
       userSection.innerHTML =
         `
                 <div class="flex items-center gap-4 mb-8">
-                    <img src="${user.photoURL || '/assets/DUYDODEE.png'}" class="w-12 h-12 rounded-xl border border-brand-primary/30">
+                    <img src="${user.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-12 h-12 rounded-xl border border-brand-primary/30">
                     <div>
                         <p class="text-white font-bold text-sm">${user.displayName || 'Premium User'}</p>
                         <p class="text-gray-500 text-[10px]">${user.email}</p>
@@ -246,11 +241,6 @@ export const UI = {
     });
   },
 
-  /**
-   * 🎬 Optimized Movie Card Component
-   * @param {Object} item - ข้อมูลหนังหรือซีรีส์
-   * @param {boolean} isHighRes - ใช้รูปความละเอียดสูงหรือไม่ (เช่น หน้า Watch)
-   */
   createMovieCard: (item, isHighRes = false) => {
     const id = item.id || '';
     const title = UI.escapeHTML(item.title || '');
@@ -258,13 +248,11 @@ export const UI = {
     const type = item.type || 'movie';
     const watchUrl = UI.getMediaWatchPath(category, type, id);
 
-    // 🖼️ Image Optimization Logic
     let posterUrl = item.poster || item.posterURL;
     if (item.videoUrl && item.videoUrl.includes('youtube.com')) {
       const videoId =
         item.videoUrl.split('v=')[1]?.split('&')[0] ||
         item.videoUrl.split('/').pop();
-      // ใช้ mqdefault (320x180) สำหรับ Card ทั่วไปเพื่อความเร็วสูงสุด
       const quality = isHighRes ? 'maxresdefault' : 'mqdefault';
       posterUrl = `https://img.youtube.com/vi/${videoId}/${quality}.jpg`;
     }
@@ -350,20 +338,16 @@ export const UI = {
   createHistoryCard: (item) => {
     const watchUrl = UI.getMediaWatchPath(item.category, item.type, item.id);
     const poster = UI.getSafePoster(item.poster || item.posterURL);
-    // สุ่มความก้าวหน้า (Mock progress for visual appeal if not stored)
     const progress = item.progress || Math.floor(Math.random() * 60) + 20;
 
     return `
             <div class="min-w-[280px] md:min-w-[360px] group cursor-pointer animate-fade-in snap-start" onclick="location.href='${watchUrl}'">
                 <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:border-brand-primary/30">
-                    <!-- Image with subtle zoom -->
                     <img src="${poster}" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-[3s]" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
                     
-                    <!-- Premium Overlays -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
 
-                    <!-- Content Info -->
                     <div class="absolute bottom-0 left-0 right-0 p-5 space-y-2">
                         <div class="flex items-center gap-2">
                              <span class="px-2 py-0.5 bg-brand-primary text-black text-[8px] font-black uppercase rounded shadow-lg Thai-font">รับชมค้างไว้</span>
@@ -371,7 +355,6 @@ export const UI = {
                         </div>
                         <h4 class="text-sm md:text-base font-black text-white Thai-font line-clamp-1 group-hover:text-brand-primary transition-colors">${UI.escapeHTML(item.title)}</h4>
                         
-                        <!-- Progress Bar -->
                         <div class="pt-2">
                             <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                                 <div class="h-full bg-brand-primary shadow-[0_0_10px_#fbbf24] transition-all duration-1000" style="width: ${progress}%"></div>
@@ -379,7 +362,6 @@ export const UI = {
                         </div>
                     </div>
 
-                    <!-- Hover Play Icon -->
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/20 backdrop-blur-[2px]">
                         <div class="w-14 h-14 rounded-full bg-brand-primary/90 flex items-center justify-center text-black scale-75 group-hover:scale-100 transition-transform duration-500 shadow-[0_0_30px_rgba(251,191,36,0.4)]">
                             <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
@@ -430,11 +412,26 @@ export const UI = {
       ? `${data.title} - DUYดูDEE PREMIUM`
       : 'DUYดูDEE PREMIUM - สตรีมมิ่งความบันเทิงระดับโลก';
     document.title = title;
-    const desc =
-      data.description ||
-      'รับชมภาพยนตร์และซีรีส์คุณภาพระดับ 4K HDR บน DUYดูDEE';
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', desc);
+    
+    const description = data.description || 'รับชมภาพยนตร์และซีรีส์คุณภาพระดับ 4K HDR บน DUYดูDEE';
+    const image = data.poster || data.posterURL || '/assets/logo/DUYDODEE.png';
+    const url = window.location.href;
+
+    const setMeta = (name, content) => {
+        let el = document.querySelector(`meta[name="${name}"]`) || document.querySelector(`meta[property="${name}"]`);
+        if (!el) {
+            el = document.createElement('meta');
+            el.setAttribute(name.includes('og:') ? 'property' : 'name', name);
+            document.head.appendChild(el);
+        }
+        el.setAttribute('content', content);
+    };
+
+    setMeta('description', description);
+    setMeta('og:title', title);
+    setMeta('og:description', description);
+    setMeta('og:image', image);
+    setMeta('og:url', url);
   },
 
   showErrorPage: (message = 'ขออภัย ไม่พบหน้าที่คุณต้องการ') => {
@@ -483,149 +480,87 @@ export const UI = {
     UI.refreshIcons();
   },
 
-  renderiPhonePlayer: (
-    data,
-    episodes = [],
-    activeIndex = 0,
-    isSeries = false,
-  ) => {
-    const container = document.getElementById('watch-container');
-    if (!container) return;
+  renderiPhonePlayer: (data, episodes = [], activeIndex = 0, isSeries = false) => {
+    return new Promise((resolve) => {
+        const container = document.getElementById('watch-container');
+        if (!container) return resolve(null);
 
-    UI.injectStarfield();
+        UI.injectStarfield();
 
-    const currentEp = isSeries ? episodes[activeIndex] : data;
-    const embedUrl =
-      currentEp?.embedURL || currentEp?.videoUrl || currentEp?.url || '';
-    const videoId = UI.extractYouTubeId(embedUrl);
+        const currentEp = isSeries ? episodes[activeIndex] : data;
+        const embedUrl = currentEp?.embedURL || currentEp?.videoUrl || currentEp?.url || '';
+        const videoId = UI.extractYouTubeId(embedUrl);
 
-    if (!embedUrl) {
-      container.innerHTML = `
-                <div class="p-20 text-center animate-fade-in">
-                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="alert-triangle" class="w-10 h-10 text-brand-primary"></i>
+        if (!embedUrl) {
+          container.innerHTML = `
+                    <div class="p-20 text-center animate-fade-in">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="alert-triangle" class="w-10 h-10 text-brand-primary"></i>
+                        </div>
+                        <h2 class="text-white text-xl font-bold Thai-font mb-2">ไม่พบไฟล์วิดีโอ</h2>
+                        <p class="text-gray-500 Thai-font">ขออภัย สตรีมมิ่งไฟล์นี้อาจถูกลบหรือย้ายที่อยู่</p>
+                    </div>`;
+          UI.refreshIcons();
+          return resolve(null);
+        }
+
+        const title = UI.escapeHTML(data.title);
+        const isVertical = data.category && (data.category.includes('แนวตั้ง') || data.category.includes('Vertical'));
+        const frameClass = isVertical ? '' : 'landscape';
+
+        container.innerHTML = `
+                <div class="animate-fade-in relative max-w-7xl mx-auto px-4 py-4 md:py-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start relative z-10">
+                        <div class="lg:col-span-8 w-full order-1">
+                            <div id="device-wrapper" class="device-frame ${frameClass} shadow-2xl group">
+                                <div class="device-chassis"></div>
+                                <div class="device-screen bg-black">
+                                    <div id="player-api-node" class="w-full h-full"></div>
+                                    <div class="absolute inset-0 pointer-events-none border border-white/10 rounded-[inherit] z-20"></div>
+                                </div>
+                                ${isVertical ? '<div class="device-island"></div>' : ''}
+                                <div class="device-home-bar"></div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-4 space-y-6 order-2">
+                            <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none">${title}</h1>
+                            <div class="flex items-center gap-3">
+                                <button class="flex-1 py-3 px-6 bg-brand-primary text-black text-[10px] font-black uppercase rounded-xl" onclick="UI.handleShare('${title}')">แชร์</button>
+                                <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white"><i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="text-white text-xl font-bold Thai-font mb-2">ไม่พบไฟล์วิดีโอ</h2>
-                    <p class="text-gray-500 Thai-font">ขออภัย สตรีมมิ่งไฟล์นี้อาจถูกลบหรือย้ายที่อยู่</p>
                 </div>`;
-      UI.refreshIcons();
-      return;
-    }
 
-    const title = UI.escapeHTML(data.title);
-    const desc = UI.escapeHTML(
-      data.description ||
-        'สตรีมมิ่งคุณภาพระดับ 4K HDR ที่ออกแบบมาเพื่อประสบการณ์การรับชมที่ดีที่สุดของคุณบน DUYดูDEE PREMIUM',
-    );
-    const isVertical =
-      data.category &&
-      (data.category.includes('แนวตั้ง') || data.category.includes('Vertical'));
-    const frameClass = isVertical ? '' : 'landscape';
+        UI.refreshIcons();
+        
+        // Initialize YouTube Player
+        if (videoId) {
+            const initPlayer = () => {
+                const player = new YT.Player('player-api-node', {
+                    videoId: videoId,
+                    playerVars: { 'autoplay': 1, 'controls': 1 },
+                    events: {
+                        onReady: () => resolve(player)
+                    }
+                });
+            };
 
-    container.innerHTML = `
-            <div class="animate-fade-in relative max-w-7xl mx-auto px-4 py-4 md:py-8">
-                <!-- 📽️ CINEMATIC PLAYER STAGE -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start relative z-10">
-                    
-                    <!-- Player Area -->
-                    <div class="lg:col-span-8 w-full order-1">
-                        <div id="device-wrapper" class="device-frame ${frameClass} shadow-2xl group">
-                            <div class="device-chassis"></div>
-                            <div class="device-screen bg-black">
-                                ${
-                                  videoId
-                                    ? '<div id="player-api-node" class="w-full h-full"></div>'
-                                    : `<iframe src="${UI.escapeHTML(embedUrl)}" class="w-full h-full" allowfullscreen frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`
-                                }
-
-                                <!-- ⏭️ Up Next Overlay -->
-                                <div id="up-next-overlay" class="absolute bottom-10 right-4 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-700 max-w-[220px]">
-                                    <div class="p-3 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl flex gap-3 items-center">
-                                        <div class="w-16 aspect-video rounded-lg overflow-hidden flex-shrink-0 border border-white/5">
-                                            <img id="next-ep-poster" src="" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="flex-1 overflow-hidden">
-                                            <p class="text-[7px] font-black text-brand-primary uppercase tracking-[0.2em] mb-0.5">ตอนต่อไป</p>
-                                            <h4 id="next-ep-title" class="text-[9px] font-black text-white Thai-font line-clamp-1 leading-tight"></h4>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Edge Lighting Effect -->
-                                <div class="absolute inset-0 pointer-events-none border border-white/10 rounded-[inherit] z-20"></div>
-                            </div>
-                            ${isVertical ? '<div class="device-island"></div>' : ''}
-                            <div class="device-home-bar"></div>
-                        </div>
-                    </div>
-
-                    <!-- Metadata Area -->
-                    <div class="lg:col-span-4 space-y-6 order-2">
-                        <div class="space-y-3">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="badge-premium">Premium HDR</span>
-                                <span class="px-1.5 text-[9px] font-bold text-white/40 uppercase Thai-font">${data.category || 'VOD'}</span>
-                            </div>
-                            <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none">
-                                ${title}
-                            </h1>
-                            ${
-                              isSeries
-                                ? `
-                                <p class="text-xs font-bold text-brand-primary uppercase tracking-[0.1em] Thai-font">
-                                    กำลังรับชม: ${UI.escapeHTML(currentEp.title)}
-                                </p>
-                            `
-                                : ''
-                            }
-                        </div>
-
-                        <!-- Action Bar -->
-                        <div class="flex items-center gap-3">
-                            <button class="flex-1 py-3 px-6 bg-brand-primary text-black text-[10px] font-black uppercase rounded-xl hover:scale-[1.02] transition-transform Thai-font" onclick="UI.handleShare('${title}')">
-                                แชร์
-                            </button>
-                            <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all">
-                                <i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i>
-                            </button>
-                        </div>
-
-                        <!-- ⭐ Rating System -->
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-between group/rate">
-                            <div class="space-y-1">
-                                <h3 class="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] Thai-font">คะแนนความพึงพอใจ</h3>
-                                <div class="flex items-center gap-1" id="star-rating-container">
-                                    ${[1, 2, 3, 4, 5].map((num) => `<i data-lucide="star" data-value="${num}" class="star-icon w-5 h-5 cursor-pointer text-gray-700 transition-all hover:scale-125"></i>`).join('')}
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-black text-brand-primary Thai-font italic leading-none" id="avg-rating-display">${data.rating || '0.0'}</div>
-                                <div class="text-[8px] text-gray-600 font-bold uppercase tracking-widest mt-1">${data.ratingCount || 0} VOTES</div>
-                            </div>
-                        </div>
-
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-2">
-                            <h3 class="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] Thai-font">เรื่องย่อ</h3>
-                            <p class="text-xs leading-relaxed text-gray-400 font-medium">${desc}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 🎞️ EPISODE SELECTOR -->
-                ${isSeries ? UI._buildEpSelector(episodes, data.id, activeIndex) : ''}
-
-                <!-- 🎬 RELATED CONTENT -->
-                <div class="mt-12 pt-8 border-t border-white/5">
-                    <h3 class="text-lg font-black text-white uppercase italic tracking-tighter Thai-font mb-6">
-                        รายการ <span class="text-brand-primary">แนะนำ</span>
-                    </h3>
-                    <div id="related-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
-                    </div>
-                </div>
-            </div>`;
-
-    UI.refreshIcons();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (!window.YT) {
+                const tag = document.createElement('script');
+                tag.src = 'https://www.youtube.com/iframe_api';
+                const firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                window.onYouTubeIframeAPIReady = initPlayer;
+            } else {
+                initPlayer();
+            }
+        } else {
+            resolve(null);
+        }
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   },
 
   _buildEpSelector: (episodes, seriesId, activeIndex) => {
@@ -715,9 +650,6 @@ export const UI = {
     }
   },
 
-  /**
-   * 🎫 Modal สำหรับแจ้งปัญหา (Support Ticket)
-   */
   renderTicketModal: async () => {
     if (!auth.currentUser)
       return UI.showToast('กรุณาเข้าสู่ระบบก่อนแจ้งปัญหา', 'error');

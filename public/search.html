@@ -25,14 +25,14 @@
         </div>
     </nav>
 
-    <main class="flex-grow layout-container py-10 md:py-20 relative z-10">
+    <main class="relative z-10 flex-grow p-section">
         <!-- 🔍 Cinematic Search Header -->
         <header class="max-w-3xl mx-auto text-center space-y-8 mb-16 animate-slide-up">
             <div class="space-y-4">
-                <h1 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter uppercase Thai-font">
+                <h1 class="text-h1">
                     FIND YOUR <span class="text-brand-primary text-glow">CONTENT</span>
                 </h1>
-                <p class="text-gray-500 text-sm md:text-lg Thai-font opacity-80">ค้นหาภาพยนตร์ ซีรีส์ หรือนักแสดงที่คุณชื่นชอบ</p>
+                <p class="text-body opacity-80">ค้นหาภาพยนตร์ ซีรีส์ หรือนักแสดงที่คุณชื่นชอบ</p>
             </div>
 
             <div class="relative group">
@@ -47,7 +47,7 @@
 
         <!-- 🍿 Search Results Grid -->
         <section id="search-section" class="space-y-8">
-            <div id="search-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-8">
+            <div id="search-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
                 <!-- ผลลัพธ์จะถูกแสดงที่นี่ -->
             </div>
         </section>
@@ -78,6 +78,6 @@
         </div>
     </footer>
 
-    <script type="module" src="/src/pages/content/search.js"></script>
+    <script type="module" src="/src/pages/search.js"></script>
 </body>
 </html>
