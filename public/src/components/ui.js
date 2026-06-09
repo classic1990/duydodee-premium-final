@@ -112,7 +112,6 @@ export const UI = {
       const q = query(
         collection(db, SCHEMA.COLLECTIONS.TICKETS),
         where('status', '==', 'open'),
-        orderBy('createdAt', 'desc'),
       );
       onSnapshot(q, (snap) => {
         const count = snap.size;
