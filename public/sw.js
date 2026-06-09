@@ -3,7 +3,7 @@
  * Implements advanced caching strategies for optimal performance
  */
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `duydee-premium-${CACHE_VERSION}`;
 
 // Cache names for different strategies
