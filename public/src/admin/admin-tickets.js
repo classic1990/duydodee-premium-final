@@ -11,7 +11,7 @@ function loadTickets() {
     const filter = document.getElementById('status-filter');
 
     // ใช้ onSnapshot เพื่อให้เป็น Real-time Dashboard
-    const q = query(collection(db, SCHEMA.COLLECTIONS.TICKETS), orderBy('priority', 'desc'), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, SCHEMA.COLLECTIONS.TICKETS), orderBy('createdAt', 'desc'));
     
     onSnapshot(q, (snap) => {
         const selectedStatus = filter.value;

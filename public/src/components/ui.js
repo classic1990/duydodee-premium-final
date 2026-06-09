@@ -104,28 +104,34 @@ export const UI = {
       }
     });
 
-    const q = query(
-      collection(db, SCHEMA.COLLECTIONS.TICKETS),
-      where('status', '==', 'open'),
-    );
-    onSnapshot(q, (snap) => {
-      const count = snap.size;
-      const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
-      if (ticketLink) {
-        let badge = ticketLink.querySelector('.ticket-notif-badge');
-        if (count > 0) {
-          if (!badge) {
-            badge = document.createElement('span');
-            badge.className =
-              'ticket-notif-badge ml-auto px-2 py-0.5 rounded-full bg-red-500 text-white text-[8px] font-black animate-pulse';
+    // Check if this is an admin page before setting up ticket notifications
+    const isAdminPage = window.location.pathname.includes('/admin/');
+
+    if (isAdminPage) {
+      const q = query(
+        collection(db, SCHEMA.COLLECTIONS.TICKETS),
+        where('status', '==', 'open'),
+        orderBy('createdAt', 'desc'),
+      );
+      onSnapshot(q, (snap) => {
+        const count = snap.size;
+        const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
+        if (ticketLink) {
+          let badge = ticketLink.querySelector('.ticket-notif-badge');
+          if (count > 0) {
+            if (!badge) {
+              badge = document.createElement('span');
+              badge.className =
+                'ticket-notif-badge ml-auto px-2 py-0.5 rounded-full bg-red-500 text-white text-[8px] font-black animate-pulse';
             ticketLink.appendChild(badge);
+            }
+            badge.innerText = count;
+          } else if (badge) {
+            badge.remove();
           }
-          badge.innerText = count;
-        } else if (badge) {
-          badge.remove();
         }
-      }
-    });
+      });
+    }
   },
 
   showImageLightbox: (url) => {
