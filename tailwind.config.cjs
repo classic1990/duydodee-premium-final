@@ -13,16 +13,16 @@ module.exports = {
       },
       colors: {
         brand: {
-          black: '#030305',     // Deep Obsidian Black
-          obsidian: '#0a0a0e',  // Deep Indigo-Black
-          surface: '#111116',   // Studio Gray
-          primary: '#eab308',   // Premium Gold
-          accent: '#a78bfa',    // Soft Amethyst (Violet)
-          muted: '#71717a',     // Stone Muted
+          black: '#000000',     // Pure Black (Netflix Base)
+          obsidian: '#141414',  // Netflix Dark Gray
+          surface: '#2F2F2F',   // Netflix Medium Gray
+          primary: '#E50914',   // Netflix Red
+          accent: '#B81D24',    // Netflix Red Dark
+          muted: '#808080',     // Netflix Gray
         },
         text: {
-          main: '#e5e7eb',
-          muted: '#6b7280',
+          main: '#ffffff',      // Pure White
+          muted: '#b3b3b3',    // Netflix Light Gray
         }
       },
       fontSize: {
@@ -45,6 +45,7 @@ module.exports = {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
         'slide-up': 'slideUp 0.6s ease-out forwards',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'glow': 'glow 2s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -54,6 +55,10 @@ module.exports = {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(229, 9, 20, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(229, 9, 20, 0.6)' },
         }
       }
     },

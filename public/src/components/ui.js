@@ -258,7 +258,7 @@ export const UI = {
     }
 
     return `
-            <div class="movie-card group relative w-full aspect-[2/3] rounded-2xl overflow-hidden bg-[#0b0b0d] border border-white/5 cursor-pointer shadow-2xl transition-all duration-500 hover:border-brand-primary/40 hover:-translate-y-2" 
+            <div class="movie-card poster-glow group relative w-full aspect-[2/3] rounded-2xl overflow-hidden bg-[#0b0b0d] border border-white/5 cursor-pointer shadow-2xl"
                  onclick="window.location.href='${watchUrl}'">
                 <img src="${posterUrl}" alt="${title}" loading="lazy" decoding="async"
                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -282,10 +282,10 @@ export const UI = {
     const watchUrl = UI.getMediaWatchPath(movie.category, movie.type, movie.id);
     return `
             <div class="min-w-[280px] md:min-w-[450px] snap-start group animate-fade-in cursor-pointer" onclick="location.href='${watchUrl}'">
-                <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-brand-surface shadow-2xl">
+                <div class="poster-glow relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-brand-surface shadow-2xl">
                     <img src="${UI.getSafePoster(movie.poster || movie.posterURL)}" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" loading="lazy" alt="${UI.escapeHTML(movie.title)}" onerror="this.src='/assets/logo/DUYDODEE.png';">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent opacity-90"></div>
-                    <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-brand-primary text-black font-black text-2xl italic flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.5)] z-10 Thai-font">
+                    <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-brand-primary text-white font-black text-2xl italic flex items-center justify-center shadow-[0_0_20px_rgba(229,9,20,0.5)] z-10 Thai-font">
                         ${rank}
                     </div>
                     <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
@@ -312,13 +312,13 @@ export const UI = {
 
     return `
             <div class="movie-card group animate-fade-in">
-                <div class="movie-poster-wrapper !rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl relative aspect-[2/3] max-w-[180px] mx-auto">
+                <div class="movie-poster-wrapper poster-glow !rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl relative aspect-[2/3] max-w-[180px] mx-auto">
                     <img src="${safePoster}" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';" class="movie-poster-img w-full h-full object-cover" loading="lazy">
                     <div class="absolute top-3 left-3 px-2 py-0.5 bg-brand-black/90 backdrop-blur-md rounded-lg text-[7px] font-black text-brand-primary border border-white/10 uppercase tracking-widest z-40">
                         ${typeLabel}
                     </div>
                     <div class="movie-card-overlay flex flex-row justify-center items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/70 backdrop-blur-[3px]">
-                         <button onclick="window.open('${watchUrl}', '_blank')" class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 text-black haptic-btn" title="ดูตัวอย่างเนื้อหา">
+                         <button onclick="window.open('${watchUrl}', '_blank')" class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 text-white haptic-btn" title="ดูตัวอย่างเนื้อหา">
                             <i data-lucide="external-link" class="w-5 h-5"></i>
                          </button>
                          <button onclick="location.href='${editUrl}'" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl hover:bg-white hover:text-black transition-all duration-300 haptic-btn" title="แก้ไขข้อมูล">
@@ -342,28 +342,28 @@ export const UI = {
 
     return `
             <div class="min-w-[280px] md:min-w-[360px] group cursor-pointer animate-fade-in snap-start" onclick="location.href='${watchUrl}'">
-                <div class="relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:border-brand-primary/30">
+                <div class="poster-glow relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl">
                     <img src="${poster}" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-[3s]" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
-                    
+
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
 
                     <div class="absolute bottom-0 left-0 right-0 p-5 space-y-2">
                         <div class="flex items-center gap-2">
-                             <span class="px-2 py-0.5 bg-brand-primary text-black text-[8px] font-black uppercase rounded shadow-lg Thai-font">รับชมค้างไว้</span>
+                             <span class="px-2 py-0.5 bg-brand-primary text-white text-[8px] font-black uppercase rounded shadow-lg Thai-font">รับชมค้างไว้</span>
                              <span class="text-[9px] font-bold text-white/50 uppercase tracking-widest">${item.category || 'Premium'}</span>
                         </div>
                         <h4 class="text-sm md:text-base font-black text-white Thai-font line-clamp-1 group-hover:text-brand-primary transition-colors">${UI.escapeHTML(item.title)}</h4>
-                        
+
                         <div class="pt-2">
                             <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-primary shadow-[0_0_10px_#fbbf24] transition-all duration-1000" style="width: ${progress}%"></div>
+                                <div class="h-full bg-brand-primary shadow-[0_0_10px_#E50914] transition-all duration-1000" style="width: ${progress}%"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/20 backdrop-blur-[2px]">
-                        <div class="w-14 h-14 rounded-full bg-brand-primary/90 flex items-center justify-center text-black scale-75 group-hover:scale-100 transition-transform duration-500 shadow-[0_0_30px_rgba(251,191,36,0.4)]">
+                        <div class="w-14 h-14 rounded-full bg-brand-primary/90 flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500 shadow-[0_0_30px_rgba(229,9,20,0.4)]">
                             <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
                         </div>
                     </div>
