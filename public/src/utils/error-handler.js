@@ -182,7 +182,9 @@ class ErrorHandler {
             try {
                 const observer = new PerformanceObserver((list) => {
                     for (const entry of list.getEntries()) {
-                        if (entry.duration > 1000) {
+                        // Adjust threshold: navigation events can be slower, custom measures should be faster
+                        const threshold = entry.entryType === 'navigation' ? 5000 : 2000;
+                        if (entry.duration > threshold) {
                             console.warn('⚡ Slow operation:', entry);
                             this.logSlowOperation(entry);
                         }
