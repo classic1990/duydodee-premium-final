@@ -21,13 +21,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function initSystemControls() {
     const purgeBtn = document.getElementById('purge-data-btn');
-    if (!purgeBtn) return;
+    if (!purgeBtn) {
+        return;
+    }
 
     purgeBtn.addEventListener('click', handlePurgeData);
 }
 
 async function handlePurgeData() {
-    if (!confirm('🚨 คำเตือนสูงสุด: คุณต้องการลบข้อมูลหนังและซีรีส์ทั้งหมดในระบบใช่หรือไม่? การกระทำนี้ไม่สามารถเรียกคืนได้!')) return;
+    if (!confirm('🚨 คำเตือนสูงสุด: คุณต้องการลบข้อมูลหนังและซีรีส์ทั้งหมดในระบบใช่หรือไม่? การกระทำนี้ไม่สามารถเรียกคืนได้!')) {
+        return;
+    }
 
     const password = prompt('กรุณาพิมพ์ \'CONFIRM DELETE\' เพื่อยืนยัน:');
     if (password !== 'CONFIRM DELETE') {
@@ -61,5 +65,4 @@ async function handlePurgeData() {
         UI.setLoading(false);
     }
 }
-
 

@@ -1,9 +1,9 @@
 import { db, toggleWatchlist } from './firebase.js';
 import { SCHEMA } from '../constants.js';
 import { UI } from '../components/ui.js';
-import { 
-    collection, collectionGroup, getDocs, doc, getDoc, setDoc, 
-    query, where, orderBy, limit, startAfter, 
+import {
+    collection, collectionGroup, getDocs, doc, getDoc, setDoc,
+    query, where, orderBy, limit, startAfter,
     increment, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
@@ -14,9 +14,13 @@ export const ContentService = {
     toggleWatchlist, // Expose watchlist toggle method
 
     async checkDuplicateLink(videoUrl) {
-        if (!videoUrl) return { exists: false };
+        if (!videoUrl) {
+            return { exists: false };
+        }
         const videoId = UI.extractYouTubeId(videoUrl);
-        if (!videoId) return { exists: false };
+        if (!videoId) {
+            return { exists: false };
+        }
 
         const normalizedEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
 
@@ -24,12 +28,16 @@ export const ContentService = {
             // 1. Check Movies (via normalized embedURL)
             const mQuery = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), where('embedURL', '==', normalizedEmbedUrl), limit(1));
             const mSnap = await getDocs(mQuery);
-            if (!mSnap.empty) return { exists: true, type: 'movie', data: mSnap.docs[0].data() };
+            if (!mSnap.empty) {
+                return { exists: true, type: 'movie', data: mSnap.docs[0].data() };
+            }
 
             // 2. Check Series Episodes (via normalized embedURL)
             const eQuery = query(collectionGroup(db, 'episodes'), where('embedURL', '==', normalizedEmbedUrl), limit(1));
             const eSnap = await getDocs(eQuery);
-            if (!eSnap.empty) return { exists: true, type: 'series', data: eSnap.docs[0].data() };
+            if (!eSnap.empty) {
+                return { exists: true, type: 'series', data: eSnap.docs[0].data() };
+            }
 
             return { exists: false };
         } catch (error) {
@@ -41,10 +49,12 @@ export const ContentService = {
     async fetchItems(type, options = {}) {
         const { pageSize = 12, lastDoc = null, sortBy = 'createdAt', direction = 'desc' } = options;
         const collName = this._getCollection(type);
-        
+
         try {
             let q = query(collection(db, collName), orderBy(sortBy, direction), limit(pageSize));
-            if (lastDoc) q = query(q, startAfter(lastDoc));
+            if (lastDoc) {
+                q = query(q, startAfter(lastDoc));
+            }
 
             const snap = await getDocs(q);
             return {
@@ -89,7 +99,7 @@ export const ContentService = {
 
             // 2. บันทึกลง daily_stats อัตโนมัติ (ใช้ ID เป็นวันที่ YYYY-MM-DD)
             const today = new Date().toISOString().split('T')[0];
-            await setDoc(doc(db, SCHEMA.COLLECTIONS.DAILY_STATS, today), { 
+            await setDoc(doc(db, SCHEMA.COLLECTIONS.DAILY_STATS, today), {
                 views: increment(1),
                 lastUpdated: serverTimestamp()
             }, { merge: true });
@@ -107,7 +117,9 @@ export const ContentService = {
     },
 
     async getEpisodes(seriesId) {
-        if (!seriesId) return [];
+        if (!seriesId) {
+            return [];
+        }
         try {
             const q = query(
                 collection(db, SCHEMA.COLLECTIONS.SERIES, seriesId, 'episodes'),
@@ -125,11 +137,13 @@ export const ContentService = {
      * 🔍 ระบบค้นหาอัจฉริยะ (Prefix Matching) สำหรับหน้า Search
      */
     async searchItems(type, term, limitCount = 12) {
-        if (!term) return [];
+        if (!term) {
+            return [];
+        }
         try {
             const collName = this._getCollection(type);
             const keyword = term.trim().toUpperCase();
-            
+
             // ใช้เทคนิค Prefix matching สำหรับประสิทธิภาพสูง
             const q = query(
                 collection(db, collName),
@@ -139,12 +153,14 @@ export const ContentService = {
             );
 
             const snap = await getDocs(q);
-            if (snap.empty) return [];
+            if (snap.empty) {
+                return [];
+            }
 
-            return snap.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data(), 
-                type 
+            return snap.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                type
             }));
         } catch (error) {
             console.error(`ContentService Error [searchItems] for ${type}:`, error);
@@ -155,7 +171,7 @@ export const ContentService = {
     async fetchItemsByCategory(collections, categoryInput, options = {}) {
         const { pageSize = 12, lastDoc = null, sortBy = 'createdAt', direction = 'desc', isAllCategories = false } = options;
         const collectionsArray = Array.isArray(collections) ? collections : [collections];
-        
+
         if (collectionsArray.length === 1) {
             const type = collectionsArray[0];
             const collName = this._getCollection(type);
@@ -203,10 +219,18 @@ export const ContentService = {
                 merged.sort((a, b) => {
                     let valA = a[sortBy];
                     let valB = b[sortBy];
-                    if (valA && typeof valA.toDate === 'function') valA = valA.toDate();
-                    if (valB && typeof valB.toDate === 'function') valB = valB.toDate();
-                    if (valA < valB) return direction === 'asc' ? -1 : 1;
-                    if (valA > valB) return direction === 'asc' ? 1 : -1;
+                    if (valA && typeof valA.toDate === 'function') {
+                        valA = valA.toDate();
+                    }
+                    if (valB && typeof valB.toDate === 'function') {
+                        valB = valB.toDate();
+                    }
+                    if (valA < valB) {
+                        return direction === 'asc' ? -1 : 1;
+                    }
+                    if (valA > valB) {
+                        return direction === 'asc' ? 1 : -1;
+                    }
                     return 0;
                 });
                 let startIndex = 0;
@@ -243,15 +267,17 @@ export const ContentService = {
                 const snap = await getDocs(collection(db, colName));
                 snap.forEach(docSnap => {
                     // รีเซ็ตยอดวิวประจำสัปดาห์ และคะแนน Trending เพื่อเริ่มรอบใหม่
-                    batch.update(docSnap.ref, { 
+                    batch.update(docSnap.ref, {
                         weeklyViews: 0,
-                        trendingScore: 0 
+                        trendingScore: 0
                     });
                     count++;
                 });
             }
 
-            if (count > 0) await batch.commit();
+            if (count > 0) {
+                await batch.commit();
+            }
             return { success: true, total: count };
         } catch (error) {
             console.error('ContentService Error [resetWeeklyViews]:', error);

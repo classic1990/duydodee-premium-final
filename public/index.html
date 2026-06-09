@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DUYดูDEE PREMIUM | ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR</title>
     <meta name="description" content="สัมผัสประสบการณ์การรับชมภาพยนตร์และซีรีส์แนวตั้งคุณภาพสูงระดับ 4K HDR ที่ดีที่สุดบน DUYดูDEE PREMIUM ออกแบบมาเพื่อความหรูหราและรสนิยมที่เหนือระดับ">
+    <meta name="keywords" content="ดูหนังออนไลน์, ซีรีส์แนวตั้ง, ซีรีส์จีน, 4K HDR, streaming, DUYดูDEE, ดูหนังฟรี, ซีรีส์ฟรี">
+    <meta name="author" content="DUYดูDEE Entertainment">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://duydodeesport.web.app/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -12,15 +16,70 @@
     <meta property="og:title" content="DUYดูDEE PREMIUM | ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR">
     <meta property="og:description" content="ก้าวข้ามขีดจำกัดเดิมๆ สู่โลกความบันเทิงระดับมาสเตอร์พีซ คมชัดทุกอณูบนทุกอุปกรณ์">
     <meta property="og:image" content="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="th_TH">
+    <meta property="og:site_name" content="DUYดูDEE PREMIUM">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://duydodeesport.web.app/">
+    <meta name="twitter:title" content="DUYดูDEE PREMIUM | ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR">
+    <meta name="twitter:description" content="ก้าวข้ามขีดจำกัดเดิมๆ สู่โลกความบันเทิงระดับมาสเตอร์พีซ คมชัดทุกอณูบนทุกอุปกรณ์">
+    <meta name="twitter:image" content="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "DUYดูDEE PREMIUM",
+        "alternateName": "DUYดูDEE",
+        "url": "https://duydodeesport.web.app/",
+        "description": "สัมผัสประสบการณ์การรับชมภาพยนตร์และซีรีส์แนวตั้งคุณภาพสูงระดับ 4K HDR ที่ดีที่สุด",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://duydodeesport.web.app/search.html?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "DUYดูDEE Entertainment",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://duydodeesport.web.app/assets/logo/DUYDODEE.png"
+            }
+        }
+    }
+    </script>
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#050507">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DUYดูDEE">
 
     <!-- ⚡ PERFORMANCE: Critical Asset Preloading -->
     <link rel="icon" type="image/png" href="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
-    
-    <!-- 🎨 Lucide Icons -->
-    <script src="https://unpkg.com/lucide@0.410.0"></script>
-    <meta name="theme-color" content="#050507">
+
+    <!-- 🎨 Lucide Icons (defer loading for performance) -->
+    <script src="https://unpkg.com/lucide@0.410.0" defer></script>
+
+    <!-- 🎯 Critical CSS inline for first paint -->
+    <style>
+        /* Critical rendering path optimization */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
 </head>
 <body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30">
 
@@ -192,11 +251,16 @@
         </div>
     </footer>
 
+    <!-- 🛡️ Error Handler (load first for global error tracking) -->
+    <script type="module" src="/src/utils/error-handler.js"></script>
+
     <script type="module" src="/src/pages/home.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('✅ Service Worker registered:', registration))
+                    .catch(error => console.error('❌ Service Worker registration failed:', error));
             });
         }
     </script>

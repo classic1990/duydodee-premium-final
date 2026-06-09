@@ -9,14 +9,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarPreview = document.getElementById('avatar-preview');
     const avatarTrigger = document.querySelector('.avatar-trigger');
     const form = document.getElementById('edit-profile-form');
-    
-    if (avatarTrigger) avatarTrigger.onclick = () => avatarInput.click();
-    
+
+    if (avatarTrigger) {
+        avatarTrigger.onclick = () => avatarInput.click();
+    }
+
     auth.onAuthStateChanged(user => {
         if (user) {
-            if (document.getElementById('display-name')) document.getElementById('display-name').value = user.displayName || '';
-            if (document.getElementById('email')) document.getElementById('email').value = user.email || '';
-            if (avatarPreview) avatarPreview.src = user.photoURL || '/assets/logo/DUYDODEE.png';
+            if (document.getElementById('display-name')) {
+                document.getElementById('display-name').value = user.displayName || '';
+            }
+            if (document.getElementById('email')) {
+                document.getElementById('email').value = user.email || '';
+            }
+            if (avatarPreview) {
+                avatarPreview.src = user.photoURL || '/assets/logo/DUYDODEE.png';
+            }
             UI.refreshIcons();
         } else {
             window.location.href = '/login.html';
@@ -44,13 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         form.onsubmit = async (e) => {
             e.preventDefault();
             const user = auth.currentUser;
-            if (!user) return;
+            if (!user) {
+                return;
+            }
 
             UI.setLoading(true);
             try {
                 let photoURL = user.photoURL;
                 const file = avatarInput.files[0];
-                
+
                 if (file) {
                     const storageRef = ref(storage, `avatars/${user.uid}`);
                     await uploadBytes(storageRef, file);
@@ -58,17 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const displayName = document.getElementById('display-name').value.trim();
-                if (!displayName) throw new Error('กรุณาระบุชื่อที่แสดง');
+                if (!displayName) {
+                    throw new Error('กรุณาระบุชื่อที่แสดง');
+                }
 
                 await updateProfile(user, { displayName, photoURL });
-                
+
                 // Update Firestore too
-                await setDoc(doc(db, 'users', user.uid), { 
-                    displayName, 
+                await setDoc(doc(db, 'users', user.uid), {
+                    displayName,
                     photoURL,
                     updatedAt: new Date()
                 }, { merge: true });
-                
+
                 UI.showToast('อัปเดตข้อมูลส่วนตัวสำเร็จ', 'success');
                 setTimeout(() => window.location.href = '/profile.html', 1500);
             } catch (err) {
@@ -80,5 +92,4 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 });
-
 

@@ -5,11 +5,13 @@ import { UI } from '../../components/ui.js';
 let isRendering = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (window.WATCH_JS_INITIALIZED) return;
+    if (window.WATCH_JS_INITIALIZED) {
+        return;
+    }
     window.WATCH_JS_INITIALIZED = true;
 
     UI.initNavbar();
-    
+
     const params = new URLSearchParams(window.location.search);
     const movieId = params.get('id');
 
@@ -18,22 +20,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    if (isRendering) return;
+    if (isRendering) {
+        return;
+    }
     isRendering = true;
 
     try {
         const movie = await ContentService.getItemById('movie', movieId);
-        
+
         if (movie) {
             UI.updateMeta(movie);
 
             // Clear container
             const container = document.getElementById('watch-container');
-            if (container) container.innerHTML = '';
+            if (container) {
+                container.innerHTML = '';
+            }
 
             // 1. Render Player
             const player = await UI.renderiPhonePlayer(movie, [], 0, false);
-            
+
             // Setup periodic progress saving (every 15s)
             if (player) {
                 AuthService.onStateChanged(user => {
@@ -55,7 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 3. Save History (initial entry)
             AuthService.onStateChanged(user => {
-                if (user) AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' }, 0);
+                if (user) {
+                    AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' }, 0);
+                }
             });
 
             // 4. Bookmark Button Handler
@@ -95,7 +103,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadRelated(category, currentId) {
     const grid = document.getElementById('related-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
     try {
         const related = await ContentService.getRelatedItems('movie', category, currentId, 6);
         UI.renderRelatedGrid(grid, related, 'movie');
@@ -103,5 +113,4 @@ async function loadRelated(category, currentId) {
         console.error('Related Error:', err);
     }
 }
-
 

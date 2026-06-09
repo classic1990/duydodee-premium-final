@@ -3,7 +3,7 @@ import { UI } from '../components/ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.initNavbar();
-    
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             loadWatchlist(user.uid);
@@ -16,13 +16,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadWatchlist(uid) {
     const grid = document.getElementById('watchlist-grid');
     const emptyState = document.getElementById('empty-state');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     UI.renderSkeleton(grid, 6);
 
     try {
         const snap = await getDocs(collection(db, 'users', uid, 'bookmarks'));
-        
+
         // Remove skeletons
         grid.innerHTML = '';
 

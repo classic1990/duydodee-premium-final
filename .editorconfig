@@ -1,0 +1,51 @@
+# EditorConfig for DUYดูDEE Project
+# Ensures consistent coding styles across different editors and IDEs
+
+root = true
+
+# Default settings
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript/TypeScript files
+[*.{js,jsx,ts,tsx,mjs,cjs}]
+indent_size = 4
+max_line_length = 120
+
+# HTML files
+[*.{html,htm}]
+indent_size = 2
+
+# CSS/SCSS files
+[*.{css,scss,sass,less}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Configuration files
+[*.{eslintrc,editorconfig,gitignore,prettierrc}]
+indent_size = 2
+
+# Package files
+[package.json]
+indent_size = 2
+
+# Firebase configuration files
+[{firebase.json,.firebaserc,firestore.rules}]
+indent_size = 2

@@ -9,9 +9,9 @@ import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 const PAGE_SIZE = 15;
 let currentPage = 1;
-let cursors = [null];
+const cursors = [null];
 let totalUsers = 0;
-let userCache = new Map();
+const userCache = new Map();
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -39,22 +39,32 @@ async function updateUserCount() {
         const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.USERS));
         totalUsers = countSnap.data().count;
         const countEl = document.getElementById('user-count');
-        if (countEl) countEl.innerText = totalUsers.toLocaleString();
-    } catch (e) { console.error('Count failed:', e); }
+        if (countEl) {
+            countEl.innerText = totalUsers.toLocaleString();
+        }
+    } catch (e) {
+        console.error('Count failed:', e);
+    }
 }
 
 async function loadUsers() {
-    if (isSearchMode) return;
+    if (isSearchMode) {
+        return;
+    }
 
     const tableBody = document.getElementById('user-list');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div></td></tr>';
 
     try {
         const cursor = cursors[currentPage - 1];
         let q = query(collection(db, SCHEMA.COLLECTIONS.USERS), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursor) q = query(q, startAfter(cursor));
+        if (cursor) {
+            q = query(q, startAfter(cursor));
+        }
 
         const snap = await getDocs(q);
         const users = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
@@ -79,7 +89,9 @@ async function loadUsers() {
 
 function renderUsers(users) {
     const tableBody = document.getElementById('user-list');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     if (users.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center text-gray-500 Thai-font opacity-40">ไม่พบรายชื่อสมาชิก</td></tr>';
@@ -141,11 +153,15 @@ function renderUsers(users) {
  */
 function setupUserActionListeners() {
     const tableBody = document.getElementById('user-table-body');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     tableBody.addEventListener('click', (e) => {
         const btn = e.target.closest('.user-action-btn');
-        if (!btn) return;
+        if (!btn) {
+            return;
+        }
 
         const action = btn.dataset.action;
         const uid = btn.dataset.uid;
@@ -162,7 +178,9 @@ function setupUserActionListeners() {
 function updatePaginationUI() {
     const container = document.getElementById('pagination-container');
     if (!container || isSearchMode) {
-        if (container) container.innerHTML = '';
+        if (container) {
+            container.innerHTML = '';
+        }
         return;
     }
 
@@ -180,17 +198,27 @@ function updatePaginationUI() {
             </button>
         </div>`;
 
-    document.getElementById('prev-btn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; loadUsers(); } });
-    document.getElementById('next-btn')?.addEventListener('click', () => { currentPage++; loadUsers(); });
+    document.getElementById('prev-btn')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--; loadUsers();
+        }
+    });
+    document.getElementById('next-btn')?.addEventListener('click', () => {
+        currentPage++; loadUsers();
+    });
     UI.refreshIcons();
 }
 
 function setupSearch() {
     const input = document.getElementById('user-search');
-    if (!input) return;
+    if (!input) {
+        return;
+    }
     input.addEventListener('input', UI.debounce(async (e) => {
         const term = e.target.value.trim().toLowerCase();
-        if (!term) { isSearchMode = false; loadUsers(); return; }
+        if (!term) {
+            isSearchMode = false; loadUsers(); return;
+        }
 
         isSearchMode = true;
         const tableBody = document.getElementById('user-list');
@@ -205,13 +233,17 @@ function setupSearch() {
             filtered.forEach(u => userCache.set(u.uid, u));
             renderUsers(filtered);
             document.getElementById('pagination-container').innerHTML = '';
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error(e);
+        }
     }, 400));
 }
 
 function setupEditModal() {
     const form = document.getElementById('edit-user-form');
-    if (!form) return;
+    if (!form) {
+        return;
+    }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -239,7 +271,9 @@ function setupEditModal() {
  */
 function openEditModal(uid) {
     const user = userCache.get(uid);
-    if (!user) return;
+    if (!user) {
+        return;
+    }
 
     document.getElementById('edit-uid').value = uid;
     document.getElementById('edit-displayName').value = user.displayName || '';
@@ -267,15 +301,19 @@ function closeEditModal() {
  */
 async function toggleBan(uid, currentStatus) {
     const action = currentStatus ? 'ปลดระงับ' : 'ระงับสิทธิ์';
-    if (!confirm(`ยืนยันการ${action}สมาชิกรายนี้?`)) return;
+    if (!confirm(`ยืนยันการ${action}สมาชิกรายนี้?`)) {
+        return;
+    }
 
     UI.setLoading(true);
     try {
         await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid), { isBanned: !currentStatus });
         UI.showToast(`${action}เรียบร้อยแล้ว`, 'success');
         loadUsers();
-    } catch (e) { UI.showToast('เกิดข้อผิดพลาด', 'error'); }
-    finally { UI.setLoading(false); }
+    } catch (e) {
+        UI.showToast('เกิดข้อผิดพลาด', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
 }
-
 

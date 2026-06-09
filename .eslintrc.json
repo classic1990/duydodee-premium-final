@@ -1,7 +1,9 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "node": true,
+    "jest": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -12,17 +14,70 @@
     "Chart": "readonly",
     "lucide": "readonly",
     "goToDiscoveryPage": "writable",
-    "closeEditModal": "writable"
+    "closeEditModal": "writable",
+    "changePage": "writable",
+    "UI": "readonly",
+    "AuthService": "readonly",
+    "ContentService": "readonly",
+    "config": "readonly",
+    "errorHandler": "readonly",
+    "sentryConfig": "readonly",
+    "Sentry": "readonly"
   },
   "plugins": [
     "html"
   ],
   "rules": {
-    "no-unused-vars": "warn",
-    "no-console": "off",
-    "no-empty": "off",
+    "no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    "no-console": ["warn", {
+      "allow": ["warn", "error"]
+    }],
+    "no-empty": ["warn", {
+      "allowEmptyCatch": true
+    }],
     "no-useless-escape": "off",
     "semi": ["error", "always"],
-    "quotes": ["error", "single"]
-  }
+    "quotes": ["error", "single", {
+      "avoidEscape": true,
+      "allowTemplateLiterals": true
+    }],
+    "comma-dangle": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "brace-style": ["error", "1tbs"],
+    "indent": ["error", 4],
+    "linebreak-style": "off",
+    "no-trailing-spaces": "error",
+    "no-multiple-empty-lines": ["error", {
+      "max": 1,
+      "maxEOF": 1
+    }],
+    "space-before-function-paren": ["error", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "keyword-spacing": ["error", {
+      "before": true,
+      "after": true
+    }],
+    "space-infix-ops": "error",
+    "eol-last": ["error", "always"],
+    "no-debugger": "error",
+    "no-alert": "warn"
+  },
+  "ignorePatterns": [
+    "dist/**",
+    "build/**",
+    "node_modules/**",
+    "*.min.js",
+    "public/sw.js"
+  ]
 }

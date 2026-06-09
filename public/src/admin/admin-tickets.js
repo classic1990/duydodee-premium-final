@@ -12,7 +12,7 @@ function loadTickets() {
 
     // ใช้ onSnapshot เพื่อให้เป็น Real-time Dashboard
     const q = query(collection(db, SCHEMA.COLLECTIONS.TICKETS), orderBy('createdAt', 'desc'));
-    
+
     onSnapshot(q, (snap) => {
         const selectedStatus = filter.value;
         container.innerHTML = '';
@@ -23,11 +23,13 @@ function loadTickets() {
 
         snap.forEach(ticketDoc => {
             const t = ticketDoc.data();
-            if (selectedStatus !== 'all' && t.status !== selectedStatus) return;
+            if (selectedStatus !== 'all' && t.status !== selectedStatus) {
+                return;
+            }
 
             const dateStr = t.createdAt?.toDate().toLocaleString('th-TH') || 'N/A';
             const isVIP = t.priority === 'high';
-            
+
             const repliesHtml = (t.replies || []).map(r => `
                 <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
                     <div class="flex justify-between items-center">
@@ -85,9 +87,9 @@ function loadTickets() {
         container.querySelectorAll('.status-btn').forEach(btn => {
             btn.onclick = async () => {
                 const newStatus = btn.dataset.status;
-                await updateDoc(doc(db, SCHEMA.COLLECTIONS.TICKETS, btn.dataset.id), { 
+                await updateDoc(doc(db, SCHEMA.COLLECTIONS.TICKETS, btn.dataset.id), {
                     status: newStatus,
-                    updatedAt: serverTimestamp() 
+                    updatedAt: serverTimestamp()
                 });
                 UI.showToast(`อัปเดตสถานะเป็น ${newStatus} สำเร็จ`);
             };
@@ -99,7 +101,9 @@ function loadTickets() {
                 const tid = btn.dataset.id;
                 const input = document.getElementById(`reply-input-${tid}`);
                 const msg = input.value.trim();
-                if (!msg) return;
+                if (!msg) {
+                    return;
+                }
 
                 await updateDoc(doc(db, SCHEMA.COLLECTIONS.TICKETS, tid), {
                     replies: arrayUnion({

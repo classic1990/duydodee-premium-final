@@ -8,10 +8,21 @@
   "scripts": {
     "dev": "npm run build:css && vite",
     "build": "vite build",
+    "build:prod": "vite build --mode production",
     "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
     "lint": "eslint public/src/**/*.js",
-    "generate:sitemap": "node scripts/generate-sitemap.js"
+    "lint:fix": "eslint public/src/**/*.js --fix",
+    "format": "prettier --write \"public/src/**/*.js\"",
+    "generate:sitemap": "node scripts/generate-sitemap.js",
+    "validate:env": "node scripts/validate-env.js",
+    "clean": "rm -rf dist .firebase",
+    "predeploy": "npm run lint && npm run build:prod",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions"
   },
   "keywords": [],
   "author": "",

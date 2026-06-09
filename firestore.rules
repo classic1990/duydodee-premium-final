@@ -2,7 +2,7 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // 🛠️ Helpers
     function isSignedIn() {
       return request.auth != null;
@@ -10,8 +10,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isSignedIn() &&
-        (request.auth.token.email == 'duyclassic191@gmail.com' ||
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super-admin', 'admin', 'master'] ||
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super-admin', 'admin', 'master'] ||
          exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
     }
 

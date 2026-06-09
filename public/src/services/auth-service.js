@@ -8,6 +8,7 @@ import {
     createUserWithEmailAndPassword, sendEmailVerification
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { SCHEMA } from '../constants.js';
+import config from '../config/index.js';
 
 /**
  * 🔐 DUYดูDEE AUTH SERVICE
@@ -25,14 +26,19 @@ export const AuthService = {
      * Check if user is an admin or master
      */
     async checkIsAdmin(user) {
-        if (!user) return false;
-        // Admin access for the main developer
-        const ADMIN_EMAIL = 'duyclassic191@gmail.com';
-        if (user.email === ADMIN_EMAIL) return true;
+        if (!user) {
+            return false;
+        }
+        // Admin access from environment configuration
+        if (config.isAdmin(user.email)) {
+            return true;
+        }
 
         try {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
-            if (!snap.exists()) return false;
+            if (!snap.exists()) {
+                return false;
+            }
             const role = (snap.data().role || '').toLowerCase();
             return role === SCHEMA.ROLES.MASTER.toLowerCase() || role === SCHEMA.ROLES.ADMIN.toLowerCase();
         } catch (e) {
@@ -45,7 +51,9 @@ export const AuthService = {
      * Save watch history
      */
     async saveWatchHistory(userId, item, progress = 0) {
-        if (!userId || !item.id) return;
+        if (!userId || !item.id) {
+            return;
+        }
         try {
             const historyRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId, 'history', item.id);
             const data = {
@@ -68,14 +76,18 @@ export const AuthService = {
                     [prefKey]: increment(1)
                 });
             }
-        } catch (e) { console.error('History Save Error:', e); }
+        } catch (e) {
+            console.error('History Save Error:', e);
+        }
     },
 
     /**
      * Get watch history
      */
     async getWatchHistory(userId, count = 6) {
-        if (!userId) return [];
+        if (!userId) {
+            return [];
+        }
         try {
             const q = query(
                 collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history'),
@@ -103,7 +115,9 @@ export const AuthService = {
                 details: details,
                 timestamp: serverTimestamp()
             });
-        } catch (e) { console.error('Log Error:', e); }
+        } catch (e) {
+            console.error('Log Error:', e);
+        }
     },
 
     /**
@@ -168,7 +182,9 @@ export const AuthService = {
      * Sync user data to Firestore
      */
     async syncUserToFirestore(user, customName = null) {
-        if (!user) return;
+        if (!user) {
+            return;
+        }
         const userRef = doc(db, SCHEMA.COLLECTIONS.USERS, user.uid);
         try {
             const snap = await getDoc(userRef);

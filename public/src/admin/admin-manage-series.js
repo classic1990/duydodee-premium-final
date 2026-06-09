@@ -9,7 +9,7 @@ import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 const PAGE_SIZE = 10;
 let currentPage = 1;
-let cursors = [null];
+const cursors = [null];
 let totalSeries = 0;
 let allSeriesCache = [];
 let isSearchMode = false;
@@ -42,21 +42,29 @@ async function updateSeriesCount() {
     try {
         const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.SERIES));
         totalSeries = countSnap.data().count;
-    } catch (e) { console.error('Count failed:', e); }
+    } catch (e) {
+        console.error('Count failed:', e);
+    }
 }
 
 async function loadSeries() {
-    if (isSearchMode) return;
+    if (isSearchMode) {
+        return;
+    }
 
     const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังดึงข้อมูลจากศูนย์ควบคุม</p></td></tr>';
 
     try {
         const cursor = cursors[currentPage - 1];
         let q = query(collection(db, SCHEMA.COLLECTIONS.SERIES), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursor) q = query(q, startAfter(cursor));
+        if (cursor) {
+            q = query(q, startAfter(cursor));
+        }
 
         const snap = await getDocs(q);
 
@@ -115,7 +123,9 @@ async function handleSearch(term) {
 
 function renderSeries(seriesList) {
     const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     if (seriesList.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
@@ -193,11 +203,15 @@ function renderSeries(seriesList) {
  */
 function setupSeriesActionListeners() {
     const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
     tableBody.addEventListener('click', (e) => {
         const btn = e.target.closest('.series-action-btn');
-        if (!btn) return;
+        if (!btn) {
+            return;
+        }
 
         const action = btn.dataset.action;
         const url = btn.dataset.url;
@@ -214,7 +228,9 @@ function setupSeriesActionListeners() {
 function updatePaginationUI() {
     const container = document.getElementById('pagination-container');
     if (!container || isSearchMode) {
-        if (container) container.innerHTML = '';
+        if (container) {
+            container.innerHTML = '';
+        }
         return;
     }
 
@@ -237,8 +253,14 @@ function updatePaginationUI() {
         </div>
     `;
 
-    document.getElementById('prev-btn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; loadSeries(); } });
-    document.getElementById('next-btn')?.addEventListener('click', () => { currentPage++; loadSeries(); });
+    document.getElementById('prev-btn')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--; loadSeries();
+        }
+    });
+    document.getElementById('next-btn')?.addEventListener('click', () => {
+        currentPage++; loadSeries();
+    });
     UI.refreshIcons();
 }
 
@@ -248,7 +270,9 @@ function updatePaginationUI() {
  * @returns {Promise<void>}
  */
 async function deleteSeries(id) {
-    if (!confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')) return;
+    if (!confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
+        return;
+    }
 
     UI.setLoading(true);
     try {
@@ -264,5 +288,4 @@ async function deleteSeries(id) {
         UI.setLoading(false);
     }
 }
-
 

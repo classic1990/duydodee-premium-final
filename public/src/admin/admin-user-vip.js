@@ -65,7 +65,9 @@ async function loadUserVIPData(uid) {
         tbody.innerHTML = snap.docs.map(docSnap => {
             const p = docSnap.data();
             const isConfirmed = p.status === 'confirmed';
-            if (isConfirmed) totalPaid += (p.amount || 0);
+            if (isConfirmed) {
+                totalPaid += (p.amount || 0);
+            }
 
             const statusClass = isConfirmed ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
             const statusLabel = isConfirmed ? 'ยืนยันแล้ว' : 'รอตรวจสอบ';
@@ -110,7 +112,9 @@ async function loadUserVIPData(uid) {
         tbody.querySelectorAll('.confirm-btn').forEach(btn => {
             btn.onclick = async () => {
                 const paymentId = btn.dataset.id;
-                if (!confirm(`ยืนยันการรับยอดชำระเงิน ${btn.dataset.amount} THB และเพิ่มสถานะ VIP?`)) return;
+                if (!confirm(`ยืนยันการรับยอดชำระเงิน ${btn.dataset.amount} THB และเพิ่มสถานะ VIP?`)) {
+                    return;
+                }
 
                 UI.setLoading(true);
                 try {
@@ -146,7 +150,9 @@ async function loadUserVIPData(uid) {
                 } catch (err) {
                     console.error(err);
                     UI.showToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
-                } finally { UI.setLoading(false); }
+                } finally {
+                    UI.setLoading(false);
+                }
             };
         });
 
@@ -154,5 +160,7 @@ async function loadUserVIPData(uid) {
         totalEl.innerText = `${totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })} THB`;
         UI.refreshIcons();
 
-    } catch (e) { console.error('VIP History Error:', e); UI.showToast('ไม่สามารถดึงข้อมูลได้', 'error'); }
+    } catch (e) {
+        console.error('VIP History Error:', e); UI.showToast('ไม่สามารถดึงข้อมูลได้', 'error');
+    }
 }

@@ -59,7 +59,9 @@ async function loadHeroSlides() {
 }
 
 function renderSlides(slides) {
-    if (!container) return;
+    if (!container) {
+        return;
+    }
     if (slides.length === 0) {
         container.innerHTML = '<div class="col-span-full py-20 text-center opacity-30 Thai-font">ยังไม่มีเนื้อหาแนะนำ</div>';
         return;
@@ -91,10 +93,14 @@ function renderSlides(slides) {
  * Sets up event delegation for hero action buttons
  */
 function setupHeroActionListeners() {
-    if (!container) return;
+    if (!container) {
+        return;
+    }
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('.hero-action-btn');
-        if (!btn) return;
+        if (!btn) {
+            return;
+        }
 
         const action = btn.dataset.action;
         const id = btn.dataset.id;
@@ -113,7 +119,9 @@ function setupHeroActionListeners() {
  */
 function editHero(id) {
     const data = slidesCache.find(s => s.id === id);
-    if (!data) return;
+    if (!data) {
+        return;
+    }
     document.getElementById('hero-id').value = id;
     document.getElementById('hero-title').value = data.title;
     document.getElementById('hero-desc').value = data.description;
@@ -163,7 +171,9 @@ async function handleSaveHero(e) {
  * @returns {Promise<void>}
  */
 async function deleteHero(id) {
-    if (!confirm('คุณต้องการลบสไลด์นี้ใช่หรือไม่?')) return;
+    if (!confirm('คุณต้องการลบสไลด์นี้ใช่หรือไม่?')) {
+        return;
+    }
     UI.setLoading(true);
     try {
         await deleteDoc(doc(db, SCHEMA.COLLECTIONS.HERO, id));
@@ -176,5 +186,4 @@ async function deleteHero(id) {
         UI.setLoading(false);
     }
 }
-
 

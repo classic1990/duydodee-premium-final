@@ -49,9 +49,13 @@ async function initForm() {
 
             if (posterPreview) {
                 posterPreview.src = data.poster || '';
-                if (data.poster) posterPreview.classList.remove('opacity-0');
+                if (data.poster) {
+                    posterPreview.classList.remove('opacity-0');
+                }
             }
-            if (selectedPosterUrlInput) selectedPosterUrlInput.value = data.poster || '';
+            if (selectedPosterUrlInput) {
+                selectedPosterUrlInput.value = data.poster || '';
+            }
 
             const epSnap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES, seriesId, 'episodes'), orderBy('episodeNumber')));
             epSnap.forEach(epDoc => {
@@ -59,8 +63,12 @@ async function initForm() {
                 addEpisode(epData.title, epData.videoUrl);
             });
 
-            if (epSnap.empty) addEpisode();
-            if (!epSnap.empty) handleSmartFetch(epSnap.docs[0].data().videoUrl);
+            if (epSnap.empty) {
+                addEpisode();
+            }
+            if (!epSnap.empty) {
+                handleSmartFetch(epSnap.docs[0].data().videoUrl);
+            }
         } else {
             UI.showToast('ไม่พบข้อมูลซีรีส์', 'error');
             window.location.href = './admin-manage-series.html';
@@ -107,13 +115,17 @@ function addEpisode(title = '', url = '') {
     });
 
     epDiv.querySelector('.ep-url-input')?.addEventListener('input', UI.debounce(async () => {
-        if (epDiv === container.querySelector('div:first-child')) handleSmartFetch(epDiv.querySelector('.ep-url-input').value.trim());
+        if (epDiv === container.querySelector('div:first-child')) {
+            handleSmartFetch(epDiv.querySelector('.ep-url-input').value.trim());
+        }
     }, 600));
 }
 
 async function handleSmartFetch(url) {
     const videoId = UI.extractYouTubeId(url);
-    if (!videoId) return;
+    if (!videoId) {
+        return;
+    }
 
     const thumbnailSizes = [
         { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
@@ -139,7 +151,9 @@ async function handleSmartFetch(url) {
  * @param {string} currentSelectedUrl - Currently selected thumbnail URL
  */
 function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
-    if (!thumbnailOptionsContainer) return;
+    if (!thumbnailOptionsContainer) {
+        return;
+    }
     thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
         <div data-url="${thumb.url}" class="thumbnail-option relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
             <img src="${thumb.url}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
@@ -158,8 +172,12 @@ function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
  * @param {HTMLElement} el - Clicked element
  */
 function selectPoster(url, el) {
-    if (posterPreview) posterPreview.src = url;
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    if (posterPreview) {
+        posterPreview.src = url;
+    }
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = url;
+    }
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
 }
@@ -168,7 +186,9 @@ function reindexEpisodes() {
     const epDivs = document.querySelectorAll('#episode-container > div');
     epDivs.forEach((div, index) => {
         const badge = div.querySelector('.bg-brand-primary\/20');
-        if (badge) badge.innerText = `Episode ${index + 1}`;
+        if (badge) {
+            badge.innerText = `Episode ${index + 1}`;
+        }
     });
 }
 
@@ -262,10 +282,12 @@ async function isDuplicateContent(videoUrl) {
     const result = await ContentService.checkDuplicateLink(videoUrl);
     if (result.exists) {
         // If it's a movie, it's definitely a duplicate for this series
-        if (result.type === 'movie') return true;
+        if (result.type === 'movie') {
+            return true;
+        }
 
         // If it's another series episode, we need to check if it's from THIS series or another one
-        // Note: For series, we allow duplicate links WITHIN the same series (unlikely but possible) 
+        // Note: For series, we allow duplicate links WITHIN the same series (unlikely but possible)
         // OR we check if the parent series ID is different.
         // For simplicity and strictness, if it exists in 'episodes' group, we check the path.
         const q = query(collectionGroup(db, 'episodes'), where('videoUrl', '==', videoUrl), limit(1));
@@ -278,5 +300,4 @@ async function isDuplicateContent(videoUrl) {
     }
     return false;
 }
-
 

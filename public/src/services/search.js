@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.trim();
             clearTimeout(debounceTimer);
-            
+
             if (keyword.length < 2) {
                 resultsGrid.innerHTML = '';
                 return;
@@ -35,10 +35,10 @@ async function performSearch(keyword) {
         // ดึงข้อมูลผ่าน ContentService ตาม AI GUIDELINES - ค้นหาทั้ง movies และ series
         const movieResults = await ContentService.searchItems('movie', keyword, 12);
         const seriesResults = await ContentService.searchItems('series', keyword, 12);
-        
+
         // รวมผลลัพธ์และเรียงตาม relevance
         const allResults = [...movieResults, ...seriesResults];
-        
+
         grid.innerHTML = '';
 
         if (allResults.length === 0) {

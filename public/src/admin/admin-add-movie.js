@@ -18,7 +18,9 @@ let videoUrlInput, titleInput, descInput, posterPreview, selectedPosterUrlInput,
  * @returns {boolean} True if valid YouTube URL
  */
 function isValidYouTubeUrl(url) {
-    if (!url || typeof url !== 'string') return false;
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
     const patterns = [
         /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]+/,
         /^(https?:\/\/)?(www\.)?youtu\.be\/[\w-]+/,
@@ -33,7 +35,9 @@ function isValidYouTubeUrl(url) {
  * @returns {string} Sanitized string
  */
 function sanitizeInput(input) {
-    if (!input || typeof input !== 'string') return '';
+    if (!input || typeof input !== 'string') {
+        return '';
+    }
     return input
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
@@ -94,7 +98,9 @@ function initForm() {
     noPreview = document.getElementById('no-preview');
     previewTitle = document.getElementById('preview-title');
 
-    if (!form || !videoUrlInput) return;
+    if (!form || !videoUrlInput) {
+        return;
+    }
 
     videoUrlInput.addEventListener('input', (e) => handleLinkProcess(e.target.value.trim()));
 
@@ -111,20 +117,30 @@ function initForm() {
 }
 
 const handleLinkProcess = UI.debounce(async (url) => {
-    if (!url) return;
+    if (!url) {
+        return;
+    }
     const videoId = UI.extractYouTubeId(url);
-    if (!videoId) return;
+    if (!videoId) {
+        return;
+    }
 
     if (titleInput && titleInput.value.includes(url) && videoUrlInput && !videoUrlInput.value) {
         videoUrlInput.value = url;
     }
 
-    if (previewTitle) previewTitle.innerText = 'กำลังดึงข้อมูลจากระบบ...';
+    if (previewTitle) {
+        previewTitle.innerText = 'กำลังดึงข้อมูลจากระบบ...';
+    }
 
     const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-    if (posterPreview) { posterPreview.src = thumb; posterPreview.classList.remove('opacity-0'); }
+    if (posterPreview) {
+        posterPreview.src = thumb; posterPreview.classList.remove('opacity-0');
+    }
     noPreview?.classList.add('hidden');
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = thumb;
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = thumb;
+    }
 
     renderThumbnailOptions([
         { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
@@ -140,7 +156,9 @@ const handleLinkProcess = UI.debounce(async (url) => {
         } else {
             videoUrlInput.classList.remove('border-yellow-500', 'ring-4', 'ring-yellow-500/10');
         }
-    } catch (err) { console.error(err); }
+    } catch (err) {
+        console.error(err);
+    }
 
     try {
         const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
@@ -148,11 +166,17 @@ const handleLinkProcess = UI.debounce(async (url) => {
             const data = await response.json();
             if (titleInput && (!titleInput.value || titleInput.value.startsWith('http') || titleInput.value === url)) {
                 titleInput.value = data.title || '';
-                if (previewTitle) previewTitle.innerText = data.title || 'ยังไม่ได้ระบุชื่อเรื่อง';
+                if (previewTitle) {
+                    previewTitle.innerText = data.title || 'ยังไม่ได้ระบุชื่อเรื่อง';
+                }
             }
             UI.showToast('เชื่อมต่อข้อมูล YouTube สำเร็จ', 'success');
         }
-    } catch (err) { if (previewTitle) previewTitle.innerText = 'ไม่พบชื่อเรื่องอัตโนมัติ'; }
+    } catch (err) {
+        if (previewTitle) {
+            previewTitle.innerText = 'ไม่พบชื่อเรื่องอัตโนมัติ';
+        }
+    }
 }, 800);
 
 /**
@@ -161,7 +185,9 @@ const handleLinkProcess = UI.debounce(async (url) => {
  * @param {string} currentSelectedUrl - Currently selected thumbnail URL
  */
 function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
-    if (!thumbnailOptionsContainer) return;
+    if (!thumbnailOptionsContainer) {
+        return;
+    }
     thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
         <div data-url="${thumb.url}" class="thumbnail-option relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
             <img src="${thumb.url}" class="w-full h-full object-cover">
@@ -180,8 +206,12 @@ function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
  * @param {HTMLElement} el - Clicked element
  */
 function selectPoster(url, el) {
-    if (posterPreview) posterPreview.src = url;
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    if (posterPreview) {
+        posterPreview.src = url;
+    }
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = url;
+    }
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
 }
@@ -248,5 +278,4 @@ async function isDuplicateContent(videoUrl) {
     const result = await ContentService.checkDuplicateLink(videoUrl);
     return result.exists;
 }
-
 

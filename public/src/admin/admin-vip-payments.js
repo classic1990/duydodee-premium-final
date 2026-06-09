@@ -22,7 +22,9 @@ async function init() {
 
 async function fetchPayments() {
     const paymentList = document.getElementById('payment-history-list');
-    if (!paymentList) return;
+    if (!paymentList) {
+        return;
+    }
 
     UI.setLoading(true);
     try {
@@ -40,7 +42,9 @@ async function fetchPayments() {
 
 function renderTable(payments) {
     const paymentList = document.getElementById('payment-history-list');
-    if (!paymentList) return;
+    if (!paymentList) {
+        return;
+    }
 
     if (payments.length === 0) {
         paymentList.innerHTML = '<tr><td colspan="6" class="p-20 text-center text-xs text-gray-500 Thai-font opacity-40">ไม่พบรายการชำระเงินในระบบ</td></tr>';
@@ -104,11 +108,15 @@ function renderTable(payments) {
  */
 function setupPaymentActionListeners() {
     const paymentList = document.getElementById('payment-history-list');
-    if (!paymentList) return;
+    if (!paymentList) {
+        return;
+    }
 
     paymentList.addEventListener('click', (e) => {
         const btn = e.target.closest('.payment-action-btn');
-        if (!btn) return;
+        if (!btn) {
+            return;
+        }
 
         const action = btn.dataset.action;
         const id = btn.dataset.id;
@@ -127,7 +135,9 @@ function setupPaymentActionListeners() {
  * @returns {Promise<void>}
  */
 async function verifyPayment(id, userId) {
-    if (!confirm('ยืนยันการปรับสถานะสมาชิกรายนี้เป็น VIP?')) return;
+    if (!confirm('ยืนยันการปรับสถานะสมาชิกรายนี้เป็น VIP?')) {
+        return;
+    }
 
     UI.setLoading(true);
     try {

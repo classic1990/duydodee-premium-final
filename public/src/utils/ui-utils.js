@@ -5,7 +5,9 @@
 
 export const UIUtils = {
     extractYouTubeId: (url) => {
-        if (!url) return null;
+        if (!url) {
+            return null;
+        }
         const match = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
         return (match && match[2].length === 11) ? match[2] : null;
     },
@@ -36,21 +38,26 @@ export const UIUtils = {
     debounce: (func, delay) => {
         let timeoutId;
         return (...args) => {
-            if (timeoutId) clearTimeout(timeoutId);
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
             timeoutId = setTimeout(() => func.apply(null, args), delay);
         };
     },
 
     escapeHTML: (str) => {
-        if (typeof str !== 'string') return '';
-        return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#039;'}[m]));
+        if (typeof str !== 'string') {
+            return '';
+        }
+        return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#039;' }[m]));
     },
 
     formatDate: (ts) => {
-        if (!ts) return 'N/A';
+        if (!ts) {
+            return 'N/A';
+        }
         const d = ts.toDate ? ts.toDate() : new Date(ts);
         return d.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 };
-
 

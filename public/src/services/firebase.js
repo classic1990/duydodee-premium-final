@@ -6,10 +6,10 @@ import { UIUtils } from '../utils/ui-utils.js';
 
 // 📦 1. CORE INSTANCES & AUTH
 export const { db, auth, storage, functions, googleProvider } = FirebaseConfig;
-export const { 
+export const {
     signInWithPopup, onAuthStateChanged, signOut, httpsCallable,
-    signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-    updateProfile, sendPasswordResetEmail, sendEmailVerification 
+    signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    updateProfile, sendPasswordResetEmail, sendEmailVerification
 } = FirebaseConfig;
 
 // 📂 2. FIRESTORE & STORAGE ACTIONS
@@ -32,11 +32,13 @@ export const getWatchHistory = AuthService.getWatchHistory;
  * ❤️ ระบบ Watchlist (เดิมคือ Bookmark)
  */
 export const toggleWatchlist = async (contentId, data, type = 'movie') => {
-    if (!auth.currentUser) return { error: 'กรุณาเข้าสู่ระบบ' };
+    if (!auth.currentUser) {
+        return { error: 'กรุณาเข้าสู่ระบบ' };
+    }
     const watchlistRef = doc(db, 'users', auth.currentUser.uid, 'bookmarks', contentId);
     const snap = await getDoc(watchlistRef);
     const contentRef = doc(db, type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES, contentId);
-    
+
     if (snap.exists()) {
         await deleteDoc(watchlistRef);
         await updateDoc(contentRef, { trendingScore: increment(-0.7) });
@@ -52,8 +54,10 @@ export const toggleWatchlist = async (contentId, data, type = 'movie') => {
  * บันทึกคะแนนเรตติ้งและคำนวณคะแนนเฉลี่ยอัตโนมัติ
  */
 export const submitRating = async (contentId, type, rating) => {
-    if (!auth.currentUser) return { error: 'กรุณาเข้าสู่ระบบก่อนให้คะแนน' };
-    
+    if (!auth.currentUser) {
+        return { error: 'กรุณาเข้าสู่ระบบก่อนให้คะแนน' };
+    }
+
     const userId = auth.currentUser.uid;
     const contentRef = doc(db, type === 'series' ? 'series' : 'movies', contentId);
     const userRatingRef = doc(db, type === 'series' ? 'series' : 'movies', contentId, 'ratings', userId);
@@ -62,8 +66,10 @@ export const submitRating = async (contentId, type, rating) => {
         return await FirebaseConfig.runTransaction(db, async (transaction) => {
             const userRatingSnap = await transaction.get(userRatingRef);
             const contentSnap = await transaction.get(contentRef);
-            
-            if (!contentSnap.exists()) throw 'ไม่พบข้อมูลเนื้อหา';
+
+            if (!contentSnap.exists()) {
+                throw 'ไม่พบข้อมูลเนื้อหา';
+            }
 
             const oldRating = userRatingSnap.exists() ? userRatingSnap.data().rating : 0;
             const contentData = contentSnap.data();
@@ -75,8 +81,8 @@ export const submitRating = async (contentId, type, rating) => {
             const newAverage = (newTotalRating / newRatingCount).toFixed(1);
 
             transaction.set(userRatingRef, { rating, updatedAt: FirebaseConfig.serverTimestamp() });
-            transaction.update(contentRef, { 
-                ratingSum: newTotalRating, 
+            transaction.update(contentRef, {
+                ratingSum: newTotalRating,
                 ratingCount: newRatingCount,
                 rating: parseFloat(newAverage)
             });

@@ -5,7 +5,9 @@ import { UI } from '../../components/ui.js';
 let isRendering = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (window.WATCH_JS_INITIALIZED) return;
+    if (window.WATCH_JS_INITIALIZED) {
+        return;
+    }
     window.WATCH_JS_INITIALIZED = true;
 
     UI.initNavbar();
@@ -19,7 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    if (isRendering) return;
+    if (isRendering) {
+        return;
+    }
     isRendering = true;
 
     try {
@@ -40,7 +44,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             const container = document.getElementById('watch-container');
-            if (container) container.innerHTML = '';
+            if (container) {
+                container.innerHTML = '';
+            }
 
             // 1. Render Player
             const player = await UI.renderiPhonePlayer(series, episodes, epIndex, true);
@@ -66,7 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 3. Save History (initial entry)
             AuthService.onStateChanged(user => {
-                if (user) AuthService.saveWatchHistory(user.uid, { ...series, type: 'series', epIndex: epIndex }, 0);
+                if (user) {
+                    AuthService.saveWatchHistory(user.uid, { ...series, type: 'series', epIndex: epIndex }, 0);
+                }
             });
 
             // 4. Load Related
@@ -84,7 +92,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadRelated(category, currentId) {
     const grid = document.getElementById('related-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
     try {
         const related = await ContentService.getRelatedItems('series', category, currentId, 6);
         UI.renderRelatedGrid(grid, related, 'series');
@@ -92,6 +102,4 @@ async function loadRelated(category, currentId) {
         console.error('Related Error:', err);
     }
 }
-
-
 

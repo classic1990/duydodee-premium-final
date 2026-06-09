@@ -43,22 +43,38 @@ async function initForm() {
     selectedPosterUrlInput = document.getElementById('selected-poster-url');
     thumbnailOptionsContainer = document.getElementById('thumbnail-options-container');
 
-    if (!form || !videoUrlInput) return;
+    if (!form || !videoUrlInput) {
+        return;
+    }
 
     try {
         const movieSnap = await getDoc(doc(db, SCHEMA.COLLECTIONS.MOVIES, movieId));
         if (movieSnap.exists()) {
             const data = movieSnap.data();
-            if (videoUrlInput) videoUrlInput.value = data.videoUrl || '';
-            if (titleInput) titleInput.value = data.title || '';
-            if (categoryInput) categoryInput.value = data.category || 'ซีรีส์แนวตั้ง (ตอนเดียวจบ)';
-            if (badgeInput) badgeInput.value = data.badge || '';
-            if (descriptionInput) descriptionInput.value = data.description || '';
+            if (videoUrlInput) {
+                videoUrlInput.value = data.videoUrl || '';
+            }
+            if (titleInput) {
+                titleInput.value = data.title || '';
+            }
+            if (categoryInput) {
+                categoryInput.value = data.category || 'ซีรีส์แนวตั้ง (ตอนเดียวจบ)';
+            }
+            if (badgeInput) {
+                badgeInput.value = data.badge || '';
+            }
+            if (descriptionInput) {
+                descriptionInput.value = data.description || '';
+            }
             if (posterPreview) {
                 posterPreview.src = data.poster || '';
-                if (data.poster) posterPreview.classList.remove('opacity-0');
+                if (data.poster) {
+                    posterPreview.classList.remove('opacity-0');
+                }
             }
-            if (selectedPosterUrlInput) selectedPosterUrlInput.value = data.poster || '';
+            if (selectedPosterUrlInput) {
+                selectedPosterUrlInput.value = data.poster || '';
+            }
 
             videoUrlInput?.addEventListener('input', UI.debounce((e) => handleSmartFetch(e.target.value.trim()), 600));
             handleSmartFetch(data.videoUrl);
@@ -78,7 +94,9 @@ async function initForm() {
 
 async function handleSmartFetch(url) {
     const videoId = UI.extractYouTubeId(url);
-    if (!videoId) return;
+    if (!videoId) {
+        return;
+    }
 
     const thumbnailSizes = [
         { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
@@ -112,7 +130,9 @@ async function handleSmartFetch(url) {
  * @param {string} currentSelectedUrl - Currently selected thumbnail URL
  */
 function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
-    if (!thumbnailOptionsContainer) return;
+    if (!thumbnailOptionsContainer) {
+        return;
+    }
     thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
         <div data-url="${thumb.url}" class="thumbnail-option relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
             <img src="${thumb.url}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
@@ -131,8 +151,12 @@ function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
  * @param {HTMLElement} el - Clicked element
  */
 function selectPoster(url, el) {
-    if (posterPreview) posterPreview.src = url;
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    if (posterPreview) {
+        posterPreview.src = url;
+    }
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = url;
+    }
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
 }
@@ -198,7 +222,9 @@ async function isDuplicateContent(videoUrl) {
     const result = await ContentService.checkDuplicateLink(videoUrl);
     // If it exists in another collection or is a different movie ID
     if (result.exists) {
-        if (result.type !== 'movie') return true;
+        if (result.type !== 'movie') {
+            return true;
+        }
         // Search again to get the document ID (checkDuplicateLink returns data but maybe not ID if not handled)
         // Let's refine checkDuplicateLink later to return ID too. For now, assume data has ID if we added it.
         // Actually, let's just re-query here for simplicity in edit mode.
@@ -208,5 +234,4 @@ async function isDuplicateContent(videoUrl) {
     }
     return false;
 }
-
 

@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 /**
  * Vite Configuration for DUYดูDEE
- * Implements code splitting for admin and user bundles
+ * Implements code splitting, optimizations, and performance enhancements
  */
 export default defineConfig({
   root: 'public',
@@ -13,9 +13,6 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'unsafe-none'
     }
   },
-  define: {
-    'import.meta.env.VITE_ADMIN_EMAIL': JSON.stringify('duyclassic191@gmail.com')
-  },
   css: {
     postcss: './postcss.config.cjs',
     devSourcemap: true, // ช่วยในการ Debug CSS ใน Developer Tools
@@ -23,6 +20,14 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
+    sourcemap: false, // Disable sourcemap in production for security
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       input: {
         main: resolve('public/index.html'),
@@ -54,7 +59,7 @@ export default defineConfig({
       },
       output: {
         manualChunks(id) {
-          // Firebase SDK chunk
+          // Firebase SDK chunk (separate for better caching)
           if (id.includes('firebase')) {
             return 'firebase-vendor';
           }
@@ -66,9 +71,57 @@ export default defineConfig({
           if (id.includes('/src/services/')) {
             return 'services';
           }
+          // Admin pages chunk
+          if (id.includes('/src/admin/')) {
+            return 'admin';
+          }
+          // Auth pages chunk
+          if (id.includes('/src/pages/auth/')) {
+            return 'auth';
+          }
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const ext = assetInfo.name.split('.').pop();
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          if (/css/i.test(ext)) {
+            return `assets/css/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
         }
       }
     },
-    chunkSizeWarningLimit: 1000
-  }
+    chunkSizeWarningLimit: 1000,
+    reportCompressedSize: false, // Faster builds
+  },
+  plugins: [
+    {
+      name: 'performance-hints',
+      generateBundle(options, bundle) {
+        const KB = 1024;
+        const MB = KB * KB;
+        let totalSize = 0;
+
+        for (const [fileName, file] of Object.entries(bundle)) {
+          if (file.type === 'chunk' || file.type === 'asset') {
+            const size = file.size;
+            totalSize += size;
+            const sizeKB = (size / KB).toFixed(2);
+            const sizeMB = (size / MB).toFixed(2);
+
+            if (size > MB) {
+              console.warn(`⚠️ Large bundle: ${fileName} (${sizeMB} MB)`);
+            } else if (size > 500 * KB) {
+              console.warn(`⚠️ Large file: ${fileName} (${sizeKB} KB)`);
+            }
+          }
+        }
+
+        console.log(`📦 Total bundle size: ${(totalSize / MB).toFixed(2)} MB`);
+      }
+    }
+  ]
 });

@@ -11,8 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const googleBtn = document.getElementById('google-login-btn');
 
-    if (loginForm) loginForm.onsubmit = handleEmailLogin;
-    if (googleBtn) googleBtn.onclick = handleGoogleLogin;
+    if (loginForm) {
+        loginForm.onsubmit = handleEmailLogin;
+    }
+    if (googleBtn) {
+        googleBtn.onclick = handleGoogleLogin;
+    }
 });
 
 async function handleEmailLogin(e) {
@@ -20,7 +24,9 @@ async function handleEmailLogin(e) {
     const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('password').value;
 
-    if (!email || !pass) return UI.showToast('กรุณากรอกอีเมลและรหัสผ่าน', 'error');
+    if (!email || !pass) {
+        return UI.showToast('กรุณากรอกอีเมลและรหัสผ่าน', 'error');
+    }
 
     UI.setLoading(true);
 
@@ -30,8 +36,12 @@ async function handleEmailLogin(e) {
     } catch (error) {
         console.error('Email Login Error:', error);
         let msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
-        if (error.code === 'auth/user-not-found') msg = 'ไม่พบผู้ใช้งานนี้';
-        if (error.code === 'auth/wrong-password') msg = 'รหัสผ่านไม่ถูกต้อง';
+        if (error.code === 'auth/user-not-found') {
+            msg = 'ไม่พบผู้ใช้งานนี้';
+        }
+        if (error.code === 'auth/wrong-password') {
+            msg = 'รหัสผ่านไม่ถูกต้อง';
+        }
         UI.showToast(msg, 'error');
         UI.setLoading(false);
     }

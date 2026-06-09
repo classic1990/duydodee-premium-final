@@ -18,7 +18,9 @@ let posterPreview, noPreview, selectedPosterUrlInput, thumbnailOptionsContainer,
  * @returns {boolean} True if valid YouTube URL
  */
 function isValidYouTubeUrl(url) {
-    if (!url || typeof url !== 'string') return false;
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
     const patterns = [
         /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]+/,
         /^(https?:\/\/)?(www\.)?youtu\.be\/[\w-]+/,
@@ -33,7 +35,9 @@ function isValidYouTubeUrl(url) {
  * @returns {string} Sanitized string
  */
 function sanitizeInput(input) {
-    if (!input || typeof input !== 'string') return '';
+    if (!input || typeof input !== 'string') {
+        return '';
+    }
     return input
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
@@ -88,7 +92,9 @@ function initForm() {
     thumbnailOptionsContainer = document.getElementById('thumbnail-options-container');
     previewTitle = document.getElementById('preview-title');
 
-    if (!form) return;
+    if (!form) {
+        return;
+    }
 
     addEpisode();
     document.getElementById('add-episode-btn')?.addEventListener('click', () => addEpisode());
@@ -108,7 +114,9 @@ function initForm() {
 function addEpisode(title = '', url = '') {
     episodeCount++;
     const container = document.getElementById('episode-container');
-    if (!container) return;
+    if (!container) {
+        return;
+    }
 
     const epDiv = document.createElement('div');
     epDiv.className = 'p-5 bg-black/40 border border-white/5 rounded-2xl space-y-4 animate-fade-in relative group';
@@ -139,27 +147,37 @@ function addEpisode(title = '', url = '') {
 
     epDiv.querySelector('.ep-url-input')?.addEventListener('input', UI.debounce(async () => {
         updatePosterPreview();
-        if (epDiv === container.querySelector('div:first-child')) fetchSeriesInfo(epDiv.querySelector('.ep-url-input').value.trim());
+        if (epDiv === container.querySelector('div:first-child')) {
+            fetchSeriesInfo(epDiv.querySelector('.ep-url-input').value.trim());
+        }
     }, 600));
 }
 
 async function fetchSeriesInfo(url) {
     const videoId = UI.extractYouTubeId(url);
-    if (!videoId) return;
+    if (!videoId) {
+        return;
+    }
 
     try {
         const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
         if (res.ok) {
             const data = await res.json();
             const titleInput = document.getElementById('title');
-            if (titleInput && (!titleInput.value || titleInput.value.startsWith('http'))) titleInput.value = data.title || '';
+            if (titleInput && (!titleInput.value || titleInput.value.startsWith('http'))) {
+                titleInput.value = data.title || '';
+            }
 
             const descInput = document.getElementById('description');
-            if (descInput && !descInput.value) descInput.value = data.title || '';
+            if (descInput && !descInput.value) {
+                descInput.value = data.title || '';
+            }
 
             UI.showToast('ดึงข้อมูล YouTube สำเร็จ', 'success');
         }
-    } catch (err) { console.error(err); }
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 function reindexEpisodes() {
@@ -168,20 +186,30 @@ function reindexEpisodes() {
     epDivs.forEach((div) => {
         episodeCount++;
         const badge = div.querySelector('.bg-brand-primary\/20');
-        if (badge) badge.innerText = `Episode ${episodeCount}`;
+        if (badge) {
+            badge.innerText = `Episode ${episodeCount}`;
+        }
     });
 }
 
 function updatePosterPreview() {
     const firstUrl = document.querySelector('.ep-url-input')?.value.trim();
-    if (!firstUrl) return;
+    if (!firstUrl) {
+        return;
+    }
     const videoId = UI.extractYouTubeId(firstUrl);
-    if (!videoId) return;
+    if (!videoId) {
+        return;
+    }
 
     const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-    if (posterPreview) { posterPreview.src = thumb; posterPreview.classList.remove('opacity-0'); }
+    if (posterPreview) {
+        posterPreview.src = thumb; posterPreview.classList.remove('opacity-0');
+    }
     noPreview?.classList.add('hidden');
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = thumb;
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = thumb;
+    }
 
     renderThumbnailOptions([
         { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
@@ -196,7 +224,9 @@ function updatePosterPreview() {
  * @param {string} currentSelectedUrl - Currently selected thumbnail URL
  */
 function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
-    if (!thumbnailOptionsContainer) return;
+    if (!thumbnailOptionsContainer) {
+        return;
+    }
     thumbnailOptionsContainer.innerHTML = '';
     thumbnails.forEach(thumb => {
         const div = document.createElement('div');
@@ -217,8 +247,12 @@ function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
  * @param {HTMLElement} el - Clicked element
  */
 function selectPoster(url, el) {
-    if (posterPreview) posterPreview.src = url;
-    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    if (posterPreview) {
+        posterPreview.src = url;
+    }
+    if (selectedPosterUrlInput) {
+        selectedPosterUrlInput.value = url;
+    }
     el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
     el.classList.add('border-brand-primary', 'shadow-lg');
 }
@@ -322,5 +356,4 @@ async function isDuplicateContent(videoUrl) {
     const result = await ContentService.checkDuplicateLink(videoUrl);
     return result.exists;
 }
-
 

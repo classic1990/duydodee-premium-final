@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth-service.js';
 export async function checkAdminAccess() {
     return new Promise((resolve, reject) => {
         const unsubscribe = AuthService.onStateChanged(async (user) => {
-            unsubscribe(); 
+            unsubscribe();
             if (!user) {
                 window.location.href = '/login.html';
                 return reject('Unauthorized: No session found.');
@@ -29,6 +29,4 @@ export async function checkAdminAccess() {
         });
     });
 }
-
-
 

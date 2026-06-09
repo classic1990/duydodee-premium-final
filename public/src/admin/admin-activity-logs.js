@@ -31,10 +31,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         debounceTimer = setTimeout(() => loadActivityLogs(false), 400);
     };
 
-    if (searchInput) searchInput.oninput = (e) => { currentKeyword = e.target.value.trim().toUpperCase(); triggerReload(); };
-    if (adminInput) adminInput.oninput = (e) => { adminFilter = e.target.value.trim().toLowerCase(); triggerReload(); };
-    if (applyBtn) applyBtn.onclick = () => loadActivityLogs(false);
-    if (exportBtn) exportBtn.onclick = () => exportLogsToCSV();
+    if (searchInput) {
+        searchInput.oninput = (e) => {
+            currentKeyword = e.target.value.trim().toUpperCase(); triggerReload();
+        };
+    }
+    if (adminInput) {
+        adminInput.oninput = (e) => {
+            adminFilter = e.target.value.trim().toLowerCase(); triggerReload();
+        };
+    }
+    if (applyBtn) {
+        applyBtn.onclick = () => loadActivityLogs(false);
+    }
+    if (exportBtn) {
+        exportBtn.onclick = () => exportLogsToCSV();
+    }
 
     // ⚡ Quick Date Select Logic
     const setDateRange = (start, end) => {
@@ -43,20 +55,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadActivityLogs(false);
     };
 
-    if (quickToday) quickToday.onclick = () => {
-        const today = new Date().toISOString().split('T')[0];
-        setDateRange(today, today);
-    };
+    if (quickToday) {
+        quickToday.onclick = () => {
+            const today = new Date().toISOString().split('T')[0];
+            setDateRange(today, today);
+        };
+    }
 
-    if (quickMonth) quickMonth.onclick = () => {
-        const now = new Date();
-        setDateRange(new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0], now.toISOString().split('T')[0]);
-    };
+    if (quickMonth) {
+        quickMonth.onclick = () => {
+            const now = new Date();
+            setDateRange(new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0], now.toISOString().split('T')[0]);
+        };
+    }
 });
 
 async function loadActivityLogs(isAppend = false) {
     const tbody = document.getElementById('log-table-body');
-    if (!tbody) return;
+    if (!tbody) {
+        return;
+    }
 
     try {
         let q = query(collection(db, SCHEMA.COLLECTIONS.ACTIVITY_LOGS), orderBy('timestamp', 'desc'));
@@ -64,11 +82,17 @@ async function loadActivityLogs(isAppend = false) {
         // 📅 Apply Date Filters
         const dateStart = document.getElementById('date-start')?.value;
         const dateEnd = document.getElementById('date-end')?.value;
-        if (dateStart) q = query(q, where('timestamp', '>=', new Date(dateStart + 'T00:00:00')));
-        if (dateEnd) q = query(q, where('timestamp', '<=', new Date(dateEnd + 'T23:59:59')));
+        if (dateStart) {
+            q = query(q, where('timestamp', '>=', new Date(dateStart + 'T00:00:00')));
+        }
+        if (dateEnd) {
+            q = query(q, where('timestamp', '<=', new Date(dateEnd + 'T23:59:59')));
+        }
 
         // 📧 Apply Admin Filter
-        if (adminFilter) q = query(q, where('adminEmail', '==', adminFilter));
+        if (adminFilter) {
+            q = query(q, where('adminEmail', '==', adminFilter));
+        }
 
         // ⚡ Apply Action Search (Prefix Matching)
         if (currentKeyword) {
@@ -83,7 +107,9 @@ async function loadActivityLogs(isAppend = false) {
 
         const snap = await getDocs(q);
         if (snap.empty) {
-            if (!isAppend) tbody.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-gray-500 Thai-font">ไม่มีประวัติการทำงาน</td></tr>';
+            if (!isAppend) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-gray-500 Thai-font">ไม่มีประวัติการทำงาน</td></tr>';
+            }
             document.getElementById('pagination-container')?.classList.add('hidden');
             return;
         }
@@ -105,10 +131,15 @@ async function loadActivityLogs(isAppend = false) {
                 </tr>`;
         }).join('');
 
-        if (isAppend) tbody.insertAdjacentHTML('beforeend', html);
-        else tbody.innerHTML = html;
+        if (isAppend) {
+            tbody.insertAdjacentHTML('beforeend', html);
+        } else {
+            tbody.innerHTML = html;
+        }
 
-    } catch (e) { console.error('Load Logs Error:', e); }
+    } catch (e) {
+        console.error('Load Logs Error:', e);
+    }
 }
 
 async function exportLogsToCSV() {

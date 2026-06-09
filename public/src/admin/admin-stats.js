@@ -13,9 +13,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const startInput = document.getElementById('date-start');
     const endInput = document.getElementById('date-end');
-    
-    if (startInput) startInput.value = start.toISOString().split('T')[0];
-    if (endInput) endInput.value = end.toISOString().split('T')[0];
+
+    if (startInput) {
+        startInput.value = start.toISOString().split('T')[0];
+    }
+    if (endInput) {
+        endInput.value = end.toISOString().split('T')[0];
+    }
 
     await renderCharts();
     await renderPeriodStats();
@@ -33,11 +37,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function renderCharts() {
     const statsSnap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.DAILY_STATS), orderBy('lastUpdated', 'asc'), limit(14)));
-    if (statsSnap.empty) return;
+    if (statsSnap.empty) {
+        return;
+    }
 
     const labels = [];
     const views = [];
-    
+
     statsSnap.forEach(doc => {
         labels.push(doc.id); // YYYY-MM-DD
         views.push(doc.data().views || 0);
@@ -45,7 +51,9 @@ async function renderCharts() {
 
     const ctx = document.getElementById('dailyViewsChart')?.getContext('2d');
     if (ctx && typeof Chart !== 'undefined') {
-        if (dailyChartInstance) dailyChartInstance.destroy();
+        if (dailyChartInstance) {
+            dailyChartInstance.destroy();
+        }
         dailyChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
@@ -74,7 +82,9 @@ async function renderCharts() {
 async function renderPeriodStats() {
     const start = document.getElementById('date-start')?.value;
     const end = document.getElementById('date-end')?.value;
-    if (!start || !end) return;
+    if (!start || !end) {
+        return;
+    }
 
     const q = query(
         collection(db, SCHEMA.COLLECTIONS.DAILY_STATS),
@@ -87,7 +97,9 @@ async function renderPeriodStats() {
     snap.forEach(d => {
         totalViews += (d.data().views || 0);
     });
-    
+
     const el = document.getElementById('period-total-views');
-    if (el) el.innerText = totalViews.toLocaleString();
+    if (el) {
+        el.innerText = totalViews.toLocaleString();
+    }
 }

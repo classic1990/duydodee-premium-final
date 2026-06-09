@@ -9,12 +9,12 @@ import { ContentService } from '../services/content-service.js';
 let lastVisibleDoc = null;
 let isFetching = false;
 let hasMore = true;
-let currentFilter = 'all';
+const currentFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.injectStarfield();
     UI.initNavbar();
-    
+
     // 1. Initial Data Loading
     loadTrending();
     loadChineseSeries();
@@ -48,19 +48,25 @@ async function loadPersonalizedContent(uid) {
     const section = document.getElementById('personalized-section');
     const grid = document.getElementById('personalized-grid');
     const titleEl = document.getElementById('personalized-title');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     try {
         const userSnap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid));
-        if (!userSnap.exists()) return;
-        
+        if (!userSnap.exists()) {
+            return;
+        }
+
         const prefs = userSnap.data().preferredCategories || {};
         const categories = Object.keys(prefs);
-        if (categories.length === 0) return;
+        if (categories.length === 0) {
+            return;
+        }
 
         // Find top category
         const topCategory = categories.reduce((a, b) => prefs[a] > prefs[b] ? a : b);
-        
+
         const { items } = await ContentService.fetchItemsByCategory(['movie', 'series'], topCategory, {
             pageSize: 7
         });
@@ -82,7 +88,9 @@ async function loadPersonalizedContent(uid) {
 async function loadHistory(uid) {
     const section = document.getElementById('history-section');
     const grid = document.getElementById('history-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     try {
         const history = await getWatchHistory(uid, 8);
@@ -104,7 +112,9 @@ async function loadHistory(uid) {
 async function loadTrending() {
     const section = document.getElementById('trending-section');
     const grid = document.getElementById('trending-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     try {
         // Query TOP Rated/Viewed from both movies & series
@@ -130,7 +140,9 @@ async function loadTrending() {
  */
 async function loadChineseSeries() {
     const grid = document.getElementById('chinese-series-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     try {
         const { items } = await ContentService.fetchItemsByCategory('series', ['ซีรีส์จีน', 'Chinese', 'ซีรีส์จีนพากย์ไทย'], {
@@ -153,19 +165,26 @@ async function loadChineseSeries() {
  * 🎬 Load Global Library with Pagination & Filters
  */
 async function loadLibrary(isAppend = false) {
-    if (isFetching || (!hasMore && isAppend)) return;
-    
+    if (isFetching || (!hasMore && isAppend)) {
+        return;
+    }
+
     const grid = document.getElementById('library-grid');
-    if (!grid) return;
+    if (!grid) {
+        return;
+    }
 
     isFetching = true;
-    
-    if (isAppend) UI.renderSkeleton(grid, 4, 'poster', true);
-    else UI.renderSkeleton(grid, UI_CONFIG.PAGE_SIZE || 12);
+
+    if (isAppend) {
+        UI.renderSkeleton(grid, 4, 'poster', true);
+    } else {
+        UI.renderSkeleton(grid, UI_CONFIG.PAGE_SIZE || 12);
+    }
 
     try {
         const collections = currentFilter === 'all' ? ['movie', 'series'] : [currentFilter];
-        
+
         const { items, lastDoc, empty } = await ContentService.fetchItemsByCategory(collections, null, {
             pageSize: UI_CONFIG.PAGE_SIZE || 12,
             lastDoc: lastVisibleDoc,
@@ -185,15 +204,19 @@ async function loadLibrary(isAppend = false) {
             hasMore = false;
         } else {
             lastVisibleDoc = lastDoc;
-            if (items.length < (UI_CONFIG.PAGE_SIZE || 12)) hasMore = false;
-            
+            if (items.length < (UI_CONFIG.PAGE_SIZE || 12)) {
+                hasMore = false;
+            }
+
             grid.insertAdjacentHTML('beforeend', items.map(item => UI.createMovieCard(item)).join(''));
             UI.refreshIcons();
         }
 
         // Update pagination UI
         const nextBtn = document.getElementById('next-page');
-        if (nextBtn) nextBtn.disabled = !hasMore;
+        if (nextBtn) {
+            nextBtn.disabled = !hasMore;
+        }
 
     } catch (error) {
         console.error('Library Load Error:', error);
