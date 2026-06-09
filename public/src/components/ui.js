@@ -336,9 +336,15 @@ export const UI = {
   },
 
   createHistoryCard: (item) => {
-    const watchUrl = UI.getMediaWatchPath(item.category, item.type, item.id);
+    // Validate required fields
+    if (!item || !item.id) return '';
+
+    const type = item.type || 'movie';
+    const category = item.category || 'Premium';
+    const watchUrl = UI.getMediaWatchPath(category, type, item.id);
     const poster = UI.getSafePoster(item.poster || item.posterURL);
-    const progress = item.progress || Math.floor(Math.random() * 60) + 20;
+    const progress = item.progress || 0;
+    const title = item.title || 'Unknown Title';
 
     return `
             <div class="min-w-[280px] md:min-w-[360px] group cursor-pointer animate-fade-in snap-start" onclick="location.href='${watchUrl}'">
@@ -351,9 +357,9 @@ export const UI = {
                     <div class="absolute bottom-0 left-0 right-0 p-5 space-y-2">
                         <div class="flex items-center gap-2">
                              <span class="px-2 py-0.5 bg-brand-primary text-white text-[8px] font-black uppercase rounded shadow-lg Thai-font">รับชมค้างไว้</span>
-                             <span class="text-[9px] font-bold text-white/50 uppercase tracking-widest">${item.category || 'Premium'}</span>
+                             <span class="text-[9px] font-bold text-white/50 uppercase tracking-widest">${UI.escapeHTML(category)}</span>
                         </div>
-                        <h4 class="text-sm md:text-base font-black text-white Thai-font line-clamp-1 group-hover:text-brand-primary transition-colors">${UI.escapeHTML(item.title)}</h4>
+                        <h4 class="text-sm md:text-base font-black text-white Thai-font line-clamp-1 group-hover:text-brand-primary transition-colors">${UI.escapeHTML(title)}</h4>
 
                         <div class="pt-2">
                             <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
