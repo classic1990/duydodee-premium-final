@@ -34,14 +34,17 @@ export default {
         '^@/(.*)$': '<rootDir>/public/src/$1',
         '\\.(css|less|scss|sass)$': '<rootDir>/jest.mock.js'
     },
-    transform: {},
+    transform: {
+        '^.+\\.js$': 'babel-jest'
+    },
     transformIgnorePatterns: [
         '/node_modules/',
         '/dist/'
     ],
     testPathIgnorePatterns: [
         '/node_modules/',
-        '/dist/'
+        '/dist/',
+        '/public/src/config/config.test.js'
     ],
     verbose: true,
     testTimeout: 10000

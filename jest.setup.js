@@ -3,6 +3,30 @@
  * Global test configuration and mocks
  */
 
+// Mock import.meta.env for Vite environment variables
+global.import = {
+    meta: {
+        env: {
+            VITE_FIREBASE_API_KEY: 'test-api-key',
+            VITE_FIREBASE_AUTH_DOMAIN: 'test.firebaseapp.com',
+            VITE_FIREBASE_PROJECT_ID: 'test-project',
+            VITE_FIREBASE_STORAGE_BUCKET: 'test.appspot.com',
+            VITE_FIREBASE_MESSAGING_SENDER_ID: '123456789',
+            VITE_FIREBASE_APP_ID: '1:123456789:web:abcdef',
+            VITE_FIREBASE_MEASUREMENT_ID: 'G-TEST123',
+            VITE_ADMIN_EMAILS: 'admin@test.com',
+            VITE_SITE_URL: 'https://test.web.app',
+            VITE_SITE_NAME: 'TEST SITE',
+            VITE_GA_TRACKING_ID: 'G-TEST123',
+            VITE_ENABLE_ANALYTICS: 'false',
+            VITE_SENTRY_DSN: '',
+            VITE_SENTRY_ENVIRONMENT: 'test',
+            VITE_ENABLE_DEBUG: 'true',
+            VITE_ENABLE_MOCK_DATA: 'true'
+        }
+    }
+};
+
 // Mock localStorage
 const localStorageMock = {
     getItem: jest.fn(),
