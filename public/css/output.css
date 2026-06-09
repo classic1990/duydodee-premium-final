@@ -602,6 +602,9 @@ body::selection{
 .pointer-events-none{
   pointer-events: none;
 }
+.static{
+  position: static;
+}
 .fixed{
   position: fixed;
 }
@@ -687,6 +690,9 @@ body::selection{
 }
 .right-1{
   right: 0.25rem;
+}
+.right-4{
+  right: 1rem;
 }
 .right-6{
   right: 1.5rem;
@@ -839,6 +845,9 @@ body::selection{
 }
 .mr-2{
   margin-right: 0.5rem;
+}
+.mt-0\.5{
+  margin-top: 0.125rem;
 }
 .mt-1{
   margin-top: 0.25rem;
@@ -2235,6 +2244,10 @@ body::selection{
   --tw-text-opacity: 1;
   color: rgb(168 85 247 / var(--tw-text-opacity, 1));
 }
+.text-red-400{
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
+}
 .text-red-500{
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity, 1));
@@ -2861,6 +2874,10 @@ body::selection{
 .hover\:text-brand-primary:hover{
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
+}
+.hover\:text-red-300:hover{
+  --tw-text-opacity: 1;
+  color: rgb(252 165 165 / var(--tw-text-opacity, 1));
 }
 .hover\:text-red-500:hover{
   --tw-text-opacity: 1;
