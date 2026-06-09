@@ -9,45 +9,53 @@ class Config {
     }
 
     loadConfig() {
+        // Safe access to import.meta.env with fallback
+        let env;
+        try {
+            env = import.meta.env || {};
+        } catch (e) {
+            env = {};
+        }
+
         return {
             // Firebase Configuration
             firebase: {
-                apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA',
-                authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'duydodeesport.firebaseapp.com',
-                projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'duydodeesport',
-                storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'duydodeesport.appspot.com',
-                messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '30514101130',
-                appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:30514101130:web:1ec44f2b09367468132e49',
-                measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || 'G-7EC2RQZH22'
+                apiKey: env.VITE_FIREBASE_API_KEY || 'AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA',
+                authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || 'duydodeesport.firebaseapp.com',
+                projectId: env.VITE_FIREBASE_PROJECT_ID || 'duydodeesport',
+                storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || 'duydodeesport.appspot.com',
+                messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '30514101130',
+                appId: env.VITE_FIREBASE_APP_ID || '1:30514101130:web:1ec44f2b09367468132e49',
+                measurementId: env.VITE_FIREBASE_MEASUREMENT_ID || 'G-7EC2RQZH22'
             },
 
             // Admin Configuration
             admin: {
-                emails: (import.meta.env.VITE_ADMIN_EMAILS || 'duyclassic191@gmail.com').split(',').map(e => e.trim())
+                emails: (env.VITE_ADMIN_EMAILS || 'duyclassic191@gmail.com').split(',').map(e => e.trim())
             },
 
             // Site Configuration
             site: {
-                url: import.meta.env.VITE_SITE_URL || 'https://duydodeesport.web.app',
-                name: import.meta.env.VITE_SITE_NAME || 'DUYดูDEE PREMIUM'
+                url: env.VITE_SITE_URL || 'https://duydodeesport.web.app',
+                name: env.VITE_SITE_NAME || 'DUYดูDEE PREMIUM'
             },
 
             // Analytics Configuration
             analytics: {
-                trackingId: import.meta.env.VITE_GA_TRACKING_ID,
-                enabled: import.meta.env.VITE_ENABLE_ANALYTICS === 'true'
+                trackingId: env.VITE_GA_TRACKING_ID,
+                enabled: env.VITE_ENABLE_ANALYTICS === 'true'
             },
 
             // Error Tracking (Sentry)
             sentry: {
-                dsn: import.meta.env.VITE_SENTRY_DSN,
-                environment: import.meta.env.VITE_SENTRY_ENVIRONMENT || 'production'
+                dsn: env.VITE_SENTRY_DSN,
+                environment: env.VITE_SENTRY_ENVIRONMENT || 'production'
             },
 
             // Feature Flags
             features: {
-                debug: import.meta.env.VITE_ENABLE_DEBUG === 'true',
-                mockData: import.meta.env.VITE_ENABLE_MOCK_DATA === 'true'
+                debug: env.VITE_ENABLE_DEBUG === 'true',
+                mockData: env.VITE_ENABLE_MOCK_DATA === 'true'
             }
         };
     }
