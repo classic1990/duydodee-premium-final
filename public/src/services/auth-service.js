@@ -27,8 +27,7 @@ export const AuthService = {
     async checkIsAdmin(user) {
         if (!user) return false;
         // Admin access for the main developer
-        const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'duyclassic191@gmail.com';
-        if (user.email === adminEmail) return true;
+        if (user.email === 'duyclassic191@gmail.com') return true;
 
         try {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
