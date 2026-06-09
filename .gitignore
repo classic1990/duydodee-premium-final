@@ -14,6 +14,18 @@ firebase-debug.log*
 firestore-debug.log*
 ui-debug.log*
 
+# Skills & Tools (AI/CLI Only - Not for production)
+.skills/
+*.skill
+
+# Documentation (Keep minimal)
+docs/
+BUGFIXES.md
+
+# Config Files (Environment Specific)
+cors.json
+restore_admin.cjs
+
 # Temporary/Maintenance Scripts
 check_db.js
 inject_assets.js

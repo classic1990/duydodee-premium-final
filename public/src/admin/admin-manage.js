@@ -32,8 +32,6 @@ async function init() {
         window.location.href = '/';
         return;
       }
-    } else {
-      console.log('Access Granted via Email Override');
     }
 
     UI.setupSidebar(user);

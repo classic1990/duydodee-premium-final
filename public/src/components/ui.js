@@ -105,33 +105,8 @@ export const UI = {
       }
     });
 
-    // Check if this is an admin page before setting up ticket notifications
-    const isAdminPage = window.location.pathname.includes('/admin/');
-
-    if (isAdminPage) {
-      const q = query(
-        collection(db, SCHEMA.COLLECTIONS.TICKETS),
-        where('status', '==', 'open'),
-      );
-      onSnapshot(q, (snap) => {
-        const count = snap.size;
-        const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
-        if (ticketLink) {
-          let badge = ticketLink.querySelector('.ticket-notif-badge');
-          if (count > 0) {
-            if (!badge) {
-              badge = document.createElement('span');
-              badge.className =
-                'ticket-notif-badge ml-auto px-2 py-0.5 rounded-full bg-red-500 text-white text-[8px] font-black animate-pulse';
-            ticketLink.appendChild(badge);
-            }
-            badge.innerText = count;
-          } else if (badge) {
-            badge.remove();
-          }
-        }
-      });
-    }
+    // Remove ticket notifications from here - they should only be on admin pages
+    // This prevents Firestore index errors on non-admin pages
   },
 
   showImageLightbox: (url) => {
@@ -236,6 +211,35 @@ export const UI = {
         (isAdmin
           ? '<a href="/admin/admin-manage.html" class="flex items-center gap-3 px-6 py-4 bg-red-600/10 border border-red-600/20 rounded-2xl text-xs font-black uppercase text-red-500">Dashboard</a>'
           : '');
+    }
+
+    // Setup ticket notifications only on admin pages
+    if (isAdmin) {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        const q = query(
+          collection(db, SCHEMA.COLLECTIONS.TICKETS),
+          where('status', '==', 'open'),
+        );
+        onSnapshot(q, (snap) => {
+          const count = snap.size;
+          const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
+          if (ticketLink) {
+            let badge = ticketLink.querySelector('.ticket-notif-badge');
+            if (count > 0) {
+              if (!badge) {
+                badge = document.createElement('span');
+                badge.className =
+                  'ticket-notif-badge ml-auto px-2 py-0.5 rounded-full bg-red-500 text-white text-[8px] font-black animate-pulse';
+              ticketLink.appendChild(badge);
+              }
+              badge.innerText = count;
+            } else if (badge) {
+              badge.remove();
+            }
+          }
+        });
+      }
     }
   },
 
@@ -524,21 +528,34 @@ export const UI = {
                 <div class="animate-fade-in relative max-w-7xl mx-auto px-4 py-4 md:py-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start relative z-10">
                         <div class="lg:col-span-8 w-full order-1">
-                            <div id="device-wrapper" class="device-frame ${frameClass} shadow-2xl group">
+                            <div id="device-wrapper" class="device-frame ${frameClass} shadow-2xl group relative">
                                 <div class="device-chassis"></div>
-                                <div class="device-screen bg-black">
+                                <div class="device-screen bg-black relative">
                                     <div id="player-api-node" class="w-full h-full"></div>
-                                    <div class="absolute inset-0 pointer-events-none border border-white/10 rounded-[inherit] z-20"></div>
+                                    <div class="absolute inset-0 pointer-events-none border border-brand-primary/20 rounded-[inherit] z-20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    
+                                    <!-- Netflix-style glow effect -->
+                                    <div class="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[0_0_40px_rgba(229,9,20,0.3)] z-10 opacity-50"></div>
                                 </div>
                                 ${isVertical ? '<div class="device-island"></div>' : ''}
                                 <div class="device-home-bar"></div>
                             </div>
                         </div>
                         <div class="lg:col-span-4 space-y-6 order-2">
-                            <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none">${title}</h1>
-                            <div class="flex items-center gap-3">
-                                <button class="flex-1 py-3 px-6 bg-brand-primary text-black text-[10px] font-black uppercase rounded-xl" onclick="UI.handleShare('${title}')">แชร์</button>
-                                <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white"><i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i></button>
+                            <div class="glass-premium p-6 rounded-2xl">
+                                <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none mb-4">${title}</h1>
+                                <div class="flex items-center gap-3 mb-4">
+                                    <span class="px-3 py-1 bg-brand-primary/20 text-brand-primary text-[9px] font-black uppercase rounded-lg border border-brand-primary/30">HD 720p</span>
+                                    <span class="px-3 py-1 bg-white/5 text-gray-400 text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button class="flex-1 py-3 px-6 bg-brand-primary text-white text-[10px] font-black uppercase rounded-xl hover:bg-brand-primary/90 transition-all shadow-[0_0_20px_rgba(229,9,20,0.3)] hover:shadow-[0_0_30px_rgba(229,9,20,0.5)]" onclick="UI.handleShare('${title}')">
+                                        <i data-lucide="share-2" class="w-4 h-4 inline mr-2"></i>แชร์
+                                    </button>
+                                    <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all">
+                                        <i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -580,8 +597,8 @@ export const UI = {
             <div class="mt-16 space-y-8 animate-slide-up">
                 <div class="flex items-center gap-4">
                     <h3 class="text-xl font-black text-white uppercase tracking-widest Thai-font">เลือกตอนรับชม</h3>
-                    <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent"></div>
-                    <span class="text-[10px] font-black text-gray-600 uppercase tracking-widest Thai-font">${episodes.length} EPISODES</span>
+                    <div class="flex-1 h-px bg-gradient-to-r from-brand-primary/50 to-transparent"></div>
+                    <span class="text-[10px] font-black text-brand-primary uppercase tracking-widest Thai-font">${episodes.length} EPISODES</span>
                 </div>
                 
                 <div class="flex overflow-x-auto gap-4 pb-6 scrollbar-hide snap-x">
@@ -591,10 +608,10 @@ export const UI = {
                         return `
                             <button onclick="location.href='/watch-series.html?id=${seriesId}&ep=${i}'" 
                                     class="min-w-[160px] md:min-w-[200px] p-5 rounded-[1.5rem] border transition-all duration-300 snap-start text-left group backdrop-blur-xl
-                                    hover:scale-105 hover:shadow-[0_0_25px_rgba(251,191,36,0.3)] hover:border-brand-primary/50
-                                    ${isActive ? 'bg-brand-primary/90 border-brand-primary shadow-[0_0_30px_rgba(251,191,36,0.3)]' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
-                                <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-black/60' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
-                                <h4 class="text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-black' : 'text-white'}">${UI.escapeHTML(ep.title)}</h4>
+                                    hover:scale-105 hover:shadow-[0_0_30px_rgba(229,9,20,0.4)] hover:border-brand-primary/50
+                                    ${isActive ? 'bg-brand-primary/90 border-brand-primary shadow-[0_0_40px_rgba(229,9,20,0.4)]' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
+                                <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/60' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
+                                <h4 class="text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white'}">${UI.escapeHTML(ep.title)}</h4>
                             </button>`;
                       })
                       .join('')}
