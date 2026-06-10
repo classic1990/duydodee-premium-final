@@ -43,8 +43,7 @@ export default {
     ],
     testPathIgnorePatterns: [
         '/node_modules/',
-        '/dist/',
-        '/public/src/config/config.test.js'
+        '/dist/'
     ],
     verbose: true,
     testTimeout: 10000

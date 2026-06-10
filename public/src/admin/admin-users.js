@@ -18,9 +18,9 @@ let isSearchMode = false;
 let _userCountListener = null;
 
 // 📊 Monitoring: Helper function for admin activity logging
-function logAdminActivity(type, action, details = {}) {
+function logAdminActivity(action, details = {}) {
     try {
-        logActivity(type, action, details);
+        logActivity(action, details);
     } catch (error) {
         console.error('Failed to log admin activity:', error);
     }
@@ -30,7 +30,7 @@ function logAdminActivity(type, action, details = {}) {
 function trackPageLoad() {
     const perfData = performance.timing;
     const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-    logAdminActivity('performance', 'page-load', {
+    logAdminActivity('performance-page-load', {
         pageLoadTime,
         domReady: perfData.domContentLoadedEventEnd - perfData.navigationStart
     });
@@ -38,7 +38,7 @@ function trackPageLoad() {
 
 // 📊 Monitoring: Track user actions
 function trackAdminAction(action, details = {}) {
-    logAdminActivity('admin-action', action, details);
+    logAdminActivity(`admin-action-${action}`, details);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -109,7 +109,7 @@ function setupRealTimeUserCount() {
     }, (error) => {
         console.error('Real-time count error:', error);
         // 📊 Monitoring: Log real-time errors
-        logAdminActivity('error', 'user-count-fail', { error: error.message });
+        logAdminActivity('error-user-count-fail', { error: error.message });
     });
 }
 

@@ -10,9 +10,9 @@ let currentPayments = [];
 let currentFilter = 'all'; // 🆕 Feature: Filter by status
 
 // 📊 Monitoring: Helper function for admin activity logging
-function logAdminActivity(type, action, details = {}) {
+function logAdminActivity(action, details = {}) {
     try {
-        logActivity(type, action, details);
+        logActivity(action, details);
     } catch (error) {
         console.error('Failed to log admin activity:', error);
     }
@@ -214,22 +214,22 @@ async function verifyPayment(id, userId) {
             // ป้องกันการทับสิทธิ์แอดมิน: ถ้าเป็น admin หรือ super-admin อยู่แล้ว ไม่ต้องเปลี่ยน role เป็น vip
             if (currentRole === SCHEMA.ROLES.MASTER.toLowerCase() || currentRole === SCHEMA.ROLES.ADMIN.toLowerCase() || currentRole === 'master') {
                 UI.showToast('ยืนยันรายการแล้ว (รักษาสิทธิ์แอดมินเดิม)', 'success');
-                logAdminActivity('vip-verify', 'admin-protected', { paymentId: id, userId, currentRole });
+                logAdminActivity('vip-verify-admin-protected', { paymentId: id, userId, currentRole });
             } else {
                 await updateDoc(userRef, { role: 'vip' });
                 UI.showToast('อัปเดตสถานะสมาชิกเป็น VIP เรียบร้อยแล้ว', 'success');
-                logAdminActivity('vip-verify', 'success', { paymentId: id, userId, duration: performance.now() - startTime });
+                logAdminActivity('vip-verify-success', { paymentId: id, userId, duration: performance.now() - startTime });
             }
         } else {
             UI.showToast('ยืนยันรายการชำระเงินเรียบร้อยแล้ว', 'success');
-            logAdminActivity('vip-verify', 'guest', { paymentId: id });
+            logAdminActivity('vip-verify-guest', { paymentId: id });
         }
 
         await fetchPayments();
     } catch (e) {
         console.error('Verify Payment Error:', e);
         UI.showToast('เกิดข้อผิดพลาดในการดำเนินการ', 'error');
-        logAdminActivity('vip-verify-error', 'failed', { paymentId: id, userId, error: e.message, duration: performance.now() - startTime });
+        logAdminActivity('vip-verify-error', { paymentId: id, userId, error: e.message, duration: performance.now() - startTime });
     } finally {
         UI.setLoading(false);
     }

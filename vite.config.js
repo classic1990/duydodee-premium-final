@@ -7,6 +7,7 @@ import { resolve } from 'path';
  */
 export default defineConfig({
   root: 'public',
+  envDir: '../',
   server: {
     open: '/index.html',
     headers: {
@@ -30,7 +31,7 @@ export default defineConfig({
     },
     rollupOptions: {
       input: {
-        main: resolve('public/index.html'),
+        index: resolve('public/index.html'),
         category: resolve('public/category.html'),
         search: resolve('public/search.html'),
         login: resolve('public/login.html'),
@@ -40,22 +41,23 @@ export default defineConfig({
         'watch-movie': resolve('public/watch-movie.html'),
         'watch-series': resolve('public/watch-series.html'),
         'forgot-password': resolve('public/forgot-password.html'),
+        'watchlist': resolve('public/watchlist.html'),
         '404': resolve('public/404.html'),
-        'admin-manage': resolve('public/admin/admin-manage.html'),
-        'admin-add-movie': resolve('public/admin/admin-add-movie.html'),
-        'admin-add-series': resolve('public/admin/admin-add-series.html'),
-        'admin-edit-movie': resolve('public/admin/admin-edit-movie.html'),
-        'admin-edit-series': resolve('public/admin/admin-edit-series.html'),
-        'admin-hero-slider': resolve('public/admin/admin-hero-slider.html'),
-        'admin-manage-movies': resolve('public/admin/admin-manage-movies.html'),
-        'admin-manage-series': resolve('public/admin/admin-manage-series.html'),
-        'admin-system': resolve('public/admin/admin-system.html'),
-        'admin-users': resolve('public/admin/admin-users.html'),
-        'admin-vip-payments': resolve('public/admin/admin-vip-payments.html'),
-        'admin-activity-logs': resolve('public/admin/admin-activity-logs.html'),
-        'admin-stats': resolve('public/admin/admin-stats.html'),
-        'admin-tickets': resolve('public/admin/admin-tickets.html'),
-        'admin-user-vip': resolve('public/admin/admin-user-vip.html')
+        'admin/admin-manage': resolve('public/admin/admin-manage.html'),
+        'admin/admin-add-movie': resolve('public/admin/admin-add-movie.html'),
+        'admin/admin-add-series': resolve('public/admin/admin-add-series.html'),
+        'admin/admin-edit-movie': resolve('public/admin/admin-edit-movie.html'),
+        'admin/admin-edit-series': resolve('public/admin/admin-edit-series.html'),
+        'admin/admin-hero-slider': resolve('public/admin/admin-hero-slider.html'),
+        'admin/admin-manage-movies': resolve('public/admin/admin-manage-movies.html'),
+        'admin/admin-manage-series': resolve('public/admin/admin-manage-series.html'),
+        'admin/admin-system': resolve('public/admin/admin-system.html'),
+        'admin/admin-users': resolve('public/admin/admin-users.html'),
+        'admin/admin-vip-payments': resolve('public/admin/admin-vip-payments.html'),
+        'admin/admin-activity-logs': resolve('public/admin/admin-activity-logs.html'),
+        'admin/admin-stats': resolve('public/admin/admin-stats.html'),
+        'admin/admin-tickets': resolve('public/admin/admin-tickets.html'),
+        'admin/admin-user-vip': resolve('public/admin/admin-user-vip.html')
       },
       output: {
         manualChunks(id) {

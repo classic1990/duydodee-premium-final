@@ -1,4 +1,4 @@
-import { db, collection, getDocs, writeBatch } from '../services/firebase.js';
+import { db, collection, getDocs, writeBatch, doc, getDoc, setDoc } from '../services/firebase.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { UI } from '../components/ui.js';
 
@@ -10,9 +10,10 @@ import { UI } from '../components/ui.js';
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
+        UI.setupSidebar(user, true); // Added isAdmin=true
         UI.initAdminSidebar();
         initSystemControls();
+        loadSystemSettings(); // Added load settings
         UI.refreshIcons();
     } catch (err) {
         console.error('Access Denied:', err);
@@ -24,12 +25,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function initSystemControls() {
-    const purgeBtn = document.getElementById('purge-data-btn');
-    if (!purgeBtn) {
-        return;
+    const purgeBtn = document.getElementById('purge-btn');
+    if (purgeBtn) {
+        purgeBtn.addEventListener('click', handlePurgeData);
     }
 
-    purgeBtn.addEventListener('click', handlePurgeData);
+    const paymentForm = document.getElementById('payment-settings-form');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', handlePaymentSettings);
+    }
+}
+
+async function loadSystemSettings() {
+    try {
+        const settingsDoc = await getDoc(doc(db, 'settings', 'payment'));
+        if (settingsDoc.exists()) {
+            const data = settingsDoc.data();
+            document.getElementById('wallet-number').value = data.walletNumber || '';
+            document.getElementById('account-name').value = data.accountName || '';
+        }
+    } catch (err) {
+        console.error('Error loading settings:', err);
+    }
+}
+
+async function handlePaymentSettings(e) {
+    e.preventDefault();
+    const walletNumber = document.getElementById('wallet-number').value;
+    const accountName = document.getElementById('account-name').value;
+
+    UI.setLoading(true);
+    try {
+        await setDoc(doc(db, 'settings', 'payment'), {
+            walletNumber,
+            accountName,
+            updatedAt: new Date().toISOString()
+        });
+        UI.showToast('บันทึกข้อมูลสำเร็จ', 'success');
+    } catch (err) {
+        console.error(err);
+        UI.showToast('เกิดข้อผิดพลาดในการบันทึก', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
 }
 
 async function handlePurgeData() {

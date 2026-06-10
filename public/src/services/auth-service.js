@@ -198,11 +198,16 @@ export const AuthService = {
             };
 
             if (!snap.exists()) {
-                data.role = SCHEMA.ROLES.MEMBER;
+                data.role = config.isAdmin(user.email) ? SCHEMA.ROLES.ADMIN : SCHEMA.ROLES.MEMBER;
                 data.createdAt = serverTimestamp();
                 data.isBanned = false;
                 await setDoc(userRef, data);
             } else {
+                // 💡 Upgrade to admin if listed in config but firestore says member
+                const currentRole = snap.data().role;
+                if (config.isAdmin(user.email) && currentRole === SCHEMA.ROLES.MEMBER) {
+                    data.role = SCHEMA.ROLES.ADMIN;
+                }
                 await setDoc(userRef, data, { merge: true });
             }
         } catch (err) {

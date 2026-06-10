@@ -1,6 +1,7 @@
 {
   "firestore": {
-    "rules": "firestore.rules"
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   },
   "functions": [
     {
@@ -19,7 +20,7 @@
   ],
   "hosting": {
     "site": "duydodeesport",
-    "public": "public",
+    "public": "dist",
     "cleanUrls": true,
     "trailingSlash": false,
     "ignore": [

@@ -76,8 +76,8 @@ class ErrorHandler {
         this.storeError(error);
     }
 
-    sendToTrackingService(error) {
-    // Check if Sentry is configured
+    async sendToTrackingService(error) {
+        // Check if Sentry is configured
         if (window.Sentry) {
             try {
                 Sentry.captureException(error);
@@ -86,12 +86,17 @@ class ErrorHandler {
             }
         }
 
-    // TODO: Add custom error tracking endpoint
-    // fetch('/api/errors', {
-    //   method: 'POST',
-    //   body: JSON.stringify(error),
-    //   headers: { 'Content-Type': 'application/json' }
-    // }).catch(e => console.error('Failed to send error:', e));
+        // Log to Firebase Firestore
+        try {
+            const { db, addDoc, collection } = await import('../services/firebase.js');
+            await addDoc(collection(db, 'system_logs'), {
+                ...error,
+                timestamp: new Date().toISOString(),
+                source: 'client_error_handler'
+            });
+        } catch (e) {
+            // Silently fail to avoid infinite error loops
+        }
     }
 
     storeError(error) {
