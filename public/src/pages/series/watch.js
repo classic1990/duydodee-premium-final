@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
 
 let isRendering = false;
+let currentUser = null; // 📝 Store current user state
+let progressInterval = null; // 🧹 Store interval ID for cleanup
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.WATCH_JS_INITIALIZED) {
@@ -11,6 +13,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.WATCH_JS_INITIALIZED = true;
 
     UI.initNavbar();
+
+    // 📝 Track auth state
+    AuthService.onStateChanged(user => {
+        currentUser = user;
+    });
 
     const params = new URLSearchParams(window.location.search);
     const seriesId = params.get('id');
@@ -55,7 +62,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (player) {
                 AuthService.onStateChanged(user => {
                     if (user) {
-                        setInterval(async () => {
+                        // 🧹 Clear existing interval if any to prevent multiple intervals
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                        }
+
+                        // 🧹 Create new interval and store ID
+                        progressInterval = setInterval(async () => {
                             if (typeof player.getCurrentTime === 'function' && typeof player.getDuration === 'function') {
                                 const currentTime = player.getCurrentTime();
                                 const duration = player.getDuration();
@@ -67,8 +80,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
-            // 2. Increment View Count
-            ContentService.incrementViewCount('series', seriesId);
+            // 2. Increment View Count (only if user is authenticated)
+            if (currentUser) {
+                ContentService.incrementViewCount('series', seriesId);
+            }
 
             // 3. Save History (initial entry)
             AuthService.onStateChanged(user => {
@@ -102,4 +117,18 @@ async function loadRelated(category, currentId) {
         console.error('Related Error:', err);
     }
 }
+
+// 🧹 Cleanup function to prevent memory leaks
+function cleanup() {
+    if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+    }
+}
+
+// Add cleanup on page unload
+window.addEventListener('beforeunload', cleanup);
+
+// Also cleanup on history navigation
+window.addEventListener('popstate', cleanup);
 

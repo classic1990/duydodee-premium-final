@@ -11,7 +11,8 @@ export const SCHEMA = {
         HERO: 'hero_slides',
         ACTIVITY_LOGS: 'activity_logs',
         DAILY_STATS: 'daily_stats',
-        TICKETS: 'support_tickets'
+        TICKETS: 'support_tickets',
+        VIP_PAYMENTS: 'vip_payments'
     },
     CATEGORIES: {
         VERTICAL: 'ซีรีส์แนวตั้ง',

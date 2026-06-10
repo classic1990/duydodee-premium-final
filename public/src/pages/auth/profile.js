@@ -138,7 +138,7 @@ async function loadUserTickets(user) {
         orderBy('createdAt', 'desc')
     );
 
-    onSnapshot(q, (snap) => {
+    const _unsubscribe = onSnapshot(q, (snap) => {
         if (snap.empty) {
             section.classList.add('hidden');
             return;
@@ -219,6 +219,9 @@ async function loadUserTickets(user) {
         });
 
         UI.refreshIcons();
+    }, (error) => {
+        console.error('Tickets snapshot error:', error);
+        section.classList.add('hidden');
     });
 }
 

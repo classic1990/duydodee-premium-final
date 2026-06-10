@@ -36,7 +36,7 @@ class SentryConfig {
                 tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
                 replaysSessionSampleRate: 0.1, // 10% of sessions
                 replaysOnErrorSampleRate: 1.0, // 100% of error sessions
-                beforeSend(event, hint) {
+                beforeSend(event, _hint) {
                     // Filter out unwanted errors
                     if (this.shouldIgnoreError(event)) {
                         return null;

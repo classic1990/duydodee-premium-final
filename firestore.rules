@@ -37,22 +37,42 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
-    // 🎬 Content Collections (Public read)
+    // 🎬 Content Collections (Public read, write for views increment)
     match /movies/{movieId} {
       allow read: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
     }
 
     match /series/{seriesId} {
       allow read: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
     }
 
     match /hero_slides/{slideId} {
       allow read: if true;
     }
 
-    // 📊 Stats: Public read
+    // 📊 Stats: Public read, write for views increment
     match /daily_stats/{statId} {
       allow read: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'lastUpdated']);
+    }
+
+    // 💳 VIP Payments: Admin read/write
+    match /vip_payments/{paymentId} {
+      allow read, write: if isAdmin();
+    }
+
+    // 🎫 Support Tickets: Admin read/write, user create
+    match /tickets/{ticketId} {
+      allow read: if isAdmin() || isOwner(request.auth.uid);
+      allow create: if isSignedIn();
+      allow update: if isAdmin();
+    }
+
+    // 📝 Activity Logs: Admin only
+    match /activity_logs/{logId} {
+      allow read, write: if isAdmin();
     }
   }
 }

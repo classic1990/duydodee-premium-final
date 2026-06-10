@@ -1,5 +1,6 @@
 import { db, collection, getDocs, query, orderBy, limit, startAfter, SCHEMA, where } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 let lastVisible = null;
 let currentKeyword = '';
@@ -7,7 +8,19 @@ let adminFilter = '';
 const LOG_LIMIT = 20;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    UI.initAdminSidebar();
+    try {
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
+        UI.initAdminSidebar();
+    } catch (err) {
+        console.error('Access Denied:', err);
+        UI.showToast('ไม่มีสิทธิเข้าถึงหน้าบันทึกกิจกรรม', 'error');
+        setTimeout(() => {
+            window.location.href = '/admin/admin-manage.html';
+        }, 2000);
+        return;
+    }
+
     UI.setLoading(true);
     await loadActivityLogs();
     UI.setLoading(false);

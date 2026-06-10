@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         initManageMovies();
     } catch (err) {
         console.error('Access Denied:', err);
+        UI.showToast('ไม่มีสิทธิเข้าถึงหน้าจัดการหนัง', 'error');
+        setTimeout(() => {
+            window.location.href = '/admin/admin-manage.html';
+        }, 2000);
     }
 });
 

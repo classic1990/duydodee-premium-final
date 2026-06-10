@@ -1,4 +1,4 @@
-import { db, collection, getDocs, doc, updateDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA } from '../services/firebase.js';
+import { db, collection, getDocs, doc, updateDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, onSnapshot, where, logActivity } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -14,21 +14,74 @@ let totalUsers = 0;
 const userCache = new Map();
 let isSearchMode = false;
 
+// 🆕 Feature: Real-time user count updates
+let _userCountListener = null;
+
+// 📊 Monitoring: Helper function for admin activity logging
+function logAdminActivity(type, action, details = {}) {
+    try {
+        logActivity(type, action, details);
+    } catch (error) {
+        console.error('Failed to log admin activity:', error);
+    }
+}
+
+// 📊 Monitoring: Track page load performance
+function trackPageLoad() {
+    const perfData = performance.timing;
+    const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+    logAdminActivity('performance', 'page-load', {
+        pageLoadTime,
+        domReady: perfData.domContentLoadedEventEnd - perfData.navigationStart
+    });
+}
+
+// 📊 Monitoring: Track user actions
+function trackAdminAction(action, details = {}) {
+    logAdminActivity('admin-action', action, details);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // 📊 Monitoring: Track page load
+    setTimeout(trackPageLoad, 0);
+
     try {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
         UI.initAdminSidebar();
+        trackAdminAction('access', { page: 'admin-users', uid: user.uid });
         initManageUsers();
     } catch (err) {
         console.error('Access Denied:', err);
+        UI.showToast('ไม่มีสิทธิเข้าถึงหน้าจัดการผู้ใช้', 'error');
+        trackAdminAction('access-denied', { page: 'admin-users', error: err.message });
+        setTimeout(() => {
+            window.location.href = '/admin/admin-manage.html';
+        }, 2000);
     }
+
+    // 🎯 Feature: Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'r' && e.ctrlKey) {
+            e.preventDefault();
+            loadUsers();
+        }
+        if (e.key === 's' && e.ctrlKey && !e.shiftKey) {
+            e.preventDefault();
+            const searchInput = document.getElementById('user-search');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }
+    });
 });
 
 async function initManageUsers() {
     UI.setLoading(true);
 
     await updateUserCount();
+    setupRealTimeUserCount(); // 🆕 Real-time updates
+    setupRoleFilter(); // 🆕 Role filter
     loadUsers();
     setupSearch();
     setupEditModal();
@@ -45,6 +98,55 @@ async function updateUserCount() {
     } catch (e) {
         console.error('Count failed:', e);
     }
+}
+
+// 🆕 Feature: Setup real-time user count updates
+function setupRealTimeUserCount() {
+    const q = query(collection(db, SCHEMA.COLLECTIONS.USERS), orderBy('createdAt', 'desc'), limit(1));
+    _userCountListener = onSnapshot(q, async () => {
+        // Update count whenever users change
+        await updateUserCount();
+    }, (error) => {
+        console.error('Real-time count error:', error);
+        // 📊 Monitoring: Log real-time errors
+        logAdminActivity('error', 'user-count-fail', { error: error.message });
+    });
+}
+
+// ⚡ Optimization: Debounced role filter
+const debouncedRoleFilter = UI.debounce(async (role) => {
+    UI.setLoading(true);
+
+    try {
+        let q = query(collection(db, SCHEMA.COLLECTIONS.USERS));
+        if (role !== 'all') {
+            q = query(q, where('role', '==', role));
+        }
+        q = query(q, orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
+
+        const snap = await getDocs(q);
+        renderUsers(snap.docs.map(doc => ({ uid: doc.id, ...doc.data() })));
+        isSearchMode = true;
+        trackAdminAction('role-filter', { role });
+    } catch (error) {
+        console.error('Role filter error:', error);
+        UI.showToast('ไม่สามารถกรองข้อมูลได้', 'error');
+        trackAdminAction('role-filter-error', { role, error: error.message });
+    } finally {
+        UI.setLoading(false);
+    }
+}, 300);
+
+// 🆕 Feature: Quick role filter
+function setupRoleFilter() {
+    const roleFilter = document.getElementById('role-filter');
+    if (!roleFilter) {
+        return;
+    }
+
+    roleFilter.addEventListener('change', () => {
+        debouncedRoleFilter(roleFilter.value);
+    });
 }
 
 async function loadUsers() {

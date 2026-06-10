@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadHeroSlides();
     } catch (err) {
         console.error('Access Denied:', err);
+        UI.showToast('ไม่มีสิทธิเข้าถึงหน้าจัดการสไลเดอร์', 'error');
+        setTimeout(() => {
+            window.location.href = '/admin/admin-manage.html';
+        }, 2000);
     }
 });
 

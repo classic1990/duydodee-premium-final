@@ -9,7 +9,7 @@ import { ContentService } from '../services/content-service.js';
 let lastVisibleDoc = null;
 let isFetching = false;
 let hasMore = true;
-const currentFilter = 'all';
+let currentFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.injectStarfield();
@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // 3. Filter Buttons
+    setupFilterButtons();
+
     // 4. Global Search Redirect
     const searchInput = document.getElementById('global-search');
     if (searchInput) {
@@ -40,6 +43,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 });
+
+/**
+ * 🔍 Setup Filter Buttons
+ */
+function setupFilterButtons() {
+    const filterButtons = document.querySelectorAll('.type-filter');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filterType = btn.dataset.type;
+            if (filterType === currentFilter) {
+                return;
+            }
+
+            // Update active state
+            filterButtons.forEach(b => {
+                b.classList.remove('bg-brand-primary', 'text-black');
+                b.classList.add('text-gray-400');
+            });
+            btn.classList.add('bg-brand-primary', 'text-black');
+            btn.classList.remove('text-gray-400');
+
+            // Update filter and reload
+            currentFilter = filterType;
+            lastVisibleDoc = null; // Reset pagination
+            hasMore = true;
+            loadLibrary();
+        });
+    });
+}
 
 /**
  * 💡 Load Personalized Content

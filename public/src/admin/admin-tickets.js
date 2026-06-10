@@ -1,9 +1,21 @@
-import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp } from '../services/firebase.js';
+import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp, checkIsAdmin } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    UI.initAdminSidebar();
-    loadTickets();
+    try {
+        // Check admin access first
+        const user = auth.currentUser;
+        if (!user || !(await checkIsAdmin(user))) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        UI.initAdminSidebar();
+        loadTickets();
+    } catch (error) {
+        console.error('Admin access check failed:', error);
+        window.location.href = '/login.html';
+    }
 });
 
 function loadTickets() {
@@ -119,6 +131,9 @@ function loadTickets() {
         });
 
         UI.refreshIcons();
+    }, (error) => {
+        console.error('Tickets snapshot error:', error);
+        UI.renderEmptyState(container, 'ไม่สามารถโหลดรายการแจ้งปัญหาได้ กรุณาติดต่อเจ้าหน้าที่');
     });
 
     filter.onchange = () => loadTickets();

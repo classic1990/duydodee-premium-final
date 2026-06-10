@@ -2,7 +2,7 @@
 SETLOCAL EnableDelayedExpansion
 
 :: ================================================================
-:: 🛰️ DUYดูDEE - MASTER SHIP PROTOCOL [V42.0 PREMIUM]
+:: 🛰️ DUYดูDEE - MASTER SHIP PROTOCOL [V42.0 PREMIUM - TEST MODE]
 :: ================================================================
 
 REM Load environment variables from .env file if exists
@@ -18,7 +18,7 @@ if "%LIVE_URL%"=="" set "LIVE_URL=https://duydodeesport.web.app"
 if "%VERSION%"=="" set "VERSION=V42.0-PREMIUM"
 set "START_TIME=%TIME%"
 
-title DUYดูDEE SHIP [%VERSION%] - PRODUCTION
+title DUYดูDEE SHIP [%VERSION%] - TEST MODE
 
 :: Ensure the script runs from its own directory
 cd /d "%~dp0"
@@ -28,13 +28,14 @@ set "P_INFO=powershell -Command Write-Host ' [INFO] ' -NoNewline -ForegroundColo
 set "P_TASK=powershell -Command Write-Host ' [TASK] ' -NoNewline -ForegroundColor Cyan; Write-Host"
 set "P_OK=powershell -Command Write-Host ' [DONE] ' -NoNewline -ForegroundColor Green; Write-Host"
 set "P_ERR=powershell -Command Write-Host ' [FAIL] ' -NoNewline -ForegroundColor Red; Write-Host"
+set "P_WARN=powershell -Command Write-Host ' [WARN] ' -NoNewline -ForegroundColor Yellow; Write-Host"
 
 cls
 echo.
-powershell -Command "Write-Host ' 🚀 DUYดูDEE MASTER SHIP PROTOCOL ' -ForegroundColor White -BackgroundColor DarkCyan"
-powershell -Command "Write-Host ' ================================================================' -ForegroundColor Cyan"
+powershell -Command "Write-Host ' 🧪 DUYดูDEE MASTER SHIP PROTOCOL [TEST MODE]' -ForegroundColor White -BackgroundColor DarkMagenta"
+powershell -Command "Write-Host ' ================================================================' -ForegroundColor Magenta"
 echo   Project: %PROJECT_ID% ^| Version: %VERSION%
-powershell -Command "Write-Host ' ================================================================' -ForegroundColor Cyan"
+powershell -Command "Write-Host ' ================================================================' -ForegroundColor Magenta"
 echo.
 
 :: 1. ENVIRONMENT VALIDATION
@@ -45,12 +46,12 @@ where npm >nul 2>nul || (%P_ERR% "Critical Error: NPM missing" -ForegroundColor 
 
 :: Ensure we are on main branch
 for /f "tokens=*" %%i in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%i
-if not "%BRANCH%"=="main" (%P_ERR% "Error: Must be on 'main' branch to ship (Current: %BRANCH%)" -ForegroundColor Red & goto :FAILED)
+if not "%BRANCH%"=="main" (%P_WARN% "Warning: Not on 'main' branch (Current: %BRANCH%)" -ForegroundColor Yellow)
 
 :: Check for uncommitted changes
 for /f %%i in ('git status --porcelain') do set UNCOMMITTED=1
 if defined UNCOMMITTED (
-    %P_INFO% "Warning: Uncommitted changes detected." -ForegroundColor Yellow
+    %P_WARN% "Warning: Uncommitted changes detected." -ForegroundColor Yellow
     git status --short
 )
 
@@ -108,36 +109,22 @@ if exist "dist" (
 
 %P_OK% "Production Bundle Ready."
 
-:: 8. CLOUD SYNCHRONIZATION
-%P_TASK% "Step 8/8: Final Cloud Synchronization..." -ForegroundColor Cyan
-
-:: Pre-deploy summary
-echo.
-powershell -Command "Write-Host ' ================================================================' -ForegroundColor DarkCyan"
-powershell -Command "Write-Host '   📋 DEPLOYMENT SUMMARY' -ForegroundColor Cyan"
-powershell -Command "Write-Host ' ================================================================' -ForegroundColor DarkCyan"
-%P_INFO% "Project:  %PROJECT_ID%" -ForegroundColor Gray
-%P_INFO% "Version:  %VERSION%" -ForegroundColor Gray
-%P_INFO% "Branch:   %BRANCH%" -ForegroundColor Gray
-%P_INFO% "Target:   Hosting + Firestore" -ForegroundColor Gray
-powershell -Command "Write-Host ' ================================================================' -ForegroundColor DarkCyan"
-echo.
-
-call firebase use %PROJECT_ID% || goto :FAILED
-call firebase deploy --only hosting,firestore --message "Ship %VERSION% [%DATE% %TIME%]" || (%P_ERR% "Deployment synchronization failed." -ForegroundColor Red & goto :FAILED)
+:: 8. CLOUD SYNCHRONIZATION [SKIPPED IN TEST MODE]
+%P_WARN% "Step 8/8: Cloud Synchronization [SKIPPED - TEST MODE]" -ForegroundColor Yellow
+%P_INFO% "To deploy, run Ship.bat instead of Ship-Test.bat" -ForegroundColor Gray
 
 :: FINALIZATION
 set "END_TIME=%TIME%"
 echo.
 powershell -Command "Write-Host ' ================================================================' -ForegroundColor Green"
-powershell -Command "Write-Host '   ✅ MISSION ACCOMPLISHED: DUYดูDEE IS LIVE' -ForegroundColor White -BackgroundColor DarkGreen"
+powershell -Command "Write-Host '   ✅ TEST COMPLETED: BUILD SUCCESSFUL' -ForegroundColor White -BackgroundColor DarkGreen"
 powershell -Command "Write-Host ' ================================================================' -ForegroundColor Green"
-%P_INFO% "URL:      %LIVE_URL%" -ForegroundColor Cyan
 %P_INFO% "Started:  %START_TIME%" -ForegroundColor Gray
 %P_INFO% "Finished: %END_TIME%" -ForegroundColor Gray
 echo.
-set /p launch=" > Launch Cinematic Experience Now? (y/n): "
-if /i "%launch%"=="y" start %LIVE_URL%
+%P_WARN% "Ready for deployment. Run 'Ship.bat' to deploy to production." -ForegroundColor Yellow
+echo.
+pause
 exit /b 0
 
 :FAILED

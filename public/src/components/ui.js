@@ -22,6 +22,18 @@ import {
 export const UI = {
     ...UIUtils,
 
+    debounce: (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
     setCounter: (id, count) => {
         const el = document.getElementById(id);
         if (el) {
@@ -230,7 +242,7 @@ export const UI = {
                     collection(db, SCHEMA.COLLECTIONS.TICKETS),
                     where('status', '==', 'open')
                 );
-                onSnapshot(q, (snap) => {
+                const _unsubscribe = onSnapshot(q, (snap) => {
                     const count = snap.size;
                     const ticketLink = sidebar.querySelector('a[href*="admin-tickets"]');
                     if (ticketLink) {
@@ -247,6 +259,8 @@ export const UI = {
                             badge.remove();
                         }
                     }
+                }, (error) => {
+                    console.error('Ticket notifications error:', error);
                 });
             }
         }
@@ -295,6 +309,18 @@ export const UI = {
                     </div>
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-transparent to-transparent opacity-80"></div>
+                
+                <!-- 🎬 Enhanced Play Button Overlay -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/30 backdrop-blur-[2px] pointer-events-none group-hover:pointer-events-auto z-40">
+                    <div class="relative w-16 h-16 rounded-full bg-brand-primary/95 flex items-center justify-center text-white scale-75 group-hover:scale-110 transition-all duration-500 shadow-[0_0_40px_rgba(229,9,20,0.6)] hover:shadow-[0_0_60px_rgba(229,9,20,0.8)] border-2 border-white/20 cursor-pointer hover:bg-brand-primary play-button-container pointer-events-auto">
+                        <!-- Ripple Effect -->
+                        <div class="absolute inset-0 rounded-full border-2 border-white/30 opacity-0 group-hover:animate-ping"></div>
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-1 transition-transform duration-300">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </div>
+                </div>
             </div>`;
     },
 
@@ -314,9 +340,14 @@ export const UI = {
                             <h4 class="text-xl md:text-3xl font-black text-white Thai-font line-clamp-1 drop-shadow-lg">${UI.escapeHTML(movie.title)}</h4>
                         </div>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20 backdrop-blur-[1px]">
-                        <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500">
-                            <i data-lucide="play" class="w-8 h-8 fill-current"></i>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/40 backdrop-blur-[3px] pointer-events-none group-hover:pointer-events-auto z-40">
+                        <div class="relative w-20 h-20 rounded-full bg-brand-primary/95 flex items-center justify-center text-white scale-75 group-hover:scale-110 transition-all duration-500 shadow-[0_0_50px_rgba(229,9,20,0.7)] hover:shadow-[0_0_70px_rgba(229,9,20,0.9)] border-3 border-white/30 hover:border-white/50 cursor-pointer hover:bg-brand-primary play-button-container pointer-events-auto">
+                            <!-- Ripple Effect -->
+                            <div class="absolute inset-0 rounded-full border-2 border-white/40 opacity-0 group-hover:animate-ping"></div>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-2 transition-transform duration-300 group-hover:scale-110">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -369,14 +400,13 @@ export const UI = {
         const title = item.title || 'Unknown Title';
 
         return `
-            <div class="min-w-[280px] md:min-w-[360px] group cursor-pointer animate-fade-in snap-start" onclick="location.href='${watchUrl}'">
-                <div class="poster-glow relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl">
-                    <img src="${poster}" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-[3s]" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
+            <div class="group cursor-pointer animate-fade-in">
+                <div class="poster-glow relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/5 bg-brand-obsidian shadow-2xl" onclick="location.href='${watchUrl}'">
+                    <img src="${poster}" class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-[3s]" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';">
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+                    <!-- Removed gradient overlays -->
 
-                    <div class="absolute bottom-0 left-0 right-0 p-5 space-y-2">
+                    <div class="absolute bottom-0 left-0 right-0 p-4 space-y-2 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                         <div class="flex items-center gap-2">
                              <span class="px-2 py-0.5 bg-brand-primary text-white text-[8px] font-black uppercase rounded shadow-lg Thai-font">รับชมค้างไว้</span>
                              <span class="text-[9px] font-bold text-white/50 uppercase tracking-widest">${UI.escapeHTML(category)}</span>
@@ -390,10 +420,31 @@ export const UI = {
                         </div>
                     </div>
 
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/20 backdrop-blur-[2px]">
-                        <div class="w-14 h-14 rounded-full bg-brand-primary/90 flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500 shadow-[0_0_30px_rgba(229,9,20,0.4)]">
-                            <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
-                        </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-brand-black/40 backdrop-blur-[3px] pointer-events-none group-hover:pointer-events-auto z-40">
+                        <!-- Progress Indicator for History Cards -->
+                        ${progress > 0 ? `
+                            <div class="absolute inset-0 flex flex-col items-center justify-center space-y-3 pointer-events-auto">
+                                <div class="relative w-16 h-16">
+                                    <svg class="absolute inset-0 transform -rotate-90" viewBox="0 0 36 36">
+                                        <path class="text-brand-black/40" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"/>
+                                        <path class="text-brand-primary" stroke-dasharray="${progress}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-[10px] font-black text-white">${Math.round(progress)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : `
+                            <!-- Normal Play Button -->
+                            <div class="relative w-20 h-20 rounded-full bg-brand-primary/95 flex items-center justify-center text-white scale-75 group-hover:scale-110 transition-all duration-500 shadow-[0_0_50px_rgba(229,9,20,0.7)] hover:shadow-[0_0_70px_rgba(229,9,20,0.9)] border-3 border-white/30 hover:border-white/50 cursor-pointer hover:bg-brand-primary play-button-container pointer-events-auto">
+                                <!-- Ripple Effect -->
+                                <div class="absolute inset-0 rounded-full border-2 border-white/40 opacity-0 group-hover:animate-ping"></div>
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-2 transition-transform duration-300 group-hover:scale-110">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                            </div>
+                        `}
                     </div>
                 </div>
             </div>`;
@@ -595,7 +646,11 @@ export const UI = {
                 const initPlayer = () => {
                     const player = new YT.Player('player-api-node', {
                         videoId: videoId,
-                        playerVars: { 'autoplay': 1, 'controls': 1 },
+                        playerVars: {
+                            'autoplay': 1,
+                            'controls': 1,
+                            'origin': window.location.origin
+                        },
                         events: {
                             onReady: () => resolve(player)
                         }

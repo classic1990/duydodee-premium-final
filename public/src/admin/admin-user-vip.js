@@ -5,7 +5,12 @@ import { UI } from '../components/ui.js';
  * 💎 ADMIN INDIVIDUAL VIP REPORT - Page Controller
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    UI.initAdminSidebar();
+    try {
+        UI.initAdminSidebar();
+    } catch (err) {
+        console.error('Sidebar init error:', err);
+    }
+
     UI.setLoading(true);
 
     // 1. ดึง UID จาก URL Parameters (?uid=xxxx)
@@ -15,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!targetUid) {
         UI.showToast('ไม่พบรหัสผู้ใช้งานที่ต้องการตรวจสอบ', 'error');
         setTimeout(() => history.back(), 2000);
+        UI.setLoading(false);
         return;
     }
 
@@ -23,7 +29,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ปรับปรุง: ใช้ checkIsAdmin ที่ import มาโดยตรง
     const isAdmin = await checkIsAdmin(user);
     if (!isAdmin) {
-        window.location.href = '/';
+        UI.showToast('ไม่มีสิทธิเข้าถึงหน้านี้', 'error');
+        setTimeout(() => window.location.href = '/', 2000);
+        UI.setLoading(false);
         return;
     }
 

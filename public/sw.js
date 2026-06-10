@@ -107,7 +107,8 @@ async function cacheFirstStrategy(request) {
 
     const networkResponse = await fetch(request);
 
-    if (networkResponse.ok) {
+    // Only cache GET requests - Cache API doesn't support POST by default
+    if (networkResponse.ok && request.method === 'GET') {
       cache.put(request, networkResponse.clone());
     }
 
@@ -129,7 +130,8 @@ async function networkFirstStrategy(request) {
     cache = await caches.open(DYNAMIC_CACHE);
     const networkResponse = await fetch(request);
 
-    if (networkResponse.ok) {
+    // Only cache GET requests - Cache API doesn't support POST by default
+    if (networkResponse.ok && request.method === 'GET') {
       cache.put(request, networkResponse.clone());
     }
 
