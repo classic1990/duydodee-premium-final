@@ -35,9 +35,9 @@ class Config {
                 apiKey: safeEnv.VITE_FIREBASE_API_KEY || 'AIzaSyBZz2QI4hb2FAVjhhNCP8rARVo_zlv7_KA',
                 authDomain: safeEnv.VITE_FIREBASE_AUTH_DOMAIN || 'duydodeesport.firebaseapp.com',
                 projectId: safeEnv.VITE_FIREBASE_PROJECT_ID || 'duydodeesport',
-                storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET || 'duydodeesport.appspot.com',
-                messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || '30514101130',
-                appId: safeEnv.VITE_FIREBASE_APP_ID || '1:30514101130:web:1ec44f2b09367468132e49',
+                storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET || 'duydodeesport.firebasestorage.app',
+                messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || '435929814225',
+                appId: safeEnv.VITE_FIREBASE_APP_ID || '1:435929814225:web:81e149cfb597513040e1f0',
                 measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID || 'G-7EC2RQZH22'
             },
 

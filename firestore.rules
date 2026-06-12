@@ -37,24 +37,28 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
-    // 🎬 Content Collections (Public read; view counts are incremented
-    // server-side via the incrementViewCount Cloud Function, which uses the
-    // Admin SDK and bypasses these rules)
+    // 🎬 Content Collections (Public read; signed-in users may only
+    // increment the view counter, nothing else)
     match /movies/{movieId} {
       allow read: if true;
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
     }
 
     match /series/{seriesId} {
       allow read: if true;
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
     }
 
     match /hero_slides/{slideId} {
       allow read: if true;
     }
 
-    // 📊 Stats: Public read; written server-side via Cloud Functions
+    // 📊 Stats: Public read; signed-in users may create the daily doc and
+    // only bump the view counter
     match /daily_stats/{statId} {
       allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'lastUpdated']);
     }
 
     // 💳 VIP Payments: Admin read/write
