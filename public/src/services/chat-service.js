@@ -15,7 +15,7 @@ export const ChatService = {
         if (!message || !message.trim()) {
             return;
         }
-        
+
         try {
             await addDoc(collection(db, SCHEMA.COLLECTIONS.CHATS || 'chats'), {
                 uid,

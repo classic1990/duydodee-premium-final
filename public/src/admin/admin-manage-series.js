@@ -1,31 +1,116 @@
 import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 /**
  * 📺 DUYดูDEE SERIES MANAGEMENT ENGINE
- * ระบบจัดการซีรีส์ (แบบตอน) แบบมืออาชีพ
+ * Refactored: Decoupled Data & UI Architecture
  */
 
-const PAGE_SIZE = 10;
-let currentPage = 1;
-const cursors = [null];
-let totalSeries = 0;
-let allSeriesCache = [];
-let isSearchMode = false;
+// 📂 1. Data & State Management Service
+const SeriesService = {
+    PAGE_SIZE: 10,
+    state: {
+        currentPage: 1,
+        cursors: [null],
+        totalSeries: 0,
+        allSeriesCache: [],
+        isSearchMode: false
+    },
+
+    async getCount() {
+        try {
+            const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.SERIES));
+            this.state.totalSeries = countSnap.data().count;
+            return this.state.totalSeries;
+        } catch (e) {
+            console.error('Count failed:', e);
+            return 0;
+        }
+    },
+
+    async fetchPage(page) {
+        const cursor = this.state.cursors[page - 1];
+        let q = query(collection(db, SCHEMA.COLLECTIONS.SERIES), orderBy('createdAt', 'desc'), limit(this.PAGE_SIZE));
+        if (cursor) {
+            q = query(q, startAfter(cursor));
+        }
+
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+            this.state.cursors[page] = snap.docs[snap.docs.length - 1];
+            return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+        return [];
+    },
+
+    async search(term) {
+        if (this.state.allSeriesCache.length === 0) {
+            const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES), limit(500)));
+            this.state.allSeriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+        return this.state.allSeriesCache.filter(s =>
+            s.title?.toLowerCase().includes(term) ||
+            s.category?.toLowerCase().includes(term) ||
+            s.id.toLowerCase().includes(term)
+        );
+    },
+
+    async delete(id) {
+        await deleteDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, id));
+    }
+};
+
+// 🎨 2. UI & Rendering Layer
+const SeriesView = {
+    elements: {
+        tableBody: document.getElementById('series-full-list'),
+        pagination: document.getElementById('pagination-container'),
+        searchInput: document.getElementById('series-search')
+    },
+
+    showLoading() {
+        if (this.elements.tableBody) {
+            this.elements.tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="py-20 text-center Thai-font">
+                        <div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div>
+                        <p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังซิงค์ข้อมูลกับศูนย์ควบคุม</p>
+                    </td>
+                </tr>`;
+        }
+    },
+
+    renderEmpty() {
+        if (this.elements.tableBody) {
+            this.elements.tableBody.innerHTML = `
+                <tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
+                    <div class="flex flex-col items-center gap-6">
+                        <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                            <i data-lucide="tv" class="w-10 h-10 text-gray-500"></i>
+                        </div>
+                        <p class="text-sm font-black text-gray-500 uppercase tracking-[0.4em] Thai-font">ไม่มีข้อมูลซีรีส์ในระบบ</p>
+                    </div>
+                </td></tr>`;
+            UI.refreshIcons();
+        }
+    }
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        UI.initAdminSidebar();
+        await checkAdminAccess();
+        // ใช้ระบบโหลด sidebar แบบแยกไฟล์
+        await injectAdminSidebar();
+
         initManageSeries();
     } catch (err) {
         console.error('Access Denied:', err);
         UI.showToast('ไม่มีสิทธิเข้าถึงหน้าจัดการซีรีส์', 'error');
         setTimeout(() => {
             window.location.href = '/admin/admin-manage.html';
-        }, 2000);
+        }, 1500);
     }
 });
 
@@ -35,49 +120,36 @@ async function initManageSeries() {
     loadSeries();
 
     const searchInput = document.getElementById('series-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', UI.debounce((e) => {
-            handleSearch(e.target.value.toLowerCase().trim());
-        }, 400));
-    }
+    searchInput?.addEventListener('input', UI.debounce((e) => {
+        handleSearch(e.target.value.toLowerCase().trim());
+    }, 400));
 }
 
 async function updateSeriesCount() {
-    try {
-        const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.SERIES));
-        totalSeries = countSnap.data().count;
-    } catch (e) {
-        console.error('Count failed:', e);
-    }
+    await SeriesService.getCount();
 }
 
 async function loadSeries() {
-    if (isSearchMode) {
+    if (SeriesService.state.isSearchMode) {
         return;
     }
 
-    const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) {
-        return;
-    }
-
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังดึงข้อมูลจากศูนย์ควบคุม</p></td></tr>';
+    SeriesView.showLoading();
 
     try {
-        const cursor = cursors[currentPage - 1];
-        let q = query(collection(db, SCHEMA.COLLECTIONS.SERIES), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursor) {
-            q = query(q, startAfter(cursor));
-        }
+        const data = await SeriesService.fetchPage(SeriesService.state.currentPage);
 
-        const snap = await getDocs(q);
-
-        if (!snap.empty) {
-            cursors[currentPage] = snap.docs[snap.docs.length - 1];
-            renderSeries(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        if (data.length > 0) {
+            renderSeries(data);
             updatePaginationUI();
-        } else if (currentPage > 1) {
-            currentPage--;
+        } else if (SeriesService.state.currentPage > 1) {
+            // Auto-fallback if current page is empty
+            SeriesService.state.currentPage--;
+            loadSeries();
+        } else if (SeriesService.state.currentPage === 1 && data.length === 0) {
+            // จริงๆ มีข้อมูลแต่หน้าแรกดันว่าง (อาจจะกรณีลบจนหมด)
+            await SeriesService.getCount();
+            SeriesView.renderEmpty();
             loadSeries();
         } else {
             renderSeries([]);
@@ -85,39 +157,27 @@ async function loadSeries() {
     } catch (error) {
         console.error('Error loading series:', error);
         UI.showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error');
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถเชื่อมต่อฐานข้อมูลได้</td></tr>';
+        if (SeriesView.elements.tableBody) {
+            SeriesView.elements.tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถเชื่อมต่อฐานข้อมูลได้</td></tr>';
+        }
     } finally {
         UI.setLoading(false);
     }
 }
 
 async function handleSearch(term) {
-    const tableBody = document.getElementById('series-full-list');
-    const pagContainer = document.getElementById('pagination-container');
-
     if (!term) {
-        isSearchMode = false;
-        pagContainer?.classList.remove('hidden');
+        SeriesService.state.isSearchMode = false;
+        SeriesView.elements.pagination?.classList.remove('hidden');
         loadSeries();
         return;
     }
 
-    isSearchMode = true;
-    pagContainer?.classList.add('hidden');
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-brand-primary Thai-font text-xs animate-pulse">กำลังค้นหาในคลังซีรีส์...</td></tr>';
+    SeriesService.state.isSearchMode = true;
+    SeriesView.elements.pagination?.classList.add('hidden');
 
     try {
-        if (allSeriesCache.length === 0) {
-            const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES), limit(500)));
-            allSeriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-
-        const filtered = allSeriesCache.filter(s =>
-            s.title?.toLowerCase().includes(term) ||
-            s.category?.toLowerCase().includes(term) ||
-            s.id.toLowerCase().includes(term)
-        );
-
+        const filtered = await SeriesService.search(term);
         renderSeries(filtered);
     } catch (e) {
         console.error('Search failed:', e);
@@ -230,15 +290,16 @@ function setupSeriesActionListeners() {
 }
 
 function updatePaginationUI() {
-    const container = document.getElementById('pagination-container');
-    if (!container || isSearchMode) {
+    const container = SeriesView.elements.pagination;
+    if (!container || SeriesService.state.isSearchMode) {
         if (container) {
             container.innerHTML = '';
         }
         return;
     }
 
-    const totalPages = Math.ceil(totalSeries / PAGE_SIZE) || 1;
+    const totalPages = Math.ceil(SeriesService.state.totalSeries / SeriesService.PAGE_SIZE) || 1;
+    const currentPage = SeriesService.state.currentPage;
 
     container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md">
@@ -248,22 +309,25 @@ function updatePaginationUI() {
             
             <div class="flex flex-col items-center">
                 <span class="text-[10px] font-black text-white tracking-widest uppercase Thai-font">หน้า ${currentPage} / ${totalPages}</span>
-                <span class="text-[8px] font-bold text-gray-600 uppercase tracking-tighter Thai-font">ทั้งหมด ${totalSeries} เรื่อง</span>
+                <span class="text-[8px] font-bold text-gray-600 uppercase tracking-tighter Thai-font">ทั้งหมด ${SeriesService.state.totalSeries} เรื่อง</span>
             </div>
 
             <button id="next-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary hover:border-brand-primary/50 transition-all disabled:opacity-20 disabled:pointer-events-none" ${currentPage >= totalPages ? 'disabled' : ''}>
                 <i data-lucide="chevron-right" class="w-5 h-5"></i>
             </button>
-        </div>
-    `;
+        </div>`;
 
     document.getElementById('prev-btn')?.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--; loadSeries();
+        if (SeriesService.state.currentPage > 1) {
+            SeriesService.state.currentPage--;
+            loadSeries();
         }
     });
     document.getElementById('next-btn')?.addEventListener('click', () => {
-        currentPage++; loadSeries();
+        if (SeriesService.state.currentPage < totalPages) {
+            SeriesService.state.currentPage++;
+            loadSeries();
+        }
     });
     UI.refreshIcons();
 }
@@ -280,7 +344,7 @@ async function deleteSeries(id) {
 
     UI.setLoading(true);
     try {
-        await deleteDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, id));
+        await SeriesService.delete(id);
         UI.showToast('ลบซีรีส์เรียบร้อยแล้ว', 'success');
 
         await updateSeriesCount();
@@ -292,4 +356,3 @@ async function deleteSeries(id) {
         UI.setLoading(false);
     }
 }
-
