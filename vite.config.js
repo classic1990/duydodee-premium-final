@@ -1,5 +1,19 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { copyFileSync, existsSync } from 'fs';
+
+// Root-level static files that live in `public/` (the Vite root) and must be
+// copied verbatim into the build output. Vite only emits assets referenced by
+// the HTML entries, so these would otherwise be missing from `dist/`. A missing
+// `sw.js` is especially harmful: returning visitors keep an old Service Worker
+// registered, its update check 404s, and it keeps serving stale cached pages.
+const STATIC_ROOT_FILES = [
+  'sw.js',
+  'manifest.json',
+  'robots.txt',
+  'sitemap.xml',
+  'favicon.ico'
+];
 
 /**
  * Vite Configuration for DUYดูDEE
@@ -98,6 +112,18 @@ export default defineConfig({
     reportCompressedSize: false, // Faster builds
   },
   plugins: [
+    {
+      name: 'copy-static-root-files',
+      closeBundle() {
+        for (const file of STATIC_ROOT_FILES) {
+          const src = resolve('public', file);
+          const dest = resolve('dist', file);
+          if (existsSync(src)) {
+            copyFileSync(src, dest);
+          }
+        }
+      }
+    },
     {
       name: 'performance-hints',
       generateBundle(options, bundle) {

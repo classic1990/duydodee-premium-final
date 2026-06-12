@@ -3,10 +3,10 @@
  * Implements intelligent caching for optimal performance
  */
 
-const CACHE_NAME = 'duydodee-v1';
-const STATIC_CACHE = 'duydodee-static-v1';
-const DYNAMIC_CACHE = 'duydodee-dynamic-v1';
-const IMAGE_CACHE = 'duydodee-images-v1';
+const CACHE_NAME = 'duydodee-v2';
+const STATIC_CACHE = 'duydodee-static-v2';
+const DYNAMIC_CACHE = 'duydodee-dynamic-v2';
+const IMAGE_CACHE = 'duydodee-images-v2';
 
 // Cache expiration (in seconds)
 const CACHE_EXPIRY = {
@@ -15,13 +15,12 @@ const CACHE_EXPIRY = {
   IMAGES: 30 * 24 * 60 * 60,    // 30 days
 };
 
-// URLs to cache on install
+// URLs to precache on install. Keep this list to URLs that are guaranteed to
+// return a direct 200 — `cache.addAll` rejects atomically if ANY entry 404s or
+// redirects, which would fail SW installation and strand the previous worker.
+// Hashed build assets (CSS/JS) are cached lazily by the fetch handler instead.
 const CACHE_URLS = [
   '/',
-  '/index.html',
-  '/css/output.css',
-  '/css/fonts.css',
-  '/assets/logo/DUYDODEE.png',
 ];
 
 // Install event - cache static assets
