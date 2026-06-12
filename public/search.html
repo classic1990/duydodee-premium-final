@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ค้นหาภาพยนตร์และซีรีส์ | DUYดูDEE PREMIUM</title>
+    
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30 min-h-screen flex flex-col">
+
+    <!-- 🧭 Navbar -->
+    <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0" id="main-nav">
+        <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 group">
+                <img src="/assets/logo/DUYDODEE.png" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
+                <span class="text-xl md:text-2xl font-heading font-black text-white uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
+            </a>
+            <div id="user-profile-area"></div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 flex-grow p-section">
+        <!-- 🔍 Cinematic Search Header -->
+        <header class="max-w-3xl mx-auto text-center space-y-8 mb-16 animate-slide-up">
+            <div class="space-y-4">
+                <h1 class="text-h1">
+                    FIND YOUR <span class="text-brand-primary text-glow">CONTENT</span>
+                </h1>
+                <p class="text-body opacity-80">ค้นหาภาพยนตร์ ซีรีส์ หรือนักแสดงที่คุณชื่นชอบ</p>
+            </div>
+
+            <div class="relative group">
+                <div class="absolute inset-0 bg-brand-primary/20 blur-[50px] opacity-0 group-focus-within:opacity-100 transition-opacity duration-1000"></div>
+                <div class="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] p-2 backdrop-blur-3xl focus-within:border-brand-primary/50 transition-all duration-500">
+                    <i data-lucide="search" class="w-6 h-6 ml-6 text-gray-500 group-focus-within:text-brand-primary transition-colors"></i>
+                    <input type="text" id="search-input" placeholder="พิมพ์ชื่อเรื่องที่ต้องการค้นหา..." 
+                           class="w-full bg-transparent border-none outline-none px-6 py-4 text-lg md:text-xl text-white placeholder-gray-600 Thai-font">
+                </div>
+            </div>
+        </header>
+
+        <!-- 🍿 Search Results Grid -->
+        <section id="search-section" class="space-y-8">
+            <div id="search-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+                <!-- ผลลัพธ์จะถูกแสดงที่นี่ -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 📱 Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">หน้าแรก</span>
+            </a>
+            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">แนวตั้ง</span>
+            </a>
+            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
+            </a>
+            <div id="user-profile-area-mobile"></div>
+        </div>
+    </nav>
+
+    <footer class="border-t border-white/5 bg-brand-black/50 py-12 relative z-10">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-800 text-[8px] font-black uppercase tracking-[0.4em]">© 2026 DUYดูDEE ENTERTAINMENT. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/pages/search.js"></script>
+</body>
+</html>

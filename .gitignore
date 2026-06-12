@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# Skills & Tools (AI/CLI Only - Not for production)
+.skills/
+*.skill
+
+# Documentation (Keep minimal)
+docs/
+BUGFIXES.md
+
+# Config Files (Environment Specific)
+cors.json
+restore_admin.cjs
+
+# Temporary/Maintenance Scripts
+check_db.js
+inject_assets.js
+
+# IDEs/Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Tool specific
+coverage/
+.qodo/
+.windsurf/
+.gemini/
+
+# Credentials & Keys (CRITICAL - Never commit these!)
+serviceAccountKey.json
+*.json.key
+firebase-key.json
+credentials.json
+
+# Build outputs
+*.log
+.aider*

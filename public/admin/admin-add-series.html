@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>เพิ่มซีรีส์ใหม่ | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">เพิ่ม <span class="text-brand-primary">ซีรีส์</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ลงทะเบียนซีรีส์แบบตอนเข้าสู่ฐานข้อมูลระบบ</p>
+            </div>
+        </header>
+
+        <form id="add-series-form" class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+            <!-- Preview Column -->
+            <div class="xl:col-span-4">
+                <div class="cyber-card p-8 sticky top-8">
+                    <h3 class="text-center text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] mb-10 Thai-font">ตัวอย่างหน้าปก</h3>
+                    
+                    <div class="device-frame mx-auto scale-90">
+                        <div class="device-screen relative overflow-hidden bg-black">
+                            <img id="poster-preview" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700" loading="lazy">
+                            <div id="no-preview" class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 space-y-4">
+                                <i data-lucide="image" class="w-12 h-12"></i>
+                                <span class="text-[8px] font-black uppercase Thai-font">รอลิงก์รูปภาพ...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2">ลิงก์รูปภาพหน้าปก</label>
+                            <input type="url" id="poster" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all text-xs" placeholder="https://..." required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xl:col-span-8">
+                <div class="cyber-card p-10 space-y-10">
+                    <!-- Section: Basic Info -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-1.5 h-6 bg-brand-primary rounded-full"></div>
+                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">ข้อมูลพื้นฐานซีรีส์</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ชื่อซีรีส์</label>
+                                <input type="text" id="title" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="ระบุชื่อซีรีส์ภาษาไทย..." required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">หมวดหมู่</label>
+                                <select id="category" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font appearance-none">
+                                    <option value="ซีรีส์แนวตั้ง">ซีรีส์แนวตั้ง (ตอนยาว)</option>
+                                    <option value="ซีรีส์แนวตั้ง (ตอนเดียวจบ)">ซีรีส์แนวตั้ง (ตอนเดียวจบ)</option>
+                                    <option value="ซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">เรื่องย่อ</label>
+                            <textarea id="description" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font min-h-[120px] resize-none" placeholder="ระบุรายละเอียดซีรีส์..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section: Episodes -->
+                    <div class="space-y-8 pt-10 border-t border-white/5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-1.5 h-6 bg-blue-500 rounded-full"></div>
+                                <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">การจัดการตอน (EPISODES)</h2>
+                            </div>
+                            <button type="button" id="add-episode-btn" class="px-6 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-500 hover:text-white transition-all Thai-font">
+                                + เพิ่มตอนใหม่
+                            </button>
+                        </div>
+                        
+                        <div id="episode-container" class="space-y-4"></div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 pt-4">
+                        <button type="submit" id="submit-btn" class="flex-1 py-5 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-transform active:scale-95 Thai-font">
+                            บันทึกซีรีส์และตอนทั้งหมด
+                        </button>
+                        <a href="/admin/admin-manage-series.html" class="px-10 py-5 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all text-center Thai-font">
+                            ยกเลิก
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="/src/admin/admin-add-series.js"></script>
+</body>
+</html>

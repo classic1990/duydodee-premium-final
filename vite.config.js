@@ -1,0 +1,153 @@
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+import { copyFileSync, existsSync } from 'fs';
+
+// Root-level static files that live in `public/` (the Vite root) and must be
+// copied verbatim into the build output. Vite only emits assets referenced by
+// the HTML entries, so these would otherwise be missing from `dist/`. A missing
+// `sw.js` is especially harmful: returning visitors keep an old Service Worker
+// registered, its update check 404s, and it keeps serving stale cached pages.
+const STATIC_ROOT_FILES = [
+  'sw.js',
+  'manifest.json',
+  'robots.txt',
+  'sitemap.xml',
+  'favicon.ico'
+];
+
+/**
+ * Vite Configuration for DUYดูDEE
+ * Implements code splitting, optimizations, and performance enhancements
+ */
+export default defineConfig({
+  root: 'public',
+  envDir: '../',
+  server: {
+    open: '/index.html',
+    headers: {
+      'Cross-Origin-Opener-Policy': 'unsafe-none'
+    }
+  },
+  css: {
+    postcss: './postcss.config.cjs',
+    devSourcemap: true, // ช่วยในการ Debug CSS ใน Developer Tools
+  },
+  build: {
+    outDir: '../dist',
+    emptyOutDir: true,
+    sourcemap: false, // Disable sourcemap in production for security
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+      },
+    },
+    rollupOptions: {
+      input: {
+        index: resolve('public/index.html'),
+        category: resolve('public/category.html'),
+        search: resolve('public/search.html'),
+        login: resolve('public/login.html'),
+        register: resolve('public/register.html'),
+        profile: resolve('public/profile.html'),
+        'edit-profile': resolve('public/edit-profile.html'),
+        'watch-movie': resolve('public/watch-movie.html'),
+        'watch-series': resolve('public/watch-series.html'),
+        'forgot-password': resolve('public/forgot-password.html'),
+        'watchlist': resolve('public/watchlist.html'),
+        '404': resolve('public/404.html'),
+        'admin/admin-manage': resolve('public/admin/admin-manage.html'),
+        'admin/admin-add-movie': resolve('public/admin/admin-add-movie.html'),
+        'admin/admin-add-series': resolve('public/admin/admin-add-series.html'),
+        'admin/admin-edit-movie': resolve('public/admin/admin-edit-movie.html'),
+        'admin/admin-edit-series': resolve('public/admin/admin-edit-series.html'),
+        'admin/admin-hero-slider': resolve('public/admin/admin-hero-slider.html'),
+        'admin/admin-manage-movies': resolve('public/admin/admin-manage-movies.html'),
+        'admin/admin-manage-series': resolve('public/admin/admin-manage-series.html'),
+        'admin/admin-system': resolve('public/admin/admin-system.html'),
+        'admin/admin-users': resolve('public/admin/admin-users.html'),
+        'admin/admin-vip-payments': resolve('public/admin/admin-vip-payments.html'),
+        'admin/admin-activity-logs': resolve('public/admin/admin-activity-logs.html'),
+        'admin/admin-stats': resolve('public/admin/admin-stats.html'),
+        'admin/admin-tickets': resolve('public/admin/admin-tickets.html'),
+        'admin/admin-user-vip': resolve('public/admin/admin-user-vip.html')
+      },
+      output: {
+        manualChunks(id) {
+          // Firebase SDK chunk (separate for better caching)
+          if (id.includes('firebase')) {
+            return 'firebase-vendor';
+          }
+          // UI components chunk
+          if (id.includes('/src/components/ui.js')) {
+            return 'ui-components';
+          }
+          // Services chunk
+          if (id.includes('/src/services/')) {
+            return 'services';
+          }
+          // NOTE: Do NOT group page entry modules (e.g. /src/admin/ or
+          // /src/pages/) into shared chunks. Each HTML page is its own entry and
+          // runs side effects on DOMContentLoaded (auth guards, toasts). Merging
+          // entries makes one page load every other page's module and fire its
+          // side effects (e.g. admin guards showing "no permission" toasts on the
+          // login page). Only shared, side-effect-free libraries are chunked here.
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const ext = assetInfo.name.split('.').pop();
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          if (/css/i.test(ext)) {
+            return `assets/css/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+    reportCompressedSize: false, // Faster builds
+  },
+  plugins: [
+    {
+      name: 'copy-static-root-files',
+      closeBundle() {
+        for (const file of STATIC_ROOT_FILES) {
+          const src = resolve('public', file);
+          const dest = resolve('dist', file);
+          if (existsSync(src)) {
+            copyFileSync(src, dest);
+          }
+        }
+      }
+    },
+    {
+      name: 'performance-hints',
+      generateBundle(options, bundle) {
+        const KB = 1024;
+        const MB = KB * KB;
+        let totalSize = 0;
+
+        for (const [fileName, file] of Object.entries(bundle)) {
+          if (file.type === 'chunk' || file.type === 'asset') {
+            const size = file.size;
+            totalSize += size;
+            const sizeKB = (size / KB).toFixed(2);
+            const sizeMB = (size / MB).toFixed(2);
+
+            if (size > MB) {
+              console.warn(`⚠️ Large bundle: ${fileName} (${sizeMB} MB)`);
+            } else if (size > 500 * KB) {
+              console.warn(`⚠️ Large file: ${fileName} (${sizeKB} KB)`);
+            }
+          }
+        }
+
+        console.log(`📦 Total bundle size: ${(totalSize / MB).toFixed(2)} MB`);
+      }
+    }
+  ]
+});

@@ -1,0 +1,103 @@
+{
+  "name": "DUYดูDEE PREMIUM - สตรีมมิ่งภาพยนตร์ 4K HDR",
+  "short_name": "DUYดูDEE",
+  "description": "สัมผัสประสบการณ์การรับชมภาพยนตร์และซีรีส์แนวตั้งคุณภาพสูงระดับ 4K HDR ที่ดีที่สุด",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "th",
+  "dir": "ltr",
+  "categories": ["entertainment", "video", "streaming"],
+  "screenshots": [],
+  "icons": [
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo/DUYDODEE.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "ค้นหา",
+      "short_name": "ค้นหา",
+      "description": "ค้นหาภาพยนตร์และซีรีส์",
+      "url": "/search.html",
+      "icons": [
+        {
+          "src": "/assets/logo/DUYDODEE.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "รายการของฉัน",
+      "short_name": "รายการ",
+      "description": "ดูรายการที่บันทึกไว้",
+      "url": "/watchlist.html",
+      "icons": [
+        {
+          "src": "/assets/logo/DUYDODEE.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "ซีรีส์แนวตั้ง",
+      "short_name": "แนวตั้ง",
+      "description": "ดูซีรีส์แนวตั้งยอดนิยม",
+      "url": "/category.html?cat=vertical",
+      "icons": [
+        {
+          "src": "/assets/logo/DUYDODEE.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
