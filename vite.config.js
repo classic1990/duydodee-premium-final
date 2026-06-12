@@ -73,14 +73,12 @@ export default defineConfig({
           if (id.includes('/src/services/')) {
             return 'services';
           }
-          // Admin pages chunk
-          if (id.includes('/src/admin/')) {
-            return 'admin';
-          }
-          // Auth pages chunk
-          if (id.includes('/src/pages/auth/')) {
-            return 'auth';
-          }
+          // NOTE: Do NOT group page entry modules (e.g. /src/admin/ or
+          // /src/pages/) into shared chunks. Each HTML page is its own entry and
+          // runs side effects on DOMContentLoaded (auth guards, toasts). Merging
+          // entries makes one page load every other page's module and fire its
+          // side effects (e.g. admin guards showing "no permission" toasts on the
+          // login page). Only shared, side-effect-free libraries are chunked here.
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
