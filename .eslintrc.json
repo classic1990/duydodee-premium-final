@@ -2,6 +2,7 @@
   "env": {
     "browser": true,
     "es2021": true
+    "jest": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -22,7 +23,13 @@
     "no-console": "off",
     "no-empty": "off",
     "no-useless-escape": "off",
-    "semi": ["error", "always"],
-    "quotes": ["error", "single"]
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ]
   }
 }

@@ -1,62 +1,79 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขภาพยนตร์ | DUYดูDEE EXECUTIVE</title>
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
     <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
-    
+
     <!-- 📊 Advanced UI Core -->
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
 </head>
+
 <body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
 
     <!-- Mobile Overlay for Sidebar -->
     <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
 
     <!-- 🧭 SIDEBAR -->
-    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+    <aside
+        class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col"
+        id="sidebar">
         <div class="p-10 border-b border-white/5">
             <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
                 <div class="relative">
                     <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
-                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div
+                        class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
                 </div>
                 <div>
-                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
-                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span
+                            class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN
+                        CONTROL</p>
                 </div>
             </div>
         </div>
 
         <nav class="flex-1 px-6 py-10 space-y-2">
-            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
-            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ
+            </p>
+            <a href="/admin/admin-manage.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="layout-grid" class="w-5 h-5"></i>
                 <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
             </a>
-            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+            <a href="/admin/admin-manage-movies.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
                 <i data-lucide="film" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
             </a>
-            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-manage-series.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="tv" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
             </a>
-            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-hero-slider.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
-                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+                <span
+                    class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
             </a>
-            
-            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
-            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">
+                สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="users" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
             </a>
-            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-system.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
             </a>
@@ -64,7 +81,8 @@
 
         <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
             <div id="admin-sidebar-profile" class="mb-6"></div>
-            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+            <button onclick="location.href='/'"
+                class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
                 <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
             </button>
         </div>
@@ -72,21 +90,26 @@
 
     <main class="lg:ml-80 min-h-screen p-6 md:p-16 relative z-10">
         <!-- Mobile Sidebar Toggle -->
-        <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
+        <button id="sidebar-toggle-btn"
+            class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
             <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
 
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12 pl-12 lg:pl-0">
             <div class="flex items-center gap-6">
-                <a href="/admin/admin-manage-movies.html" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-brand-primary hover:text-black transition-all">
+                <a href="/admin/admin-manage-movies.html"
+                    class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-brand-primary hover:text-black transition-all">
                     <i data-lucide="chevron-left" class="w-6 h-6"></i>
                 </a>
                 <div>
-                    <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic Thai-font">แก้ไข <span class="text-brand-primary">ภาพยนตร์</span></h1>
-                    <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ปรับปรุงข้อมูลภาพยนตร์ที่มีอยู่ในระบบ</p>
+                    <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic Thai-font">แก้ไข <span
+                            class="text-brand-primary">ภาพยนตร์</span></h1>
+                    <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">
+                        ปรับปรุงข้อมูลภาพยนตร์ที่มีอยู่ในระบบ</p>
                 </div>
             </div>
-            <button id="delete-btn" class="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all Thai-font">
+            <button id="delete-btn"
+                class="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all Thai-font">
                 <i data-lucide="trash-2" class="w-4 h-4 inline-block mr-2"></i> ลบภาพยนตร์นี้
             </button>
         </header>
@@ -95,12 +118,16 @@
             <!-- Preview Column (Moves to top on mobile) -->
             <div class="xl:col-span-4 order-1 xl:order-2">
                 <div class="cyber-card p-6 md:p-8 sticky top-8">
-                    <h3 class="text-center text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] mb-8 Thai-font">ตัวอย่างการแสดงผลบนอุปกรณ์</h3>
-                    
+                    <h3
+                        class="text-center text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] mb-8 Thai-font">
+                        ตัวอย่างการแสดงผลบนอุปกรณ์</h3>
+
                     <div class="device-frame mx-auto scale-[0.7] md:scale-90 transition-transform">
                         <div class="device-screen relative overflow-hidden bg-black">
-                            <img id="poster-preview" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700">
-                            <div id="no-preview" class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 space-y-4">
+                            <img id="poster-preview" src=""
+                                class="w-full h-full object-cover opacity-0 transition-opacity duration-700">
+                            <div id="no-preview"
+                                class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 space-y-4">
                                 <i data-lucide="image" class="w-12 h-12"></i>
                                 <span class="text-[8px] font-black uppercase Thai-font">รอข้อมูลวิดีโอ...</span>
                             </div>
@@ -109,9 +136,11 @@
 
                     <div class="mt-4 md:mt-10 space-y-6">
                         <div class="p-4 rounded-2xl bg-black/40 border border-white/5">
-                            <p id="preview-title" class="text-xs font-black text-gray-500 text-center Thai-font italic">ยังไม่ได้ระบุชื่อเรื่อง</p>
+                            <p id="preview-title" class="text-xs font-black text-gray-500 text-center Thai-font italic">
+                                ยังไม่ได้ระบุชื่อเรื่อง</p>
                         </div>
-                        <div id="thumbnail-options-container" class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"></div>
+                        <div id="thumbnail-options-container" class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,12 +151,16 @@
                     <div class="space-y-6">
                         <div class="flex items-center gap-4">
                             <div class="w-1.5 h-6 bg-brand-primary rounded-full"></div>
-                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">แหล่งที่มาวิดีโอ</h2>
+                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">
+                                แหล่งที่มาวิดีโอ</h2>
                         </div>
                         <div class="relative group">
-                            <i data-lucide="link" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-brand-primary transition-colors"></i>
+                            <i data-lucide="link"
+                                class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-brand-primary transition-colors"></i>
                             <label for="videoUrl" class="sr-only">ลิงก์วิดีโอ</label>
-                            <input type="url" id="videoUrl" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="ระบุลิงก์ YouTube..." required>
+                            <input type="url" id="videoUrl"
+                                class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white outline-none focus:border-brand-primary transition-all Thai-font"
+                                placeholder="ระบุลิงก์ YouTube..." required>
                         </div>
                     </div>
 
@@ -135,37 +168,53 @@
                     <div class="space-y-6 pt-10 border-t border-white/5">
                         <div class="flex items-center gap-4">
                             <div class="w-1.5 h-6 bg-brand-primary rounded-full"></div>
-                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">ข้อมูลพื้นฐาน</h2>
+                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">ข้อมูลพื้นฐาน
+                            </h2>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label for="title" class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ชื่อเรื่อง</label>
-                                <input type="text" id="title" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="ระบุชื่อเรื่องภาษาไทย..." required>
+                                <label for="title"
+                                    class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ชื่อเรื่อง</label>
+                                <input type="text" id="title"
+                                    class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font"
+                                    placeholder="ระบุชื่อเรื่องภาษาไทย..." required>
                             </div>
                             <div class="space-y-2">
-                                <label for="category" class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">หมวดหมู่</label>
-                                <select id="category" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font appearance-none">
+                                <label for="category"
+                                    class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">หมวดหมู่</label>
+                                <select id="category"
+                                    class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font appearance-none">
                                     <option value="ซีรีส์แนวตั้ง">ซีรีส์แนวตั้ง</option>
                                     <option value="ซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
-                                <label for="badge" class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ป้ายกำกับ (Badge)</label>
-                                <input type="text" id="badge" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="เช่น 4K HDR, พากย์ไทย">
+                                <label for="badge"
+                                    class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ป้ายกำกับ
+                                    (Badge)</label>
+                                <input type="text" id="badge"
+                                    class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font"
+                                    placeholder="เช่น 4K HDR, พากย์ไทย">
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label for="description" class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">เรื่องย่อ / รายละเอียด</label>
-                            <textarea id="description" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font min-h-[150px] resize-none" placeholder="ระบุรายละเอียดเนื้อหาที่ต้องการแสดง..."></textarea>
+                            <label for="description"
+                                class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">เรื่องย่อ
+                                / รายละเอียด</label>
+                            <textarea id="description"
+                                class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font min-h-[150px] resize-none"
+                                placeholder="ระบุรายละเอียดเนื้อหาที่ต้องการแสดง..."></textarea>
                         </div>
                         <input type="hidden" id="selected-poster-url">
                     </div>
 
                     <div class="flex flex-col md:flex-row gap-4 pt-10 border-t border-white/5">
-                        <button type="submit" id="submit-btn" class="flex-1 py-5 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-transform active:scale-95 Thai-font">
+                        <button type="submit" id="submit-btn"
+                            class="flex-1 py-5 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-transform active:scale-95 Thai-font">
                             อัปเดตข้อมูลภาพยนตร์
                         </button>
-                        <a href="/admin/admin-manage-movies.html" class="px-10 py-5 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all text-center Thai-font">
+                        <a href="/admin/admin-manage-movies.html"
+                            class="px-10 py-5 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all text-center Thai-font">
                             ยกเลิก
                         </a>
                     </div>
@@ -174,6 +223,7 @@
         </form>
     </main>
 
-    <script type="module" src="/js/admin/admin-edit-movie.js"></script>
+    <script type="module" src="/src/admin/admin-edit-movie.js"></script>
 </body>
+
 </html>

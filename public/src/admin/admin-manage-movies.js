@@ -1,0 +1,147 @@
+// 💠 Admin Manage Movies - admin-manage-movies.js
+import { db, collection, getDocs, doc, deleteDoc, orderBy, query, logActivity } from '/src/services/firebase.js';
+import { checkAdminAccess } from '/src/middleware/auth-guard.js';
+import { UI } from '/src/components/ui.js';
+
+const PAGE_SIZE = 15;
+let allMovies = [];
+let filtered = [];
+let currentPage = 1;
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+function initSidebar() {
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('admin-overlay');
+    if (!toggleBtn || !sidebar) return;
+    const open = () => { sidebar.classList.remove('-translate-x-full'); overlay?.classList.remove('hidden'); };
+    const close = () => { sidebar.classList.add('-translate-x-full'); overlay?.classList.add('hidden'); };
+    toggleBtn.addEventListener('click', () => sidebar.classList.contains('-translate-x-full') ? open() : close());
+    overlay?.addEventListener('click', close);
+}
+
+// ─── Fetch ────────────────────────────────────────────────────────────────────
+async function fetchMovies() {
+    const snap = await getDocs(query(collection(db, 'movies'), orderBy('createdAt', 'desc')));
+    allMovies = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    filtered = [...allMovies];
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function getThumb(movie) {
+    if (movie.poster) return movie.poster;
+    return '';
+}
+
+function renderTable() {
+    const tbody = document.getElementById('movies-full-list');
+    if (!tbody) return;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const page = filtered.slice(start, start + PAGE_SIZE);
+
+    if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-12 text-center text-gray-600 Thai-font text-sm">ไม่พบภาพยนตร์ในระบบ</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = page.map(movie => {
+        const thumb = getThumb(movie);
+        const views = (movie.views || 0).toLocaleString('th-TH');
+        const createdAt = movie.createdAt?.toDate ? movie.createdAt.toDate().toLocaleDateString('th-TH') : '-';
+        return `
+        <tr class="group hover:bg-white/[0.02] transition-colors">
+            <td class="p-4 text-center">
+                <div class="w-16 h-24 rounded-xl overflow-hidden bg-black/40 mx-auto border border-white/5">
+                    ${thumb ? `<img src="${thumb}" class="w-full h-full object-cover" loading="lazy" onerror="this.src=''; this.className='hidden'">` : '<div class="w-full h-full flex items-center justify-center text-gray-700"><i data-lucide="film" class="w-6 h-6"></i></div>'}
+                </div>
+            </td>
+            <td class="p-4">
+                <p class="text-sm font-black text-white Thai-font">${movie.title || '(ไม่มีชื่อ)'}</p>
+                <p class="text-[10px] text-gray-500 Thai-font mt-1">${movie.category || ''} ${movie.badge ? `· <span class="text-brand-primary">${movie.badge}</span>` : ''}</p>
+                <p class="text-[9px] text-gray-700 mt-1 font-mono">${movie.id}</p>
+            </td>
+            <td class="p-4 text-center">
+                <span class="text-[10px] font-bold text-gray-400 bg-white/5 px-3 py-1.5 rounded-lg Thai-font">${movie.category || '-'}</span>
+            </td>
+            <td class="p-4 text-center">
+                <span class="text-sm font-black text-white">${views}</span>
+                <span class="text-[9px] text-gray-600 ml-1 Thai-font">ครั้ง</span>
+            </td>
+            <td class="p-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                    <a href="/admin/admin-edit-movie.html?id=${movie.id}" class="px-4 py-2 text-[10px] font-black text-white bg-white/5 border border-white/10 rounded-xl hover:bg-brand-primary hover:text-black hover:border-brand-primary transition-all uppercase tracking-widest Thai-font flex items-center gap-1.5">
+                        <i data-lucide="pencil" class="w-3 h-3"></i> แก้ไข
+                    </a>
+                    <button onclick="confirmDelete('${movie.id}', '${(movie.title || '').replace(/'/g, '\\\'')}')" class="px-4 py-2 text-[10px] font-black text-red-500 bg-red-500/5 border border-red-500/10 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-500 transition-all uppercase tracking-widest Thai-font flex items-center gap-1.5">
+                        <i data-lucide="trash-2" class="w-3 h-3"></i> ลบ
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+    if (window.lucide) window.lucide.createIcons();
+    renderPagination();
+}
+
+function renderPagination() {
+    const container = document.getElementById('pagination-container');
+    if (!container) return;
+    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+    let html = '';
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button onclick="goToPage(${i})" class="w-10 h-10 rounded-xl text-xs font-black transition-all ${i === currentPage ? 'bg-brand-primary text-black' : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'}">${i}</button>`;
+    }
+    container.innerHTML = html;
+}
+
+// ─── Search ───────────────────────────────────────────────────────────────────
+function initSearch() {
+    const input = document.getElementById('movie-search');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        const q = input.value.toLowerCase().trim();
+        filtered = q ? allMovies.filter(m => (m.title || '').toLowerCase().includes(q) || (m.category || '').toLowerCase().includes(q) || m.id.toLowerCase().includes(q)) : [...allMovies];
+        currentPage = 1;
+        renderTable();
+    });
+}
+
+// ─── Delete ───────────────────────────────────────────────────────────────────
+window.confirmDelete = function (id, title) {
+    if (!confirm(`ยืนยันการลบ "${title}"?\n\nการกระทำนี้ไม่สามารถย้อนคืนได้`)) return;
+    deleteDoc(doc(db, 'movies', id)).then(() => {
+        logActivity('DELETE_MOVIE', { id, title });
+        UI.showToast('ลบภาพยนตร์เรียบร้อยแล้ว', 'success');
+        allMovies = allMovies.filter(m => m.id !== id);
+        filtered = filtered.filter(m => m.id !== id);
+        renderTable();
+    }).catch(err => {
+        console.error('Delete error:', err);
+        UI.showToast('เกิดข้อผิดพลาดในการลบ: ' + err.message, 'error');
+    });
+};
+
+window.goToPage = function (page) {
+    currentPage = page;
+    renderTable();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+async function init() {
+    initSidebar();
+    try {
+        await checkAdminAccess();
+        await fetchMovies();
+        initSearch();
+        renderTable();
+    } catch (err) {
+        console.error('[admin-manage-movies] Access Denied:', err);
+        window.location.replace('/login.html');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', init);

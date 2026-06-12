@@ -1,8 +1,8 @@
-import { ContentService } from '../../public/js/services/content-service.js';
-import * as firebase from '../../public/js/services/firebase-config.js';
+import { ContentService } from '../../public/src/services/content-service.js';
+import * as firebase from '../../public/src/services/firebase.js';
 
 // Mock firebase
-jest.mock('../../public/js/services/firebase-config.js', () => ({
+jest.mock('../../public/src/services/firebase.js', () => ({
   db: {},
   collection: jest.fn(),
   getDocs: jest.fn(),

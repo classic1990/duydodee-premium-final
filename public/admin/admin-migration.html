@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Migration | DUYดูDEE-HD Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        .Thai-font {
+            font-family: 'Kanit', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#050505] text-white Thai-font min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-[#111] border border-white/10 rounded-3xl p-8 shadow-2xl">
+        <div class="text-center mb-8">
+            <div
+                class="w-20 h-20 bg-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
+                <span class="text-4xl">🛠️</span>
+            </div>
+            <h1 class="text-2xl font-black mb-2">Data Migration</h1>
+            <p class="text-gray-500 text-sm">ย้ายข้อมูลจากฟิลด์ภาษาไทยเป็นสากล</p>
+        </div>
+
+        <div class="bg-yellow-500/5 border border-yellow-500/20 rounded-2xl p-4 mb-8">
+            <p class="text-yellow-500 text-xs leading-relaxed">
+                <strong>⚠️ คำเตือน:</strong> ฟังก์ชันนี้จะทำการค้นหาเอกสารที่มีฟิลด์ 'ชื่อ' และ 'โปสเตอร์'
+                แล้วคัดลอกไปยัง 'title' และ 'poster' โดยอัตโนมัติ
+            </p>
+        </div>
+
+        <div id="migration-status"
+            class="hidden mb-6 p-4 bg-black/40 rounded-xl border border-white/5 font-mono text-[10px] max-h-40 overflow-y-auto text-gray-400">
+            <!-- Logs will appear here -->
+        </div>
+
+        <button id="run-migration-btn"
+            class="w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-black rounded-2xl transition-all shadow-lg shadow-yellow-500/10 active:scale-[0.98]">
+            เริ่มการย้ายข้อมูล (Run Migration)
+        </button>
+
+        <div class="mt-6 text-center">
+            <a href="/admin/admin-manage.html" class="text-gray-600 hover:text-white text-xs transition-colors">←
+                กลับหน้าแดชบอร์ด</a>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin/admin-migration.js"></script>
+</body>
+
+</html>

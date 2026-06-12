@@ -1,4 +1,4 @@
-import { UIUtils } from '../../public/js/utils/ui-utils.js';
+import { UIUtils } from '../../public/src/utils/ui-utils.js';
 
 describe('UIUtils', () => {
   test('extractYouTubeId should return correct ID', () => {

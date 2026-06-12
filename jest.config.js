@@ -4,6 +4,6 @@ module.exports = {
     '^.+\.js$': 'babel-jest',
   },
   moduleNameMapper: {
-    '^/js/(.*)$': '<rootDir>/public/js/$1',
+    '^/src/(.*)$': '<rootDir>/public/src/$1',
   },
 };

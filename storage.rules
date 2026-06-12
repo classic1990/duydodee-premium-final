@@ -1,0 +1,20 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 🖼️ Profile Avatars: /avatars/{userId}
+    match /avatars/{userId} {
+      // อนุญาตให้ทุกคนอ่านรูปโปรไฟล์เพื่อแสดงผลใน UI
+      allow read: if true;
+      
+      // อนุญาตให้เขียนเฉพาะเจ้าของ UID เท่านั้น
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && request.resource.size < 2 * 1024 * 1024 // จำกัดขนาด 2MB ตามที่ระบุใน profile.js
+                   && request.resource.contentType.matches('image/.*'); // รับเฉพาะไฟล์รูปภาพเท่านั้น (ป้องกันการอัปโหลดวิดีโอ)
+    }
+    // ปิดการเข้าถึงส่วนอื่นๆ ทั้งหมดเพื่อความปลอดภัยสูงสุดและรักษา Free Tier
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

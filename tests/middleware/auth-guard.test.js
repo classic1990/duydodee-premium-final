@@ -1,7 +1,7 @@
-import { checkAdminAccess } from '../../public/js/middleware/auth-guard.js';
-import { AuthService } from '../../public/js/services/auth-service.js';
+import { checkAdminAccess } from '../../public/src/middleware/auth-guard.js';
+import { AuthService } from '../../public/src/services/auth-service.js';
 
-jest.mock('../../public/js/services/auth-service.js', () => ({
+jest.mock('../../public/src/services/auth-service.js', () => ({
   AuthService: {
     onStateChanged: jest.fn(),
     checkIsAdmin: jest.fn(),

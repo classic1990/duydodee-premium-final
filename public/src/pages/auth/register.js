@@ -1,5 +1,5 @@
-import { AuthService } from '../../services/auth-service.js';
-import { UI } from '../../components/ui.js';
+import { AuthService } from '/src/services/auth-service.js';
+import { UI } from '/src/components/ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();

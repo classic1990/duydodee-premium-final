@@ -1,62 +1,79 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายชื่อสมาชิก | DUYดูDEE EXECUTIVE</title>
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
     <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
-    
+
     <!-- 🎨 Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
 </head>
+
 <body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
 
     <!-- Mobile Overlay for Sidebar -->
     <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
 
     <!-- 🧭 SIDEBAR -->
-    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+    <aside
+        class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col"
+        id="sidebar">
         <div class="p-10 border-b border-white/5">
             <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
                 <div class="relative">
                     <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
-                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div
+                        class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
                 </div>
                 <div>
-                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
-                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span
+                            class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN
+                        CONTROL</p>
                 </div>
             </div>
         </div>
 
         <nav class="flex-1 px-6 py-10 space-y-2">
-            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
-            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ
+            </p>
+            <a href="/admin/admin-manage.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="layout-grid" class="w-5 h-5"></i>
                 <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
             </a>
-            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-manage-movies.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="film" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
             </a>
-            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-manage-series.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="tv" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
             </a>
-            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-hero-slider.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
-                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+                <span
+                    class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
             </a>
-            
-            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
-            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">
+                สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
                 <i data-lucide="users" class="w-5 h-5"></i>
                 <span class="text-xs font-black uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
             </a>
-            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+            <a href="/admin/admin-system.html"
+                class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
                 <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
             </a>
@@ -64,7 +81,8 @@
 
         <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
             <div id="admin-sidebar-profile" class="mb-6"></div>
-            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+            <button onclick="location.href='/'"
+                class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
                 <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
             </button>
         </div>
@@ -73,21 +91,25 @@
     <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
             <div>
-                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">รายชื่อ <span class="text-brand-primary">สมาชิก</span></h1>
-                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ตรวจสอบและควบคุมสิทธิ์การเข้าถึงของผู้ใช้งาน</p>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">รายชื่อ <span
+                        class="text-brand-primary">สมาชิก</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">
+                    ตรวจสอบและควบคุมสิทธิ์การเข้าถึงของผู้ใช้งาน</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
-                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">สมาชิกทั้งหมด:</span>
+                    <span
+                        class="text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">สมาชิกทั้งหมด:</span>
                     <span id="user-count" class="text-xl font-black text-white">0</span>
                 </div>
             </div>
         </header>
 
-        <section class="admin-table-container cyber-card overflow-hidden">
+        <section class="admin-table-container cyber-card overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-white/[0.02] border-b border-white/5 text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">
+                    <tr
+                        class="bg-white/[0.02] border-b border-white/5 text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">
                         <th class="p-6">ข้อมูลผู้ใช้งาน</th>
                         <th class="p-6 text-center">สิทธิ์การใช้งาน</th>
                         <th class="p-6 text-center">สถานะบัญชี</th>
@@ -95,7 +117,7 @@
                         <th class="p-6 text-right">การจัดการ</th>
                     </tr>
                 </thead>
-                <tbody id="user-list" class="divide-y divide-white/[0.03]">
+                <tbody id="user-list" class="divide-y divide-white/[0.03] min-w-[700px]">
                 </tbody>
             </table>
         </section>
@@ -103,59 +125,61 @@
     </main>
 
     <!-- 👤 Edit User Modal -->
-    <div id="edit-user-modal" class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div id="edit-user-modal"
+        class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
         <div class="bg-[#121218] border border-white/10 rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
-            <button onclick="closeEditModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+            <button onclick="closeEditModal()"
+                class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                <div
+                    class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                     <i data-lucide="user-cog" class="w-6 h-6 text-blue-500"></i>
                 </div>
                 <div>
                     <h3 class="text-xl font-black text-white uppercase tracking-tight Thai-font">แก้ไขข้อมูลสมาชิก</h3>
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest Thai-font">ปรับปรุงสิทธิ์และสถานะการใช้งาน</p>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest Thai-font">
+                        ปรับปรุงสิทธิ์และสถานะการใช้งาน</p>
                 </div>
             </div>
-            
+
             <form id="edit-user-form" class="space-y-6">
                 <input type="hidden" id="edit-uid">
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ชื่อผู้ใช้งาน</label>
-                    <input type="text" id="edit-displayName" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font" required>
+                    <label
+                        class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ชื่อผู้ใช้งาน</label>
+                    <input type="text" id="edit-displayName"
+                        class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font"
+                        required>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ระดับสิทธิ์ (Role)</label>
-                    <select id="edit-role" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font appearance-none">
+                    <label
+                        class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ระดับสิทธิ์
+                        (Role)</label>
+                    <select id="edit-role"
+                        class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font appearance-none">
                         <option value="member">สมาชิกทั่วไป (Member)</option>
                         <option value="vip">สมาชิกพรีเมียม (VIP)</option>
                         <option value="admin">ผู้ดูแลระบบ (Admin)</option>
                         <option value="super-admin">ผู้บริหาร (Super Admin)</option>
                     </select>
                 </div>
-                
+
                 <div class="pt-6 border-t border-white/5 flex gap-4">
-                    <button type="submit" class="flex-1 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform active:scale-95 Thai-font shadow-[0_10px_20px_rgba(251,191,36,0.2)]">
+                    <button type="submit"
+                        class="flex-1 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform active:scale-95 Thai-font shadow-[0_10px_20px_rgba(251,191,36,0.2)]">
                         บันทึกข้อมูล
                     </button>
-                    <button type="button" onclick="closeEditModal()" class="px-6 py-4 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all Thai-font">
+                    <button type="button" onclick="closeEditModal()"
+                        class="px-6 py-4 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all Thai-font">
                         ยกเลิก
                     </button>
                 </div>
             </form>
         </div>
     </div>
-
-    <script type="module" src="/js/admin/admin-users.js"></script>
+    <script type="module" src="/src/admin/admin-users.js"></script>
 </body>
-</html>
-ิก
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <script type="module" src="/js/admin/admin-users.js"></script>
-</body>
 </html>

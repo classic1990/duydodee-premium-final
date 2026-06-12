@@ -13,8 +13,7 @@ service cloud.firestore {
     // ตรวจสอบว่าเป็น Admin หรือไม่ (ตรวจสอบจาก Role ใน Database)
     function isAdmin() {
       return isSignedIn() && (
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'member') in ['admin', 'super-admin', 'master']
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super-admin', 'master']
       );
     }
 
@@ -60,6 +59,11 @@ service cloud.firestore {
 
       // ประวัติการรับชม (Watch History)
       match /history/{historyId} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // รายการโปรด (Bookmarks/Watchlist)
+      match /bookmarks/{bookmarkId} {
         allow read, write: if isSignedIn() && request.auth.uid == userId;
       }
     }

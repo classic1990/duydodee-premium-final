@@ -36,7 +36,7 @@ self.addEventListener('activate', (e) => {
 // 📡 Fetch Event - Network First with Cache Fallback
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
-  
+
   // Only handle GET requests
   if (e.request.method !== 'GET') return;
 
@@ -72,4 +72,18 @@ self.addEventListener('fetch', (e) => {
       return cachedResponse || fetchPromise;
     })
   );
+});
+
+// 🔔 Background Push Notifications
+self.addEventListener('push', (event) => {
+  const data = event.data ? event.data.json() : { title: 'DUYดูDEE-HD', body: 'มีหนังใหม่เข้าแล้วนะ!' };
+
+  const options = {
+    body: data.body,
+    icon: '/assets/logo/DUYDODEE.png',
+    badge: '/assets/logo/DUYDODEE.png',
+    data: { url: data.url || '/' }
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });

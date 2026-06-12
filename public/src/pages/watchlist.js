@@ -1,5 +1,6 @@
-import { auth, onAuthStateChanged, db, SCHEMA, collection, getDocs, query, orderBy } from '../services/firebase.js';
-import { UI } from '../components/ui.js';
+import { auth, onAuthStateChanged } from '/src/services/firebase.js';
+import { UI } from '/src/components/ui.js';
+import { ContentService } from '/src/services/content-service.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();
@@ -21,17 +22,17 @@ async function loadWatchlist(uid) {
     UI.renderSkeleton(grid, 6);
 
     try {
-        const watchlistRef = collection(db, SCHEMA.COLLECTIONS.USERS, uid, 'bookmarks');
-        const q = query(watchlistRef, orderBy('addedAt', 'desc'));
-        const snap = await getDocs(q);
+        const items = await ContentService.fetchWatchlist(uid);
 
-        if (snap.empty) {
+        if (items.length === 0) {
             grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 uppercase tracking-widest font-black">คุณยังไม่มีรายการที่บันทึกไว้</p>';
             return;
         }
 
-        grid.innerHTML = snap.docs.map(doc => UI.createCard({ ...doc.data(), id: doc.id })).join('');
+        grid.innerHTML = items.map(item => UI.createCard(item, true)).join('');
+        if (window.lucide) window.lucide.createIcons();
     } catch (err) {
         console.error('Watchlist Load Error:', err);
+        grid.innerHTML = '<p class="col-span-full text-center text-red-500 py-20">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
     }
 }

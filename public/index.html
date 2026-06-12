@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,15 @@
     <link rel="stylesheet" href="/css/output.css">
     <script src="https://unpkg.com/lucide@0.410.0" defer></script>
 </head>
+
 <body class="bg-brand-black text-gray-200">
 
-    <nav id="main-nav" class="fixed top-0 inset-x-0 z-[1000] py-6 transition-all duration-500">
+    <nav id="main-nav" class="fixed top-0 inset-x-0 z-[1000] py-6 transition-all duration-500" aria-label="เมนูหลัก">
         <div class="container mx-auto px-6 flex items-center justify-between gap-8">
-            <a href="/" class="flex items-center gap-3 group">
-                <img src="/assets/logo/DUYDODEE.png" alt="Logo" class="w-10 h-10 rounded-xl">
-                <span class="text-2xl font-black text-white uppercase tracking-tighter">DUY<span class="text-brand-primary">ดูDEE</span></span>
+            <a href="/" class="flex items-center gap-3 group" aria-label="กลับสู่หน้าแรก DUYดูDEE">
+                <img src="/assets/logo/DUYDODEE.png" alt="โลโก้ DUYดูDEE-HD" class="w-10 h-10 rounded-xl">
+                <span class="text-2xl font-black text-white uppercase tracking-tighter">DUY<span
+                        class="text-brand-primary">ดูDEE</span></span>
             </a>
             <div id="user-auth-area"></div>
         </div>
@@ -22,11 +25,15 @@
 
     <main class="py-32 container mx-auto px-6 min-h-screen">
         <div class="space-y-12">
-            <h1 class="text-4xl font-black text-white uppercase italic tracking-tighter">Trending <span class="text-brand-primary">Now</span></h1>
-            <div id="trending-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-8"></div>
+            <h1 class="text-4xl font-black text-white uppercase italic tracking-tighter">Trending <span
+                    class="text-brand-primary">Now</span></h1>
+            <div id="trending-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-8">
+            </div>
         </div>
     </main>
 
     <script type="module" src="/src/pages/home.js"></script>
 </body>
+
 </html>

@@ -78,8 +78,8 @@
     </div>
 
     <script type="module">
-        import { db, collection, getDocs, SCHEMA, getMediaWatchPath } from '/js/services/firebase.js';
-        import { UI } from '/js/components/ui.js';
+        import { db, collection, getDocs, SCHEMA } from '/src/services/firebase.js';
+        import { UI } from '/src/components/ui.js';
 
         let allContent = [];
         const modal = document.getElementById('search-modal');
@@ -144,7 +144,7 @@
             }
 
             resultsGrid.innerHTML = results.map(item => {
-                const watchUrl = getMediaWatchPath(item.category, item.type, item.id);
+                const watchUrl = item.type === 'series' ? `/watch-series.html?id=${item.id}` : `/watch-movie.html?id=${item.id}`;
                 return `
                     <div class="movie-card group cursor-pointer" onclick="location.href='${watchUrl}'">
                         <div class="movie-poster-wrapper !rounded-2xl">

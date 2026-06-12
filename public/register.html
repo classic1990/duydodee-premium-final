@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครสมาชิก | DUYดูDEE PREMIUM</title>
-    <meta name="description" content="สร้างบัญชีผู้ใช้งาน DUYดูDEE PREMIUM เพื่อรับชมภาพยนตร์และซีรีส์คุณภาพสูงระดับ 4K HDR">
+    <meta name="description"
+        content="สร้างบัญชีผู้ใช้งาน DUYดูDEE PREMIUM เพื่อรับชมภาพยนตร์และซีรีส์คุณภาพสูงระดับ 4K HDR">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -25,35 +27,43 @@
     <link rel="icon" type="image/png" href="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
-    
+
     <!-- 🎨 Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
     <link rel="manifest" href="/manifest.json">
 </head>
+
 <body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30">
 
     <!-- 🧭 Modern Navbar -->
     <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0" id="main-nav">
         <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between gap-4">
-            
+
             <!-- Logo & Brand -->
             <a href="/" class="flex items-center gap-2 md:gap-3 group flex-shrink-0">
-                <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
-                <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-brand-primary">ดูDEE</span></span>
+                <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo"
+                    onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png';"
+                    class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
+                <span
+                    class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span
+                        class="text-brand-primary">ดูDEE</span></span>
             </a>
 
             <!-- 🌐 Desktop Navigation Links -->
             <div class="hidden lg:flex items-center gap-8 text-sm font-bold text-gray-300">
                 <a href="/" class="hover:text-brand-primary transition-colors">หน้าแรก</a>
-                <a href="/category.html?cat=vertical" class="hover:text-brand-primary transition-colors flex items-center gap-2">
-                    ซีรีส์แนวตั้ง 
-                    <span class="relative px-2 py-0.5 text-[8px] bg-brand-primary text-black rounded-sm uppercase tracking-wider font-black overflow-hidden group/badge">
+                <a href="/category.html?cat=vertical"
+                    class="hover:text-brand-primary transition-colors flex items-center gap-2">
+                    ซีรีส์แนวตั้ง
+                    <span
+                        class="relative px-2 py-0.5 text-[8px] bg-brand-primary text-black rounded-sm uppercase tracking-wider font-black overflow-hidden group/badge">
                         <span class="relative z-10">Hot</span>
                         <div class="border-beam"></div>
                     </span>
                 </a>
-                <a href="/category.html?cat=chinese" class="hover:text-brand-primary transition-colors">ซีรีส์จีนพากย์ไทย</a>
+                <a href="/category.html?cat=chinese"
+                    class="hover:text-brand-primary transition-colors">ซีรีส์จีนพากย์ไทย</a>
             </div>
 
             <!-- 🔍 Global Search & Profile -->
@@ -64,18 +74,21 @@
     </nav>
 
     <!-- 📱 Mobile Bottom Navigation -->
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
+    <nav
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
         <div class="flex items-center justify-around px-2 py-2">
             <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
                 <i data-lucide="home" class="w-5 h-5"></i>
                 <span class="text-[9px] font-bold">หน้าแรก</span>
             </a>
-            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors relative">
+            <a href="/category.html?cat=vertical"
+                class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors relative">
                 <i data-lucide="smartphone" class="w-5 h-5"></i>
                 <span class="text-[9px] font-bold">แนวตั้ง</span>
                 <span class="absolute top-1 right-2 w-2 h-2 bg-brand-primary rounded-full animate-ping"></span>
             </a>
-            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
+            <a href="/category.html?cat=chinese"
+                class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
                 <i data-lucide="tv" class="w-5 h-5"></i>
                 <span class="text-[9px] font-bold">ซีรีส์จีน</span>
             </a>
@@ -85,61 +98,88 @@
 
     <!-- 🌌 Cinematic Background -->
     <div class="fixed inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2059&auto=format&fit=crop" alt="Cinematic Background" class="w-full h-full object-cover opacity-10">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2059&auto=format&fit=crop"
+            alt="Cinematic Background" class="w-full h-full object-cover opacity-10">
         <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/80 to-transparent"></div>
     </div>
 
     <main class="relative z-10 min-h-screen flex items-center justify-center p-6 py-24">
         <div class="w-full max-w-md space-y-8 animate-slide-up">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center justify-center w-24 h-24 rounded-[2rem] bg-brand-primary/10 border border-brand-primary/20 shadow-2xl mb-4">
+                <div
+                    class="inline-flex items-center justify-center w-24 h-24 rounded-[2rem] bg-brand-primary/10 border border-brand-primary/20 shadow-2xl mb-4">
                     <i data-lucide="user-plus" class="w-10 h-10 text-brand-primary"></i>
                 </div>
-                <h1 class="text-4xl font-black text-white Thai-font uppercase tracking-tighter italic">สมัครสมาชิกใหม่</h1>
+                <h1 class="text-4xl font-black text-white Thai-font uppercase tracking-tighter italic">สมัครสมาชิกใหม่
+                </h1>
                 <p class="text-gray-500 text-sm Thai-font">เริ่มต้นประสบการณ์พรีเมียมกับเราวันนี้</p>
             </div>
 
             <div class="glass-premium p-8 !rounded-[2.5rem] space-y-6">
                 <form id="register-form" class="space-y-4">
                     <div class="space-y-2">
-                        <label for="display-name" class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">ชื่อที่ใช้แสดง (Display Name)</label>
-                        <input type="text" id="display-name" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font" placeholder="ระบุชื่อของคุณ..." required>
+                        <label for="display-name"
+                            class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">ชื่อที่ใช้แสดง
+                            (Display Name)</label>
+                        <input type="text" id="display-name"
+                            class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font"
+                            placeholder="ระบุชื่อของคุณ..." required>
                     </div>
                     <div class="space-y-2">
-                        <label for="email" class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">อีเมลผู้ใช้งาน</label>
-                        <input type="email" id="email" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font" placeholder="example@mail.com" required>
+                        <label for="email"
+                            class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">อีเมลผู้ใช้งาน</label>
+                        <input type="email" id="email"
+                            class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font"
+                            placeholder="example@mail.com" required>
                     </div>
                     <div class="space-y-2">
-                        <label for="password" class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">รหัสผ่าน</label>
-                        <input type="password" id="password" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6">
+                        <label for="password"
+                            class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">รหัสผ่าน</label>
+                        <input type="password" id="password"
+                            class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font"
+                            placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6">
                     </div>
                     <div class="space-y-2">
-                        <label for="confirm-password" class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">ยืนยันรหัสผ่านอีกครั้ง</label>
-                        <input type="password" id="confirm-password" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font" placeholder="กรอกรหัสผ่านเดิมอีกครั้ง" required>
+                        <label for="confirm-password"
+                            class="text-[10px] font-black text-gray-600 uppercase tracking-widest ml-2">ยืนยันรหัสผ่านอีกครั้ง</label>
+                        <input type="password" id="confirm-password"
+                            class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary/50 transition-all Thai-font"
+                            placeholder="กรอกรหัสผ่านเดิมอีกครั้ง" required>
                     </div>
-                    <button type="submit" class="w-full py-5 bg-brand-primary text-black font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-brand-primary/20 hover:scale-[1.02] transition-transform active:scale-95 mt-4">
+                    <button type="submit"
+                        class="w-full py-5 bg-brand-primary text-black font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-brand-primary/20 hover:scale-[1.02] transition-transform active:scale-95 mt-4">
                         ยืนยันการสมัครพรีเมียม
                     </button>
                 </form>
 
                 <div class="relative py-4">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
-                    <div class="relative flex justify-center text-[10px] uppercase font-black text-gray-700 tracking-[0.3em] bg-transparent"><span class="bg-[#0f0f13] px-4">หรือสมัครผ่านระบบ</span></div>
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/5"></div>
+                    </div>
+                    <div
+                        class="relative flex justify-center text-[10px] uppercase font-black text-gray-700 tracking-[0.3em] bg-transparent">
+                        <span class="bg-[#0f0f13] px-4">หรือสมัครผ่านระบบ</span></div>
                 </div>
 
-                <button id="google-register-btn" class="w-full py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-all group">
+                <button id="google-register-btn"
+                    class="w-full py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-all group">
                     <svg class="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        <path fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                        <path fill="#EA4335"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                     <span class="Thai-font">สมัครสมาชิกด้วย Google</span>
                 </button>
             </div>
 
             <p class="text-center text-xs text-gray-600 Thai-font">
-                มีบัญชีสมาชิกอยู่แล้ว? <a href="/login.html" class="text-brand-primary font-bold hover:underline">เข้าสู่ระบบที่นี่</a>
+                มีบัญชีสมาชิกอยู่แล้ว? <a href="/login.html"
+                    class="text-brand-primary font-bold hover:underline">เข้าสู่ระบบที่นี่</a>
             </p>
         </div>
     </main>
@@ -148,6 +188,7 @@
         <p class="text-[9px] font-black uppercase tracking-[0.5em]">© 2026 DUYดูDEE PREMIUM. ALL RIGHTS RESERVED.</p>
     </footer>
 
-    <script type="module" src="public/src/pages/auth/register.js"></script>
+    <script type="module" src="/src/pages/auth/register.js"></script>
 </body>
+
 </html>
