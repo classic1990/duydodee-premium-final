@@ -10,7 +10,7 @@ const path = require('path');
 
 // Required environment variables
 const REQUIRED_VARS = [
-    'VITE_ADMIN_EMAIL',
+    'VITE_ADMIN_EMAILS',
     'VITE_FIREBASE_API_KEY',
     'VITE_FIREBASE_AUTH_DOMAIN',
     'VITE_FIREBASE_PROJECT_ID',
