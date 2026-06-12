@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>จัดการภาพยนตร์ | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-64 bg-[#08080a]/90 backdrop-blur-3xl border-r border-white/5 z-[450] flex flex-col" id="sidebar">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.href='/'">
+                <img src="/assets/logo/DUYDODEE.png" class="w-10 h-10 rounded-xl">
+                <div>
+                    <h3 class="text-sm font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[7px] font-black text-gray-600 uppercase tracking-[0.2em] mt-1 Thai-font">ADMIN</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <a href="/admin/admin-manage.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
+                <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">สรุป</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-primary/10 text-white border-r-2 border-brand-primary">
+                <i data-lucide="film" class="w-4 h-4 text-brand-primary"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest Thai-font">หนัง</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
+                <i data-lucide="tv" class="w-4 h-4"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">ซีรีส์</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
+                <i data-lucide="images" class="w-4 h-4"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">สไลด์</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-64 min-h-screen p-6 relative z-10">
+        
+        <!-- Mobile Sidebar Toggle -->
+        <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">จัดการ <span class="text-brand-primary">ภาพยนตร์</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ควบคุมและบริหารจัดการทรัพยากรภาพยนตร์</p>
+            </div>
+            <button onclick="location.href='/admin/admin-add-movie.html'" class="px-8 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-lg hover:scale-105 transition-transform Thai-font">
+                <i data-lucide="plus" class="w-4 h-4 inline-block mr-2"></i> เพิ่มภาพยนตร์ใหม่
+            </button>
+        </header>
+
+        <!-- Search Node -->
+        <div class="mb-10 group">
+            <div class="relative max-w-2xl">
+                <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-brand-primary transition-colors"></i>
+                <input type="text" id="movie-search" placeholder="ค้นหาด้วยชื่อเรื่อง หมวดหมู่ หรือไอดี..." class="w-full bg-white/5 border border-white/10 rounded-[2rem] py-5 pl-16 pr-8 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all shadow-2xl Thai-font text-sm">
+            </div>
+        </div>
+
+        <section class="admin-table-container overflow-x-auto shadow-2xl rounded-2xl bg-[#08080a]/50 border border-white/5">
+            <table class="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                    <tr class="bg-white/[0.02] border-b border-white/5 text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">
+                        <th class="p-6 text-center">รูปปก</th>
+                        <th class="p-6">ข้อมูลภาพยนตร์</th>
+                        <th class="p-6 text-center">หมวดหมู่</th>
+                        <th class="p-6 text-center">ยอดเข้าชม</th>
+                        <th class="p-6 text-right">ดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody id="movies-full-list" class="divide-y divide-white/[0.03]">
+                </tbody>
+            </table>
+        </section>
+        
+        <div id="pagination-container" class="flex justify-center py-10 gap-2"></div>
+    </main>
+
+    <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
+
+    <script type="module" src="/js/admin/admin-manage-movies.js"></script>
+</body>
+</html>

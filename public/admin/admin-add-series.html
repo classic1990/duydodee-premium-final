@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขซีรีส์ | DUYดูDEE EXECUTIVE</title>
+    <meta name="description" content="แก้ไขข้อมูลซีรีส์ที่มีอยู่ในระบบ DUYดูDEE">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duydodeesport.web.app/admin/admin-edit-series.html">
+    <meta property="og:title" content="แก้ไขซีรีส์ | DUYดูDEE EXECUTIVE">
+    <meta property="og:description" content="หน้าแก้ไขข้อมูลซีรีส์ในระบบ DUYดูDEE">
+    <meta property="og:image" content="https://duydodeesport.web.app/assets/logo/DUYDODEE.png?v=2">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="แก้ไขซีรีส์ | DUYดูDEE EXECUTIVE">
+    <meta name="twitter:description" content="หน้าแก้ไขข้อมูลซีรีส์ในระบบ DUYดูDEE">
+
+    <!-- ⚡ PERFORMANCE: Critical Asset Preloading -->
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png?v=2">
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30 overflow-x-hidden">
+
+    <!-- Mobile Overlay for Sidebar -->
+    <div id="admin-overlay" class="fixed inset-0 bg-black/50 z-[400] hidden lg:hidden"></div>
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div class="flex items-center gap-6">
+                <a href="/admin/admin-manage-series.html" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-brand-primary hover:text-black transition-all">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </a>
+                <div>
+                    <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic Thai-font">แก้ไข <span class="text-brand-primary">ซีรีส์</span></h1>
+                    <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ปรับปรุงข้อมูลซีรีส์และตอนทั้งหมดในระบบ</p>
+                </div>
+            </div>
+            <button id="delete-btn" class="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all Thai-font">
+                <i data-lucide="trash-2" class="w-4 h-4 inline-block mr-2"></i> ลบซีรีส์นี้
+            </button>
+        </header>
+
+        <form id="edit-series-form" class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+            <div class="xl:col-span-8 space-y-10">
+                <!-- Section: Basic Info -->
+                <div class="cyber-card p-10 space-y-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-1.5 h-6 bg-brand-primary rounded-full"></div>
+                        <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">ข้อมูลพื้นฐานซีรีส์</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ชื่อซีรีส์</label>
+                            <input type="text" id="title" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="ระบุชื่อซีรีส์ภาษาไทย..." required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">หมวดหมู่</label>
+                            <select id="category" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font appearance-none">
+                                <option value="ซีรีส์แนวตั้ง">ซีรีส์แนวตั้ง (ตอนยาว)</option>
+                                <option value="ซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">เรื่องย่อ</label>
+                            <textarea id="description" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font min-h-[120px] resize-none" placeholder="ระบุรายละเอียดซีรีส์..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Episodes -->
+                <div class="cyber-card p-10 space-y-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-1.5 h-6 bg-blue-500 rounded-full"></div>
+                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">การจัดการตอน (EPISODES)</h2>
+                        </div>
+                        <button type="button" id="add-episode-btn" class="px-6 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-500 hover:text-white transition-all Thai-font">
+                            + เพิ่มตอนใหม่
+                        </button>
+                    </div>
+                    
+                    <div id="episode-container" class="space-y-4">
+                        <!-- Episode list will be injected here -->
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 pt-4">
+                    <button type="submit" id="submit-btn" class="flex-1 py-5 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-transform active:scale-95 Thai-font">
+                        บันทึกซีรีส์และตอนทั้งหมด
+                    </button>
+                    <a href="/admin/admin-manage-series.html" class="px-10 py-5 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all text-center Thai-font">
+                        ยกเลิก
+                    </a>
+                </div>
+            </div>
+
+            <!-- Preview Column -->
+            <div class="xl:col-span-4">
+                <div class="cyber-card p-8 sticky top-8">
+                    <h3 class="text-center text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] mb-10 Thai-font">ตัวอย่างหน้าปก</h3>
+                    
+                    <div class="device-frame mx-auto scale-90">
+                        <div class="device-screen relative overflow-hidden bg-black">
+                            <img id="poster-preview" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700" loading="lazy">
+                        </div>
+                    </div>
+
+                    <div class="mt-10 space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2">ลิงก์รูปภาพหน้าปก</label>
+                            <input type="url" id="poster" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font text-xs" placeholder="https://..." required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="/js/admin/admin-edit-series.js"></script>
+</body>
+</html>
+Content from @public\js\admin\admin-add-movie.js:
+import { db, collection, addDoc, serverTimestamp, query, where, getDocs, SCHEMA, limit, logActivity } from '/js/services/firebase.js';
+import { UI } from '/js/components/ui.js';
+import { checkAdminAccess } from '/js/middleware/auth-guard.js';
+
+/**
+ * 🎬 DUYดูDEE MOVIE REGISTRATION ENGINE
+ * Unified Logic for High-Impact Content Onboarding
+ */
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
+        initForm();
+    } catch (err) {
+        console.error('Access Denied:', err);
+    }
+});
+
+function initForm() {
+    const form = document.getElementById('add-movie-form');
+    const videoUrlInput = document.getElementById('videoUrl');
+    const titleInput = document.getElementById('title');
+    const categoryInput = document.getElementById('category');
+    const badgeInput = document.getElementById('badge');
+    const descInput = document.getElementById('description');
+    const posterPreview = document.getElementById('poster-preview');
+    const selectedPosterUrlInput = document.getElementById('selected-poster-url');
+    const thumbnailOptionsContainer = document.getElementById('thumbnail-options-container');
+    const noPreview = document.getElementById('no-preview');
+    const previewTitle = document.getElementById('preview-title');
+
+    if (!form || !videoUrlInput) return;
+
+    // Listen for link input
+    videoUrlInput.addEventListener('input', (e) => handleLinkProcess(e.target.value.trim()));
+    
+    // Support pasting link in title field
+    titleInput?.addEventListener('input', (e) => {
+        const value = e.target.value.trim();
+        if (value.startsWith('http') || value.includes('youtube.com') || value.includes('youtu.be')) {
+            handleLinkProcess(value);
+        } else if (previewTitle) {
+            previewTitle.innerText = value || 'ยังไม่ได้ระบุชื่อเรื่อง';
+        }
+    });
+
+    form.addEventListener('submit', handleAddMovie);
+}
+
+// 🧠 Core Process: Fetching YouTube Meta
+const handleLinkProcess = UI.debounce(async (url) => {
+    if (!url) return;
+    const videoId = UI.extractYouTubeId(url);
+    if (!videoId) return;
+
+    // Auto-sync fields
+    if (titleInput && titleInput.value.includes(url) && videoUrlInput && !videoUrlInput.value) {
+        videoUrlInput.value = url;
+    }
+
+    if (previewTitle) previewTitle.innerText = 'กำลังดึงข้อมูลจากระบบ...';
+
+    // Update Poster Thumbnails
+    const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    if (posterPreview) { posterPreview.src = thumb; posterPreview.classList.remove('opacity-0'); }
+    noPreview?.classList.add('hidden');
+    if (selectedPosterUrlInput) selectedPosterUrlInput.value = thumb;
+
+    renderThumbnailOptions([
+        { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
+        { url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, label: 'มาตรฐาน' },
+        { url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, label: 'สูง' }
+    ], thumb);
+
+    // 🛡️ REAL-TIME DUPLICATE CHECK
+    try {
+        const q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), where('videoUrl', '==', url), limit(1));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+            UI.showToast('🚨 ตรวจพบวิดีโอนี้ในระบบแล้ว! กรุณาตรวจสอบอีกครั้ง', 'warning');
+            videoUrlInput.classList.add('border-yellow-500', 'ring-4', 'ring-yellow-500/10');
+        } else {
+            videoUrlInput.classList.remove('border-yellow-500', 'ring-4', 'ring-yellow-500/10');
+        }
+    } catch (err) {}
+
+    // Fetch Meta
+    try {
+        const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (titleInput && (!titleInput.value || titleInput.value.startsWith('http') || titleInput.value === url)) {
+                titleInput.value = data.title || '';
+                if (previewTitle) previewTitle.innerText = data.title || 'ยังไม่ได้ระบุชื่อเรื่อง';
+            }
+            UI.showToast('เชื่อมต่อข้อมูล YouTube สำเร็จ', 'success');
+        }
+    } catch (err) { if (previewTitle) previewTitle.innerText = 'ไม่พบชื่อเรื่องอัตโนมัติ'; }
+}, 800);
+
+function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
+    if (!thumbnailOptionsContainer) return;
+    thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
+        <div onclick="window.UI.selectPoster('${thumb.url}', this)" class="relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
+            <img src="${thumb.url}" class="w-full h-full object-cover">
+            <span class="absolute bottom-1 right-1 px-1 py-0.5 bg-black/70 text-white text-[8px] rounded-md Thai-font">${thumb.label}</span>
+        </div>`).join('');
+}
+
+// Global UI Helper
+window.UI.selectPoster = (url, el) => {
+    if (posterPreview) posterPreview.src = url;
+    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
+    el.classList.add('border-brand-primary', 'shadow-lg');
+};
+
+async function handleAddMovie(e) {
+    e.preventDefault();
+    UI.setLoading(true);
+
+    const videoUrl = videoUrlInput?.value.trim() || '';
+    const title = titleInput?.value.trim() || 'Untitled';
+    const category = document.getElementById('category').value;
+    const badge = document.getElementById('badge')?.value.trim() || 'HD';
+    const description = descInput?.value.trim() || '';
+
+    // 🛡️ BLOCK DUPLICATE SAVE
+    try {
+        const q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), where('videoUrl', '==', videoUrl), limit(1));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+            UI.showToast('ขออภัย ลิงก์นี้มีอยู่ในระบบแล้ว ไม่สามารถบันทึกซ้ำได้', 'error');
+            UI.setLoading(false);
+            return;
+        }
+    } catch (err) {}
+
+    const videoId = UI.extractYouTubeId(videoUrl);
+    if (!videoId) {
+        UI.showToast('กรุณาระบุลิงก์ YouTube ที่ถูกต้อง', 'error');
+        UI.setLoading(false);
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, SCHEMA.COLLECTIONS.MOVIES), {
+            title, description, category,
+            badge,
+            videoUrl,
+            embedURL: `https://www.youtube.com/embed/${videoId}`,
+            poster: selectedPosterUrlInput?.value || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+            views: 0,
+            createdAt: serverTimestamp()
+        });
+        
+        await logActivity('ADD_MOVIE', `เพิ่มหนังเรื่อง: ${title}`);
+        UI.showToast('บันทึกและเผยแพร่ข้อมูลสำเร็จ', 'success');
+        setTimeout(() => window.location.href = './admin-manage-movies.html', 1500);
+    } catch (error) {
+        console.error('Error adding movie:', error);
+        UI.showToast('เกิดข้อผิดพลาดในการบันทึก', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
+}
+Content from @public\admin\admin-users.html:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTFDODEE">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>รายชื่อสมาชิก | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">รายชื่อ <span class="text-brand-primary">สมาชิก</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ตรวจสอบและควบคุมสิทธิ์การเข้าถึงของผู้ใช้งาน</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">สมาชิกทั้งหมด:</span>
+                    <span id="user-count" class="text-xl font-black text-white">0</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="admin-table-container cyber-card overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white/[0.02] border-b border-white/5 text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">
+                        <th class="p-6">ข้อมูลผู้ใช้งาน</th>
+                        <th class="p-6 text-center">สิทธิ์การใช้งาน</th>
+                        <th class="p-6 text-center">สถานะบัญชี</th>
+                        <th class="p-6 text-center">เข้าร่วมเมื่อ</th>
+                        <th class="p-6 text-right">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list" class="divide-y divide-white/[0.03]">
+                </tbody>
+            </table>
+        </section>
+        <div id="pagination-container" class="flex justify-center py-10 gap-2"></div>
+    </main>
+
+    <!-- 👤 Edit User Modal -->
+    <div id="edit-user-modal" class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+        <div class="bg-[#121218] border border-white/10 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8">
+                <button id="close-modal" class="text-gray-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                    <i data-lucide="user-cog" class="w-6 h-6 text-blue-500"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tight Thai-font">แก้ไขข้อมูลสมาชิก</h3>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest Thai-font">ปรับปรุงสิทธิ์และสถานะการใช้งาน</p>
+                </div>
+            </div>
+            
+            <form id="edit-user-form" class="space-y-6">
+                <input type="hidden" id="edit-uid">
+                <div class="space-y-2">
+                    <label for="edit-displayName" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ชื่อผู้ใช้งาน</label>
+                    <input type="text" id="edit-displayName" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font" required>
+                </div>
+                <div class="space-y-2">
+                    <label for="edit-role" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ระดับสิทธิ์ (Role)</label>
+                    <select id="edit-role" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font appearance-none">
+                        <option value="member">สมาชิกทั่วไป (Member)</option>
+                        <option value="vip">สมาชิกพรีเมียม (VIP)</option>
+                        <option value="admin">ผู้ดูแลระบบ (Admin)</option>
+                        <option value="super-admin">ผู้บริหาร (Super Admin)</option>
+                    </select>
+                </div>
+                
+                <div class="pt-6 border-t border-white/5 flex gap-4">
+                    <button type="submit" class="flex-1 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all Thai-font shadow-[0_10px_20px_rgba(251,191,36,0.2)]">
+                        บันทึกข้อมูล
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="px-6 py-4 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all Thai-font">
+                        ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/js/admin/admin-users.js"></script>
+</body>
+</html>
+Content from @public\admin\admin-system.html:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>ความปลอดภัยระบบ | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-white">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl md:text-6xl font-black text-white uppercase tracking-tighter italic Thai-font">ความปลอดภัย <span class="text-brand-primary">ระบบ</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">การตั้งค่าความปลอดภัยและดูแลรักษาฐานข้อมูล</p>
+            </div>
+            <button id="add-slide-btn" class="px-8 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-[0_15px_30px_rgba(251,191,36,0.2)] hover:scale-105 transition-transform active:scale-95 Thai-font">
+                <i data-lucide="shield-plus" class="w-4 h-4 inline-block mr-2"></i> ตั้งค่าความปลอดภัย
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- 🛡️ Purge Logic -->
+            <div class="cyber-card p-10 space-y-8 border border-red-500/10 hover:border-red-500/30 transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                        <i data-lucide="trash-2" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white uppercase tracking-tight Thai-font">ล้างข้อมูลทั้งหมด (Purge)</h2>
+                        <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest Thai-font">คำเตือน: การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                    </div>
+                </div>
+                
+                <div class="p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
+                    <p class="text-xs font-bold text-red-500/80 Thai-font leading-relaxed">ฟังก์ชันนี้จะลบข้อมูลหนังและซีรีส์ทั้งหมดออกจากฐานข้อมูล Cloud Firestore โปรดใช้ความระมัดระวังสูงสุด</p>
+                </div>
+
+                <div class="space-y-4">
+                    <button id="purge-data-btn" class="w-full py-4 rounded-2xl bg-red-600 text-white text-xs font-black uppercase tracking-widest hover:bg-red-500 transition-all shadow-xl shadow-red-900/20 Thai-font">
+                        ยืนยันการล้างข้อมูลระบบ
+                    </button>
+                </div>
+            </div>
+
+            <!-- 📝 System Logs Info -->
+            <div class="cyber-card p-10 space-y-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
+                        <i data-lucide="clipboard-list" class="w-6 h-6 text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white uppercase tracking-tight Thai-font">บันทึกกิจกรรมระบบ</h2>
+                        <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest Thai-font">ประวัติการทำงานของผู้ดูแลระบบ</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 text-xs font-medium text-gray-500 Thai-font leading-relaxed">
+                    <p>ระบบมีการบันทึกการกระทำที่สำคัญ เช่น การเพิ่ม/ลบเนื้อหา และการเปลี่ยนสิทธิ์สมาชิก โดยจะจัดเก็บไว้ในคอลเลกชัน <code class="text-brand-primary bg-white/5 px-2 py-0.5 rounded">activity_logs</code></p>
+                </div>
+
+                <button class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all Thai-font" onclick="window.open('https://console.firebase.google.com/', '_blank')">
+                    เปิดแผงควบคุม FIREBASE
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/admin/admin-system.js"></script>
+</body>
+</html>
+Content from @public\admin\admin-users.html:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>รายชื่อสมาชิก | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">รายชื่อ <span class="text-brand-primary">สมาชิก</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ตรวจสอบและควบคุมสิทธิ์การเข้าถึงของผู้ใช้งาน</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">สมาชิกทั้งหมด:</span>
+                    <span id="user-count" class="text-xl font-black text-white">0</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="admin-table-container cyber-card overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white/[0.02] border-b border-white/5 text-[10px] font-black text-gray-500 uppercase tracking-widest Thai-font">
+                        <th class="p-6">ข้อมูลผู้ใช้งาน</th>
+                        <th class="p-6 text-center">สิทธิ์การใช้งาน</th>
+                        <th class="p-6 text-center">สถานะบัญชี</th>
+                        <th class="p-6 text-center">เข้าร่วมเมื่อ</th>
+                        <th class="p-6 text-right">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list" class="divide-y divide-white/[0.03]">
+                </tbody>
+            </table>
+        </section>
+        <div id="pagination-container" class="flex justify-center py-10 gap-2"></div>
+    </main>
+
+    <!-- 👤 Edit User Modal -->
+    <div id="edit-user-modal" class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+        <div class="bg-[#121218] border border-white/10 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
+            <button id="close-modal" class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                    <i data-lucide="user-cog" class="w-6 h-6 text-blue-500"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tight Thai-font">แก้ไขข้อมูลสมาชิก</h3>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest Thai-font">ปรับปรุงสิทธิ์และสถานะการใช้งาน</p>
+                </div>
+            </div>
+            
+            <form id="edit-user-form" class="space-y-6">
+                <input type="hidden" id="edit-uid">
+                <div class="space-y-2">
+                    <label for="edit-displayName" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ชื่อผู้ใช้งาน</label>
+                    <input type="text" id="edit-displayName" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font" required>
+                </div>
+                <div class="space-y-2">
+                    <label for="edit-role" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 Thai-font">ระดับสิทธิ์ (Role)</label>
+                    <select id="edit-role" class="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm Thai-font appearance-none">
+                        <option value="member">สมาชิกทั่วไป (Member)</option>
+                        <option value="vip">สมาชิกพรีเมียม (VIP)</option>
+                        <option value="admin">ผู้ดูแลระบบ (Admin)</option>
+                        <option value="super-admin">ผู้บริหาร (Super Admin)</option>
+                    </select>
+                </div>
+                
+                <div class="pt-6 border-t border-white/5 flex gap-4">
+                    <button type="submit" class="flex-1 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all Thai-font shadow-[0_10px_20px_rgba(251,191,36,0.2)]">
+                        บันทึกข้อมูล
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="px-6 py-4 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all Thai-font">
+                        ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/js/admin/admin-users.js"></script>
+</body>
+</html>
+Content from @public\js\admin\admin-add-series.js:
+import { db, collection, addDoc, serverTimestamp, doc, getDocs, query, where, limit, writeBatch } from '/js/services/firebase.js';
+import { UI } from '/js/components/ui.js';
+import { checkAdminAccess } from '/js/middleware/auth-guard.js';
+
+/**
+ * 📺 DUYดูDEE SERIES REGISTRATION ENGINE
+ * Unified Logic for High-Impact Series Onboarding
+ */
+
+let episodeCount = 0;
+let posterPreview;
+let noPreview;
+let selectedPosterUrlInput;
+let thumbnailOptionsContainer;
+let previewTitle;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
+        initForm();
+    } catch (err) {
+        console.error('Access Denied:', err);
+    }
+});
+
+function initForm() {
+    const form = document.getElementById('add-series-form');
+    const addEpBtn = document.getElementById('add-episode-btn');
+    const titleInput = document.getElementById('title');
+    posterPreview = document.getElementById('poster-preview');
+    noPreview = document.getElementById('no-preview');
+    selectedPosterUrlInput = document.getElementById('selected-poster-url');
+    thumbnailOptionsContainer = document.getElementById('thumbnail-options-container');
+    previewTitle = document.getElementById('preview-title');
+
+    if (!form) return;
+
+    // Add first episode by default
+    addEpisode();
+
+    if (addEpBtn) {
+        addEpBtn.addEventListener('click', () => addEpisode());
+    }
+
+    // Support pasting link in title field
+    titleInput?.addEventListener('input', (e) => {
+        const value = e.target.value.trim();
+        if (value.startsWith('http') || value.includes('youtube.com') || value.includes('youtu.be')) {
+            fetchSeriesInfo(value);
+        } else if (previewTitle) {
+            previewTitle.innerText = value || 'ยังไม่ได้ระบุชื่อ';
+        }
+    });
+
+    form.addEventListener('submit', handleAddSeries);
+}
+
+function addEpisode(title = '', url = '') {
+    episodeCount++;
+    const container = document.getElementById('episode-container');
+    const epDiv = document.createElement('div');
+    epDiv.className = 'p-5 bg-black/40 border border-white/5 rounded-2xl space-y-4 animate-fade-in relative group';
+    epDiv.innerHTML = `
+        <div class="flex items-center justify-between">
+            <span class="px-3 py-1 bg-brand-primary/20 text-brand-primary text-[10px] font-black uppercase rounded-lg border border-brand-primary/20">Episode ${episodeCount}</span>
+            ${episodeCount > 1 ? '<button type="button" class="remove-ep-btn text-gray-600 hover:text-red-500 transition-colors"><i data-lucide="x-circle" class="w-5 h-5"></i></button>' : ''}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">ชื่อตอน</label>
+                <input type="text" name="ep-title" value="${title || 'ตอนที่ ' + episodeCount}" class="w-full bg-brand-black/50 border border-white/10 rounded-xl py-3.5 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm" required>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">YouTube Video URL</label>
+                <input type="url" name="ep-url" value="${url}" class="ep-url-input w-full bg-brand-black/50 border border-white/10 rounded-xl py-3.5 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm" placeholder="https://..." required>
+            </div>
+        </div>
+    `;
+    container.appendChild(epDiv);
+    UI.refreshIcons();
+
+    const removeBtn = epDiv.querySelector('.remove-ep-btn');
+    if (removeBtn) {
+        removeBtn.onclick = () => {
+            epDiv.remove();
+            reindexEpisodes();
+            updatePosterPreview();
+        };
+    }
+
+    const urlInput = epDiv.querySelector('.ep-url-input');
+    if (urlInput) {
+        urlInput.addEventListener('input', UI.debounce(async () => {
+            const val = urlInput.value.trim();
+            updatePosterPreview();
+            
+            // Auto-fetch if first episode
+            const firstEp = container.querySelector('div:first-child');
+            const isFirst = epDiv === firstEp;
+            if (isFirst && val) fetchSeriesInfo(val);
+        }, 600));
+    }
+}
+
+async function fetchSeriesInfo(url) {
+    const videoId = UI.extractYouTubeId(url);
+    if (!videoId) return;
+
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const firstEpUrlInput = document.querySelector('.ep-url-input');
+
+    try {
+        const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (titleInput && (!titleInput.value || titleInput.value.startsWith('http') || titleInput.value === url)) {
+                titleInput.value = data.title || '';
+                if (previewTitle) previewTitle.innerText = data.title || 'ยังไม่ได้ระบุชื่อ';
+            }
+            if (descInput && !descInput.value) descInput.value = data.title || '';
+            if (firstEpUrlInput && !firstEpUrlInput.value) {
+                firstEpUrlInput.value = url;
+                updatePosterPreview();
+            }
+            UI.showToast('ดึงข้อมูล YouTube สำเร็จ', 'success');
+        }
+    } catch (err) {}
+}
+
+function reindexEpisodes() {
+    const epDivs = document.querySelectorAll('#episode-container > div');
+    episodeCount = 0;
+    epDivs.forEach((div) => {
+        episodeCount++;
+        const badge = div.querySelector('.bg-brand-primary\/20');
+        if (badge) badge.innerText = `Episode ${episodeCount}`;
+    });
+}
+
+function updatePosterPreview() {
+    const firstUrlInput = document.querySelector('.ep-url-input');
+    if (!firstUrlInput) return;
+    const videoId = UI.extractYouTubeId(firstUrlInput.value.trim());
+    if (videoId) {
+        const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        if (posterPreview) { posterPreview.src = thumb; posterPreview.classList.remove('opacity-0'); }
+        noPreview?.classList.add('hidden');
+        if (selectedPosterUrlInput) selectedPosterUrlInput.value = thumb;
+        
+        renderThumbnailOptions([
+            { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
+            { url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, label: 'มาตรฐาน' },
+            { url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, label: 'สูง' }
+        ], thumb);
+    }
+}
+
+function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
+    if (!thumbnailOptionsContainer) return;
+    thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
+        <div onclick="UI.selectPoster('${thumb.url}', this)" class="relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
+            <img src="${thumb.url}" class="w-full h-full object-cover">
+            <span class="absolute bottom-1 right-1 px-1 py-0.5 bg-black/70 text-white text-[8px] rounded-md Thai-font">${thumb.label}</span>
+        </div>`).join('');
+}
+
+window.UI.selectPoster = (url, el) => {
+    if (posterPreview) posterPreview.src = url;
+    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
+    el.classList.add('border-brand-primary', 'shadow-lg');
+};
+
+async function handleAddSeries(e) {
+    e.preventDefault();
+    UI.setLoading(true);
+
+    const title = document.getElementById('title').value.trim();
+    const category = document.getElementById('category').value;
+    const badge = document.getElementById('badge').value.trim() || 'NEW';
+    const description = document.getElementById('description').value.trim();
+
+    const episodeDivs = document.querySelectorAll('#episode-container > div');
+    const episodes = [];
+    const duplicateEps = [];
+
+    for (let i = 0; i < episodeDivs.length; i++) {
+        const div = episodeDivs[i];
+        const epTitle = div.querySelector('[name="ep-title"]').value.trim();
+        const epUrl = div.querySelector('.ep-url-input').value.trim();
+        const videoId = UI.extractYouTubeId(epUrl);
+        if (videoId) {
+            // 🛡️ MANDATORY DUPLICATE CHECK (BLOCKING)
+            try {
+                const q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), where('videoUrl', '==', epUrl), limit(1));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    duplicateEps.push(i + 1);
+                    div.querySelector('.ep-url-input').classList.add('border-red-500');
+                } else {
+                    div.querySelector('.ep-url-input').classList.remove('border-red-500');
+                    episodes.push({
+                        title: epTitle,
+                        episodeNumber: i + 1,
+                        videoUrl: epUrl,
+                        embedURL: `https://www.youtube.com/embed/${videoId}`
+                    });
+                }
+            } catch (err) { console.error(err); }
+        }
+    }
+
+    if (duplicateEps.length > 0) {
+        UI.showToast(`ขออภัย พบลิ้งก์ซ้ำในตอนที่ ${duplicateEps.join(', ')}`, 'error');
+        UI.setLoading(false);
+        return; // ⛔ STOP SUBMISSION
+    }
+
+    if (episodes.length === 0) {
+        UI.showToast('กรุณาเพิ่มอย่างน้อย 1 ตอน', 'error');
+        UI.setLoading(false);
+        return;
+    }
+
+    const firstVideoId = UI.extractYouTubeId(episodes[0].videoUrl);
+    const poster = selectedPosterUrlInput?.value || `https://img.youtube.com/vi/${firstVideoId}/maxresdefault.jpg`;
+
+    try {
+        const batch = writeBatch(db);
+        const seriesRef = doc(collection(db, SCHEMA.COLLECTIONS.SERIES));
+        
+        // 1. Update Series Doc
+        batch.set(seriesRef, {
+            title,
+            description,
+            category,
+            badge: badge || 'NEW',
+            poster,
+            episodeCount: episodes.length,
+            views: 0,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        });
+
+        // 2. Add Episodes
+        episodes.forEach(ep => {
+            const epRef = doc(collection(db, SCHEMA.COLLECTIONS.SERIES, seriesRef.id, 'episodes'));
+            batch.set(epRef, { ...ep, createdAt: serverTimestamp() });
+        });
+
+        await batch.commit();
+
+        await logActivity('ADD_SERIES', `เพิ่มซีรีส์ใหม่: ${title} (${episodes.length} ตอน)`);
+        UI.showToast('บันทึกและเผยแพร่ซีรีส์สำเร็จ', 'success');
+        setTimeout(() => window.location.href = './admin-manage-series.html', 1500);
+
+    } catch (error) {
+        console.error(error);
+        UI.showToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
+}
+Content from @public\js\admin\admin-edit-series.js:
+import { db, doc, getDoc, updateDoc, collection, getDocs, query, orderBy, limit, writeBatch, SCHEMA, serverTimestamp, where, deleteDoc } from '/js/services/firebase.js';
+import { UI } from '/js/components/ui.js';
+import { checkAdminAccess } from '/js/middleware/auth-guard.js';
+
+/**
+ * 📺 DUYดูDEE SERIES EDIT ENGINE
+ * Unified Logic for High-Impact Series Updates.
+ */
+
+// Module-scoped variables
+let posterPreview;
+let selectedPosterUrlInput;
+let thumbnailOptionsContainer;
+let seriesId;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
+        
+        const params = new URLSearchParams(window.location.search);
+        seriesId = params.get('id');
+
+        if (!seriesId) {
+            UI.showToast('ไม่พบ ID ซีรีส์', 'error');
+            setTimeout(() => window.location.href = './admin-manage-series.html', 1500);
+            return;
+        }
+
+        initForm();
+    } catch (err) {
+        console.error('Access Denied:', err);
+    }
+});
+
+async function initForm() {
+    UI.setLoading(true);
+    const form = document.getElementById('edit-series-form');
+    const titleInput = document.getElementById('title');
+    const categoryInput = document.getElementById('category');
+    const badgeInput = document.getElementById('badge');
+    const descriptionInput = document.getElementById('description');
+    posterPreview = document.getElementById('poster-preview');
+    selectedPosterUrlInput = document.getElementById('selected-poster-url');
+    thumbnailOptionsContainer = document.getElementById('thumbnail-options-container');
+    const addEpBtn = document.getElementById('add-episode-btn');
+
+    if (!form) return;
+
+    try {
+        const seriesSnap = await getDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, seriesId));
+        if (seriesSnap.exists()) {
+            const data = seriesSnap.data();
+            titleInput.value = data.title || '';
+            categoryInput.value = data.category || 'ซีรีส์แนวตั้ง (ตอนยาว)';
+            badgeInput.value = data.badge || '';
+            descriptionInput.value = data.description || '';
+            
+            if (posterPreview && data.poster) {
+                posterPreview.src = data.poster;
+                posterPreview.classList.remove('opacity-0');
+            }
+            if (selectedPosterUrlInput) selectedPosterUrlInput.value = data.poster || '';
+
+            // Load episodes
+            const epSnap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES, seriesId, 'episodes'), orderBy('episodeNumber')));
+            epSnap.forEach(epDoc => {
+                const epData = epDoc.data();
+                addEpisode(epData.title, epData.videoUrl);
+            });
+            if (epSnap.empty) addEpisode(); // Add one empty episode if none exist
+
+            // Fetch Thumbnails for preview
+            const firstEpUrl = epSnap.docs.length > 0 ? epSnap.docs[0].data().videoUrl : '';
+            if (firstEpUrl) handleSmartFetch(firstEpUrl, data.poster);
+
+        } else {
+            UI.showToast('ไม่พบข้อมูลซีรีส์', 'error');
+            window.location.href = './admin-manage-series.html';
+        }
+    } catch (error) {
+        console.error('Error loading series:', error);
+        UI.showToast('เกิดข้อผิดพลาดในการดึงข้อมูล', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
+
+    if (addEpBtn) addEpBtn.addEventListener('click', () => addEpisode());
+    form.addEventListener('submit', handleUpdateSeries);
+}
+
+function addEpisode(title = '', url = '') {
+    episodeCount++;
+    const container = document.getElementById('episode-container');
+    const epDiv = document.createElement('div');
+    epDiv.className = 'p-5 bg-black/40 border border-white/5 rounded-2xl space-y-4 animate-fade-in relative group';
+    epDiv.innerHTML = `
+        <div class="flex items-center justify-between">
+            <span class="px-3 py-1 bg-brand-primary/20 text-brand-primary text-[10px] font-black uppercase rounded-lg border border-brand-primary/20">Episode ${episodeCount}</span>
+            ${episodeCount > 1 ? '<button type="button" class="remove-ep-btn text-gray-600 hover:text-red-500 transition-colors"><i data-lucide="x-circle" class="w-5 h-5"></i></button>' : ''}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">ชื่อตอน</label>
+                <input type="text" name="ep-title" value="${title || 'ตอนที่ ' + episodeCount}" class="w-full bg-brand-black/50 border border-white/10 rounded-xl py-3.5 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm" required>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">YouTube Video URL</label>
+                <input type="url" name="ep-url" value="${url}" class="ep-url-input w-full bg-brand-black/50 border border-white/10 rounded-xl py-3.5 px-4 text-white outline-none focus:border-brand-primary transition-all text-sm" placeholder="https://..." required>
+            </div>
+        </div>
+    `;
+    container.appendChild(epDiv);
+    UI.refreshIcons();
+
+    const removeBtn = epDiv.querySelector('.remove-ep-btn');
+    if (removeBtn) {
+        removeBtn.onclick = () => {
+            epDiv.remove();
+            reindexEpisodes();
+            updatePosterPreview();
+        };
+    }
+
+    const urlInput = epDiv.querySelector('.ep-url-input');
+    if (urlInput) {
+        urlInput.addEventListener('input', UI.debounce(() => {
+            updatePosterPreview();
+            // Auto-fetch if first episode
+            const firstEp = container.querySelector('div:first-child');
+            const isFirst = epDiv === firstEp;
+            if (isFirst && urlInput.value) fetchSeriesInfo(urlInput.value.trim());
+        }, 600));
+    }
+}
+
+async function fetchSeriesInfo(url) {
+    const videoId = UI.extractYouTubeId(url);
+    if (!videoId) return;
+
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const firstEpUrlInput = document.querySelector('.ep-url-input');
+
+    try {
+        const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (titleInput && (!titleInput.value || titleInput.value.startsWith('http') || titleInput.value === url)) {
+                titleInput.value = data.title || '';
+                if (previewTitle) previewTitle.innerText = data.title || 'ยังไม่ได้ระบุชื่อ';
+            }
+            if (descInput && !descInput.value) descInput.value = data.title || '';
+            if (firstEpUrlInput && !firstEpUrlInput.value) {
+                firstEpUrlInput.value = url;
+                updatePosterPreview();
+            }
+            UI.showToast('ดึงข้อมูล YouTube สำเร็จ', 'success');
+        }
+    } catch (err) {}
+}
+
+function reindexEpisodes() {
+    const epDivs = document.querySelectorAll('#episode-container > div');
+    episodeCount = 0;
+    epDivs.forEach((div) => {
+        episodeCount++;
+        const badge = div.querySelector('.bg-brand-primary\/20');
+        if (badge) badge.innerText = `Episode ${episodeCount}`;
+    });
+}
+
+function updatePosterPreview() {
+    const firstUrlInput = document.querySelector('.ep-url-input');
+    if (!firstUrlInput) return;
+    const videoId = UI.extractYouTubeId(firstUrlInput.value.trim());
+    if (videoId) {
+        const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        if (posterPreview) { posterPreview.src = thumb; posterPreview.classList.remove('opacity-0'); }
+        noPreview?.classList.add('hidden');
+        if (selectedPosterUrlInput) selectedPosterUrlInput.value = thumb;
+        
+        renderThumbnailOptions([
+            { url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, label: 'สูงสุด' },
+            { url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, label: 'มาตรฐาน' },
+            { url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, label: 'สูง' }
+        ], thumb);
+    }
+}
+
+function renderThumbnailOptions(thumbnails, currentSelectedUrl) {
+    if (!thumbnailOptionsContainer) return;
+    thumbnailOptionsContainer.innerHTML = thumbnails.map(thumb => `
+        <div onclick="UI.selectPoster('${thumb.url}', this)" class="relative flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${thumb.url === currentSelectedUrl ? 'border-brand-primary shadow-lg' : 'border-white/10 hover:border-brand-primary/50'}">
+            <img src="${thumb.url}" class="w-full h-full object-cover">
+            <span class="absolute bottom-1 right-1 px-1 py-0.5 bg-black/70 text-white text-[8px] rounded-md Thai-font">${thumb.label}</span>
+        </div>`).join('');
+}
+
+window.UI.selectPoster = (url, el) => {
+    if (posterPreview) posterPreview.src = url;
+    if (selectedPosterUrlInput) selectedPosterUrlInput.value = url;
+    el.parentElement.querySelectorAll('.border-brand-primary').forEach(x => x.classList.remove('border-brand-primary', 'shadow-lg'));
+    el.classList.add('border-brand-primary', 'shadow-lg');
+};
+
+async function handleAddSeries(e) {
+    e.preventDefault();
+    UI.setLoading(true);
+
+    const title = document.getElementById('title').value.trim();
+    const category = document.getElementById('category').value;
+    const badge = document.getElementById('badge').value.trim() || 'NEW';
+    const description = document.getElementById('description').value.trim();
+
+    const episodeDivs = document.querySelectorAll('#episode-container > div');
+    const episodes = [];
+    const duplicateEps = [];
+
+    for (let i = 0; i < episodeDivs.length; i++) {
+        const div = episodeDivs[i];
+        const epTitle = div.querySelector('[name="ep-title"]').value.trim();
+        const epUrl = div.querySelector('.ep-url-input').value.trim();
+        const videoId = UI.extractYouTubeId(epUrl);
+        if (videoId) {
+            // 🛡️ MANDATORY DUPLICATE CHECK (BLOCKING)
+            try {
+                const q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), where('videoUrl', '==', epUrl), limit(1));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    duplicateEps.push(i + 1);
+                    div.querySelector('.ep-url-input').classList.add('border-red-500');
+                } else {
+                    div.querySelector('.ep-url-input').classList.remove('border-red-500');
+                    episodes.push({
+                        title: epTitle,
+                        episodeNumber: i + 1,
+                        videoUrl: epUrl,
+                        embedURL: `https://www.youtube.com/embed/${videoId}`
+                    });
+                }
+            } catch (err) { console.error(err); }
+        }
+    }
+
+    if (duplicateEps.length > 0) {
+        UI.showToast(`ขออภัย พบลิ้งก์ซ้ำในตอนที่ ${duplicateEps.join(', ')}`, 'error');
+        UI.setLoading(false);
+        return; // ⛔ STOP SUBMISSION
+    }
+
+    if (episodes.length === 0) {
+        UI.showToast('กรุณาเพิ่มอย่างน้อย 1 ตอน', 'error');
+        UI.setLoading(false);
+        return;
+    }
+
+    const firstVideoId = UI.extractYouTubeId(episodes[0].videoUrl);
+    const poster = selectedPosterUrlInput?.value || `https://img.youtube.com/vi/${firstVideoId}/maxresdefault.jpg`;
+
+    try {
+        const batch = writeBatch(db);
+        const seriesRef = doc(collection(db, SCHEMA.COLLECTIONS.SERIES));
+        
+        // 1. Update Series Doc
+        batch.set(seriesRef, {
+            title,
+            description,
+            category,
+            badge: badge || 'NEW',
+            poster,
+            episodeCount: episodes.length,
+            views: 0,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        });
+
+        // 2. Add Episodes
+        episodes.forEach(ep => {
+            const epRef = doc(collection(db, SCHEMA.COLLECTIONS.SERIES, seriesRef.id, 'episodes'));
+            batch.set(epRef, { ...ep, createdAt: serverTimestamp() });
+        });
+
+        await batch.commit();
+
+        await logActivity('ADD_SERIES', `เพิ่มซีรีส์ใหม่: ${title} (${episodes.length} ตอน)`);
+        UI.showToast('บันทึกและเผยแพร่ซีรีส์สำเร็จ', 'success');
+        setTimeout(() => window.location.href = './admin-manage-series.html', 1500);
+
+    } catch (error) {
+        console.error(error);
+        UI.showToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
+}
+Content from @public\admin\admin-add-series.html:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <title>เพิ่มซีรีส์ใหม่ | DUYดูDEE EXECUTIVE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    
+    <!-- 🎨 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+    <meta name="theme-color" content="#050507">
+</head>
+<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+
+    <!-- 🧭 SIDEBAR -->
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar">
+        <div class="p-10 border-b border-white/5">
+            <div class="flex items-center gap-4 group cursor-pointer" onclick="location.href='/'">
+                <div class="relative">
+                    <img src="/assets/logo/DUYDODEE.png" class="w-12 h-12 rounded-xl z-10 relative">
+                    <div class="absolute -inset-2 bg-brand-primary/20 blur-xl rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
+                    <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ADMIN CONTROL</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-6 py-10 space-y-2">
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-4 Thai-font">เมนูจัดการระบบ</p>
+            <a href="/admin/admin-manage.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">แดชบอร์ดสรุปผล</span>
+            </a>
+            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="film" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">จัดการหนัง / เรื่องเดียวจบ</span>
+            </a>
+            <a href="/admin/admin-manage-series.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group nav-link-active">
+                <i data-lucide="tv" class="w-5 h-5"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font">จัดการซีรีส์ / แบบตอน</span>
+            </a>
+            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="images" class="w-5 h-5 text-brand-primary"></i>
+                <span class="text-xs font-black uppercase tracking-widest Thai-font text-brand-primary">จัดการสไลด์หน้าแรก</span>
+            </a>
+            
+            <p class="px-4 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mt-10 mb-4 Thai-font">สมาชิกและตั้งค่า</p>
+            <a href="/admin/admin-users.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">รายชื่อสมาชิกทั้งหมด</span>
+            </a>
+            <a href="/admin/admin-system.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-xs font-bold uppercase tracking-widest Thai-font">ตั้งค่าความปลอดภัย</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5 bg-black/20">
+            <div id="admin-sidebar-profile" class="mb-6"></div>
+            <button onclick="location.href='/'" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-widest hover:bg-brand-primary hover:text-black transition-all flex items-center justify-center gap-2 Thai-font">
+                <i data-lucide="external-link" class="w-3 h-3"></i> กลับไปหน้าเว็บหลัก
+            </button>
+        </div>
+    </aside>
+
+    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+            <div>
+                <h1 class="text-5xl font-black text-white uppercase tracking-tighter italic Thai-font">เพิ่ม <span class="text-brand-primary">ซีรีส์</span></h1>
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.6em] mt-2 Thai-font">ลงทะเบียนซีรีส์แบบตอนเข้าสู่ฐานข้อมูลระบบ</p>
+            </div>
+        </header>
+
+        <form id="add-series-form" class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+            <!-- Preview Column -->
+            <div class="xl:col-span-4">
+                <div class="cyber-card p-8 sticky top-8">
+                    <h3 class="text-center text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] mb-10 Thai-font">ตัวอย่างหน้าปก</h3>
+                    
+                    <div class="device-frame mx-auto scale-90">
+                        <div class="device-screen relative overflow-hidden bg-black">
+                            <img id="poster-preview" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700" loading="lazy">
+                            <div id="no-preview" class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 space-y-4">
+                                <i data-lucide="image" class="w-12 h-12"></i>
+                                <span class="text-[8px] font-black uppercase Thai-font">รอลิงก์รูปภาพ...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2">ลิงก์รูปภาพหน้าปก</label>
+                            <input type="url" id="poster" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all text-xs" placeholder="https://..." required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xl:col-span-8">
+                <div class="cyber-card p-10 space-y-10">
+                    <!-- Section: Basic Info -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-1.5 h-6 bg-brand-primary rounded-full"></div>
+                            <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">ข้อมูลพื้นฐานซีรีส์</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">ชื่อซีรีส์</label>
+                                <input type="text" id="title" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font" placeholder="ระบุชื่อซีรีส์ภาษาไทย..." required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">หมวดหมู่</label>
+                                <select id="category" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font appearance-none">
+                                    <option value="ซีรีส์แนวตั้ง">ซีรีส์แนวตั้ง (ตอนยาว)</option>
+                                    <option value="ซีรีส์แนวตั้ง (ตอนเดียวจบ)">ซีรีส์แนวตั้ง (ตอนเดียวจบ)</option>
+                                    <option value="ซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2 Thai-font">เรื่องย่อ</label>
+                            <textarea id="description" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all Thai-font min-h-[120px] resize-none" placeholder="ระบุรายละเอียดซีรีส์..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section: Episodes -->
+                    <div class="space-y-8 pt-10 border-t border-white/5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-1.5 h-6 bg-blue-500 rounded-full"></div>
+                                <h2 class="text-lg font-black text-white uppercase tracking-widest Thai-font">การจัดการตอน (EPISODES)</h2>
+                            </div>
+                            <button type="button" id="add-episode-btn" class="px-6 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-500 hover:text-white transition-all Thai-font">
+                                + เพิ่มตอนใหม่
+                            </button>
+                        </div>
+                        
+                        <div id="episode-container" class="space-y-4"></div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 pt-4">
+                        <button type="submit" id="submit-btn" class="flex-1 py-5 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-transform active:scale-95 Thai-font">
+                            บันทึกซีรีส์และตอนทั้งหมด
+                        </button>
+                        <a href="/admin/admin-manage-series.html" class="px-10 py-5 bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all text-center Thai-font">
+                            ยกเลิก
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="/js/admin/admin-add-series.js"></script>
+</body>
+</html>

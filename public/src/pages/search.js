@@ -1,0 +1,50 @@
+import { UI } from '../components/ui.js';
+import { ContentService } from '../services/content-service.js';
+
+/**
+ * 🔍 DUYดูDEE SEARCH ENGINE
+ * Master Edition - Fast & Responsive
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    UI.injectStarfield();
+    UI.initNavbar();
+
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(handleSearch, 500));
+    }
+});
+
+async function handleSearch(e) {
+    const query = e.target.value.trim();
+    const grid = document.getElementById('search-grid');
+    
+    if (query.length < 2) {
+        grid.innerHTML = '';
+        return;
+    }
+
+    UI.renderSkeleton(grid, 6);
+
+    try {
+        const results = await ContentService.searchContent(query);
+        
+        if (results.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 uppercase tracking-widest font-black">ไม่พบผลลัพธ์ที่ค้นหา</p>';
+            return;
+        }
+
+        grid.innerHTML = results.map(item => UI.createCard(item)).join('');
+    } catch (err) {
+        console.error('Search Error:', err);
+        UI.showToast('เกิดข้อผิดพลาดในการค้นหา', 'error');
+    }
+}
+
+function debounce(func, delay) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), delay);
+    };
+}

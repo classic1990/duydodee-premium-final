@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- [ Helper Functions ] ---
+    
+    // ตรวจสอบว่าเข้าสู่ระบบหรือยัง
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // ตรวจสอบว่าเป็น Admin หรือไม่ (ตรวจสอบจาก Role ใน Database)
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'member') in ['admin', 'super-admin', 'master']
+      );
+    }
+
+    // --- [ Collection Rules ] ---
+
+    // กฎสำหรับสไลด์แนะนำ (Hero Slides)
+    match /hero_slides/{slideId} {
+      allow read: if true; // ทุกคนดูได้
+      allow write: if isAdmin(); // เฉพาะ Admin ที่เพิ่ม/แก้ไข/ลบ ได้
+    }
+
+    // กฎสำหรับภาพยนตร์ (Movies)
+    match /movies/{movieId} {
+      allow read: if true;
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views'])) || isAdmin();
+      allow create, delete: if isAdmin();
+    }
+
+    // กฎสำหรับซีรีส์ (Series) และตอนย่อย (Episodes)
+    match /series/{seriesId} {
+      allow read: if true;
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views'])) || isAdmin();
+      allow create, delete: if isAdmin();
+
+      match /episodes/{epId} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
+    }
+
+    // กฎสำหรับข้อมูลสมาชิก (Users)
+    match /users/{userId} {
+      // Admin ดูได้ทุกคน, สมาชิกดูได้เฉพาะของตัวเอง
+      allow read: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+      
+      // การสร้างบัญชีใหม่
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      
+      // การแก้ไขข้อมูล: Admin แก้ไขได้ทั้งหมด, สมาชิกแก้ไขได้เฉพาะ displayName/photoURL (ห้ามแก้ Role หรือสถานะแบน)
+      allow update: if isAdmin() || (isSignedIn() && request.auth.uid == userId && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isBanned']));
+      
+      allow delete: if isAdmin();
+
+      // ประวัติการรับชม (Watch History)
+      match /history/{historyId} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // กฎสำหรับสถิติรายวัน (Daily Stats)
+    match /daily_stats/{dateId} {
+      allow read: if true;
+      allow write, update: if isSignedIn(); // ให้สมาชิกอัปเดตยอดวิวรายวันได้
+    }
+
+    // กฎสำหรับบันทึกกิจกรรม (Activity Logs)
+    match /activity_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false; // ห้ามแก้ไขหรือลบ Log
+    }
+  }
+}

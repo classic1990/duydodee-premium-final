@@ -1,0 +1,20 @@
+# 🤖 DUYDOODEE ROBOTS POLICY
+# ----------------------------------
+
+# 1. Allow Facebook Scraper (Highest Priority)
+User-agent: facebookexternalhit
+Allow: /
+
+# 2. Allow Line Scraper
+User-agent: line-pwa
+Allow: /
+
+# 3. Global Crawler Rules
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /profile.html
+Disallow: /edit-profile.html
+
+# 🗺️ Sitemap Location
+Sitemap: https://duydodeesport.web.app/sitemap.xml

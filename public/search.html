@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ค้นหา | DUYดูDEE PREMIUM</title>
+    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    <link rel="stylesheet" href="/css/output.css">
+    <script src="https://unpkg.com/lucide@0.410.0" defer></script>
+</head>
+<body class="bg-brand-black text-gray-200">
+
+    <nav id="main-nav" class="fixed top-0 inset-x-0 z-[1000] py-6 transition-all duration-500">
+        <div class="container mx-auto px-6 flex items-center justify-between gap-8">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/logo/DUYDODEE.png" alt="Logo" class="w-10 h-10 rounded-xl">
+                <span class="text-2xl font-black text-white uppercase tracking-tighter">DUY<span class="text-brand-primary">ดูDEE</span></span>
+            </a>
+            <div id="user-auth-area"></div>
+        </div>
+    </nav>
+
+    <main class="py-32 container mx-auto px-6 min-h-screen">
+        <div class="space-y-12">
+            <div class="max-w-2xl mx-auto">
+                <input type="text" id="search-input" placeholder="ค้นหาชื่อหนัง หรือซีรีส์..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-brand-primary transition-all">
+            </div>
+
+            <div id="search-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-8">
+                <!-- Results Injected Here -->
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/src/utils/error-handler.js"></script>
+    <script type="module" src="public/src/pages/search.js"></script>
+</body>
+</html>
