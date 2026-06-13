@@ -1,5 +1,5 @@
 {
-  "*.{js,jsx,ts,tsx}": [
+  "public/src/**/*.{js,jsx,ts,tsx}": [
     "npm run lint:fix"
   ]
 }
