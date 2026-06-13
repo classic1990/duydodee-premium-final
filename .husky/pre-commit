@@ -1,0 +1,92 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Pre-commit hook to prevent secrets from being committed
+
+echo "🔒 Checking for secrets in staged files..."
+
+# Check staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "✅ No staged files to check"
+  exit 0
+fi
+
+FOUND_SECRETS=false
+
+# Skip security documentation and pattern files
+SKIP_PATTERNS=(
+  "\.secrets-patterns$"
+  "SECURITY\.md$"
+  "\.husky/pre-commit$"
+)
+
+# Check for .env files specifically
+ENV_FILES=$(echo "$STAGED_FILES" | grep -E "\.env" || true)
+if [ -n "$ENV_FILES" ]; then
+  echo "❌ Found .env files in staged files:"
+  echo "$ENV_FILES"
+  echo "⚠️  .env files should not be committed!"
+  FOUND_SECRETS=true
+fi
+
+# Check for credential files
+CRED_FILES=$(echo "$STAGED_FILES" | grep -E "serviceAccountKey|firebase-key|credentials\.json" || true)
+if [ -n "$CRED_FILES" ]; then
+  echo "❌ Found credential files in staged files:"
+  echo "$CRED_FILES"
+  echo "⚠️  Credential files should never be committed!"
+  FOUND_SECRETS=true
+fi
+
+# Check for actual secrets (not patterns)
+for file in $STAGED_FILES; do
+  skip=false
+  
+  # Skip documentation and pattern files
+  for skip_pattern in "${SKIP_PATTERNS[@]}"; do
+    if echo "$file" | grep -q "$skip_pattern"; then
+      skip=true
+      break
+    fi
+  done
+  
+  if [ "$skip" = true ]; then
+    continue
+  fi
+  
+  # Check for actual API keys (not just the pattern in docs)
+  if echo "$file" | grep -q "\.js$"; then
+    # Check for hardcoded API keys (not patterns in comments)
+    # Look for actual key values, not documentation
+    if grep -qE "apiKey\s*=\s*[\"'][A-Za-z0-9]{35,}[\"']" "$file" 2>/dev/null; then
+      echo "❌ Found hardcoded API key in: $file"
+      FOUND_SECRETS=true
+    fi
+    
+    # Check for Firebase config with real keys (not just the pattern)
+    if grep -qE "apiKey:\s*[\"']AIza[A-Za-z0-9\-_]{35}[\"']" "$file" 2>/dev/null; then
+      echo "❌ Found Firebase API key in: $file"
+      FOUND_SECRETS=true
+    fi
+  fi
+done
+
+if [ "$FOUND_SECRETS" = true ]; then
+  echo ""
+  echo "🚨 COMMIT BLOCKED: Potential secrets found in staged files"
+  echo "Please:"
+  echo "  1. Remove the secrets from the files"
+  echo "  2. Add them to .gitignore"
+  echo "  3. Commit again"
+  echo ""
+  exit 1
+fi
+
+echo "✅ No secrets found in staged files"
+echo "🔍 Running lint-staged..."
+
+npx lint-staged
+
+echo "✅ Pre-commit checks passed"
