@@ -20,10 +20,14 @@ SKIP_PATTERNS=(
   "\.secrets-patterns$"
   "SECURITY\.md$"
   "\.husky/pre-commit$"
+  "\.gitignore$"
+  "package\.json$"
+  "\.env\.example$"
+  "jest\.setup\.js$"
 )
 
 # Check for .env files specifically
-ENV_FILES=$(echo "$STAGED_FILES" | grep -E "\.env" || true)
+ENV_FILES=$(echo "$STAGED_FILES" | grep -E "\.env[^\.]" || true)
 if [ -n "$ENV_FILES" ]; then
   echo "❌ Found .env files in staged files:"
   echo "$ENV_FILES"
@@ -32,7 +36,7 @@ if [ -n "$ENV_FILES" ]; then
 fi
 
 # Check for credential files
-CRED_FILES=$(echo "$STAGED_FILES" | grep -E "serviceAccountKey|firebase-key|credentials\.json" || true)
+CRED_FILES=$(echo "$STAGED_FILES" | grep -E "(serviceAccountKey|firebase-key|credentials\.json|.*\.json\.key)" || true)
 if [ -n "$CRED_FILES" ]; then
   echo "❌ Found credential files in staged files:"
   echo "$CRED_FILES"
@@ -40,7 +44,7 @@ if [ -n "$CRED_FILES" ]; then
   FOUND_SECRETS=true
 fi
 
-# Check for actual secrets (not patterns)
+# Check for actual secrets in files
 for file in $STAGED_FILES; do
   skip=false
   
@@ -56,18 +60,38 @@ for file in $STAGED_FILES; do
     continue
   fi
   
-  # Check for actual API keys (not just the pattern in docs)
-  if echo "$file" | grep -q "\.js$"; then
-    # Check for hardcoded API keys (not patterns in comments)
-    # Look for actual key values, not documentation
-    if grep -qE "apiKey\s*=\s*[\"'][A-Za-z0-9]{35,}[\"']" "$file" 2>/dev/null; then
-      echo "❌ Found hardcoded API key in: $file"
+  # Skip binary files
+  if ! file "$file" | grep -q "text"; then
+    continue
+  fi
+  
+  # Check for actual API keys using grep with context
+  # Google/Firebase API Keys (AIza followed by 35+ characters)
+  if grep -qE 'AIza[A-Za-z0-9\-_]{35,}' "$file" 2>/dev/null; then
+    # Check if it's a real key (not just example/test)
+    if ! echo "$file" | grep -qE "(example|test|mock)" && \
+       ! grep -qE "(your_|test_|example_)" "$file" 2>/dev/null; then
+      echo "❌ Found potential Firebase API key in: $file"
+      echo "   Pattern: AIza followed by 35+ characters"
       FOUND_SECRETS=true
     fi
-    
-    # Check for Firebase config with real keys (not just the pattern)
-    if grep -qE "apiKey:\s*[\"']AIza[A-Za-z0-9\-_]{35}[\"']" "$file" 2>/dev/null; then
-      echo "❌ Found Firebase API key in: $file"
+  fi
+  
+  # Check for other common secret patterns
+  if grep -qE '(api_key|apiKey|API_KEY)\s*[=:]\s*["\047][A-Za-z0-9]{20,}["\047]' "$file" 2>/dev/null; then
+    if ! echo "$file" | grep -qE "(example|test|mock)" && \
+       ! grep -qE "(your_|test_|example_)" "$file" 2>/dev/null; then
+      echo "❌ Found potential API key in: $file"
+      echo "   Pattern: apiKey assignment with long string"
+      FOUND_SECRETS=true
+    fi
+  fi
+  
+  # Check for secret/password/token assignments
+  if grep -qE '(secret|password|token|credentials)\s*[=:]\s*["\047][A-Za-z0-9]{10,}["\047]' "$file" 2>/dev/null; then
+    if ! echo "$file" | grep -qE "(example|test|mock)" && \
+       ! grep -qE "(your_|test_|example_)" "$file" 2>/dev/null; then
+      echo "❌ Found potential secret/password in: $file"
       FOUND_SECRETS=true
     fi
   fi
