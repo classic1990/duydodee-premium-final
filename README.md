@@ -1,318 +1,411 @@
-# DUYดูDEE PREMIUM
+# DUYดูDEE PREMIUM 🎬
 
-แพลตฟอร์มสตรีมมิ่งวิดีโอระดับพรีเมียมสำหรับดูหนังและซีรีส์คุณภาพสูงระดับ 4K HDR โดยใช้ Firebase เป็น Backend และ Vanilla JavaScript สำหรับ Frontend
+> ที่สุดแห่งประสบการณ์ความบันเทิงระดับ 4K HDR Premium
 
-## 🌟 คุณสมบัติหลัก
+DUYดูDEE PREMIUM คือแพลตฟอร์มสตรีมมิ่งวิดีโอแนวตั้งที่ออกแบบมาเพื่อมอบประสบการณ์การรับชมภาพยนตร์และซีรีส์คุณภาพสูงระดับมาสเตอร์พีซ ด้วย UI แบบ Cinematic Premium ที่หรูหราและระบบที่ทันสมัย
 
-### ผู้ใช้ทั่วไป
-- 📺 **ระบบสตรีมมิ่ง**: รับชมหนังและซีรีส์คุณภาพสูง
-- 🔍 **ระบบค้นหา**: ค้นหาเนื้อหาที่ต้องการได้อย่างรวดเร็ว
-- 📝 **ประวัติการรับชม**: ดูประวัติการรับชมย้อนหลัง
-- ❤️ **รายการโปรด**: บันทึกเนื้อหาที่ชอบไว้ดู
-- 💎 **ระบบ VIP**: สมัครสมาชิก VIP เพื่อรับสิทธิพิเศษ
-- 🎯 **Hero Slider**: แสดงเนื้อหาแนะนำโดยอัตโนมัติจากฐานข้อมูล
+---
 
-### ผู้ดูแลระบบ (Admin)
-- 🎬 **จัดการหนัง**: เพิ่ม/แก้ไข/ลบหนังและซีรีส์
-- 🖼️ **จัดการ Hero Slider**: ปรับเปลี่ยนสไลด์หน้าแรกได้ง่ายๆ
-- 👥 **จัดการผู้ใช้**: ดูและจัดการสมาชิกทั้งหมด
-- 💳 **จัดการ VIP**: อนุมัติการสมัครสมาชิก VIP
-- 🎫 **ระบบ Support Ticket**: รับแจ้งปัญหาและตอบกลับผู้ใช้
-- 📊 **สถิติระบบ**: ดูสถิติการใช้งานและยอดรับชม
+## 📋 Table of Contents
 
-## 🏗️ สถาปัตยกรรม
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Security](#security)
+- [Performance](#performance)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Deployment](#deployment)
+- [Documentation](#documentation)
+
+---
+
+## ✨ Features
+
+### 🎨 Premium UI/UX
+- **Cinematic Design** - UI แบบโรงหนังพรีเมียม
+- **Glassmorphism Effects** - Glass effects สวยงาม
+- **Gold Accents** - สีทองเพิ่มความหรูหรา
+- **Responsive Design** - รองรับทุกอุปกรณ์
+- **Dark Mode** - โหมดมืดเริ่มต้น
+
+### 🎬 Video Features
+- **YouTube Embed Player** - รองรับ YouTube iframe
+- **Premium Player Controls** - Control วิดีโอพรีเมียม
+- **Quality Badge** - แสดงคุณภาพวิดีโอ
+- **Cinematic Glows** - Effects คล้ายโรงหนัง
+- **Progress Tracking** - บันทึกความคืบหน้าการรับชม
+
+### 🔐 Security
+- **Google-Only Admin** - Admin Dashboard ต้องล็อกอินด้วย Google เท่านั้น
+- **Firebase Authentication** - ระบบยืนยันตัวตน Firebase
+- **Firestore Security Rules** - Rules ปกป้องข้อมูล
+- **Auth Guards** - Guard หน้า Admin อัตโนมัติ
+
+### 🚀 Performance
+- **Vite Build** - Build tool ที่เร็ว
+- **Code Splitting** - แบ่งโค้ดเป็น chunks
+- **Lazy Loading** - โหลดเฉพาะที่จำเป็น
+- **Service Worker** - PWA offline support
+- **Image Optimization** - Optimize รูปภาพอัตโนมัติ
+
+### 💬 Real-time Features
+- **Live Chat** - แชทสด
+- **View Count** - นับยอดเข้าชมแบบ real-time
+- **Watch History** - ประวัติการรับชม
+- **Bookmarks** - บุ๊กมาร์กเนื้อหา
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: Vanilla JavaScript (ES6+)
-- **Styling**: TailwindCSS
-- **Icons**: Lucide Icons
-- **Build Tool**: Vite
-- **PWA**: Service Worker สำหรับ Offline Support
+- **Framework:** Vanilla JavaScript (ES6+)
+- **Styling:** TailwindCSS
+- **Icons:** Lucide Icons
+- **Build Tool:** Vite
+- **PWA:** Service Worker + Manifest
 
 ### Backend
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Authentication
-- **Storage**: Firebase Storage
-- **Functions**: Firebase Cloud Functions (Node.js 20)
-- **Hosting**: Firebase Hosting
+- **Database:** Firebase Firestore
+- **Authentication:** Firebase Auth (Google + Email/Password)
+- **Storage:** Firebase Storage
+- **Functions:** Firebase Cloud Functions (Node.js 20)
+- **Hosting:** Firebase Hosting
 
-## 🚀 การติดตั้งและตั้งค่า
+### Development Tools
+- **Package Manager:** npm
+- **Linter:** ESLint
+- **CSS:** PostCSS + TailwindCSS
+- **Git:** Version Control
 
-### ข้อกำหนดเบื้องต้น
-- Node.js 20.x หรือสูงกว่า
-- npm หรือ yarn
-- Firebase CLI (`npm install -g firebase-tools`)
-- Firebase Project
+---
 
-### ขั้นตอนการติดตั้ง
+## 🏗️ Architecture
 
-1. **Clone Repository**
-```bash
-git clone <repository-url>
-cd duydodee-premium-final-main
-```
-
-2. **ติดตั้ง Dependencies**
-```bash
-# Frontend dependencies
-npm install
-
-# Firebase Functions dependencies
-cd functions
-npm install
-cd ..
-```
-
-3. **ตั้งค่า Environment Variables**
-```bash
-# Copy env template
-cp .env.example .env.local
-
-# แก้ไข .env.local ด้วยค่าจริงจาก Firebase Console
-nano .env.local
-```
-
-**ตัวแปรที่จำเป็นต้องระบุ:**
-- `VITE_FIREBASE_API_KEY`: จาก Firebase Console -> Project Settings -> General
-- `VITE_FIREBASE_AUTH_DOMAIN`: project.firebaseapp.com
-- `VITE_FIREBASE_PROJECT_ID`: project ID
-- `VITE_FIREBASE_STORAGE_BUCKET`: project.firebasestorage.app
-- `VITE_FIREBASE_MESSAGING_SENDER_ID`: Sender ID
-- `VITE_FIREBASE_APP_ID`: App ID
-- `VITE_FIREBASE_MEASUREMENT_ID`: Measurement ID
-- `VITE_ADMIN_EMAILS`: รายชื่ออีเมลแอดมิน (คั่นด้วย comma)
-- `VITE_SITE_URL`: URL ของเว็บไซต์
-- `VITE_SITE_NAME`: ชื่อเว็บไซต์
-
-4. **ติดตั้ง Firebase CLI และเชื่อมต่อ Project**
-```bash
-# Login ด้วย Firebase
-firebase login
-
-# Initialize Firebase (ถ้ายังไม่ได้ทำ)
-firebase init
-
-# หรือเชื่อมต่อกับ project ที่มีอยู่แล้ว
-firebase use <your-project-id>
-```
-
-5. **ตั้งค่า Firestore Rules และ Indexes**
-```bash
-# Deploy Firestore rules
-firebase deploy --only firestore:rules
-
-# Deploy Firestore indexes
-firebase deploy --only firestore:indexes
-```
-
-6. **รัน Development Server**
-```bash
-# Development mode
-npm run dev
-
-# Production build
-npm run build
-```
-
-## 📦 Scripts ที่มีให้
-
-```bash
-# Development
-npm run dev              # เริ่ม development server
-npm run build            # Production build
-npm run build:prod       # Production build (mode)
-npm run build:css        # Build CSS เท่านั้น
-
-# Testing
-npm run test             # Run tests
-npm run test:watch       # Watch mode
-npm run test:coverage    # Test coverage
-
-# Quality Assurance
-npm run lint             # ESLint check
-npm run lint:fix         # ESLint auto-fix
-npm run format           # Prettier format
-
-# Deployment
-npm run deploy           # Deploy ทั้งหมด
-npm run deploy:hosting   # Deploy hosting เท่านั้น
-npm run deploy:functions # Deploy functions เท่านั้น
-
-# Utilities
-npm run generate:sitemap # Generate sitemap
-npm run validate:env     # Validate environment variables
-npm run clean            # Clean build artifacts
-```
-
-## 🔥 คุณสมบัติพิเศษที่เพิ่มใหม่
-
-### 🎭 Hero Slider แบบ Dynamic
-หน้าหลักโหลด Hero Slides จาก Firestore โดยตรง:
-- **เชื่อมต่อกับฐานข้อมูลเดียวกับหน้าแอดมิน**
-- **แอดมินสามารถเพิ่ม/แก้ไข/ลบสไลด์ได้** และหน้าหลักจะแสดงผลทันที
-- **รองรับ Auto-slide** เปลี่ยนสไลด์อัตโนมัติทุก 5 วินาที
-- **Navigation** มีปุ่มเลื่อนซ้าย/ขวาและ dots indicator
-- **Fallback** แสดงรูปพื้นหลังเดิมเมื่อไม่มีสไลด์
-
-### 🔐 Security Improvements
-- **ไม่มี Hardcoded Credentials** Firebase config ถูกลบออกจาก code
-- **Environment Variables** ใช้ .env.local สำหรับ development
-- **Firestore Security Rules** มีการกำหนด permissions ชัดเจน
-- **Admin Authentication** ตรวจสอบสิทธิ์ก่อนเข้าถึงหน้าแอดมิน
-
-## 📂 โครงสร้างโปรเจค
+### Directory Structure
 
 ```
 duydodee-premium-final-main/
-├── public/                    # Frontend files
-│   ├── admin/                # Admin panel pages
-│   ├── assets/               # Static assets (images, logos)
+├── public/                      # Frontend source
+│   ├── admin/                   # Admin pages
+│   │   └── components/          # Admin fragments (sidebar.html)
+│   ├── src/
+│   │   ├── admin/              # Admin logic
+│   │   ├── components/         # Reusable components
+│   │   │   ├── cards/         # Movie cards
+│   │   │   ├── layout/        # Layout components
+│   │   │   ├── modals/        # Modal dialogs
+│   │   │   ├── player/        # Video player
+│   │   │   └── ui.js          # UI helpers
+│   │   ├── pages/             # Page logic
+│   │   │   ├── auth/         # Auth pages
+│   │   │   ├── chat/         # Chat features
+│   │   │   ├── movie/        # Movie pages
+│   │   │   └── series/       # Series pages
+│   │   ├── services/          # Firebase services
+│   │   ├── middleware/        # Auth guards
+│   │   ├── utils/            # Utilities
+│   │   ├── constants.js      # Constants
+│   │   └── config/           # Config
 │   ├── css/                  # Stylesheets
-│   ├── src/                  # Source JavaScript
-│   │   ├── admin/           # Admin panel scripts
-│   │   ├── components/      # UI components
-│   │   ├── config/          # Configuration
-│   │   ├── constants.js     # System constants
-│   │   ├── middleware/      # Auth middleware
-│   │   ├── pages/           # Page-specific scripts
-│   │   ├── services/        # Firebase services
-│   │   └── utils/           # Utility functions
-│   ├── sw.js                # Service Worker
-│   └── index.html           # Main HTML file
-├── functions/                # Firebase Cloud Functions
-│   ├── index.js             # Main functions file
-│   └── package.json         # Functions dependencies
-├── scripts/                  # Build & utility scripts
-├── .env.example             # Environment template
-├── firebase.json            # Firebase configuration
+│   ├── assets/               # Static assets
+│   └── [pages].html          # HTML files
+├── functions/                # Cloud Functions (Node.js)
 ├── firestore.rules           # Firestore security rules
-├── firestore.indexes.json    # Firestore indexes
-├── package.json             # Main dependencies
-└── README.md                # This file
+├── firebase.json             # Firebase config
+├── vite.config.js            # Vite config
+├── tailwind.config.cjs       # Tailwind config
+└── package.json              # Dependencies
 ```
 
-## 🔧 การตั้งค่า Firebase
+### Component Architecture
 
-### 1. สร้าง Firebase Project
-1. ไปที่ [Firebase Console](https://console.firebase.google.com/)
-2. สร้าง project ใหม่
-3. เปิดใช้งาน services:
-   - Authentication (Email/Password, Google)
-   - Firestore Database
-   - Storage
-   - Hosting
-
-### 2. ตั้งค่า Authentication
-- เปิด Email/Password sign-in
-- เปิด Google sign-in
-- เพิ่ม admin email ใน `VITE_ADMIN_EMAILS`
-
-### 3. ตั้งค่า Firestore
-- เลือก Production mode
-- Deploy security rules จาก `firestore.rules`
-- Deploy indexes จาก `firestore.indexes.json`
-
-### 4. ตั้งค่า Storage
-- เปิดใช้งาน Storage
-- ตั้งค่า rules สำหรับการเข้าถึงไฟล์
-
-### 5. ตั้งค่า Hosting
-- เชื่อมต่อกับ Firebase project
-- ตั้งค่า build directory เป็น `dist`
-
-## 🎯 การใช้งาน Hero Slider
-
-### สำหรับผู้ดูแลระบบ (Admin)
-1. เข้าสู่ระบบด้วย admin account
-2. ไปที่หน้า "จัดการสไลด์หน้าแรก"
-3. เพิ่ม/แก้ไข/ลบสไลด์ได้ตามต้องการ:
-   - **หัวข้อเด่น**: ชื่อเรื่องหรือหัวข้อที่ต้องการแสดง
-   - **คำอธิบายโปรโมท**: รายละเอียดเพิ่มเติม
-   - **รูปพื้นหลัง**: URL ของรูปภาพ
-   - **ลิงก์ปลายทาง**: ลิงก์ไปยังหน้ารับชม
-   - **ลำดับการแสดงผล**: กำหนดลำดับสไลด์
-
-### สำหรับผู้ใช้ทั่วไป
-- Hero Slides จะแสดงผลอัตโนมัติบนหน้าแรก
-- คลิกที่ปุ่ม "รับชมเลย" เพื่อไปยังหน้ารับชม
-- ใช้ปุ่มซ้าย/ขวาหรือ dots เพื่อเลื่อนดูสไลด์อื่น
-
-## 🔒 Security Considerations
-
-### ⚠️ สิ่งที่ต้องทำ
-1. **ตั้งค่า Environment Variables**: อย่าลืมตั้งค่า `.env.local` ก่อนรัน
-2. **Firestore Rules**: ตรวจสอบและปรับ rules ให้เหมาะกับการใช้งาน
-3. **Admin Access**: ใช้ email ที่เชื่อถือได้เท่านั้นใน `VITE_ADMIN_EMAILS`
-4. **Firebase Config**: ไม่ commit firebase credentials ลงใน Git
-
-### 🛡️ Security Features
-- Admin-only access สำหรับหน้าจัดการ
-- Firestore security rules แยก permissions ชัดเจน
-- Input validation และ XSS protection
-- No hardcoded credentials in production code
-
-## 📝 Environment Variables อ้างอิง
-
-ดูตัวอย่างที่ `.env.example` - **อย่า commit ไฟล์ที่มี credentials จริง!**
-
-```bash
-# สำคัญ: อย่า commit .env.local ลงใน Git
-echo ".env.local" >> .gitignore
+```
+Pages (HTML + JS)
+  └─> Components (Reusable)
+       ├─> Cards (Movie, Series)
+       ├─> Layout (Navbar, Hero Slider)
+       ├─> Player (Video Player)
+       ├─> Modals (VIP Upgrade, Tickets)
+       └─> UI (Toast, Error Handling)
+  └─> Services (Firebase)
+       ├─> Auth Service
+       ├─> Content Service
+       ├─> Chat Service
+       └─> Firebase Config
+  └─> Middleware
+       └─> Auth Guard
 ```
 
-## 🚀 Deployment
+---
 
-### Development
+## 🔒 Security
+
+### Admin Access
+- **Google-Only Login Required** - Admin Dashboard ต้องล็อกอินด้วย Google Account เท่านั้น
+- **Email Verification** - Email ต้องถูกยืนยัน
+- **Role-Based Access** - เช็ค admin role จาก Firestore
+- **Auth Guards** - Guard หน้า Admin อัตโนมัติ
+
+### Firebase Security Rules
+- **VIP Payments Collection** - อ่าน/เขียนเฉพาะ Admin
+- **User Data** - User สามารถอ่าน/เขียนข้อมูลตัวเองเท่านั้น
+- **Public Data** - Movies/Series อ่านได้ทุกคน
+- **Admin Operations** - เฉพาะ Admin เท่านั้นสามารถลบ/แก้ไข
+
+### Important Security Notes
+
+⚠️ **CRITICAL: Google Login for Admin Access**
+
+Admin Dashboard ต้องล็อกอินด้วย Google Account เท่านั้น:
+- ตรวจสอบใน: `src/middleware/auth-guard.js`
+- Helper function: `src/services/auth-service.js` → `isGoogleUser()`
+- Firebase Service: `src/services/firebase.js` → เช็ค Google login
+
+❌ **Non-Google Login** จะไม่สามารถเข้า Admin Dashboard ได้
+✅ **User ปกติ** สามารถล็อกอินด้วย Email/Password และใช้งานได้ปกติ
+
+---
+
+## ⚡ Performance
+
+### Build Optimizations
+- **Code Splitting** - แบ่งโค้ดเป็น chunks (Firebase, UI, Services)
+- **Tree Shaking** - ลบโค้ดที่ไม่ได้ใช้
+- **Minification** - Minify JS/CSS
+- **Asset Optimization** - Optimize รูปภาพ
+
+### Runtime Optimizations
+- **Lazy Loading** - โหลดเฉพาะที่จำเป็น
+- **Image Lazy Loading** - โหลดรูปเมื่อเลื่อนมาถึง
+- **Throttle/Debounce** - ลดการเรียก function ซ้ำ
+- **Fallback Strategy** - มี local fallback ถ้า Functions ไม่ทำงาน
+
+### Service Worker & PWA
+- **Offline Support** - ทำงาน offline ได้
+- **Caching Strategy** - Cache assets เพื่อโหลดเร็วขึ้น
+- **Manifest** - Installable app
+- **Update Strategy** - Auto-update content
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+
+- npm
+- Firebase CLI
+- Git
+
+### Installation
+
 ```bash
+# Clone repository
+git clone https://github.com/classic1990/duydodee-premium-final.git
+cd duydodee-premium-final-main
+
+# Install dependencies
+npm install
+
+# Setup Firebase
+firebase login
+npm run firebase:init
+```
+
+### Run Development Server
+
+```bash
+# Start dev server
 npm run dev
+
+# Open browser at http://localhost:5173
 ```
 
-### Production
+### Build for Production
+
 ```bash
-# Build
-npm run build
+# Build production
+npm run build:prod
 
-# Deploy to Firebase
-npm run deploy
+# Preview production build
+npm run preview
 ```
 
-### Deploy เฉพาะส่วน
+---
+
+## 👨‍💻 Development
+
+### Available Scripts
+
 ```bash
-# Deploy hosting เท่านั้น
-npm run deploy:hosting
+# Development
+npm run dev              # Start dev server
+npm run preview          # Preview production build
 
-# Deploy functions เท่านั้น
-npm run deploy:functions
+# Building
+npm run build:prod       # Build production
+npm run build:css        # Build CSS with PostCSS
+
+# Linting
+npm run lint            # Check linting
+npm run lint:fix        # Fix linting automatically
+
+# Firebase
+npm run firebase:deploy  # Deploy Firebase (full)
+npm run firebase:rules  # Deploy Firestore rules only
 ```
+
+### Development Workflow
+
+1. **Start Dev Server**
+   ```bash
+   npm run dev
+   ```
+
+2. **Make Changes**
+   - Edit HTML/JS/CSS files in `public/`
+   - Changes auto-reload via Vite HMR
+
+3. **Test Locally**
+   - Test features in dev server
+   - Check console for errors
+
+4. **Build & Deploy**
+   ```bash
+   npm run build:prod
+   npm run firebase:rules
+   npm run firebase:deploy
+   ```
+
+---
+
+## 🚢 Deployment
+
+### Firebase Deployment
+
+```bash
+# Deploy everything (Hosting, Functions, Firestore)
+firebase deploy
+
+# Deploy Hosting only
+firebase deploy --only hosting
+
+# Deploy Firestore Rules only
+firebase deploy --only firestore:rules
+
+# Deploy Functions only
+firebase deploy --only functions
+```
+
+### Important Deployment Notes
+
+⚠️ **Cloud Functions - Billing Required**
+
+Cloud Functions deployment ต้องการ billing account:
+```bash
+# If billing is not enabled, use local fallback
+# The system will work without Functions via:
+# - Local search fallback (Firestore prefix matching)
+# - Local view count increment (Firestore direct update)
+```
+
+⚠️ **Service Worker Copy**
+
+Vite config มี plugin copy sw.js อัตโนมัติ:
+```javascript
+// vite.config.js
+// sw.js, manifest.json, robots.txt, sitemap.xml
+// จะถูก copy ไป dist/ อัตโนมัติ
+```
+
+### Deployment Checklist
+
+- [ ] Build production: `npm run build:prod`
+- [ ] Check sw.js is copied to dist
+- [ ] Deploy Firestore rules: `firebase deploy --only firestore:rules`
+- [ ] Deploy Hosting: `firebase deploy --only hosting`
+- [ ] (Optional) Deploy Functions: `firebase deploy --only functions`
+- [ ] Test on production URL
+- [ ] Check Service Worker registration
+- [ ] Check PWA manifest
+- [ ] Test Google Admin login
+
+---
+
+## 📚 Documentation
+
+### Essential Documentation
+
+- **[SETUP.md](./SETUP.md)** - การติดตั้งและตั้งค่า
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - ไกด์การพัฒนา
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - ไกด์การ Deploy
+- **[AGENTS.md](./AGENTS.md)** - ไกด์สำหรับ Devin/Agents
+
+### Project Configuration
+
+- **[vite.config.js](./vite.config.js)** - Vite configuration
+- **[tailwind.config.cjs](./tailwind.config.cjs)** - Tailwind CSS config
+- **[firebase.json](./firebase.json)** - Firebase project config
+- **[firestore.rules](./firestore.rules)** - Firestore security rules
+- **[package.json](./package.json)** - Dependencies and scripts
+
+### Key Files to Understand
+
+**Authentication & Security:**
+- `public/src/services/auth-service.js` - Authentication logic
+- `public/src/middleware/auth-guard.js` - Auth guards
+- `public/src/services/firebase.js` - Firebase config
+
+**Core Components:**
+- `public/src/components/ui.js` - Main UI components
+- `public/src/components/player/VideoPlayer.js` - Video player
+- `public/src/components/cards/MovieCards.js` - Movie cards
+
+**Pages:**
+- `public/src/pages/home.js` - Home page logic
+- `public/src/pages/search.js` - Search logic
+- `public/src/pages/movie/watch.js` - Movie watch page
+
+---
 
 ## 🐛 Troubleshooting
 
-### ไม่สามารถโหลด Hero Slides ได้
-1. ตรวจสอบว่า Firestore rules อนุญาตให้อ่าน `hero_slides` collection
-2. ตรวจสอบว่ามี data ใน `hero_slides` collection
-3. ตรวจสอบ browser console สำหรับ errors
+### Common Issues
 
-### Authentication ไม่ทำงาน
-1. ตรวจสอบว่า Firebase config ถูกต้อง
-2. ตรวจสอบว่า Authentication service เปิดใช้งานใน Firebase Console
-3. ตรวจสอบว่า admin email ถูกต้องใน `VITE_ADMIN_EMAILS`
+**Issue: Service Worker 404 Error**
+- **Solution:** Check vite.config.js for copy-static-files plugin
+- sw.js must be in STATIC_ROOT_FILES
+- Run `npm run build:prod` again
 
-### Build หรือ Deploy ล้มเหลว
-1. ตรวจสอบว่า dependencies ติดตั้งครบ (`npm install`)
-2. ตรวจสอบ environment variables
-3. ตรวจสอบ Firebase CLI version (`firebase --version`)
+**Issue: CORS Error on View Count**
+- **Solution:** System uses local fallback automatically
+- Check content-service.js for incrementViewCount fallback
 
-## 📄 License
+**Issue: Google Admin Login Not Working**
+- **Solution:** Check auth-service.js for isGoogleUser()
+- Check auth-guard.js for admin access check
+- Ensure user email is in ADMIN_EMAILS env var
 
-โปรเจคนี้เป็นส่วนตัว กรุณาขออนุญาตก่อนนำไปใช้งาน
+**Issue: Build Fails**
+- **Solution:** Run `npm install` to update dependencies
+- Clear node_modules and reinstall
+- Check Node.js version (requires 20+)
 
-## 👨‍💻 ผู้พัฒนา
+---
 
-DUYดูDEE Entertainment
+## 📝 License
 
-## 🙏 Acknowledgments
+Copyright © 2026 DUYดูDEE Entertainment. All Rights Reserved.
 
-- Firebase สำหรับ Backend services
-- TailwindCSS สำหรับ Styling
-- Lucide สำหรับ Icons
-- Vite สำหรับ Build tool
+---
+
+## 👥 Support
+
+For support and questions:
+- Email: support@duydodee.com
+- GitHub Issues: https://github.com/classic1990/duydodee-premium-final/issues
+
+---
+
+**Built with ❤️ using Firebase, Vite, and TailwindCSS**
