@@ -100,8 +100,10 @@ const MovieView = {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        await checkAdminAccess();
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
         await injectAdminSidebar();
+        UI.initAdminSidebar();
 
         initManageMovies();
     } catch (err) {

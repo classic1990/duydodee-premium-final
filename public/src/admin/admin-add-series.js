@@ -2,6 +2,7 @@ import { db, collection, serverTimestamp, doc, SCHEMA, logActivity, writeBatch }
 import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 /**
  * 📺 DUYดูDEE SERIES REGISTRATION ENGINE
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
         initForm();
     } catch (err) {

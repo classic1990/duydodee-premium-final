@@ -1,6 +1,7 @@
 import { db, collection, getDocs, query, orderBy, limit, startAfter, SCHEMA, where } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 let lastVisible = null;
 let currentKeyword = '';
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
     } catch (err) {
         console.error('Access Denied:', err);
@@ -140,7 +142,7 @@ async function loadActivityLogs(isAppend = false) {
                         </div>
                     </td>
                     <td class="p-5"><span class="px-2 py-1 rounded bg-brand-primary/10 text-brand-primary text-[9px] font-black uppercase">${log.action}</span></td>
-                    <td class="p-5 text-xs text-gray-400 font-medium Thai-font">${log.details}</td>
+                    <td class="p-5 text-xs text-gray-400 font-medium Thai-font">${typeof log.details === 'object' ? JSON.stringify(log.details) : log.details}</td>
                 </tr>`;
         }).join('');
 
@@ -156,5 +158,47 @@ async function loadActivityLogs(isAppend = false) {
 }
 
 async function exportLogsToCSV() {
-    UI.showToast('ฟีเจอร์นี้กำลังอยู่ในการพัฒนา', 'info');
+    UI.setLoading(true);
+    try {
+        const q = query(collection(db, SCHEMA.COLLECTIONS.ACTIVITY_LOGS), orderBy('timestamp', 'desc'), limit(1000));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            UI.showToast('ไม่มีข้อมูลสำหรับการ Export', 'error');
+            return;
+        }
+
+        const rows = [
+            ['Timestamp', 'Admin Name', 'Admin Email', 'Action', 'Details']
+        ];
+
+        snap.docs.forEach(docSnap => {
+            const log = docSnap.data();
+            const date = log.timestamp?.toDate ? log.timestamp.toDate().toLocaleString('th-TH') : 'N/A';
+            const details = typeof log.details === 'object' ? JSON.stringify(log.details).replace(/"/g, '""') : String(log.details).replace(/"/g, '""');
+            rows.push([
+                date,
+                log.adminName || 'N/A',
+                log.adminEmail || 'N/A',
+                log.action || 'N/A',
+                `"${details}"`
+            ]);
+        });
+
+        const csvContent = '\uFEFF' + rows.map(e => e.join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `admin_logs_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        UI.showToast('Export CSV สำเร็จ');
+    } catch (e) {
+        console.error('Export Error:', e);
+        UI.showToast('Export ไม่สำเร็จ', 'error');
+    } finally {
+        UI.setLoading(false);
+    }
 }

@@ -254,7 +254,7 @@ function renderUsers(users) {
  * Sets up event delegation for user action buttons
  */
 function setupUserActionListeners() {
-    const tableBody = document.getElementById('user-table-body');
+    const tableBody = document.getElementById('user-list');
     if (!tableBody) {
         return;
     }

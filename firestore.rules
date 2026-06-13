@@ -63,7 +63,9 @@ service cloud.firestore {
 
     // 💳 VIP Payments: Admin read/write
     match /vip_payments/{paymentId} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
     }
 
     // 🎫 Support Tickets: Admin read/write, user create

@@ -12,41 +12,12 @@
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
 </head>
-<body class="bg-[#050507] text-gray-400 antialiased font-body overflow-x-hidden">
+<body class="bg-brand-black text-white selection:bg-brand-primary/50">
 
     <!-- 🧭 SIDEBAR -->
-    <aside class="fixed left-0 top-0 bottom-0 w-64 bg-[#08080a]/90 backdrop-blur-3xl border-r border-white/5 z-[450] flex flex-col" id="sidebar">
-        <div class="p-6 border-b border-white/5">
-            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.href='/'">
-                <img src="/assets/logo/DUYDODEE.png" class="w-10 h-10 rounded-xl">
-                <div>
-                    <h3 class="text-sm font-black text-white uppercase tracking-tighter leading-none">DUY<span class="text-brand-primary">ดูDEE</span></h3>
-                    <p class="text-[7px] font-black text-gray-600 uppercase tracking-[0.2em] mt-1 Thai-font">ADMIN</p>
-                </div>
-            </div>
-        </div>
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar"></aside>
 
-        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            <a href="/admin/admin-manage.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
-                <i data-lucide="layout-grid" class="w-4 h-4"></i>
-                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">สรุป</span>
-            </a>
-            <a href="/admin/admin-manage-movies.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-primary/10 text-white border-r-2 border-brand-primary">
-                <i data-lucide="film" class="w-4 h-4 text-brand-primary"></i>
-                <span class="text-[10px] font-black uppercase tracking-widest Thai-font">หนัง</span>
-            </a>
-            <a href="/admin/admin-manage-series.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
-                <i data-lucide="tv" class="w-4 h-4"></i>
-                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">ซีรีส์</span>
-            </a>
-            <a href="/admin/admin-hero-slider.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
-                <i data-lucide="images" class="w-4 h-4"></i>
-                <span class="text-[10px] font-bold uppercase tracking-widest Thai-font">สไลด์</span>
-            </a>
-        </nav>
-    </aside>
-
-    <main class="ml-64 min-h-screen p-6 relative z-10">
+    <main class="lg:ml-80 min-h-screen p-6 relative z-10">
         
         <!-- Mobile Sidebar Toggle -->
         <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">

@@ -2,6 +2,7 @@ import { db, doc, getDoc, collection, collectionGroup, getDocs, writeBatch, SCHE
 import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 /**
  * 📺 DUYดูDEE SERIES EDIT ENGINE
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
 
         const params = new URLSearchParams(window.location.search);

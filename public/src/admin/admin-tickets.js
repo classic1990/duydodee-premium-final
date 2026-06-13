@@ -1,5 +1,6 @@
 import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp, checkIsAdmin } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -10,6 +11,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
         loadTickets();
     } catch (error) {

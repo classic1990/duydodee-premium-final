@@ -57,11 +57,19 @@ export { SCHEMA };
 
 /**
  * Check if current user is an admin
+ * 🔒 SECURITY: Only Google login is allowed for admin access
  */
 export async function checkIsAdmin(user) {
     if (!user) {
         return false;
     }
+
+    // 🔒 SECURITY CHECK: Verify user logged in with Google only
+    if (!isGoogleUser(user)) {
+        console.error('Security Alert: Non-Google login attempt for admin access');
+        return false;
+    }
+
     try {
         const userDoc = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
         if (userDoc.exists()) {
@@ -73,6 +81,16 @@ export async function checkIsAdmin(user) {
         console.error('Error checking admin status:', error);
         return false;
     }
+}
+
+/**
+ * 🔒 Check if user logged in with Google
+ */
+function isGoogleUser(user) {
+    if (!user || !user.providerData) {
+        return false;
+    }
+    return user.providerData.some(provider => provider.providerId === 'google.com');
 }
 
 /**

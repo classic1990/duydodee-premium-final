@@ -6,60 +6,300 @@
 
 @layer base {
   body {
-    @apply bg-brand-black text-text-main font-body selection:bg-brand-primary/30;
+    @apply bg-brand-black text-white font-body selection:bg-brand-primary/50;
   }
 }
 
 @layer utilities {
   /* 📏 Layout & Spacing */
   .p-section { @apply py-12 md:py-20 px-4 md:px-8 max-w-[1600px] mx-auto; }
-  
+
   /* ✒️ Typography Hierarchy */
   .text-h1 { @apply text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter; }
   .text-h2 { @apply text-2xl md:text-4xl font-black text-white uppercase tracking-tight; }
   .text-h3 { @apply text-lg font-bold text-white uppercase tracking-widest; }
-  .text-meta { @apply text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]; }
-  .text-body { @apply text-sm text-gray-400 font-medium leading-relaxed; }
-  
-  /* 🌟 Cinematic Components */
-  .glass-premium { @apply bg-brand-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl; }
-  .btn-primary { @apply bg-brand-primary text-white font-black uppercase tracking-widest hover:scale-[1.02] transition-transform rounded-xl px-6 py-3; }
+  .text-meta { @apply text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]; }
+  .text-body { @apply text-sm text-gray-300 font-medium leading-relaxed; }
+  .text-gold { @apply text-brand-gold; }
+
+  /* 🌟 Cinematic Components - High Contrast Red/Black/Grey/Gold */
+  .nav-glass { @apply bg-brand-black/95 backdrop-blur-3xl border-b border-brand-obsidian; }
+  .glass-premium { @apply bg-brand-obsidian/60 backdrop-blur-2xl border border-white/5 rounded-3xl shadow-xl; }
+  .btn-primary { @apply bg-brand-primary text-white font-black uppercase tracking-widest hover:bg-brand-accent transition-colors rounded-2xl px-8 py-4 shadow-[0_10px_20px_rgba(217,4,41,0.2)]; }
+  .btn-vip { @apply bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-black font-black uppercase tracking-widest hover:scale-[1.02] transition-transform rounded-2xl px-8 py-4 shadow-[0_10px_20px_rgba(191,149,63,0.3)]; }
 
   /* 🎥 Cinematic Device Frame */
-  .device-frame { @apply relative mx-auto bg-gray-900 border-[8px] border-gray-800 rounded-[3rem] overflow-hidden; }
+  .device-frame { @apply relative mx-auto bg-brand-obsidian border-[8px] border-black rounded-[3rem] overflow-hidden; }
   .device-frame.landscape { @apply aspect-video max-w-4xl; }
   .device-frame:not(.landscape) { @apply aspect-[9/19] max-w-[300px]; }
 
   .device-chassis { @apply absolute inset-0 rounded-[2.5rem] border-[4px] border-white/5 pointer-events-none; }
   .device-screen { @apply w-full h-full bg-black relative z-10; }
 
-  .device-island { @apply absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-30; }
-  .device-home-bar { @apply absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full z-30; }
-
-  /* 🔥 Netflix Style Poster Glow Effect */
+  /* 🔥 Premium Red Poster Glow Effect */
   .poster-glow {
-    @apply relative border-2 border-brand-primary/20 rounded-2xl overflow-hidden;
+    @apply relative border border-white/5 rounded-2xl overflow-hidden;
     transition: all 0.4s ease;
   }
 
-  .poster-glow::before {
-    content: '';
-    @apply absolute inset-0 rounded-2xl border-2 border-brand-primary/40;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
   .poster-glow:hover {
-    box-shadow: 0 0 30px rgba(229, 9, 20, 0.4), 0 0 60px rgba(229, 9, 20, 0.2);
+    box-shadow: 0 0 40px rgba(217, 4, 41, 0.3);
+    border-color: rgba(217, 4, 41, 0.5);
     transform: translateY(-8px) scale(1.02);
   }
 
-  .poster-glow:hover::before {
+  /* 🌟 Gold Accents */
+  .border-gold { @apply border border-brand-gold; }
+  .text-gold { @apply text-brand-gold; }
+  .sidebar-active-gold { @apply bg-white/5 border-r-2 border-brand-gold text-brand-gold; }
+
+  /* ✨ NEW PREMIUM EFFECTS */
+  
+  /* Premium Gradient Backgrounds */
+  .bg-premium-gradient {
+    background: linear-gradient(135deg, #050505 0%, #0d0d0f 50%, #121214 100%);
+  }
+  
+  /* Glassmorphism Enhanced */
+  .glass-premium-enhanced {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  }
+
+  /* Shimmer Loading Effect */
+  .shimmer-loading {
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Premium Glow Effects */
+  .glow-red-premium {
+    box-shadow: 0 0 30px rgba(229, 9, 20, 0.5), 0 0 60px rgba(229, 9, 20, 0.3);
+  }
+  
+  .glow-gold-premium {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), 0 0 60px rgba(212, 175, 55, 0.2);
+  }
+
+  /* 3D Card Effect */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-3d:hover {
+    transform: perspective(1000px) rotateY(5deg) rotateX(5deg) scale(1.02);
+  }
+
+  /* Cinematic Border */
+  .cinematic-border {
+    position: relative;
+  }
+  
+  .cinematic-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(229, 9, 20, 0.5), rgba(212, 175, 55, 0.5));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .cinematic-border:hover::before {
     opacity: 1;
-    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Particle Background */
+  .particle-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(212, 175, 55, 0.6);
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Premium Input */
+  .input-premium {
+    @apply w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3 text-white outline-none transition-all;
+  }
+  
+  .input-premium:focus {
+    @apply border-brand-primary/50 bg-black/60;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.2);
+  }
+
+  /* Animated Border Gradient */
+  .animated-border {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #E50914, #D4AF37, #E50914, #D4AF37);
+    background-size: 400% 400%;
+    animation: gradientMove 3s ease infinite;
+    z-index: -1;
+    border-radius: inherit;
+  }
+
+  /* Premium Badge */
+  .badge-premium {
+    @apply px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-full;
+    background: linear-gradient(135deg, #D4AF37, #F4D03F);
+    color: #050505;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+  }
+
+  /* Premium Button Variants */
+  .btn-premium-outline {
+    @apply border-2 border-brand-primary text-brand-primary font-black uppercase tracking-widest rounded-2xl px-8 py-4;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-premium-outline:hover {
+    @apply bg-brand-primary text-white;
+    box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
+  }
+
+  /* Scroll Animation */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+  
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Text Gradient */
+  .text-gradient-premium {
+    background: linear-gradient(135deg, #E50914, #D4AF37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Morphing Blob */
+  .morphing-blob {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: morph 8s ease-in-out infinite;
+  }
+
+  /* Spotlight Effect */
+  .spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .spotlight:hover::after {
+    opacity: 1;
   }
 }
 
-/* 🧊 Scrollbar UI */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  /* 🧊 Scrollbar UI */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-black;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-primary/30 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-primary/50;
+  }
+
+  /* Custom Animations */
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes morph {
+    0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  }
+
+  /* Premium Transitions */
+  .transition-premium {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Responsive Container */
+  .container-premium {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  /* Safe Area Padding for Mobile */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* 🖼️ Premium Image Optimization */
+  .img-premium {
+    @apply w-full h-full object-cover;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  .lazy-loading {
+    @apply opacity-50 blur-sm;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  .lazy-loaded {
+    @apply opacity-100 blur-0;
+  }
+
+  /* Image Quality Enhancements */
+  img {
+    @apply max-w-full;
+    image-rendering: auto;
+  }
+
+  @supports (image-rendering: -webkit-optimize-contrast) {
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+  }
+

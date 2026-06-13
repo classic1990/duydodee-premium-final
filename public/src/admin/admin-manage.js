@@ -15,6 +15,8 @@ import {
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { UI } from '../components/ui.js';
 import config from '../config/index.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
+import { AuthService } from '../services/auth-service.js';
 
 /**
  * 👑 DUYดูDEE EXECUTIVE DASHBOARD ENGINE
@@ -27,6 +29,14 @@ async function init() {
     // Admin access check using environment configuration
         const { user } = await checkAdminAccess();
         if (!config.isAdmin(user.email)) {
+            // 🔒 SECURITY: Double check Google login
+            if (!AuthService.isGoogleUser(user)) {
+                console.error('🚨 Security Alert: Non-Google login attempt detected');
+                alert('🔒 ระบบความปลอดภัย: การเข้าถึงหน้าแอดมินต้องล็อกอินด้วย Google Account เท่านั้น');
+                window.location.href = '/';
+                return;
+            }
+
             const isAdmin = await checkIsAdmin(user);
             if (!isAdmin) {
                 console.error('Access Denied. Role is not Admin.');
@@ -36,6 +46,7 @@ async function init() {
         }
 
         UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
 
         // 2. ปิดตัวโหลดหลักทันที แล้วให้แต่ละส่วนแยกกันโหลดเอง (แบบ Async)
@@ -44,6 +55,7 @@ async function init() {
         // 3. เริ่มโหลดข้อมูลแต่ละส่วน (ไม่ใช้ await Promise.all เพื่อไม่ให้ติดบล็อก)
         fetchStats().catch((e) => console.error('Stats Error:', e));
         fetchRecentAssets().catch((e) => console.error('Assets Error:', e));
+        fetchRecentPayments().catch((e) => console.error('Payments Error:', e));
         initChart().catch((e) => console.error('Chart Error:', e));
         initTopContentChart().catch((e) => console.error('Top Chart Error:', e));
 
@@ -53,6 +65,46 @@ async function init() {
         console.error('Dashboard Init Failed:', err);
         UI.setLoading(false);
         UI.showToast('การเชื่อมต่อล้มเหลว โปรดตรวจสอบสิทธิ์', 'error');
+    }
+}
+
+async function fetchRecentPayments() {
+    const container = document.getElementById('vip-payment-list');
+    if (!container) {
+        return;
+    }
+
+    try {
+        const q = query(collection(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS), orderBy('createdAt', 'desc'), limit(5));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            container.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500 text-xs">ไม่มีรายการใหม่</td></tr>';
+            return;
+        }
+
+        container.innerHTML = snap.docs.map(d => {
+            const data = d.data();
+            const isConfirmed = data.status === 'confirmed';
+            return `
+            <tr>
+                <td class="p-4 text-xs font-bold text-white">${UI.escapeHTML(data.senderName || 'ไม่ระบุชื่อ')}</td>
+                <td class="p-4 text-center text-xs text-brand-primary">฿${(data.amount || 0).toLocaleString()}</td>
+                <td class="p-4 text-center"><span class="px-2 py-1 rounded text-[9px] font-black ${isConfirmed ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}">${isConfirmed ? 'ยืนยันแล้ว' : 'รอตรวจสอบ'}</span></td>
+                <td class="p-4 text-right">
+                    <button onclick="window.location.href='/admin/admin-vip-payments.html'" class="btn-primary !py-1.5 !px-3 !text-[9px]">ตรวจสอบ</button>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch (e) {
+        console.error('Payments Fetch Error:', e);
+        // Handle permissions error specifically
+        if (e.code === 'permission-denied' || e.message.includes('Missing or insufficient permissions')) {
+            container.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500 text-xs">❌ ไม่มีสิทธิ์เข้าถึงข้อมูล - กรุณาตรวจสอบสิทธิ์ Admin</td></tr>';
+            UI.showToast('ไม่มีสิทธิ์เข้าถึงข้อมูลการชำระเงิน', 'error');
+        } else {
+            container.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500 text-xs">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+        }
     }
 }
 

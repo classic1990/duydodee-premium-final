@@ -81,66 +81,110 @@
         }
     </style>
 </head>
-<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/30">
+<body class="bg-brand-black text-gray-200 selection:bg-brand-primary/50">
 
-    <!-- 🧭 Modern Navbar -->
-    <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0" id="main-nav">
+    <!-- 🧭 Premium Navigation Bar with Enhanced Effects -->
+    <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0 transition-all duration-500" id="main-nav">
         <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between gap-4">
             
+            <!-- Logo with Premium Effect -->
             <a href="/" class="flex items-center gap-2 md:gap-3 group flex-shrink-0" aria-label="ไปยังหน้าแรก">
-                <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
-                <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-brand-primary">ดูDEE</span></span>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-gold rounded-lg blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform relative z-10">
+                </div>
+                <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-gradient-premium">ดูDEE</span></span>
             </a>
 
+            <!-- Desktop Navigation with Premium Styling -->
             <div class="hidden lg:flex items-center gap-8 text-sm font-bold text-gray-300" role="navigation" aria-label="เมนูหลัก">
-                <a href="/" class="hover:text-brand-primary transition-colors Thai-font" aria-label="ไปยังหน้าแรก">หน้าแรก</a>
-                <a href="/category.html?cat=vertical" class="hover:text-brand-primary transition-colors flex items-center gap-2 Thai-font" aria-label="ไปยังหมวดซีรีส์แนวตั้ง">
+                <a href="/" class="hover:text-brand-primary transition-colors Thai-font relative group" aria-label="ไปยังหน้าแรก">
+                    หน้าแรก
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-gold group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="/category.html?cat=vertical" class="hover:text-brand-primary transition-colors flex items-center gap-2 Thai-font relative group" aria-label="ไปยังหมวดซีรีส์แนวตั้ง">
                     ซีรีส์แนวตั้ง
-                    <span class="relative px-2 py-0.5 text-[8px] bg-brand-primary text-black rounded-sm uppercase tracking-wider font-black overflow-hidden" aria-hidden="true">
-                        Hot<div class="border-beam"></div>
+                    <span class="relative px-2 py-0.5 text-[8px] bg-gradient-to-r from-brand-primary to-brand-gold text-white rounded-sm uppercase tracking-wider font-black overflow-hidden animate-pulse" aria-hidden="true">
+                        Hot
                     </span>
                 </a>
-                <a href="/category.html?cat=chinese" class="hover:text-brand-primary transition-colors Thai-font" aria-label="ไปยังหมวดซีรีส์จีนพากย์ไทย">ซีรีส์จีนพากย์ไทย</a>
-                <a href="/watchlist.html" class="hover:text-brand-primary transition-colors Thai-font" aria-label="ไปยังรายการของฉัน">รายการของฉัน</a>
+                <a href="/category.html?cat=chinese" class="hover:text-brand-primary transition-colors Thai-font relative group" aria-label="ไปยังหมวดซีรีส์จีนพากย์ไทย">
+                    ซีรีส์จีนพากย์ไทย
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-gold group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="/watchlist.html" class="hover:text-brand-primary transition-colors Thai-font relative group" aria-label="ไปยังรายการของฉัน">
+                    รายการของฉัน
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-gold group-hover:w-full transition-all duration-300"></span>
+                </a>
             </div>
 
+            <!-- Right Side Actions -->
             <div class="flex items-center gap-4 md:gap-6 flex-1 justify-end lg:flex-none">
-                <button onclick="UI.renderVIPUpgradeModal()" class="btn-primary !py-2 !px-4 hidden md:flex animate-pulse" aria-label="สมัครสมาชิก VIP">สมัคร VIP</button>
+                <!-- VIP Button with Enhanced Glow -->
+                <button onclick="UI.renderVIPUpgradeModal()" class="btn-vip !py-2 !px-4 hidden md:flex relative overflow-hidden group" aria-label="สมัครสมาชิก VIP">
+                    <span class="relative z-10">สมัคร VIP</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                </button>
+                
+                <!-- Enhanced Search Bar -->
                 <div class="hidden md:flex relative items-center w-full max-w-sm group">
-                    <i data-lucide="search" class="absolute left-4 w-4 h-4 text-gray-500 group-focus-within:text-brand-primary transition-colors"></i>
-                    <input type="text" id="global-search" placeholder="ค้นหาเนื้อหา..." class="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl py-2 md:py-2.5 pl-10 md:pl-12 pr-4 text-xs md:text-sm text-white placeholder-gray-500 outline-none focus:bg-white/10 focus:border-brand-primary/50 transition-all shadow-inner">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-gold/20 rounded-xl md:rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                    <i data-lucide="search" class="absolute left-4 w-4 h-4 text-gray-500 group-focus-within:text-brand-primary transition-colors z-10"></i>
+                    <input type="text" id="global-search" placeholder="ค้นหาเนื้อหา..." class="w-full bg-black/40 border border-white/10 rounded-xl md:rounded-2xl py-2 md:py-2.5 pl-10 md:pl-12 pr-4 text-xs md:text-sm text-white placeholder-gray-500 outline-none focus:bg-black/60 focus:border-brand-primary/50 transition-all shadow-inner relative z-10">
                 </div>
+                
+                <!-- User Profile Area -->
                 <div id="user-profile-area"></div>
             </div>
         </div>
     </nav>
 
-    <!-- 📱 Mobile Bottom Navigation -->
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-obsidian/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
-        <div class="flex items-center justify-around px-2 py-2">
-            <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
-                <i data-lucide="home" class="w-5 h-5"></i>
+    <!-- 📱 Premium Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-black/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
+        <div class="flex items-center justify-around px-2 py-3">
+            <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="home" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 <span class="text-[9px] font-bold Thai-font">หน้าแรก</span>
+                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
-                <i data-lucide="smartphone" class="w-5 h-5"></i>
+            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="smartphone" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 <span class="text-[9px] font-bold Thai-font">แนวตั้ง</span>
+                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-white transition-colors">
-                <i data-lucide="tv" class="w-5 h-5"></i>
+            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="tv" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
+                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <div id="user-profile-area-mobile"></div>
+            <div id="user-profile-area-mobile" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <div class="w-5 h-5 group-hover:scale-110 transition-transform"></div>
+                <span class="text-[9px] font-bold Thai-font">โปรไฟล์</span>
+            </div>
         </div>
     </nav>
 
-    <!-- 🎭 MASTER BRANDING HERO -->
-    <header id="master-hero" class="relative w-full aspect-video md:aspect-[21/9] lg:h-[40vh] flex items-center overflow-hidden bg-brand-black pt-16 md:pt-0">
+    <!-- 🎭 Premium Hero Section with Enhanced Effects -->
+    <header id="master-hero" class="relative w-full aspect-video md:aspect-[21/9] lg:h-[45vh] flex items-center overflow-hidden bg-brand-black pt-16 md:pt-0">
+        <!-- Animated Background -->
         <div class="absolute inset-0 z-0">
             <img src="/assets/B1.png" class="w-full h-full object-cover object-center animate-fade-in" alt="DUYODEE-HD MASTER BRANDING" loading="lazy" decoding="async" id="hero-background-image">
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-transparent to-transparent opacity-60"></div>
+            <!-- Premium Gradient Overlays -->
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/50 to-transparent opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-black/80 via-transparent to-brand-black/80 opacity-60"></div>
+            <!-- Animated Glow Effects -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
         </div>
+        
+        <!-- Particle Effect Container -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden" id="hero-particles"></div>
+        
+        <!-- Hero Slider Container -->
         <div class="container mx-auto px-6 relative z-10" id="hero-slider-container"></div>
+        
+        <!-- Cinematic Vignette -->
+        <div class="absolute inset-0 pointer-events-none" style="box-shadow: inset 0 0 150px rgba(0,0,0,0.7);"></div>
     </header>
 
     <!-- 🚀 Main Content -->

@@ -100,9 +100,10 @@ const SeriesView = {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        await checkAdminAccess();
-        // ใช้ระบบโหลด sidebar แบบแยกไฟล์
+        const { user } = await checkAdminAccess();
+        UI.setupSidebar(user);
         await injectAdminSidebar();
+        UI.initAdminSidebar();
 
         initManageSeries();
     } catch (err) {

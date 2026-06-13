@@ -13,7 +13,7 @@ export async function injectAdminSidebar() {
 
     try {
         // 1. ดึงไฟล์ Template
-        const response = await fetch('/admin/components/sidebar.html');
+        const response = await fetch('/admin/components/sidebar.html?v=' + Date.now());
         if (!response.ok) {
             throw new Error('Sidebar template not found');
         }

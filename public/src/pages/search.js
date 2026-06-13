@@ -1,16 +1,9 @@
-import {
-    db,
-    collection,
-    getDocs,
-    query,
-    where,
-    limit,
-    SCHEMA
-} from '../services/firebase.js';
 import { UI } from '../components/ui.js';
+import { ContentService } from '../services/content-service.js';
 
 /**
- * 🔍 DUYดูDEE SEARCH ENGINE - Real-time Edition
+ * 🔍 DUYดูDEE SEARCH ENGINE - Unified Master Edition
+ * Searches across Movies and Series using ContentService
  */
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();
@@ -20,52 +13,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsGrid = document.getElementById('search-results');
     let debounceTimer;
 
+    // Check for initial query in URL
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q');
+    if (initialQuery && searchInput) {
+        searchInput.value = initialQuery;
+        performSearch(initialQuery);
+    }
+
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.trim();
             clearTimeout(debounceTimer);
 
             if (keyword.length < 2) {
-                resultsGrid.innerHTML = '';
+                if (resultsGrid) {
+                    resultsGrid.innerHTML = '';
+                }
                 return;
             }
 
-            // ⏲️ Debounce 300ms เพื่อประหยัด Firestore Reads
-            debounceTimer = setTimeout(() => performSearch(keyword), 300);
+            // ⏲️ Debounce 400ms เพื่อประหยัด Firestore/Function Calls
+            debounceTimer = setTimeout(() => performSearch(keyword), 400);
         });
     }
 });
 
 async function performSearch(keyword) {
     const grid = document.getElementById('search-results');
-    UI.renderSkeleton(grid, 6);
+    if (!grid) {
+        return;
+    }
+
+    UI.renderSkeleton(grid, 8);
 
     try {
-    // Firestore ไม่รองรับ Full-text search โดยตรง
-    // เราจะใช้วิธี Query แบบ Prefix matching (เริ่มด้วย...) ซึ่งมีประสิทธิภาพสูง
-        const q = query(
-            collection(db, SCHEMA.COLLECTIONS.MOVIES),
-            where('title', '>=', keyword),
-            where('title', '<=', keyword + '\uf8ff'),
-            limit(12)
-        );
+        // Use ContentService which handles hybrid Function/Firestore search
+        const results = await ContentService.searchItems(keyword, 20);
 
-        const snap = await getDocs(q);
+        // results structure: { movies: [], series: [] } OR just flat array if function returns it
+        // Our fallback returns { movies, series }, let's normalize
+        let allResults = [];
+        if (Array.isArray(results)) {
+            allResults = results;
+        } else {
+            allResults = [...(results.movies || []), ...(results.series || [])];
+        }
+
         grid.innerHTML = '';
 
-        if (snap.empty) {
+        if (allResults.length === 0) {
             UI.renderEmptyState(grid, `ไม่พบผลลัพธ์สำหรับ "${keyword}"`);
             return;
         }
 
-        snap.forEach((doc) => {
-            const data = { id: doc.id, ...doc.data(), type: 'movie' };
-            grid.insertAdjacentHTML('beforeend', UI.createMovieCard(data));
-        });
+        // Sort by title for consistency
+        allResults.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 
+        grid.innerHTML = allResults.map(item => UI.createMovieCard(item)).join('');
         UI.refreshIcons();
+
     } catch (error) {
         console.error('Search Error:', error);
         UI.showToast('การค้นหาขัดข้อง กรุณาลองใหม่', 'error');
+        grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 Thai-font">ระบบค้นหาขัดข้องชั่วคราว</div>';
     }
 }

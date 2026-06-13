@@ -40,27 +40,71 @@ export const VideoPlayer = {
                                 <div class="device-chassis"></div>
                                 <div class="device-screen bg-black relative">
                                     <div id="player-api-node" class="w-full h-full"></div>
-                                    <div class="absolute inset-0 pointer-events-none border border-brand-primary/20 rounded-[inherit] z-20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    <div class="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[0_0_40px_rgba(229,9,20,0.3)] z-10 opacity-50"></div>
+                                    <!-- Premium Border Effects -->
+                                    <div class="absolute inset-0 pointer-events-none border-2 border-gradient-to-r from-brand-primary/30 to-brand-gold/30 rounded-[inherit] z-20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div class="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[0_0_60px_rgba(229,9,20,0.4)] z-10 opacity-60"></div>
+                                    <!-- Cinematic Glow -->
+                                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-brand-black/20 to-transparent rounded-[inherit] z-15"></div>
+                                    
+                                    <!-- Video Quality Badge -->
+                                    <div class="absolute top-4 right-4 px-3 py-1 bg-brand-black/80 backdrop-blur-md rounded-lg border border-brand-primary/30 z-30">
+                                        <span class="text-[9px] font-black text-brand-primary uppercase tracking-widest">HD 720p</span>
+                                    </div>
                                 </div>
                                 ${isVertical ? '<div class="device-island"></div>' : ''}
                                 <div class="device-home-bar"></div>
                             </div>
                         </div>
                         <div class="lg:col-span-4 space-y-6 order-2">
-                            <div class="glass-premium p-6 rounded-2xl">
+                            <!-- Movie Info Card -->
+                            <div class="glass-premium-enhanced p-6 rounded-2xl relative overflow-hidden">
+                                <!-- Premium Background Glow -->
+                                <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-3xl"></div>
+                                
                                 <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none mb-4">${title}</h1>
-                                <div class="flex items-center gap-3 mb-4">
-                                    <span class="px-3 py-1 bg-brand-primary/20 text-brand-primary text-[9px] font-black uppercase rounded-lg border border-brand-primary/30">HD 720p</span>
-                                    <span class="px-3 py-1 bg-white/5 text-gray-400 text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
+                                
+                                <!-- Movie Meta Info -->
+                                <div class="space-y-3 mb-6">
+                                    <div class="flex items-center gap-3 flex-wrap">
+                                        <span class="badge-premium">HD 720p</span>
+                                        <span class="px-3 py-1 bg-white/5 text-gray-400 text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
+                                        ${data.views ? `<span class="px-3 py-1 bg-white/5 text-gray-500 text-[9px] font-black uppercase rounded-lg border border-white/10 flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${(data.views || 0).toLocaleString()}</span>` : ''}
+                                    </div>
+                                    ${data.description ? `
+                                        <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 Thai-font">${UIUtils.escapeHTML(data.description)}</p>
+                                    ` : ''}
                                 </div>
+                                
+                                <!-- Action Buttons -->
                                 <div class="flex items-center gap-3">
-                                    <button class="flex-1 py-3 px-6 bg-brand-primary text-white text-[10px] font-black uppercase rounded-xl hover:bg-brand-primary/90 transition-all shadow-[0_0_20px_rgba(229,9,20,0.3)] hover:shadow-[0_0_30px_rgba(229,9,20,0.5)]" onclick="UI.handleShare('${title}')">
-                                        <i data-lucide="share-2" class="w-4 h-4 inline mr-2"></i>แชร์
+                                    <button class="flex-1 py-3 px-6 bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white text-[10px] font-black uppercase rounded-xl hover:scale-105 transition-all shadow-[0_0_30px_rgba(229,9,20,0.4)] hover:shadow-[0_0_50px_rgba(229,9,20,0.6)] relative overflow-hidden group" onclick="UI.handleShare('${title}')">
+                                        <span class="relative z-10 flex items-center justify-center gap-2">
+                                            <i data-lucide="share-2" class="w-4 h-4"></i>แชร์
+                                        </span>
+                                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
                                     </button>
-                                    <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all">
+                                    <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all hover:scale-110 shadow-lg">
                                         <i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i>
                                     </button>
+                                </div>
+                            </div>
+
+                            <!-- Additional Info Card -->
+                            <div class="glass-premium-enhanced p-6 rounded-2xl relative overflow-hidden">
+                                <h3 class="text-lg font-black text-white uppercase tracking-widest Thai-font mb-4">ข้อมูลเพิ่มเติม</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <i data-lucide="calendar" class="w-4 h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-sm">เผยแพร่: ${data.year || '2026'}</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i data-lucide="clock" class="w-4 h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-sm">ระยะเวลา: ${data.duration || '90 นาที'}</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i data-lucide="globe" class="w-4 h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-sm">ประเภท: ${data.category || 'Premium'}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +123,10 @@ export const VideoPlayer = {
                             'controls': 1,
                             'playsinline': 1,
                             'rel': 0,
-                            'modestbranding': 1
+                            'modestbranding': 1,
+                            'origin': window.location.origin,
+                            'enablejsapi': 1,
+                            'widget_referrer': window.location.href
                         },
                         events: {
                             onReady: () => resolve(player),
@@ -113,7 +160,7 @@ export const VideoPlayer = {
             <div class="mt-16 space-y-8 animate-slide-up">
                 <div class="flex items-center gap-4">
                     <h3 class="text-xl font-black text-white uppercase tracking-widest Thai-font">เลือกตอนรับชม</h3>
-                    <div class="flex-1 h-px bg-gradient-to-r from-brand-primary/50 to-transparent"></div>
+                    <div class="flex-1 h-px bg-gradient-to-r from-brand-primary/50 via-brand-gold/30 to-transparent"></div>
                     <span class="text-[10px] font-black text-brand-primary uppercase tracking-widest Thai-font">${episodes.length} EPISODES</span>
                 </div>
                 
@@ -122,11 +169,16 @@ export const VideoPlayer = {
         const isActive = i === activeIndex;
         return `
                             <button onclick="location.href='/watch-series.html?id=${seriesId}&ep=${i}'" 
-                                    class="min-w-[160px] md:min-w-[200px] p-5 rounded-[1.5rem] border transition-all duration-300 snap-start text-left group backdrop-blur-xl
-                                    hover:scale-105 hover:shadow-[0_0_30px_rgba(229,9,20,0.4)] hover:border-brand-primary/50
-                                    ${isActive ? 'bg-brand-primary/90 border-brand-primary shadow-[0_0_40px_rgba(229,9,20,0.4)]' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
-                                <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/60' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
-                                <h4 class="text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white'}">${UIUtils.escapeHTML(ep.title)}</h4>
+                                    class="min-w-[160px] md:min-w-[200px] p-5 rounded-[1.5rem] border transition-all duration-300 snap-start text-left group backdrop-blur-xl relative overflow-hidden
+                                    hover:scale-105 hover:shadow-[0_0_40px_rgba(229,9,20,0.5)] hover:border-brand-primary/50 cinematic-border
+                                    ${isActive ? 'bg-gradient-to-r from-brand-primary/90 to-brand-primary-dark/90 border-brand-primary shadow-[0_0_50px_rgba(229,9,20,0.5)]' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
+                                <!-- Premium Background Effect for Active State -->
+                                ${isActive ? '<div class="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-brand-gold/10"></div>' : ''}
+                                
+                                <div class="relative z-10">
+                                    <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/70' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
+                                    <h4 class="text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white group-hover:text-brand-primary transition-colors'}">${UIUtils.escapeHTML(ep.title)}</h4>
+                                </div>
                             </button>`;
     }).join('')}
                 </div>

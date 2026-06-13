@@ -15,6 +15,7 @@ import config from '../config/index.js';
  * Handles authentication, user profiles, and permissions.
  */
 export const AuthService = {
+    auth,
     /**
      * Listen for auth state changes
      */
@@ -24,11 +25,19 @@ export const AuthService = {
 
     /**
      * Check if user is an admin or master
+     * 🔒 SECURITY: Only Google login is allowed for admin access
      */
     async checkIsAdmin(user) {
         if (!user) {
             return false;
         }
+
+        // 🔒 SECURITY CHECK: Verify user logged in with Google only
+        if (!this.isGoogleUser(user)) {
+            console.error('Security Alert: Non-Google login attempt for admin access');
+            return false;
+        }
+
         // Admin access from environment configuration
         if (config.isAdmin(user.email)) {
             return true;
@@ -45,6 +54,18 @@ export const AuthService = {
             console.error('Admin check failed:', e);
             return false;
         }
+    },
+
+    /**
+     * 🔒 Check if user logged in with Google
+     * Returns true if user has Google provider data
+     */
+    isGoogleUser(user) {
+        if (!user || !user.providerData) {
+            return false;
+        }
+        // Check if user has Google provider
+        return user.providerData.some(provider => provider.providerId === 'google.com');
     },
 
     /**

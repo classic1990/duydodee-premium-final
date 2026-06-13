@@ -4,7 +4,7 @@ import { UIUtils } from '../utils/ui-utils.js';
 import {
     collection, collectionGroup, getDocs, doc, getDoc, setDoc,
     query, where, orderBy, limit, startAfter,
-    writeBatch, increment, serverTimestamp
+    increment, serverTimestamp
 } from './firebase-config.js';
 
 /**
@@ -15,16 +15,17 @@ export const ContentService = {
     toggleWatchlist,
 
     /**
-     * Increment view count using Firebase Functions (Secure)
+     * Increment view count using Firebase Functions (Secure) with fallback
      */
     async incrementViewCount(type, id) {
         try {
+            // Try Firebase Function first
             const incrementFn = httpsCallable(functions, 'incrementViewCount');
             await incrementFn({ type, id });
         } catch (error) {
             console.error('ContentService Fallback [incrementViewCount]:', error);
+            // Always use local fallback to avoid CORS issues
             try {
-                // Local fallback: Direct Firestore update
                 const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
                 await setDoc(doc(db, collName, id), {
                     views: increment(1),

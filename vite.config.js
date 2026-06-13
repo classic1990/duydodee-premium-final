@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import { copyFileSync, existsSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 
 // Root-level static files that live in `public/` (the Vite root) and must be
 // copied verbatim into the build output. Vite only emits assets referenced by
@@ -113,14 +113,60 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: 'copy-static-root-files',
+      name: 'copy-static-files',
       closeBundle() {
+        const rootDir = resolve('public');
+        const distDir = resolve('dist');
+        
+        // Copy static root files (sw.js, manifest.json, etc.)
         for (const file of STATIC_ROOT_FILES) {
-          const src = resolve('public', file);
-          const dest = resolve('dist', file);
-          if (existsSync(src)) {
-            copyFileSync(src, dest);
+          const srcPath = resolve(rootDir, file);
+          if (existsSync(srcPath)) {
+            copyFileSync(srcPath, resolve(distDir, file));
+            console.log(`✅ Copied ${file}`);
+          } else {
+            console.warn(`⚠️  Warning: ${file} not found in public/`);
           }
+        }
+      }
+    },
+    {
+      name: 'copy-admin-components',
+      closeBundle() {
+        // Copy admin components (fragments)
+        const adminCompDir = resolve('public/admin/components');
+        const destAdminCompDir = resolve('dist/admin/components');
+
+        if (existsSync(adminCompDir)) {
+          if (!existsSync(destAdminCompDir)) {
+            mkdirSync(destAdminCompDir, { recursive: true });
+          }
+          const files = readdirSync(adminCompDir);
+          for (const file of files) {
+            copyFileSync(resolve(adminCompDir, file), resolve(destAdminCompDir, file));
+          }
+        }
+
+        // Copy all assets
+        const assetsDir = resolve('public/assets');
+        const destAssetsDir = resolve('dist/assets');
+        
+        function copyRecursive(src, dest) {
+          if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+          const entries = readdirSync(src, { withFileTypes: true });
+          for (const entry of entries) {
+            const srcPath = resolve(src, entry.name);
+            const destPath = resolve(dest, entry.name);
+            if (entry.isDirectory()) {
+              copyRecursive(srcPath, destPath);
+            } else {
+              copyFileSync(srcPath, destPath);
+            }
+          }
+        }
+        
+        if (existsSync(assetsDir)) {
+          copyRecursive(assetsDir, destAssetsDir);
         }
       }
     },

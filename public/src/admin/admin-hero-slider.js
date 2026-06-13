@@ -1,6 +1,7 @@
 import { db, collection, getDocs, doc, setDoc, addDoc, deleteDoc, query, orderBy, SCHEMA, serverTimestamp } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 /**
  * 🖼️ DUYดูDEE HERO SLIDER ENGINE
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
         UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
 
         modal = document.getElementById('hero-modal');

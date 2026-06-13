@@ -1,6 +1,7 @@
 import { db, collection, getDocs, writeBatch, doc, getDoc, setDoc } from '../services/firebase.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { UI } from '../components/ui.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 
 /**
  * 🛡️ DUYดูDEE SYSTEM SAFETY ENGINE
@@ -10,7 +11,8 @@ import { UI } from '../components/ui.js';
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { user } = await checkAdminAccess();
-        UI.setupSidebar(user, true); // Added isAdmin=true
+        UI.setupSidebar(user);
+        await injectAdminSidebar();
         UI.initAdminSidebar();
         initSystemControls();
         loadSystemSettings(); // Added load settings
