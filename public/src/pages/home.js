@@ -1,4 +1,5 @@
 import { auth, onAuthStateChanged, getWatchHistory, db, doc, getDoc, SCHEMA } from '../services/firebase.js';
+import { PresenceService } from '../services/presence-service.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
 import { ContentService } from '../services/content-service.js';
@@ -14,6 +15,9 @@ let currentFilter = 'all';
 document.addEventListener('DOMContentLoaded', async () => {
     UI.injectStarfield();
     UI.initNavbar();
+
+    // Initialize presence service for real-time user tracking
+    PresenceService.init();
 
     // 1. Load Hero Slider from Firestore
     UI.loadHeroSlides('hero-slider-container');

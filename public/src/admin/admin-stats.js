@@ -1,4 +1,5 @@
 import { db, collection, getDocs, SCHEMA, query, where, orderBy, limit } from '../services/firebase.js';
+import { PresenceService } from '../services/presence-service.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -19,6 +20,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     UI.setLoading(true);
+
+    // Start real-time online user tracking
+    PresenceService.listenToOnlineCount((count) => {
+        const onlineUsersEl = document.getElementById('online-users-count');
+        if (onlineUsersEl) {
+            onlineUsersEl.textContent = count;
+            onlineUsersEl.classList.add('text-brand-primary', 'font-bold');
+        }
+    });
 
     const end = new Date();
     const start = new Date();
