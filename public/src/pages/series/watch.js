@@ -5,6 +5,8 @@ import { UI } from '../../components/ui.js';
 let isRendering = false;
 let currentUser = null; // 📝 Store current user state
 let progressInterval = null; // 🧹 Store interval ID for cleanup
+let viewCountIncremented = false; // 📝 Track if view count already incremented
+let historySaved = false; // 📝 Track if history already saved
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.WATCH_JS_INITIALIZED) {
@@ -13,11 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.WATCH_JS_INITIALIZED = true;
 
     UI.initNavbar();
-
-    // 📝 Track auth state
-    AuthService.onStateChanged(user => {
-        currentUser = user;
-    });
 
     const params = new URLSearchParams(window.location.search);
     const seriesId = params.get('id');
@@ -58,10 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             // 1. Render Player
             const player = await UI.renderiPhonePlayer(series, episodes, epIndex, true);
 
-            // Setup periodic progress saving (every 15s)
-            if (player) {
-                AuthService.onStateChanged(user => {
-                    if (user) {
+            // 2. Single auth state change handler for all auth-dependent operations
+            AuthService.onStateChanged(user => {
+                currentUser = user;
+
+                if (user) {
+                    // Setup periodic progress saving (every 15s)
+                    if (player && typeof player.getCurrentTime === 'function') {
                         // 🧹 Clear existing interval if any to prevent multiple intervals
                         if (progressInterval) {
                             clearInterval(progressInterval);
@@ -77,18 +77,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }
                         }, 15000);
                     }
-                });
-            }
 
-            // 2. Increment View Count (only if user is authenticated)
-            if (currentUser) {
-                ContentService.incrementViewCount('series', seriesId);
-            }
+                    // Increment View Count (only once per page load)
+                    if (!viewCountIncremented) {
+                        ContentService.incrementViewCount('series', seriesId);
+                        viewCountIncremented = true;
+                    }
 
-            // 3. Save History (initial entry)
-            AuthService.onStateChanged(user => {
-                if (user) {
-                    AuthService.saveWatchHistory(user.uid, { ...series, type: 'series', epIndex: epIndex }, 0);
+                    // Save History (initial entry, only once)
+                    if (!historySaved) {
+                        AuthService.saveWatchHistory(user.uid, { ...series, type: 'series', epIndex: epIndex }, 0);
+                        historySaved = true;
+                    }
                 }
             });
 

@@ -127,7 +127,7 @@ async function loadCategoryContent(colName, categoryInput, sortField = 'createdA
             container.classList.add('hidden');
             if (emptyState) {
                 emptyState.classList.remove('hidden');
-                emptyState.innerHTML = '<div class="col-span-full py-20 text-center Thai-font opacity-40">ไม่พบเนื้อหาในหมวดหมู่ที่คุณต้องการ</div>';
+                emptyState.innerHTML = '<div class="col-span-full py-12 sm:py-16 text-center Thai-font opacity-40">ไม่พบเนื้อหาในหมวดหมู่ที่คุณต้องการ</div>';
             }
             if (pagContainer) {
                 pagContainer.classList.add('hidden');

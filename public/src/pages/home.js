@@ -239,7 +239,7 @@ async function loadLibrary(isAppend = false) {
         }
 
         if (empty && !isAppend) {
-            grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500 Thai-font">ไม่พบเนื้อหาในขณะนี้</div>';
+            grid.innerHTML = '<div class="col-span-full py-12 sm:py-16 text-center text-gray-500 Thai-font">ไม่พบเนื้อหาในขณะนี้</div>';
             hasMore = false;
         } else {
             lastVisibleDoc = lastDoc;
@@ -259,7 +259,7 @@ async function loadLibrary(isAppend = false) {
 
     } catch (error) {
         console.error('Library Load Error:', error);
-        grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 Thai-font">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+        grid.innerHTML = '<div class="col-span-full py-12 sm:py-16 text-center text-red-500 Thai-font">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     } finally {
         isFetching = false;
     }

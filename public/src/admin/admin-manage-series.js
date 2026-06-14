@@ -74,7 +74,7 @@ const SeriesView = {
         if (this.elements.tableBody) {
             this.elements.tableBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="py-20 text-center Thai-font">
+                    <td colspan="5" class="py-16 text-center Thai-font">
                         <div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div>
                         <p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังซิงค์ข้อมูลกับศูนย์ควบคุม</p>
                     </td>
@@ -85,7 +85,7 @@ const SeriesView = {
     renderEmpty() {
         if (this.elements.tableBody) {
             this.elements.tableBody.innerHTML = `
-                <tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
+                <tr><td colspan="5" class="py-20 text-center animate-fade-in opacity-40">
                     <div class="flex flex-col items-center gap-6">
                         <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                             <i data-lucide="tv" class="w-10 h-10 text-gray-500"></i>
@@ -193,7 +193,7 @@ function renderSeries(seriesList) {
     }
 
     if (seriesList.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
+        tableBody.innerHTML = `<tr><td colspan="5" class="py-20 text-center animate-fade-in opacity-40">
             <div class="flex flex-col items-center gap-6">
                 <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                     <i data-lucide="tv" class="w-10 h-10 text-gray-500"></i>

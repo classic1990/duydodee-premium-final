@@ -125,7 +125,7 @@ export const UI = {
             return;
         }
         container.innerHTML = `
-            <div class="col-span-full py-20 text-center animate-fade-in">
+            <div class="col-span-full py-12 sm:py-16 text-center animate-fade-in">
                 <div class="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
                     <i data-lucide="ghost" class="w-8 h-8 text-gray-600"></i>
                 </div>

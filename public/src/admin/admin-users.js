@@ -159,7 +159,7 @@ async function loadUsers() {
         return;
     }
 
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div></td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="5" class="py-16 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div></td></tr>';
 
     try {
         const cursor = cursors[currentPage - 1];
@@ -196,7 +196,7 @@ function renderUsers(users) {
     }
 
     if (users.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center text-gray-500 Thai-font opacity-40">ไม่พบรายชื่อสมาชิก</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" class="py-16 text-center text-gray-500 Thai-font opacity-40">ไม่พบรายชื่อสมาชิก</td></tr>';
         return;
     }
 

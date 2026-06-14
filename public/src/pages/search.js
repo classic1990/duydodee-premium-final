@@ -76,6 +76,6 @@ async function performSearch(keyword) {
     } catch (error) {
         console.error('Search Error:', error);
         UI.showToast('การค้นหาขัดข้อง กรุณาลองใหม่', 'error');
-        grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 Thai-font">ระบบค้นหาขัดข้องชั่วคราว</div>';
+        grid.innerHTML = '<div class="col-span-full py-12 sm:py-16 text-center text-red-500 Thai-font">ระบบค้นหาขัดข้องชั่วคราว</div>';
     }
 }

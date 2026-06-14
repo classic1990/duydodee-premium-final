@@ -69,7 +69,7 @@ function renderSlides(slides) {
         return;
     }
     if (slides.length === 0) {
-        container.innerHTML = '<div class="col-span-full py-20 text-center opacity-30 Thai-font">ยังไม่มีเนื้อหาแนะนำ</div>';
+        container.innerHTML = '<div class="col-span-full py-12 sm:py-16 text-center opacity-30 Thai-font">ยังไม่มีเนื้อหาแนะนำ</div>';
         return;
     }
 

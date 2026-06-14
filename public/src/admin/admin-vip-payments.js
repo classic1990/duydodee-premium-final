@@ -91,7 +91,7 @@ const VipPaymentView = {
         if (this.elements.paymentList) {
             this.elements.paymentList.innerHTML = `
                 <tr>
-                    <td colspan="6" class="py-20 text-center Thai-font">
+                    <td colspan="6" class="py-16 text-center Thai-font">
                         <div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div>
                         <p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังซิงค์ข้อมูลการชำระเงิน</p>
                     </td>
