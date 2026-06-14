@@ -131,7 +131,6 @@ public/
 │   │   └── ui.js           # Main UI component
 │   ├── pages/              # Page logic
 │   │   ├── auth/          # Login, Register, Profile
-│   │   ├── chat/          # Chat features
 │   │   ├── movie/         # Movie watch page
 │   │   └── series/        # Series watch page
 │   ├── services/           # Firebase services
@@ -188,7 +187,6 @@ public/admin/components/
 | File | Purpose | Fallback? |
 |------|---------|-----------|
 | `src/services/content-service.js` | Content CRUD | ✅ Yes |
-| `src/services/chat-service.js` | Chat | No |
 | `src/services/firebase-config.js` | Firebase SDK | No |
 
 ### Build & Config

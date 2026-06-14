@@ -16,8 +16,6 @@
     "lint": "eslint public/src/**/*.js",
     "lint:fix": "eslint public/src/**/*.js --fix",
     "format": "prettier --write \"public/src/**/*.js\"",
-    "generate:sitemap": "node scripts/generate-sitemap.cjs",
-    "validate:env": "node scripts/validate-env.cjs",
     "clean": "rm -rf dist .firebase",
     "predeploy": "npm run lint && npm run build:prod",
     "deploy": "firebase deploy",
