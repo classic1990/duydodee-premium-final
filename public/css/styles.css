@@ -33,7 +33,7 @@
   .device-frame.landscape { @apply aspect-video max-w-4xl; }
   .device-frame:not(.landscape) { @apply aspect-[9/19] max-w-[300px]; }
 
-  .device-chassis { @apply absolute inset-0 rounded-[2.5rem] border-[4px] border-white/5 pointer-events-none; }
+  .device-chassis { @apply absolute inset-0 rounded-[2.5rem] pointer-events-none; }
   .device-screen { @apply w-full h-full bg-black relative z-10; }
 
   /* 🔥 Premium Red Poster Glow Effect */

@@ -1880,8 +1880,8 @@ body::selection{
   --tw-gradient-to: rgb(5 5 5 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-.from-brand-black\/20{
-  --tw-gradient-from: rgb(5 5 5 / 0.2) var(--tw-gradient-from-position);
+.from-brand-black\/10{
+  --tw-gradient-from: rgb(5 5 5 / 0.1) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(5 5 5 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
@@ -1922,11 +1922,6 @@ body::selection{
 }
 .from-brand-primary\/20{
   --tw-gradient-from: rgb(229 9 20 / 0.2) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(229 9 20 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.from-brand-primary\/30{
-  --tw-gradient-from: rgb(229 9 20 / 0.3) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(229 9 20 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
@@ -2019,9 +2014,6 @@ body::selection{
 }
 .to-brand-gold\/20{
   --tw-gradient-to: rgb(212 175 55 / 0.2) var(--tw-gradient-to-position);
-}
-.to-brand-gold\/30{
-  --tw-gradient-to: rgb(212 175 55 / 0.3) var(--tw-gradient-to-position);
 }
 .to-brand-gold\/5{
   --tw-gradient-to: rgb(212 175 55 / 0.05) var(--tw-gradient-to-position);
@@ -2668,11 +2660,6 @@ body::selection{
   --tw-shadow-colored: 0 0 50px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.shadow-\[0_0_60px_rgba\(229\2c 9\2c 20\2c 0\.4\)\]{
-  --tw-shadow: 0 0 60px rgba(229,9,20,0.4);
-  --tw-shadow-colored: 0 0 60px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
 .shadow-\[0_0_60px_rgba\(229\2c 9\2c 20\2c 0\.7\)\]{
   --tw-shadow: 0 0 60px rgba(229,9,20,0.7);
   --tw-shadow-colored: 0 0 60px var(--tw-shadow-color);
@@ -3027,8 +3014,6 @@ body::selection{
   position: absolute;
   inset: 0px;
   border-radius: 2.5rem;
-  border-width: 4px;
-  border-color: rgb(255 255 255 / 0.05);
 }
 .device-screen{
   position: relative;

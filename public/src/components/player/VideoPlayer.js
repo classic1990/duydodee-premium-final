@@ -36,15 +36,12 @@ export const VideoPlayer = {
                 <div class="animate-fade-in relative max-w-7xl mx-auto px-4 py-4 md:py-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start relative z-10">
                         <div class="lg:col-span-8 w-full order-1">
-                            <div id="device-wrapper" class="device-frame ${frameClass} shadow-2xl group relative">
+                            <div id="device-wrapper" class="device-frame ${frameClass} group relative">
                                 <div class="device-chassis"></div>
                                 <div class="device-screen bg-black relative">
                                     <div id="player-api-node" class="w-full h-full"></div>
-                                    <!-- Premium Border Effects -->
-                                    <div class="absolute inset-0 pointer-events-none border-2 border-gradient-to-r from-brand-primary/30 to-brand-gold/30 rounded-[inherit] z-20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    <div class="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[0_0_60px_rgba(229,9,20,0.4)] z-10 opacity-60"></div>
                                     <!-- Cinematic Glow -->
-                                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-brand-black/20 to-transparent rounded-[inherit] z-15"></div>
+                                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-brand-black/10 to-transparent rounded-[inherit] z-15"></div>
                                     
                                     <!-- Video Quality Badge -->
                                     <div class="absolute top-4 right-4 px-3 py-1 bg-brand-black/80 backdrop-blur-md rounded-lg border border-brand-primary/30 z-30">
