@@ -167,9 +167,9 @@ powershell -Command "Write-Host ' ==============================================
 %P_INFO% "Finished: %END_TIME%" -ForegroundColor Gray
 %P_INFO% "Version:  %VERSION%" -ForegroundColor Gray
 echo.
-powershell -Command "Write-Host '   🎭 Hero Slider Integration: ACTIVE' -ForegroundColor White -BackgroundColor DarkGreen"
-powershell -Command "Write-Host '   🔒 Security: Hardcoded credentials removed' -ForegroundColor White -BackgroundColor DarkGreen"
-powershell -Command "Write-Host '   📚 Documentation: Complete' -ForegroundColor White -BackgroundColor DarkGreen"
+powershell -Command "Write-Host '   [HERO] Slider Integration: ACTIVE' -ForegroundColor White -BackgroundColor DarkGreen"
+powershell -Command "Write-Host '   [SECURITY] Hardcoded credentials removed' -ForegroundColor White -BackgroundColor DarkGreen"
+powershell -Command "Write-Host '   [DOCS] Documentation: Complete' -ForegroundColor White -BackgroundColor DarkGreen"
 echo.
 set /p launch=" > Launch Cinematic Experience Now? (y/n): "
 if /i "%launch%"=="y" start %LIVE_URL%
