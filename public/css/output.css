@@ -2412,6 +2412,10 @@ body::selection{
   --tw-text-opacity: 1 !important;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1)) !important;
 }
+.text-amber-500{
+  --tw-text-opacity: 1;
+  color: rgb(245 158 11 / var(--tw-text-opacity, 1));
+}
 .text-black{
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity, 1));
@@ -3326,6 +3330,10 @@ body::selection{
   background-color: rgb(229 9 20 / var(--tw-bg-opacity, 1));
 }
 
+  .hover\:bg-brand-primary\/80:hover{
+  background-color: rgb(229 9 20 / 0.8);
+}
+
   .hover\:bg-cyan-500:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(6 182 212 / var(--tw-bg-opacity, 1));
@@ -3626,6 +3634,10 @@ body::selection{
   .group\/slip:hover .group-hover\/slip\:text-brand-primary{
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
+}
+
+  .group:hover .group-hover\:text-brand-gold\/10{
+  color: rgb(212 175 55 / 0.1);
 }
 
   .group:hover .group-hover\:text-brand-primary{
