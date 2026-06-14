@@ -33,10 +33,10 @@ export const VideoPlayer = {
             const frameClass = isVertical ? '' : 'landscape';
 
             container.innerHTML = `
-                <div class="animate-fade-in relative max-w-7xl mx-auto px-4 py-4 md:py-8">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start relative z-10">
+                <div class="animate-fade-in relative max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-4 md:py-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start relative z-10">
                         <div class="lg:col-span-8 w-full order-1">
-                            <div id="device-wrapper" class="device-frame ${frameClass} group relative">
+                            <div id="device-wrapper" class="device-frame ${frameClass} group relative w-full">
                                 <div class="device-chassis"></div>
                                 <div class="device-screen bg-black relative">
                                     <div id="player-api-node" class="w-full h-full"></div>
@@ -52,20 +52,20 @@ export const VideoPlayer = {
                                 <div class="device-home-bar"></div>
                             </div>
                         </div>
-                        <div class="lg:col-span-4 space-y-6 order-2">
+                        <div class="lg:col-span-4 space-y-4 sm:space-y-6 order-2">
                             <!-- Movie Info Card -->
-                            <div class="glass-premium-enhanced p-6 rounded-2xl relative overflow-hidden">
+                            <div class="glass-premium-enhanced p-4 sm:p-6 rounded-2xl relative overflow-hidden">
                                 <!-- Premium Background Glow -->
                                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-3xl"></div>
                                 
-                                <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none mb-4">${title}</h1>
+                                <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white uppercase tracking-tighter italic Thai-font leading-none mb-3 sm:mb-4">${title}</h1>
                                 
                                 <!-- Movie Meta Info -->
-                                <div class="space-y-3 mb-6">
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <span class="badge-premium">HD 720p</span>
-                                        <span class="px-3 py-1 bg-white/5 text-gray-400 text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
-                                        ${data.views ? `<span class="px-3 py-1 bg-white/5 text-gray-500 text-[9px] font-black uppercase rounded-lg border border-white/10 flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${(data.views || 0).toLocaleString()}</span>` : ''}
+                                <div class="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                                    <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                        <span class="badge-premium text-[8px] sm:text-[9px] px-2 sm:px-3">HD 720p</span>
+                                        <span class="px-2 sm:px-3 py-1 bg-white/5 text-gray-400 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
+                                        ${data.views ? `<span class="px-2 sm:px-3 py-1 bg-white/5 text-gray-500 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/10 flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${(data.views || 0).toLocaleString()}</span>` : ''}
                                     </div>
                                     ${data.description ? `
                                         <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 Thai-font">${UIUtils.escapeHTML(data.description)}</p>
@@ -73,34 +73,34 @@ export const VideoPlayer = {
                                 </div>
                                 
                                 <!-- Action Buttons -->
-                                <div class="flex items-center gap-3">
-                                    <button class="flex-1 py-3 px-6 bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white text-[10px] font-black uppercase rounded-xl hover:scale-105 transition-all shadow-[0_0_30px_rgba(229,9,20,0.4)] hover:shadow-[0_0_50px_rgba(229,9,20,0.6)] relative overflow-hidden group" onclick="UI.handleShare('${title}')">
-                                        <span class="relative z-10 flex items-center justify-center gap-2">
-                                            <i data-lucide="share-2" class="w-4 h-4"></i>แชร์
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <button class="flex-1 py-2 sm:py-3 px-3 sm:px-6 bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white text-[9px] sm:text-[10px] font-black uppercase rounded-xl hover:scale-105 transition-all shadow-[0_0_30px_rgba(229,9,20,0.4)] hover:shadow-[0_0_50px_rgba(229,9,20,0.6)] relative overflow-hidden group" onclick="UI.handleShare('${title}')">
+                                        <span class="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
+                                            <i data-lucide="share-2" class="w-3 h-3 sm:w-4 sm:h-4"></i><span class="hidden sm:inline">แชร์</span>
                                         </span>
                                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
                                     </button>
-                                    <button id="bookmark-btn" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all hover:scale-110 shadow-lg">
-                                        <i data-lucide="heart" id="bookmark-icon" class="w-5 h-5"></i>
+                                    <button id="bookmark-btn" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all hover:scale-110 shadow-lg">
+                                        <i data-lucide="heart" id="bookmark-icon" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Additional Info Card -->
-                            <div class="glass-premium-enhanced p-6 rounded-2xl relative overflow-hidden">
-                                <h3 class="text-lg font-black text-white uppercase tracking-widest Thai-font mb-4">ข้อมูลเพิ่มเติม</h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-sm">เผยแพร่: ${data.year || '2026'}</span>
+                            <div class="glass-premium-enhanced p-4 sm:p-6 rounded-2xl relative overflow-hidden">
+                                <h3 class="text-sm sm:text-lg font-black text-white uppercase tracking-widest Thai-font mb-3 sm:mb-4">ข้อมูลเพิ่มเติม</h3>
+                                <div class="space-y-2 sm:space-y-3">
+                                    <div class="flex items-center gap-2 sm:gap-3">
+                                        <i data-lucide="calendar" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-xs sm:text-sm">เผยแพร่: ${data.year || '2026'}</span>
                                     </div>
-                                    <div class="flex items-center gap-3">
-                                        <i data-lucide="clock" class="w-4 h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-sm">ระยะเวลา: ${data.duration || '90 นาที'}</span>
+                                    <div class="flex items-center gap-2 sm:gap-3">
+                                        <i data-lucide="clock" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-xs sm:text-sm">ระยะเวลา: ${data.duration || '90 นาที'}</span>
                                     </div>
-                                    <div class="flex items-center gap-3">
-                                        <i data-lucide="globe" class="w-4 h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-sm">ประเภท: ${data.category || 'Premium'}</span>
+                                    <div class="flex items-center gap-2 sm:gap-3">
+                                        <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
+                                        <span class="text-gray-400 text-xs sm:text-sm">ประเภท: ${data.category || 'Premium'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -154,27 +154,27 @@ export const VideoPlayer = {
 
     _buildEpSelector: (episodes, seriesId, activeIndex) => {
         return `
-            <div class="mt-16 space-y-8 animate-slide-up">
-                <div class="flex items-center gap-4">
-                    <h3 class="text-xl font-black text-white uppercase tracking-widest Thai-font">เลือกตอนรับชม</h3>
+            <div class="mt-8 sm:mt-12 md:mt-16 space-y-4 sm:space-y-8 animate-slide-up px-2 sm:px-0">
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <h3 class="text-base sm:text-lg md:text-xl font-black text-white uppercase tracking-widest Thai-font">เลือกตอนรับชม</h3>
                     <div class="flex-1 h-px bg-gradient-to-r from-brand-primary/50 via-brand-gold/30 to-transparent"></div>
-                    <span class="text-[10px] font-black text-brand-primary uppercase tracking-widest Thai-font">${episodes.length} EPISODES</span>
+                    <span class="text-[9px] sm:text-[10px] font-black text-brand-primary uppercase tracking-widest Thai-font">${episodes.length} EPISODES</span>
                 </div>
                 
-                <div class="flex overflow-x-auto gap-4 pb-6 scrollbar-hide snap-x">
+                <div class="flex overflow-x-auto gap-2 sm:gap-4 pb-4 sm:pb-6 scrollbar-hide snap-x px-2 sm:px-0">
                     ${episodes.map((ep, i) => {
         const isActive = i === activeIndex;
         return `
                             <button onclick="location.href='/watch-series.html?id=${seriesId}&ep=${i}'" 
-                                    class="min-w-[160px] md:min-w-[200px] p-5 rounded-[1.5rem] border transition-all duration-300 snap-start text-left group backdrop-blur-xl relative overflow-hidden
+                                    class="min-w-[140px] sm:min-w-[160px] md:min-w-[200px] p-3 sm:p-5 rounded-[1.5rem] border transition-all duration-300 snap-start text-left group backdrop-blur-xl relative overflow-hidden
                                     hover:scale-105 hover:shadow-[0_0_40px_rgba(229,9,20,0.5)] hover:border-brand-primary/50 cinematic-border
                                     ${isActive ? 'bg-gradient-to-r from-brand-primary/90 to-brand-primary-dark/90 border-brand-primary shadow-[0_0_50px_rgba(229,9,20,0.5)]' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
                                 <!-- Premium Background Effect for Active State -->
                                 ${isActive ? '<div class="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-brand-gold/10"></div>' : ''}
                                 
                                 <div class="relative z-10">
-                                    <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/70' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
-                                    <h4 class="text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white group-hover:text-brand-primary transition-colors'}">${UIUtils.escapeHTML(ep.title)}</h4>
+                                    <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/70' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
+                                    <h4 class="text-[10px] sm:text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white group-hover:text-brand-primary transition-colors'}">${UIUtils.escapeHTML(ep.title)}</h4>
                                 </div>
                             </button>`;
     }).join('')}

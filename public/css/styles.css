@@ -28,10 +28,10 @@
   .btn-primary { @apply bg-brand-primary text-white font-black uppercase tracking-widest hover:bg-brand-accent transition-colors rounded-2xl px-8 py-4 shadow-[0_10px_20px_rgba(217,4,41,0.2)]; }
   .btn-vip { @apply bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-black font-black uppercase tracking-widest hover:scale-[1.02] transition-transform rounded-2xl px-8 py-4 shadow-[0_10px_20px_rgba(191,149,63,0.3)]; }
 
-  /* 🎥 Cinematic Device Frame */
+  /* 🎥 Cinematic Device Frame - Mobile Optimized */
   .device-frame { @apply relative mx-auto bg-brand-obsidian border-[8px] border-black rounded-[3rem] overflow-hidden; }
-  .device-frame.landscape { @apply aspect-video max-w-4xl; }
-  .device-frame:not(.landscape) { @apply aspect-[9/19] max-w-[300px]; }
+  .device-frame.landscape { @apply aspect-video max-w-full; }
+  .device-frame:not(.landscape) { @apply aspect-[9/19] max-w-[280px] sm:max-w-[320px] md:max-w-[300px]; }
 
   .device-chassis { @apply absolute inset-0 rounded-[2.5rem] pointer-events-none; }
   .device-screen { @apply w-full h-full bg-black relative z-10; }
