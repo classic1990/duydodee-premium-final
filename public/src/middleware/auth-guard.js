@@ -1,4 +1,5 @@
 import { AuthService } from '../services/auth-service.js';
+import errorHandler from '../utils/error-handler.js';
 
 /**
  * 🛡️ DUYดูDEE - MASTER AUTH GUARD (V6.0)
@@ -28,11 +29,17 @@ export async function checkAdminAccess() {
                 if (!isAdmin) {
                     // Check if it's because of non-Google login
                     if (!AuthService.isGoogleUser(currentUser)) {
-                        console.error('🚨 Security Alert: Non-Google login attempt for admin access');
+                        errorHandler.logError({
+                            type: 'security',
+                            message: 'Non-Google login attempt for admin access'
+                        });
                         // eslint-disable-next-line no-alert
                         alert('🔒 ระบบความปลอดภัย: การเข้าถึงหน้าแอดมินต้องล็อกอินด้วย Google Account เท่านั้น\n\nกรุณาล็อกอินด้วย Google Account ที่ลงทะเบียนไว้เท่านั้น');
                     } else {
-                        console.error('Auth Guard: Access Denied. User does not have administrative rights.');
+                        errorHandler.logError({
+                            type: 'auth',
+                            message: 'Access Denied: Administrative rights required.'
+                        });
                         // eslint-disable-next-line no-alert
                         alert('❌ ไม่มีสิทธิ์เข้าถึงหน้าแอดมิน\n\nอีเมลของคุณไม่อยู่ในรายชื่อผู้ดูแลระบบ');
                     }
@@ -41,7 +48,7 @@ export async function checkAdminAccess() {
                 }
                 resolve({ user: currentUser, role: 'authorized' });
             } catch (err) {
-                console.error('Auth Guard Error:', err);
+                errorHandler.logError({ type: 'error', message: 'Auth Guard Error', stack: err.stack });
                 window.location.href = '/';
                 reject(err);
             }

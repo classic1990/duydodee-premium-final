@@ -1,3 +1,4 @@
+import errorHandler from '../utils/error-handler.js';
 import {
     auth, db, doc, getDoc, setDoc, addDoc, serverTimestamp,
     collection, query, orderBy, limit, getDocs, googleProvider,
@@ -34,7 +35,8 @@ export const AuthService = {
 
         // 🔒 SECURITY CHECK: Verify user logged in with Google only
         if (!this.isGoogleUser(user)) {
-            console.error('Security Alert: Non-Google login attempt for admin access');
+            // Using error handler for security alert
+            console.warn('Security Alert: Non-Google login attempt for admin access');
             return false;
         }
 
@@ -51,7 +53,7 @@ export const AuthService = {
             const role = (snap.data().role || '').toLowerCase();
             return role === SCHEMA.ROLES.MASTER.toLowerCase() || role === SCHEMA.ROLES.ADMIN.toLowerCase();
         } catch (e) {
-            console.error('Admin check failed:', e);
+            errorHandler.logError({ type: 'error', message: 'Admin check failed', stack: e.stack });
             return false;
         }
     },
@@ -98,7 +100,7 @@ export const AuthService = {
                 });
             }
         } catch (e) {
-            console.error('History Save Error:', e);
+            errorHandler.logError({ type: 'error', message: 'History Save Error', stack: e.stack });
         }
     },
 
@@ -118,7 +120,7 @@ export const AuthService = {
             const snap = await getDocs(q);
             return snap.docs.map(d => d.data());
         } catch (e) {
-            console.error('History Fetch Error:', e);
+            errorHandler.logError({ type: 'error', message: 'History Fetch Error', stack: e.stack });
             return [];
         }
     },
@@ -137,7 +139,7 @@ export const AuthService = {
                 timestamp: serverTimestamp()
             });
         } catch (e) {
-            console.error('Log Error:', e);
+            errorHandler.logError({ type: 'error', message: 'Log Error', stack: e.stack });
         }
     },
 
@@ -149,7 +151,7 @@ export const AuthService = {
             await signOut(auth);
             return true;
         } catch (error) {
-            console.error('Logout error:', error);
+            errorHandler.logError({ type: 'error', message: 'Logout error', stack: error.stack });
             throw error;
         }
     },
@@ -163,7 +165,7 @@ export const AuthService = {
             await this.syncUserToFirestore(result.user);
             return result.user;
         } catch (error) {
-            console.error('Google Login error:', error);
+            errorHandler.logError({ type: 'error', message: 'Google Login error', stack: error.stack });
             throw error;
         }
     },
@@ -177,7 +179,7 @@ export const AuthService = {
             await this.syncUserToFirestore(result.user);
             return result.user;
         } catch (error) {
-            console.error('Email Login error:', error);
+            errorHandler.logError({ type: 'error', message: 'Email Login error', stack: error.stack });
             throw error;
         }
     },
@@ -194,7 +196,7 @@ export const AuthService = {
             await this.syncUserToFirestore(user, name);
             return user;
         } catch (error) {
-            console.error('Email Register error:', error);
+            errorHandler.logError({ type: 'error', message: 'Email Register error', stack: error.stack });
             throw error;
         }
     },
@@ -232,7 +234,7 @@ export const AuthService = {
                 await setDoc(userRef, data, { merge: true });
             }
         } catch (err) {
-            console.error('Sync User Error:', err);
+            errorHandler.logError({ type: 'error', message: 'Sync User Error', stack: err.stack });
         }
     },
 
@@ -244,6 +246,7 @@ export const AuthService = {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid));
             return snap.exists() && snap.data().isBanned === true;
         } catch (e) {
+            errorHandler.logError({ type: 'error', message: 'Check Banned Error', stack: e.stack });
             return false;
         }
     }
