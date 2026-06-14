@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการสมาชิก VIP | DUYดูDEE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+</head>
+<body class="bg-brand-black text-white selection:bg-brand-primary/50">
+    <main class="p-10 max-w-7xl mx-auto space-y-10">
+        <header class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <div>
+                    <h1 class="text-3xl font-black Thai-font uppercase italic">VIP <span class="text-brand-primary">Manager</span></h1>
+                    <p class="text-gray-500 text-xs tracking-widest uppercase">จัดการสมาชิก VIP ทั้งหมด</p>
+                </div>
+            </div>
+            <button onclick="loadVipUsers()" class="px-6 py-3 bg-brand-primary text-black font-bold rounded-xl hover:bg-brand-primary/80 transition-all">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                รีเฟรชข้อมูล
+            </button>
+        </header>
+
+        <!-- 📊 VIP Status Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">สมาชิก VIP ทั้งหมด</span>
+                <h2 id="total-vip" class="text-3xl font-black text-brand-gold">0</h2>
+            </div>
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">กำลังจะหมดอายุ (3 วัน)</span>
+                <h2 id="expiring-soon" class="text-3xl font-black text-red-500">0</h2>
+            </div>
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">จะหมดอายุ (7 วัน)</span>
+                <h2 id="expiring-week" class="text-3xl font-black text-amber-500">0</h2>
+            </div>
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">สถานะปกติ</span>
+                <h2 id="active-normal" class="text-3xl font-black text-green-500">0</h2>
+            </div>
+        </div>
+
+        <!-- 📋 VIP Users Table -->
+        <div class="glass-premium overflow-hidden border border-white/5">
+            <table class="w-full text-left">
+                <thead class="bg-white/5 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                    <tr>
+                        <th class="p-5">สมาชิก</th>
+                        <th class="p-5">อีเมล</th>
+                        <th class="p-5">วันหมดอายุ</th>
+                        <th class="p-5">สถานะ</th>
+                        <th class="p-5 text-right">ดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody id="vip-user-table" class="divide-y divide-white/5">
+                    <!-- ข้อมูลจะถูกฉีกที่นี่ -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="/src/admin/admin-vip-manager.js"></script>
+</body>
+</html>

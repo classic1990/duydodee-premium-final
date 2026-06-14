@@ -49,6 +49,14 @@ import {
     getFunctions,
     httpsCallable
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
+import {
+    getDatabase,
+    ref as rtdbRef,
+    onValue,
+    set,
+    onDisconnect,
+    serverTimestamp as rtdbTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 import config from '../config/index.js';
 
 // Use environment configuration with fallback to existing config
@@ -59,6 +67,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const functions = getFunctions(app);
+const rtdb = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
 export {
@@ -66,6 +75,7 @@ export {
     auth,
     storage,
     functions,
+    rtdb,
     googleProvider,
     signInWithPopup,
     onAuthStateChanged,
@@ -102,5 +112,10 @@ export {
     ref,
     getDownloadURL,
     uploadBytes,
-    deleteObject
+    deleteObject,
+    rtdbRef,
+    onValue,
+    set,
+    onDisconnect,
+    rtdbTimestamp
 };
