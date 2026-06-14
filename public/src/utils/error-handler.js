@@ -65,8 +65,11 @@ class ErrorHandler {
 
     logError(error) {
     // Log to console with proper formatting
+        // eslint-disable-next-line no-console
         console.group(`🚨 ${error.type.toUpperCase()}: ${error.message}`);
+        // eslint-disable-next-line no-console
         console.error('Error Details:', error);
+        // eslint-disable-next-line no-console
         console.groupEnd();
 
         // Send to error tracking service (Sentry, etc.)
@@ -227,6 +230,7 @@ class ErrorHandler {
             cores: navigator.hardwareConcurrency
         };
 
+        // eslint-disable-next-line no-console
         console.log('🌍 Environment Info:', envInfo);
         localStorage.setItem('duydodee_env', JSON.stringify(envInfo));
     }

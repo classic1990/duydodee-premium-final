@@ -73,10 +73,12 @@ async function handlePaymentSettings(e) {
 }
 
 async function handlePurgeData() {
+    // eslint-disable-next-line no-alert
     if (!confirm('🚨 คำเตือนสูงสุด: คุณต้องการลบข้อมูลหนังและซีรีส์ทั้งหมดในระบบใช่หรือไม่? การกระทำนี้ไม่สามารถเรียกคืนได้!')) {
         return;
     }
 
+    // eslint-disable-next-line no-alert
     const password = prompt('กรุณาพิมพ์ \'CONFIRM DELETE\' เพื่อยืนยัน:');
     if (password !== 'CONFIRM DELETE') {
         UI.showToast('การยืนยันไม่ถูกต้อง', 'error');

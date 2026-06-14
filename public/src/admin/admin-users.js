@@ -403,6 +403,7 @@ function closeEditModal() {
  */
 async function toggleBan(uid, currentStatus) {
     const action = currentStatus ? 'ปลดระงับ' : 'ระงับสิทธิ์';
+    // eslint-disable-next-line no-alert
     if (!confirm(`ยืนยันการ${action}สมาชิกรายนี้?`)) {
         return;
     }

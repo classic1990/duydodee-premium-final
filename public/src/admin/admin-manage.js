@@ -32,6 +32,7 @@ async function init() {
             // 🔒 SECURITY: Double check Google login
             if (!AuthService.isGoogleUser(user)) {
                 console.error('🚨 Security Alert: Non-Google login attempt detected');
+                // eslint-disable-next-line no-alert
                 alert('🔒 ระบบความปลอดภัย: การเข้าถึงหน้าแอดมินต้องล็อกอินด้วย Google Account เท่านั้น');
                 window.location.href = '/';
                 return;

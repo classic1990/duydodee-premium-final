@@ -29,9 +29,11 @@ export async function checkAdminAccess() {
                     // Check if it's because of non-Google login
                     if (!AuthService.isGoogleUser(currentUser)) {
                         console.error('🚨 Security Alert: Non-Google login attempt for admin access');
+                        // eslint-disable-next-line no-alert
                         alert('🔒 ระบบความปลอดภัย: การเข้าถึงหน้าแอดมินต้องล็อกอินด้วย Google Account เท่านั้น\n\nกรุณาล็อกอินด้วย Google Account ที่ลงทะเบียนไว้เท่านั้น');
                     } else {
                         console.error('Auth Guard: Access Denied. User does not have administrative rights.');
+                        // eslint-disable-next-line no-alert
                         alert('❌ ไม่มีสิทธิ์เข้าถึงหน้าแอดมิน\n\nอีเมลของคุณไม่อยู่ในรายชื่อผู้ดูแลระบบ');
                     }
                     window.location.href = '/';

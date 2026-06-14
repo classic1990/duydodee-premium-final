@@ -339,6 +339,7 @@ function updatePaginationUI() {
  * @returns {Promise<void>}
  */
 async function deleteSeries(id) {
+    // eslint-disable-next-line no-alert
     if (!confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
         return;
     }

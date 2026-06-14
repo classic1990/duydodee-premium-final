@@ -3,7 +3,6 @@ import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
 
 let isRendering = false;
-let currentUser = null; // 📝 Store current user state
 let progressInterval = null; // 🧹 Store interval ID for cleanup
 let viewCountIncremented = false; // 📝 Track if view count already incremented
 let historySaved = false; // 📝 Track if history already saved
@@ -46,8 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 2. Single auth state change handler for all auth-dependent operations
             AuthService.onStateChanged(user => {
-                currentUser = user;
-
                 if (user) {
                     // Setup periodic progress saving (every 15s)
                     if (player && typeof player.getCurrentTime === 'function') {

@@ -331,6 +331,7 @@ function updatePaginationUI() {
  * @returns {Promise<void>}
  */
 async function deleteMovie(id) {
+    // eslint-disable-next-line no-alert
     if (!confirm('ยืนยันการลบข้อมูลหนังเรื่องนี้? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
         return;
     }

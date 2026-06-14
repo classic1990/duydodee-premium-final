@@ -177,6 +177,7 @@ async function handleSaveHero(e) {
  * @returns {Promise<void>}
  */
 async function deleteHero(id) {
+    // eslint-disable-next-line no-alert
     if (!confirm('คุณต้องการลบสไลด์นี้ใช่หรือไม่?')) {
         return;
     }

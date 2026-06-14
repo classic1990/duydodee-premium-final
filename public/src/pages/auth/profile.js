@@ -77,6 +77,7 @@ async function loadUserProfile(user) {
 
         // Attach logout listener
         logoutBtn.onclick = () => {
+            // eslint-disable-next-line no-alert
             if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
                 signOut(auth)
                     .then(() => {
@@ -195,6 +196,7 @@ async function loadUserTickets(user) {
         // Attach click events for Resolve buttons
         grid.querySelectorAll('.resolve-ticket-btn').forEach((btn) => {
             btn.onclick = async () => {
+                // eslint-disable-next-line no-alert
                 if (!confirm('ยืนยันว่าปัญหาได้รับการแก้ไขเรียบร้อยแล้ว?')) {
                     return;
                 }
@@ -263,6 +265,7 @@ async function loadWatchHistory(user) {
     if (clearBtn) {
         clearBtn.onclick = async () => {
             if (
+                // eslint-disable-next-line no-alert
                 !confirm(
                     'คุณต้องการลบประวัติการรับชมทั้งหมดใช่หรือไม่? (ไม่สามารถย้อนคืนได้)'
                 )

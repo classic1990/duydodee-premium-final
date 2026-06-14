@@ -20,6 +20,7 @@ class Config {
 
         // Debugging (Remove in production)
         if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+            // eslint-disable-next-line no-console
             console.log('🔧 Config loading...', {
                 hasImportMeta: typeof import.meta !== 'undefined',
                 keys: env ? Object.keys(env) : []

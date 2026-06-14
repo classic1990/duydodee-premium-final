@@ -29,6 +29,7 @@ const VipPaymentService = {
     },
 
     async verifyPayment(id, userId) {
+        // eslint-disable-next-line no-alert
         if (!confirm('ยืนยันการปรับสถานะสมาชิกรายนี้เป็น VIP?')) {
             return;
         }

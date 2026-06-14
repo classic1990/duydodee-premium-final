@@ -266,6 +266,7 @@ async function handleUpdateSeries(e) {
 }
 
 async function handleDeleteSeries() {
+    // eslint-disable-next-line no-alert
     if (confirm('คุณต้องการลบซีรีส์ชุดนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้')) {
         UI.setLoading(true);
         try {

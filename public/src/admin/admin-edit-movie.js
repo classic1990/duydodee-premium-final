@@ -206,6 +206,7 @@ async function handleUpdateMovie(e) {
 }
 
 async function handleDeleteMovie() {
+    // eslint-disable-next-line no-alert
     if (confirm('คุณต้องการลบภาพยนตร์เรื่องนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้')) {
         UI.setLoading(true);
         try {

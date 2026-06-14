@@ -1,7 +1,7 @@
 import { UIUtils } from '../../utils/ui-utils.js';
 
 export const MovieCards = {
-    createMovieCard: (item, isHighRes = true) => {
+    createMovieCard: (item) => {
         const id = item.id || '';
         const title = UIUtils.escapeHTML(item.title || '');
         const category = item.category || 'VOD';

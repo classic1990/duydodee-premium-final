@@ -120,6 +120,7 @@ async function loadUserVIPData(uid) {
         tbody.querySelectorAll('.confirm-btn').forEach(btn => {
             btn.onclick = async () => {
                 const paymentId = btn.dataset.id;
+                // eslint-disable-next-line no-alert
                 if (!confirm(`ยืนยันการรับยอดชำระเงิน ${btn.dataset.amount} THB และเพิ่มสถานะ VIP?`)) {
                     return;
                 }
