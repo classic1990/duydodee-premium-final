@@ -17,12 +17,12 @@ export const VideoPlayer = {
 
             if (!embedUrl) {
                 container.innerHTML = `
-                    <div class="p-20 text-center animate-fade-in">
-                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i data-lucide="alert-triangle" class="w-10 h-10 text-brand-primary"></i>
+                    <div class="p-12 sm:p-20 text-center animate-fade-in">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-brand-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                            <i data-lucide="alert-triangle" class="w-8 h-8 sm:w-10 sm:h-10 text-brand-primary"></i>
                         </div>
-                        <h2 class="text-white text-xl font-bold Thai-font mb-2">ไม่พบไฟล์วิดีโอ</h2>
-                        <p class="text-gray-500 Thai-font">ขออภัย สตรีมมิ่งไฟล์นี้อาจถูกลบหรือย้ายที่อยู่</p>
+                        <h2 class="text-white text-lg sm:text-xl font-bold Thai-font mb-2">ไม่พบไฟล์วิดีโอ</h2>
+                        <p class="text-gray-300 sm:text-gray-400 text-sm sm:text-base Thai-font">ขออภัย สตรีมมิ่งไฟล์นี้อาจถูกลบหรือย้ายที่อยู่</p>
                     </div>`;
                 UI.refreshIcons();
                 return resolve(null);
@@ -44,8 +44,8 @@ export const VideoPlayer = {
                                     <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-brand-black/10 to-transparent rounded-[inherit] z-15"></div>
                                     
                                     <!-- Video Quality Badge -->
-                                    <div class="absolute top-4 right-4 px-3 py-1 bg-brand-black/80 backdrop-blur-md rounded-lg border border-brand-primary/30 z-30">
-                                        <span class="text-[9px] font-black text-brand-primary uppercase tracking-widest">HD 720p</span>
+                                    <div class="absolute top-3 sm:top-4 right-3 sm:right-4 px-2 sm:px-3 py-0.5 sm:py-1 bg-brand-black/90 backdrop-blur-md rounded-lg border border-brand-primary/40 z-30">
+                                        <span class="text-[8px] sm:text-[9px] font-black text-brand-primary uppercase tracking-widest">HD 720p</span>
                                     </div>
                                 </div>
                                 ${isVertical ? '<div class="device-island"></div>' : ''}
@@ -64,11 +64,11 @@ export const VideoPlayer = {
                                 <div class="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                                     <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                                         <span class="badge-premium text-[8px] sm:text-[9px] px-2 sm:px-3">HD 720p</span>
-                                        <span class="px-2 sm:px-3 py-1 bg-white/5 text-gray-400 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/10">${data.category || 'Premium'}</span>
-                                        ${data.views ? `<span class="px-2 sm:px-3 py-1 bg-white/5 text-gray-500 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/10 flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${(data.views || 0).toLocaleString()}</span>` : ''}
+                                        <span class="px-2 sm:px-3 py-1 bg-white/10 text-white/90 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/20">${data.category || 'Premium'}</span>
+                                        ${data.views ? `<span class="px-2 sm:px-3 py-1 bg-white/10 text-white/80 text-[8px] sm:text-[9px] font-black uppercase rounded-lg border border-white/20 flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${(data.views || 0).toLocaleString()}</span>` : ''}
                                     </div>
                                     ${data.description ? `
-                                        <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 Thai-font">${UIUtils.escapeHTML(data.description)}</p>
+                                        <p class="text-gray-300 sm:text-gray-400 text-sm leading-relaxed line-clamp-3 Thai-font">${UIUtils.escapeHTML(data.description)}</p>
                                     ` : ''}
                                 </div>
                                 
@@ -92,15 +92,15 @@ export const VideoPlayer = {
                                 <div class="space-y-2 sm:space-y-3">
                                     <div class="flex items-center gap-2 sm:gap-3">
                                         <i data-lucide="calendar" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-xs sm:text-sm">เผยแพร่: ${data.year || '2026'}</span>
+                                        <span class="text-gray-200 sm:text-gray-400 text-xs sm:text-sm">เผยแพร่: ${data.year || '2026'}</span>
                                     </div>
                                     <div class="flex items-center gap-2 sm:gap-3">
                                         <i data-lucide="clock" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-xs sm:text-sm">ระยะเวลา: ${data.duration || '90 นาที'}</span>
+                                        <span class="text-gray-200 sm:text-gray-400 text-xs sm:text-sm">ระยะเวลา: ${data.duration || '90 นาที'}</span>
                                     </div>
                                     <div class="flex items-center gap-2 sm:gap-3">
                                         <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4 text-brand-primary"></i>
-                                        <span class="text-gray-400 text-xs sm:text-sm">ประเภท: ${data.category || 'Premium'}</span>
+                                        <span class="text-gray-200 sm:text-gray-400 text-xs sm:text-sm">ประเภท: ${data.category || 'Premium'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -173,8 +173,8 @@ export const VideoPlayer = {
                                 ${isActive ? '<div class="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-brand-gold/10"></div>' : ''}
                                 
                                 <div class="relative z-10">
-                                    <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/70' : 'text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
-                                    <h4 class="text-[10px] sm:text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-white group-hover:text-brand-primary transition-colors'}">${UIUtils.escapeHTML(ep.title)}</h4>
+                                    <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-white/70' : 'text-gray-300 sm:text-gray-500 group-hover:text-brand-primary'}">ตอนที่ ${i + 1}</p>
+                                    <h4 class="text-[10px] sm:text-xs md:text-sm font-black Thai-font line-clamp-1 ${isActive ? 'text-white' : 'text-gray-200 sm:text-white group-hover:text-brand-primary transition-colors'}">${UIUtils.escapeHTML(ep.title)}</h4>
                                 </div>
                             </button>`;
     }).join('')}

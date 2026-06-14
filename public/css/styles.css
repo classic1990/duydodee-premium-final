@@ -60,9 +60,9 @@
     background: linear-gradient(135deg, #050505 0%, #0d0d0f 50%, #121214 100%);
   }
   
-  /* Glassmorphism Enhanced */
+  /* Glassmorphism Enhanced - Mobile Optimized */
   .glass-premium-enhanced {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+    @apply bg-black/40 sm:bg-white/5 backdrop-blur-xl border border-white/10 sm:border-white/10 rounded-3xl;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   }
 

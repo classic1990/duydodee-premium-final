@@ -1613,6 +1613,9 @@ body::selection{
 .border-brand-primary\/30{
   border-color: rgb(229 9 20 / 0.3);
 }
+.border-brand-primary\/40{
+  border-color: rgb(229 9 20 / 0.4);
+}
 .border-cyan-500\/20{
   border-color: rgb(6 182 212 / 0.2);
 }
@@ -1737,9 +1740,6 @@ body::selection{
 }
 .bg-brand-black\/70{
   background-color: rgb(5 5 5 / 0.7);
-}
-.bg-brand-black\/80{
-  background-color: rgb(5 5 5 / 0.8);
 }
 .bg-brand-black\/90{
   background-color: rgb(5 5 5 / 0.9);
@@ -2071,6 +2071,9 @@ body::selection{
 }
 .p-10{
   padding: 2.5rem;
+}
+.p-12{
+  padding: 3rem;
 }
 .p-2{
   padding: 0.5rem;
@@ -2526,6 +2529,12 @@ body::selection{
 }
 .text-white\/70{
   color: rgb(255 255 255 / 0.7);
+}
+.text-white\/80{
+  color: rgb(255 255 255 / 0.8);
+}
+.text-white\/90{
+  color: rgb(255 255 255 / 0.9);
 }
 .text-yellow-500{
   --tw-text-opacity: 1;
@@ -3062,16 +3071,25 @@ body::selection{
 /* 🌟 Gold Accents */
 /* ✨ NEW PREMIUM EFFECTS */
 /* Premium Gradient Backgrounds */
-/* Glassmorphism Enhanced */
+/* Glassmorphism Enhanced - Mobile Optimized */
 .glass-premium-enhanced{
   border-radius: 1.5rem;
   border-width: 1px;
   border-color: rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.05);
+  background-color: rgb(0 0 0 / 0.4);
   --tw-backdrop-blur: blur(24px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
 }
+@media (min-width: 640px){
+
+  .glass-premium-enhanced{
+    border-color: rgb(255 255 255 / 0.1);
+    background-color: rgb(255 255 255 / 0.05);
+  }
+}
+.glass-premium-enhanced {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  }
 /* Shimmer Loading Effect */
 .shimmer-loading {
     background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
@@ -3685,6 +3703,14 @@ body::selection{
 
   @media (min-width: 640px){
 
+  .sm\:right-4{
+    right: 1rem;
+  }
+
+  .sm\:top-4{
+    top: 1rem;
+  }
+
   .sm\:mb-4{
     margin-bottom: 1rem;
   }
@@ -3705,8 +3731,16 @@ body::selection{
     display: inline;
   }
 
+  .sm\:h-10{
+    height: 2.5rem;
+  }
+
   .sm\:h-12{
     height: 3rem;
+  }
+
+  .sm\:h-20{
+    height: 5rem;
   }
 
   .sm\:h-4{
@@ -3717,8 +3751,16 @@ body::selection{
     height: 1.25rem;
   }
 
+  .sm\:w-10{
+    width: 2.5rem;
+  }
+
   .sm\:w-12{
     width: 3rem;
+  }
+
+  .sm\:w-20{
+    width: 5rem;
   }
 
   .sm\:w-4{
@@ -3779,6 +3821,10 @@ body::selection{
     padding: 2.5rem;
   }
 
+  .sm\:p-20{
+    padding: 5rem;
+  }
+
   .sm\:p-5{
     padding: 1.25rem;
   }
@@ -3807,6 +3853,11 @@ body::selection{
     padding-right: 1.5rem;
   }
 
+  .sm\:py-1{
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
   .sm\:py-3{
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -3829,6 +3880,10 @@ body::selection{
     font-size: 9px;
   }
 
+  .sm\:text-base{
+    font-size: 1rem;
+  }
+
   .sm\:text-lg{
     font-size: 1.125rem;
   }
@@ -3843,6 +3898,21 @@ body::selection{
 
   .sm\:text-xs{
     font-size: 0.75rem;
+  }
+
+  .sm\:text-gray-400{
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+  }
+
+  .sm\:text-gray-500{
+    --tw-text-opacity: 1;
+    color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+  }
+
+  .sm\:text-white{
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
   }
 }
 
