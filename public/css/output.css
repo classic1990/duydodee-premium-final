@@ -3684,10 +3684,6 @@ body::selection{
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
 }
 
-  .group:hover .group-hover\:text-brand-gold\/10{
-  color: rgb(212 175 55 / 0.1);
-}
-
   .group:hover .group-hover\:text-brand-primary{
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
