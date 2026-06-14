@@ -38,8 +38,7 @@ class Config {
                 storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET,
                 messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID,
                 appId: safeEnv.VITE_FIREBASE_APP_ID,
-                measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID,
-                databaseURL: safeEnv.VITE_FIREBASE_DATABASE_URL || `https://${safeEnv.VITE_FIREBASE_PROJECT_ID || 'duydodeesport'}-default-rtdb.firebaseio.com/`
+                measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID
             },
 
             // Admin Configuration

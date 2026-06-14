@@ -8,7 +8,6 @@ import {
     auth,
     storage,
     functions,
-    rtdb,
     googleProvider,
     signInWithPopup,
     onAuthStateChanged,
@@ -45,12 +44,7 @@ import {
     ref,
     getDownloadURL,
     uploadBytes,
-    deleteObject,
-    rtdbRef,
-    onValue,
-    set,
-    onDisconnect,
-    rtdbTimestamp
+    deleteObject
 } from './firebase-config.js';
 
 import { SCHEMA } from '../constants.js';
@@ -217,11 +211,5 @@ export {
     ref,
     getDownloadURL,
     uploadBytes,
-    deleteObject,
-    rtdb,
-    rtdbRef,
-    onValue,
-    set,
-    onDisconnect,
-    rtdbTimestamp
+    deleteObject
 };

@@ -1185,9 +1185,6 @@ body::selection{
 .max-w-\[440px\]{
   max-width: 440px;
 }
-.max-w-\[70\%\]{
-  max-width: 70%;
-}
 .max-w-full{
   max-width: 100%;
 }
@@ -1371,9 +1368,6 @@ body::selection{
 .flex-row{
   flex-direction: row;
 }
-.flex-row-reverse{
-  flex-direction: row-reverse;
-}
 .flex-col{
   flex-direction: column;
 }
@@ -1553,12 +1547,6 @@ body::selection{
 .rounded-t-\[1\.5rem\]{
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
-}
-.rounded-tl-none{
-  border-top-left-radius: 0px;
-}
-.rounded-tr-none{
-  border-top-right-radius: 0px;
 }
 .border{
   border-width: 1px;
