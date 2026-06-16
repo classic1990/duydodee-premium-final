@@ -2,6 +2,22 @@
 
 > ไกด์สำคัญสำหรับ Devin AI Agent ในการพัฒนาและดูแลรักษาโปรเจค DUYดูDEE PREMIUM
 
+## 🔄 BEFORE STARTING ANY WORK (CRITICAL)
+
+**❗ AI Agent MUST run this BEFORE making any changes:**
+
+```bash
+git pull origin main
+```
+
+This ensures you're working on the latest code that other agents may have pushed.  
+After making changes, always `git push origin main` when done (if the user confirms).
+
+## 🔐 CREDENTIALS
+
+All Firebase + API keys are in `.env.local` (not committed).  
+Check `.env.example` for required variables.
+
 ---
 
 ## 📋 Table of Contents
