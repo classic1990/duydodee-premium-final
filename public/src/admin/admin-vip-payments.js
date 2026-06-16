@@ -43,22 +43,41 @@ const VipPaymentService = {
         const startTime = performance.now();
         UI.setLoading(true);
         try {
-            // 1. อัปเดตสถานะการชำระเงิน
-            await updateDoc(doc(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS, id), { status: 'confirmed' });
+            // 1. อัปเดตสถานะการชำระเงินและดึงข้อมูล payment
+            const paymentRef = doc(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS, id);
+            const paymentSnap = await getDoc(paymentRef);
+            const paymentData = paymentSnap.data();
 
-            // 2. อัปเดต Role ของผู้ใช้ (เฉพาะถ้าไม่ใช่ Admin/Master อยู่แล้ว)
+            await updateDoc(paymentRef, { status: 'confirmed' });
+
+            // 2. อัปเดต Role และ VIP duration ของผู้ใช้
             if (userId && userId !== 'guest') {
                 const userRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId);
                 const userSnap = await getDoc(userRef);
-                const currentRole = userSnap.exists() ? (userSnap.data().role || '').toLowerCase() : '';
+                const userData = userSnap.exists() ? userSnap.data() : {};
+                const currentRole = (userData.role || '').toLowerCase();
+
+                // Calculate VIP expiry date
+                const planDuration = paymentData.planDuration || 30; // Default 30 days
+                const now = new Date();
+                const currentExpiry = userData.vipUntil?.toDate();
+                const baseDate = (currentExpiry && currentExpiry > now) ? currentExpiry : now;
+                const newExpiry = new Date(baseDate);
+                newExpiry.setDate(newExpiry.getDate() + planDuration);
 
                 if (currentRole === SCHEMA.ROLES.MASTER.toLowerCase() || currentRole === SCHEMA.ROLES.ADMIN.toLowerCase() || currentRole === 'master') {
                     UI.showToast('ยืนยันรายการแล้ว (รักษาสิทธิ์แอดมินเดิม)', 'success');
                     this.logAdminActivity('vip-verify-admin-protected', { paymentId: id, userId, currentRole });
                 } else {
-                    await updateDoc(userRef, { role: 'vip' });
+                    await updateDoc(userRef, {
+                        role: 'vip',
+                        vipStatus: 'active',
+                        vipUntil: newExpiry,
+                        planId: paymentData.planId || 'monthly',
+                        updatedAt: new Date()
+                    });
                     UI.showToast('อัปเดตสถานะสมาชิกเป็น VIP เรียบร้อยแล้ว', 'success');
-                    this.logAdminActivity('vip-verify-success', { paymentId: id, userId, duration: performance.now() - startTime });
+                    this.logAdminActivity('vip-verify-success', { paymentId: id, userId, planDuration, newExpiry: newExpiry.toISOString(), duration: performance.now() - startTime });
                 }
             } else {
                 UI.showToast('ยืนยันรายการชำระเงินเรียบร้อยแล้ว', 'success');
@@ -177,10 +196,13 @@ const VipPaymentView = {
                         </div>
                     </td>
                     <td class="p-6 text-center">
-                        <span class="px-3 py-1 rounded-lg text-[10px] font-bold text-gray-300 bg-white/5 border border-white/10 Thai-font">Wallet</span>
+                        <div class="flex flex-col items-center gap-1">
+                            <span class="px-3 py-1 rounded-lg text-[10px] font-bold text-gray-300 bg-white/5 border border-white/10 Thai-font">Wallet</span>
+                            <span class="text-[9px] text-brand-primary">${data.planName || 'Standard'}</span>
+                        </div>
                     </td>
                     <td class="p-6 text-center text-sm font-black text-brand-primary">
-                        ฿${(data.amount || 0).toLocaleString()}
+                        ฿${(data.planPrice || data.amount || 0).toLocaleString()}
                     </td>
                     <td class="p-6 text-center">
                         <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${statusClass} Thai-font">

@@ -74,7 +74,8 @@ export default defineConfig({
         'admin/admin-stats': resolve('public/admin/admin-stats.html'),
         'admin/admin-tickets': resolve('public/admin/admin-tickets.html'),
         'admin/admin-user-vip': resolve('public/admin/admin-user-vip.html'),
-        'admin/admin-vip-manager': resolve('public/admin/admin-vip-manager.html')
+        'admin/admin-vip-manager': resolve('public/admin/admin-vip-manager.html'),
+        'admin/admin-vip-plans': resolve('public/admin/admin-vip-plans.html')
       },
       output: {
         manualChunks(id) {

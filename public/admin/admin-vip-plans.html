@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการแผน VIP | DUYดูDEE</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+</head>
+<body class="bg-brand-black text-white selection:bg-brand-primary/50">
+    <!-- Sidebar -->
+    <div id="sidebar"></div>
+
+    <!-- Overlay -->
+    <div id="admin-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[400] hidden"></div>
+
+    <main class="p-10 ml-64 space-y-10 transition-all duration-300">
+        <header class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <button id="sidebar-toggle-btn" class="lg:hidden w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div>
+                    <h1 class="text-3xl font-black Thai-font uppercase italic">VIP <span class="text-brand-primary">Plans</span></h1>
+                    <p class="text-gray-500 text-xs tracking-widest uppercase">จัดการแผนสมัครสมาชิก VIP</p>
+                </div>
+            </div>
+            <button onclick="openPlanModal()" class="px-6 py-3 bg-brand-primary text-black font-bold rounded-xl hover:bg-brand-primary/80 transition-all">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                เพิ่มแผนใหม่
+            </button>
+        </header>
+
+        <!-- 📊 Plans Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">แผนทั้งหมด</span>
+                <h2 id="total-plans" class="text-3xl font-black text-brand-gold">0</h2>
+            </div>
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">แผนยอดนิยม</span>
+                <h2 id="popular-plans" class="text-3xl font-black text-cyan-400">0</h2>
+            </div>
+            <div class="glass-premium p-6 border border-white/5">
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">แผนที่ใช้งาน</span>
+                <h2 id="active-plans" class="text-3xl font-black text-green-500">0</h2>
+            </div>
+        </div>
+
+        <!-- 📋 VIP Plans Table -->
+        <div class="glass-premium overflow-hidden border border-white/5">
+            <table class="w-full text-left">
+                <thead class="bg-white/5 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                    <tr>
+                        <th class="p-5">ชื่อแผน</th>
+                        <th class="p-5">ราคา (บาท)</th>
+                        <th class="p-5">ระยะเวลา (วัน)</th>
+                        <th class="p-5">สถานะ</th>
+                        <th class="p-5 text-right">ดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody id="vip-plans-table" class="divide-y divide-white/5">
+                    <!-- ข้อมูลจะถูกฉีกที่นี่ -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Plan Modal -->
+    <div id="plan-modal" class="fixed inset-0 z-[2000] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 hidden">
+        <div class="glass-premium border border-brand-primary/20 rounded-[2rem] p-8 max-w-2xl w-full relative">
+            <button onclick="closePlanModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 id="modal-title" class="text-h2 mb-6">เพิ่มแผน VIP ใหม่</h2>
+            <form id="plan-form" class="space-y-4">
+                <input type="hidden" id="plan-id">
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">ชื่อแผน (ภาษาไทย)</label>
+                    <input type="text" id="plan-name-th" required placeholder="VIP เดือน" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs text-white focus:border-brand-primary outline-none transition-all Thai-font">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">Plan Name (English)</label>
+                    <input type="text" id="plan-name-en" required placeholder="VIP Monthly" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs text-white focus:border-brand-primary outline-none transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">ราคา (บาท)</label>
+                        <input type="number" id="plan-price" required placeholder="99" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs text-white focus:border-brand-primary outline-none transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">ระยะเวลา (วัน)</label>
+                        <input type="number" id="plan-duration" required placeholder="30" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs text-white focus:border-brand-primary outline-none transition-all">
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">ฟีเจอร์ (คั่นด้วยเครื่อม)</label>
+                    <textarea id="plan-features" required placeholder="ดูซีรีส์แนวตั้งแบบไม่จำกัด&#10;คุณภาพ 4K HDR&#10;ไม่มีโฆษณา" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs text-white h-32 resize-none focus:border-brand-primary outline-none transition-all"></textarea>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="plan-popular" class="mt-1">
+                    <label for="plan-popular" class="text-[10px] text-gray-400">แสดงในหน้าแนะนำ</label>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="btn-primary flex-1 !py-4">บันทึก</button>
+                    <button type="button" onclick="closePlanModal()" class="px-6 py-4 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-all">ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin/admin-vip-plans.js"></script>
+</body>
+</html>
