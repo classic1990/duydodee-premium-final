@@ -1,5 +1,3 @@
-import { UIUtils } from '../utils/ui-utils.js';
-
 const ALGOLIA_APP_ID = import.meta.env.VITE_ALGOLIA_APP_ID || '';
 const ALGOLIA_SEARCH_KEY = import.meta.env.VITE_ALGOLIA_SEARCH_KEY || '';
 

@@ -2,7 +2,7 @@ import errorHandler from '../utils/error-handler.js';
 import {
     auth, db, doc, getDoc, setDoc, addDoc, serverTimestamp,
     collection, query, orderBy, limit, getDocs, googleProvider,
-    updateProfile, updateDoc, increment, writeBatch, deleteDoc
+    updateProfile, updateDoc, increment, writeBatch
 } from './firebase-config.js';
 import {
     onAuthStateChanged, signOut, signInWithPopup, signInWithEmailAndPassword,
