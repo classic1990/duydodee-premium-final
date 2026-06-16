@@ -305,6 +305,7 @@ export const PerformanceOptimizations = {
                 for (const entry of list.getEntries()) {
                     if (entry.entryType === 'navigation') {
                         const navEntry = entry;
+                        // eslint-disable-next-line no-console
                         console.log('⚡ Performance:', {
                             loadTime: navEntry.loadEventEnd - navEntry.fetchStart,
                             domReady: navEntry.domContentLoadedEventEnd - navEntry.fetchStart,
@@ -331,6 +332,7 @@ export const PerformanceOptimizations = {
         PerformanceOptimizations.checkServiceWorkerUpdate();
         PerformanceOptimizations.monitorPerformance();
 
+        // eslint-disable-next-line no-console
         console.log('⚡ Performance optimizations initialized');
     }
 };

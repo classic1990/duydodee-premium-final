@@ -5,7 +5,6 @@ import {
     getDocs,
     query,
     orderBy,
-    limit,
     SCHEMA,
     onAuthStateChanged,
     signOut,
@@ -264,6 +263,7 @@ async function loadWatchHistory(user) {
     const clearBtn = document.getElementById('clear-history-btn');
     if (clearBtn) {
         clearBtn.onclick = async () => {
+            // eslint-disable-next-line no-alert
             if (!confirm('คุณต้องการลบประวัติการรับชมทั้งหมดใช่หรือไม่?')) {
                 return;
             }

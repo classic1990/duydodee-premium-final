@@ -8,7 +8,7 @@ jest.mock('../../utils/ui-utils.js', () => ({
     UIUtils: {
         escapeHTML: jest.fn((str) => str),
         getMediaWatchPath: jest.fn((cat, type, id) => `/watch-${type}.html?id=${id}`),
-        getSafePoster: jest.fn((url, quality) => url || '/assets/logo/DUYDODEE.png')
+        getSafePoster: jest.fn((url, _quality) => url || '/assets/logo/DUYDODEE.png')
     }
 }));
 
@@ -61,7 +61,7 @@ describe('MovieCards', () => {
                 videoUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ'
             };
 
-            const html = MovieCards.createMovieCard(item);
+            MovieCards.createMovieCard(item);
 
             expect(UIUtils.getSafePoster).toHaveBeenCalledWith('https://youtube.com/watch?v=dQw4w9WgXcQ', 'medium');
         });
@@ -75,7 +75,7 @@ describe('MovieCards', () => {
                 poster: 'https://example.com/poster.jpg'
             };
 
-            const html = MovieCards.createMovieCard(item);
+            MovieCards.createMovieCard(item);
 
             expect(UIUtils.escapeHTML).toHaveBeenCalledWith('<script>alert("xss")</script>');
         });
@@ -168,7 +168,7 @@ describe('MovieCards', () => {
                 poster: 'https://example.com/poster.jpg'
             };
 
-            const html = MovieCards.createTrendingCard(movie, 1);
+            MovieCards.createTrendingCard(movie, 1);
 
             expect(UIUtils.getSafePoster).toHaveBeenCalledWith('https://example.com/poster.jpg', 'high');
         });
@@ -182,7 +182,7 @@ describe('MovieCards', () => {
                 poster: 'https://example.com/poster.jpg'
             };
 
-            const html = MovieCards.createTrendingCard(movie, 1);
+            MovieCards.createTrendingCard(movie, 1);
 
             expect(UIUtils.escapeHTML).toHaveBeenCalledWith('<script>alert("xss")</script>');
         });
@@ -286,7 +286,7 @@ describe('MovieCards', () => {
                 poster: 'https://example.com/poster.jpg'
             };
 
-            const html = MovieCards.createAdminAssetCard(data);
+            MovieCards.createAdminAssetCard(data);
 
             expect(UIUtils.escapeHTML).toHaveBeenCalledWith('<script>alert("xss")</script>');
         });
@@ -300,7 +300,7 @@ describe('MovieCards', () => {
                 poster: 'https://example.com/poster.jpg'
             };
 
-            const html = MovieCards.createAdminAssetCard(data);
+            MovieCards.createAdminAssetCard(data);
 
             expect(UIUtils.getSafePoster).toHaveBeenCalledWith('https://example.com/poster.jpg', 'medium');
         });
@@ -376,7 +376,7 @@ describe('MovieCards', () => {
                 progress: 25
             };
 
-            const html = MovieCards.createHistoryCard(item);
+            MovieCards.createHistoryCard(item);
 
             expect(UIUtils.escapeHTML).toHaveBeenCalledWith('<script>alert("xss")</script>');
         });
@@ -407,7 +407,7 @@ describe('MovieCards', () => {
                 progress: 25
             };
 
-            const html = MovieCards.createHistoryCard(item);
+            MovieCards.createHistoryCard(item);
 
             expect(UIUtils.getSafePoster).toHaveBeenCalled();
         });

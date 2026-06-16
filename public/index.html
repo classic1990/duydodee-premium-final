@@ -90,20 +90,20 @@
 <body class="bg-brand-black text-gray-200 selection:bg-brand-primary/50">
 
     <!-- 🧭 Premium Navigation Bar with Enhanced Effects -->
-    <nav class="nav-glass h-16 md:h-20 z-[500] sticky top-0 transition-all duration-500" id="main-nav">
-        <div class="container mx-auto px-4 md:px-6 h-full flex items-center justify-between gap-4">
-            
+    <nav class="nav-glass h-16 md:h-20 lg:h-24 z-[500] sticky top-0 transition-all duration-500" id="main-nav">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 h-full flex items-center justify-between gap-4">
+
             <!-- Logo with Premium Effect -->
-            <a href="/" class="flex items-center gap-2 md:gap-3 group flex-shrink-0" aria-label="ไปยังหน้าแรก">
+            <a href="/" class="flex items-center gap-2 md:gap-3 lg:gap-4 group flex-shrink-0" aria-label="ไปยังหน้าแรก">
                 <div class="relative">
                     <div class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-gold rounded-lg blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform relative z-10">
+                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-9 h-9 md:w-11 md:h-11 lg:w-12 lg:h-12 rounded-lg shadow-xl group-hover:scale-105 transition-transform relative z-10">
                 </div>
-                <span class="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-gradient-premium">ดูDEE</span></span>
+                <span class="text-xl md:text-2xl lg:text-3xl font-heading font-black text-white tracking-tighter uppercase hidden sm:block">DUY<span class="text-gradient-premium">ดูDEE</span></span>
             </a>
 
             <!-- Desktop Navigation with Premium Styling -->
-            <div class="hidden lg:flex items-center gap-8 text-sm font-bold text-gray-300" role="navigation" aria-label="เมนูหลัก">
+            <div class="hidden lg:flex items-center gap-10 text-sm font-bold text-gray-300" role="navigation" aria-label="เมนูหลัก">
                 <a href="/" class="hover:text-brand-primary transition-colors Thai-font relative group" aria-label="ไปยังหน้าแรก">
                     หน้าแรก
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-gold group-hover:w-full transition-all duration-300"></span>
@@ -125,20 +125,20 @@
             </div>
 
             <!-- Right Side Actions -->
-            <div class="flex items-center gap-4 md:gap-6 flex-1 justify-end lg:flex-none">
+            <div class="flex items-center gap-4 md:gap-6 lg:gap-8 flex-1 justify-end lg:flex-none">
                 <!-- VIP Button with Enhanced Glow -->
-                <button onclick="UI.renderVIPUpgradeModal()" class="btn-vip !py-2 !px-4 hidden md:flex relative overflow-hidden group" aria-label="สมัครสมาชิก VIP">
+                <button onclick="UI.renderVIPUpgradeModal()" class="btn-vip !py-2.5 !px-5 hidden md:flex relative overflow-hidden group" aria-label="สมัครสมาชิก VIP">
                     <span class="relative z-10">สมัคร VIP</span>
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 </button>
-                
+
                 <!-- Enhanced Search Bar -->
-                <div class="hidden md:flex relative items-center w-full max-w-sm group">
+                <div class="hidden md:flex relative items-center w-full max-w-sm lg:max-w-md group">
                     <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-gold/20 rounded-xl md:rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
-                    <i data-lucide="search" class="absolute left-4 w-4 h-4 text-gray-500 group-focus-within:text-brand-primary transition-colors z-10"></i>
-                    <input type="text" id="global-search" placeholder="ค้นหาเนื้อหา..." class="w-full bg-black/40 border border-white/10 rounded-xl md:rounded-2xl py-2 md:py-2.5 pl-10 md:pl-12 pr-4 text-xs md:text-sm text-white placeholder-gray-500 outline-none focus:bg-black/60 focus:border-brand-primary/50 transition-all shadow-inner relative z-10">
+                    <i data-lucide="search" class="absolute left-4 w-4 h-4 lg:w-5 lg:h-5 text-gray-500 group-focus-within:text-brand-primary transition-colors z-10"></i>
+                    <input type="text" id="global-search" placeholder="ค้นหาเนื้อหา..." class="w-full bg-black/40 border border-white/10 rounded-xl md:rounded-2xl py-2.5 md:py-3 lg:py-3.5 pl-11 md:pl-13 lg:pl-14 pr-4 text-xs md:text-sm text-white placeholder-gray-500 outline-none focus:bg-black/60 focus:border-brand-primary/50 transition-all shadow-inner relative z-10">
                 </div>
-                
+
                 <!-- User Profile Area -->
                 <div id="user-profile-area"></div>
             </div>
@@ -147,31 +147,31 @@
 
     <!-- 📱 Premium Mobile Bottom Navigation -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-black/95 backdrop-blur-xl border-t border-white/10 z-[500] pb-safe">
-        <div class="flex items-center justify-around px-2 py-3">
-            <a href="/" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
-                <i data-lucide="home" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                <span class="text-[9px] font-bold Thai-font">หน้าแรก</span>
+        <div class="flex items-center justify-around px-2 py-4">
+            <a href="/" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="home" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold Thai-font">หน้าแรก</span>
                 <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
-                <i data-lucide="smartphone" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                <span class="text-[9px] font-bold Thai-font">แนวตั้ง</span>
+            <a href="/category.html?cat=vertical" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="smartphone" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold Thai-font">แนวตั้ง</span>
                 <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
-                <i data-lucide="tv" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
+            <a href="/category.html?cat=chinese" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <i data-lucide="tv" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold Thai-font">ซีรีส์จีน</span>
                 <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
-            <div id="user-profile-area-mobile" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
-                <div class="w-5 h-5 group-hover:scale-110 transition-transform"></div>
-                <span class="text-[9px] font-bold Thai-font">โปรไฟล์</span>
+            <div id="user-profile-area-mobile" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
+                <div class="w-6 h-6 group-hover:scale-110 transition-transform"></div>
+                <span class="text-[10px] font-bold Thai-font">โปรไฟล์</span>
             </div>
         </div>
     </nav>
 
     <!-- 🎭 Premium Hero Section with Enhanced Effects -->
-    <header id="master-hero" class="relative w-full aspect-video md:aspect-[21/9] lg:h-[45vh] flex items-center overflow-hidden bg-brand-black pt-16 md:pt-0">
+    <header id="master-hero" class="relative w-full aspect-video md:aspect-[21/9] lg:h-[55vh] flex items-center overflow-hidden bg-brand-black pt-16 md:pt-0">
         <!-- Animated Background -->
         <div class="absolute inset-0 z-0">
             <img src="/assets/B1.png" class="w-full h-full object-cover object-center animate-fade-in" alt="DUYODEE-HD MASTER BRANDING" loading="lazy" decoding="async" id="hero-background-image">
@@ -195,24 +195,24 @@
 
     <!-- 🚀 Main Content -->
     <main class="p-section min-h-screen relative z-10">
-        
+
         <!-- 🕒 1. WATCH HISTORY -->
-        <section id="history-section" class="space-y-6 hidden animate-fade-in mb-12">
-            <div class="flex items-center justify-between border-b border-white/5 pb-4">
+        <section id="history-section" class="space-y-8 hidden animate-fade-in mb-20">
+            <div class="flex items-center justify-between border-b border-white/5 pb-6">
                 <div class="flex items-center gap-4">
-                    <div class="w-1 h-8 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981]"></div>
-                    <h2 class="text-h2">รับชมค้างไว้ <span class="text-emerald-500/50 italic ml-2 text-xs">Continue</span></h2>
+                    <div class="w-1.5 h-10 bg-emerald-500 rounded-full shadow-[0_0_20px_#10b981]"></div>
+                    <h2 class="text-h2 leading-tight">รับชมค้างไว้ <span class="text-emerald-500/50 italic ml-2 text-xs">Continue</span></h2>
                 </div>
             </div>
             <div id="history-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-6 md:gap-8"></div>
         </section>
 
         <!-- 🔥 2. TRENDING -->
-        <section id="trending-section" class="space-y-8 hidden animate-fade-in mb-16">
+        <section id="trending-section" class="space-y-8 hidden animate-fade-in mb-20">
             <div class="flex items-center justify-between border-b border-white/5 pb-6">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                        <i data-lucide="trending-up" class="w-6 h-6 text-cyan-400"></i>
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                        <i data-lucide="trending-up" class="w-7 h-7 text-cyan-400"></i>
                     </div>
                     <div class="flex flex-col">
                         <h2 class="text-h2 leading-tight">ยอดนิยมสูงสุด</h2>
@@ -224,11 +224,11 @@
         </section>
 
         <!-- ✨ 3. PERSONALIZED -->
-        <section id="personalized-section" class="space-y-8 hidden animate-fade-in mb-16">
+        <section id="personalized-section" class="space-y-8 hidden animate-fade-in mb-20">
             <div class="flex items-center justify-between border-b border-white/5 pb-6">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20">
-                        <i data-lucide="sparkles" class="w-6 h-6 text-brand-primary"></i>
+                    <div class="w-14 h-14 rounded-xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20">
+                        <i data-lucide="sparkles" class="w-7 h-7 text-brand-primary"></i>
                     </div>
                     <div class="flex flex-col">
                         <h2 class="text-h2 leading-tight" id="personalized-title">แนะนำสำหรับคุณ</h2>
@@ -240,58 +240,58 @@
         </section>
 
         <!-- 🏮 4. CHINESE SERIES -->
-        <section class="space-y-8 hidden animate-fade-in mb-16">
+        <section class="space-y-8 hidden animate-fade-in mb-20">
             <div class="flex items-center justify-between border-b border-white/5 pb-6">
                 <div class="flex items-center gap-4">
                     <div class="w-1.5 h-10 bg-accent rounded-full shadow-[0_0_20px_#ef4444]"></div>
                     <div class="flex flex-col">
-                        <h2 class="text-h2">ซีรีส์จีนพากย์ไทย</h2>
+                        <h2 class="text-h2 leading-tight">ซีรีส์จีนพากย์ไทย</h2>
                         <span class="text-meta">Premium Chinese Selection</span>
                     </div>
                 </div>
-                <a href="/category.html?cat=chinese" class="btn-primary !py-2 !px-5 text-[9px] Thai-font">ดูทั้งหมด</a>
+                <a href="/category.html?cat=chinese" class="btn-primary !py-2.5 !px-6 text-[10px] Thai-font">ดูทั้งหมด</a>
             </div>
             <div id="chinese-series-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6 md:gap-8"></div>
         </section>
         
         <!-- 🎬 5. GLOBAL DISCOVERY -->
-        <section id="vertical-section" class="space-y-10 pt-8 border-t border-white/5">
+        <section id="vertical-section" class="space-y-10 pt-10 border-t border-white/5">
             <div class="flex flex-col md:flex-row items-end justify-between gap-6 pb-8">
-                <div class="space-y-2">
-                    <div class="text-meta px-3 py-1 bg-white/5 rounded-full border border-white/10 inline-block">The Grand Library</div>
+                <div class="space-y-3">
+                    <div class="text-meta px-4 py-1.5 bg-white/5 rounded-full border border-white/10 inline-block">The Grand Library</div>
                     <h2 class="text-h1">ภาพยนตร์และซีรีส์ทั้งหมด</h2>
                     <p class="text-body opacity-70">สัมผัสความบันเทิงระดับพรีเมียมที่คัดสรรมาเพื่อคุณโดยเฉพาะ</p>
                 </div>
-                
-                <div class="flex items-center bg-white/5 p-1 rounded-xl border border-white/10 backdrop-blur-md">
-                    <button data-type="all" class="type-filter active px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all bg-brand-primary text-black">ทั้งหมด</button>
-                    <button data-type="movie" class="type-filter px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">หนัง</button>
-                    <button data-type="series" class="type-filter px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">ซีรีส์</button>
+
+                <div class="flex items-center bg-white/5 p-1.5 rounded-xl border border-white/10 backdrop-blur-md">
+                    <button data-type="all" class="type-filter active px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all bg-brand-primary text-black">ทั้งหมด</button>
+                    <button data-type="movie" class="type-filter px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">หนัง</button>
+                    <button data-type="series" class="type-filter px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all text-gray-400 hover:text-white">ซีรีส์</button>
                 </div>
             </div>
 
-            <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6 md:gap-8 min-h-[400px]"></div>
-            
+            <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6 md:gap-8 min-h-[500px]"></div>
+
             <div id="pagination-container" class="flex items-center justify-center gap-4 pt-8">
-                <button id="prev-page" class="w-12 h-12 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-10" onclick="changePage(-1)">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                <button id="prev-page" class="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary hover:border-brand-primary/30 transition-all disabled:opacity-10" onclick="changePage(-1)">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
                 </button>
-                <div id="page-numbers" class="text-xs font-black text-white Thai-font min-w-[60px] text-center uppercase tracking-widest">หน้า 1</div>
-                <button id="next-page" class="w-12 h-12 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-10" onclick="changePage(1)">
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                <div id="page-numbers" class="text-xs font-black text-white Thai-font min-w-[80px] text-center uppercase tracking-widest">หน้า 1</div>
+                <button id="next-page" class="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-gray-400 hover:text-brand-primary hover:border-brand-primary/30 transition-all disabled:opacity-10" onclick="changePage(1)">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
                 </button>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-white/5 bg-brand-black/50 pt-12 pb-8">
-        <div class="container mx-auto px-6 text-center">
-            <div class="flex flex-col items-center gap-6">
-                <div class="flex items-center gap-3">
-                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-10 h-10 rounded-xl">
-                    <span class="text-2xl font-black text-white tracking-tighter uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
+    <footer class="border-t border-white/5 bg-brand-black/50 pt-16 pb-12">
+        <div class="container mx-auto px-6 lg:px-8 text-center">
+            <div class="flex flex-col items-center gap-8">
+                <div class="flex items-center gap-4">
+                    <img src="/assets/logo/DUYDODEE.png" alt="DUYดูDEE Logo" class="w-12 h-12 rounded-xl">
+                    <span class="text-2xl lg:text-3xl font-black text-white tracking-tighter uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
                 </div>
-                <div class="flex flex-wrap justify-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-gray-600">
+                <div class="flex flex-wrap justify-center gap-8 lg:gap-12 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">
                     <a href="#" class="hover:text-brand-primary transition-all">Privacy Policy</a>
                     <a href="#" class="hover:text-brand-primary transition-all">Terms of Service</a>
                     <a href="#" class="hover:text-brand-primary transition-all">Contact Us</a>

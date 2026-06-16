@@ -13,6 +13,7 @@ export const Analytics = {
         Analytics.trackPerformance();
         Analytics.setupEventListeners();
 
+        // eslint-disable-next-line no-console
         console.log('📊 Analytics initialized');
     },
 
@@ -204,6 +205,7 @@ export const Analytics = {
      * Log event to console (can be sent to analytics service)
      */
     logEvent: (eventName, data) => {
+        // eslint-disable-next-line no-console
         console.log(`📊 [Analytics] ${eventName}:`, data);
 
         // In production, send to analytics service (Firebase Analytics, GA, etc.)
@@ -248,6 +250,7 @@ export const Analytics = {
         keys.forEach(key => {
             localStorage.removeItem(`analytics_${key}`);
         });
+        // eslint-disable-next-line no-console
         console.log('📊 Analytics data cleared');
     }
 };

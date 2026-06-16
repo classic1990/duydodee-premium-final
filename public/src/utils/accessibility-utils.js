@@ -226,7 +226,7 @@ export const AccessibilityUtils = {
             }
 
             // Ensure form has submit handler or prevents default
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', (_e) => {
                 if (!form.hasAttribute('novalidate')) {
                     // Add client-side validation
                 }
@@ -262,7 +262,7 @@ export const AccessibilityUtils = {
 
         elements.forEach(element => {
             const styles = window.getComputedStyle(element);
-            const color = styles.color;
+            const _color = styles.color;
             const backgroundColor = styles.backgroundColor;
 
             // Basic contrast check (should be at least 4.5:1 for normal text)
@@ -293,6 +293,7 @@ export const AccessibilityUtils = {
         AccessibilityUtils.suggestAltText();
         AccessibilityUtils.checkColorContrast();
 
+        // eslint-disable-next-line no-console
         console.log('♿ Accessibility improvements initialized');
     }
 };

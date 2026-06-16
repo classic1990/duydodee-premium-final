@@ -3,8 +3,6 @@
  * Extended features for better user experience
  */
 
-import { SearchEnhancements, FilteringEnhancements } from './search-filtering-enhancements.js';
-
 export const AdditionalFeatures = {
     /**
      * Bookmark/Watchlist Management
@@ -177,6 +175,7 @@ export const AdditionalFeatures = {
                     });
                     return true;
                 } catch (error) {
+                    // eslint-disable-next-line no-console
                     console.log('Share canceled:', error);
                     return false;
                 }

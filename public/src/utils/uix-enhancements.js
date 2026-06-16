@@ -288,6 +288,7 @@ export const UIUXEnhancements = {
         UIUXEnhancements.improveFocusRings();
         UIUXEnhancements.improveTooltips();
 
+        // eslint-disable-next-line no-console
         console.log('✨ UI/UX enhancements initialized');
     }
 };
