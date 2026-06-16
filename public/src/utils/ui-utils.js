@@ -4,6 +4,14 @@
  */
 
 export const UIUtils = {
+    /**
+     * Extract YouTube video ID from URL
+     * @param {string} url - YouTube video URL
+     * @returns {string|null} YouTube video ID or null if invalid
+     * @example
+     * extractYouTubeId('https://youtube.com/watch?v=dQw4w9WgXcQ') // 'dQw4w9WgXcQ'
+     * extractYouTubeId('https://youtu.be/dQw4w9WgXcQ') // 'dQw4w9WgXcQ'
+     */
     extractYouTubeId: (url) => {
         if (!url) {
             return null;
@@ -12,12 +20,31 @@ export const UIUtils = {
         return (match && match[2].length === 11) ? match[2] : null;
     },
 
+    /**
+     * Get the appropriate watch page path based on content type and category
+     * @param {string} category - Content category (e.g., 'Action', 'แนวตั้ง')
+     * @param {string} type - Content type ('movie' or 'series')
+     * @param {string} id - Content ID
+     * @returns {string} Full watch page URL with query parameter
+     * @example
+     * getMediaWatchPath('Action', 'movie', '123') // '/watch-movie.html?id=123'
+     * getMediaWatchPath('แนวตั้ง', 'series', '456') // '/watch-movie.html?id=456'
+     */
     getMediaWatchPath: (category, type, id) => {
         const isVertical = category && (category.includes('แนวตั้ง') || category.includes('Vertical'));
         const page = (isVertical || type === 'movie' || type === 'movies') ? '/watch-movie.html' : '/watch-series.html';
         return `${page}?id=${id}`;
     },
 
+    /**
+     * Get safe poster URL with fallback and quality optimization
+     * @param {string} url - Original poster URL
+     * @param {string} quality - Image quality: 'high', 'medium', 'standard', 'low'
+     * @returns {string} Safe poster URL with fallback to default logo
+     * @example
+     * getSafePoster('https://youtube.com/watch?v=dQw4w9WgXcQ', 'high') // 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'
+     * getSafePoster('', 'medium') // '/assets/logo/DUYDODEE.png'
+     */
     getSafePoster: (url, quality = 'high') => {
         const logo = '/assets/logo/DUYDODEE.png';
         if (!url || url === '' || url.includes('DUYDODEE.png')) {
@@ -45,6 +72,14 @@ export const UIUtils = {
         return logo;
     },
 
+    /**
+     * Debounce function to limit execution rate
+     * @param {Function} func - Function to debounce
+     * @param {number} delay - Delay in milliseconds
+     * @returns {Function} Debounced function
+     * @example
+     * const debouncedSearch = debounce((query) => search(query), 300);
+     */
     debounce: (func, delay) => {
         let timeoutId;
         return (...args) => {
@@ -55,6 +90,13 @@ export const UIUtils = {
         };
     },
 
+    /**
+     * Escape HTML special characters to prevent XSS attacks
+     * @param {string} str - String to escape
+     * @returns {string} Escaped HTML-safe string
+     * @example
+     * escapeHTML('<script>alert("xss")</script>') // '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'
+     */
     escapeHTML: (str) => {
         if (typeof str !== 'string') {
             return '';
@@ -71,6 +113,7 @@ export const UIUtils = {
 
     /**
      * 🚀 Performance: Lazy load images with intersection observer
+     * Automatically lazy loads all images with 'data-src' attribute
      */
     setupLazyLoading: () => {
         if ('IntersectionObserver' in window) {
@@ -99,7 +142,10 @@ export const UIUtils = {
     },
 
     /**
-     * 🚀 Performance: Prefetch critical resources
+     * 🚀 Performance: Prefetch critical resources for faster navigation
+     * @param {string[]} urls - Array of URLs to prefetch
+     * @example
+     * prefetchResources(['/watch-movie.html', '/search.html'])
      */
     prefetchResources: (urls) => {
         urls.forEach(url => {
@@ -111,7 +157,12 @@ export const UIUtils = {
     },
 
     /**
-     * 🚀 Performance: Throttle function for scroll events
+     * 🚀 Performance: Throttle function for scroll events and frequent calls
+     * @param {Function} func - Function to throttle
+     * @param {number} limit - Minimum time between calls in milliseconds
+     * @returns {Function} Throttled function
+     * @example
+     * const throttledScroll = throttle(() => handleScroll(), 100);
      */
     throttle: (func, limit) => {
         let inThrottle;
@@ -124,6 +175,13 @@ export const UIUtils = {
         };
     },
 
+    /**
+     * Format timestamp to Thai date format
+     * @param {Date|Object} ts - Timestamp or Date object
+     * @returns {string} Formatted Thai date string
+     * @example
+     * formatDate(new Date('2024-01-15')) // '15 ม.ค. 2567'
+     */
     formatDate: (ts) => {
         if (!ts) {
             return 'N/A';

@@ -1,15 +1,27 @@
+/**
+ * 🎨 DUYดูDEE PREMIUM STYLES
+ * Cinematic dark theme with premium red/gold accents
+ * Optimized for performance and accessibility
+ */
+
 @import "./fonts.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   🏗️ BASE LAYER - Global Styles
+   ============================================ */
 @layer base {
   body {
     @apply bg-brand-black text-white font-body selection:bg-brand-primary/50;
   }
 }
 
+/* ============================================
+   🛠️ UTILITIES LAYER - Component Classes
+   ============================================ */
 @layer utilities {
   /* 📏 Layout & Spacing - Optimized for cleaner look */
   .p-section { @apply py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 max-w-[1400px] xl:max-w-[1600px] mx-auto; }
@@ -37,6 +49,10 @@
   .device-chassis { @apply absolute inset-0 rounded-[2.5rem] pointer-events-none; }
   .device-screen { @apply w-full h-full bg-black relative z-10; }
 
+  /* ============================================
+     🌟 PREMIUM EFFECTS
+     ============================================ */
+  
   /* 🔥 Premium Red Poster Glow Effect */
   .poster-glow {
     @apply relative border border-white/5 rounded-2xl overflow-hidden;
@@ -134,6 +150,9 @@
     animation: float 3s ease-in-out infinite;
   }
 
+  /* ============================================
+     📝 INPUT & FORM COMPONENTS
+     ============================================ */
   /* Premium Input */
   .input-premium {
     @apply w-full bg-black/40 border border-white/10 rounded-2xl px-4 py-3 text-white outline-none transition-all;
@@ -161,6 +180,9 @@
     border-radius: inherit;
   }
 
+  /* ============================================
+     🎯 BADGES & BUTTONS
+     ============================================ */
   /* Premium Badge */
   .badge-premium {
     @apply px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-full;
@@ -180,6 +202,9 @@
     box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
   }
 
+  /* ============================================
+     ✨ ANIMATIONS & TRANSITIONS
+     ============================================ */
   /* Scroll Animation */
   .scroll-reveal {
     opacity: 0;
@@ -228,44 +253,15 @@
   .spotlight:hover::after {
     opacity: 1;
   }
-}
-
-  /* 🧊 Scrollbar UI */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-brand-black;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-brand-primary/30 rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-brand-primary/50;
-  }
-
-  /* Custom Animations */
-  @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  @keyframes morph {
-    0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
-    100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  }
 
   /* Premium Transitions */
   .transition-premium {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* ============================================
+     📐 LAYOUT UTILITIES
+     ============================================ */
   /* Responsive Container */
   .container-premium {
     @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
@@ -276,7 +272,10 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* 🖼️ Premium Image Optimization */
+  /* ============================================
+     🖼️ IMAGE OPTIMIZATION
+     ============================================ */
+  /* Premium Image Optimization */
   .img-premium {
     @apply w-full h-full object-cover;
     image-rendering: -webkit-optimize-contrast;
@@ -302,5 +301,43 @@
     img {
       image-rendering: -webkit-optimize-contrast;
     }
+  }
+}
+
+/* ============================================
+   🧊 SCROLLBAR & GLOBAL STYLES
+   ============================================ */
+  /* 🧊 Scrollbar UI */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-black;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-primary/30 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-primary/50;
+  }
+
+/* ============================================
+   🎬 KEYFRAME ANIMATIONS
+   ============================================ */
+  /* Custom Animations */
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes morph {
+    0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
   }
 
