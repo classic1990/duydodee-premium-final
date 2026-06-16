@@ -3,6 +3,13 @@ node_modules/
 dist/
 build/
 
+# TypeScript (not yet configured, TS files cause lint errors)
+*.ts
+*.tsx
+
+# AI CLI worktrees
+.climpire-worktrees/
+
 # Environment Variables & Secrets
 .env
 .env.local

@@ -1,5 +1,4 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
 # Pre-commit hook to prevent secrets from being committed
 
@@ -111,6 +110,6 @@ fi
 echo "✅ No secrets found in staged files"
 echo "🔍 Running lint-staged..."
 
-npx lint-staged
+npx lint-staged --no-stash
 
 echo "✅ Pre-commit checks passed"
