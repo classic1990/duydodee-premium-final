@@ -1,12 +1,12 @@
-import { db, toggleWatchlist, functions, httpsCallable } from './firebase.js';
-import { SCHEMA } from '../constants.js';
-import { UIUtils } from '../utils/ui-utils.js';
-import { SearchService } from './search-service.js';
 import {
+    db, toggleWatchlist, functions, httpsCallable,
     collection, collectionGroup, getDocs, doc, getDoc, setDoc,
     query, where, orderBy, limit, startAfter,
     increment, serverTimestamp
-} from './firebase-config.js';
+} from './firebase.js';
+import { SCHEMA } from '../constants.js';
+import { UIUtils } from '../utils/ui-utils.js';
+import { SearchService } from './search-service.js';
 
 /**
  * 🚀 DUYดูDEE CONTENT SERVICE (Master Edition)

@@ -13,7 +13,8 @@ import {
     onSnapshot,
     where,
     updateDoc,
-    serverTimestamp
+    serverTimestamp,
+    getWatchHistory
 } from '../../services/firebase.js';
 import { UI } from '../../components/ui.js';
 import { AuthService } from '../../services/auth-service.js';
@@ -244,7 +245,7 @@ async function loadWatchHistory(user) {
     }
 
     try {
-        const history = await AuthService.getWatchHistory(user.uid, 20);
+        const history = await getWatchHistory(user.uid, 20);
 
         if (history.length === 0) {
             UI.renderEmptyState(grid, 'คุณยังไม่มีประวัติการรับชม');

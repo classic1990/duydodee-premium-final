@@ -1,7 +1,7 @@
 import errorHandler from '../utils/error-handler.js';
 import {
-    auth, db, doc, getDoc, setDoc, addDoc, serverTimestamp,
-    collection, query, orderBy, limit, getDocs, googleProvider,
+    auth, db, doc, getDoc, setDoc, serverTimestamp,
+    collection, getDocs, googleProvider,
     updateProfile, updateDoc, increment, writeBatch
 } from './firebase-config.js';
 import {
@@ -105,27 +105,6 @@ export const AuthService = {
     },
 
     /**
-     * Get watch history
-     */
-    async getWatchHistory(userId, count = 6) {
-        if (!userId) {
-            return [];
-        }
-        try {
-            const q = query(
-                collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history'),
-                orderBy('watchedAt', 'desc'),
-                limit(count)
-            );
-            const snap = await getDocs(q);
-            return snap.docs.map(d => d.data());
-        } catch (e) {
-            errorHandler.logError({ type: 'error', message: 'History Fetch Error', stack: e.stack });
-            return [];
-        }
-    },
-
-    /**
      * Clear watch history
      */
     async clearWatchHistory(userId) {
@@ -142,24 +121,6 @@ export const AuthService = {
         } catch (e) {
             errorHandler.logError({ type: 'error', message: 'History Clear Error', stack: e.stack });
             throw e;
-        }
-    },
-
-    /**
-     * Log admin activity
-     */
-    async logActivity(action, details) {
-        try {
-            const user = auth.currentUser;
-            await addDoc(collection(db, SCHEMA.COLLECTIONS.ACTIVITY_LOGS), {
-                adminEmail: user?.email || 'System',
-                adminName: user?.displayName || 'Unknown',
-                action: action,
-                details: details,
-                timestamp: serverTimestamp()
-            });
-        } catch (e) {
-            errorHandler.logError({ type: 'error', message: 'Log Error', stack: e.stack });
         }
     },
 

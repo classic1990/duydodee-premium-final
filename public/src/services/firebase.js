@@ -87,6 +87,27 @@ export async function logActivity(action, details) {
 }
 
 /**
+ * Get user watch history
+ */
+export async function getWatchHistory(userId, count = 10) {
+    if (!userId) {
+        return [];
+    }
+    try {
+        const q = query(
+            collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history'),
+            orderBy('watchedAt', 'desc'),
+            limit(count)
+        );
+        const snap = await getDocs(q);
+        return snap.docs.map(d => d.data());
+    } catch (error) {
+        console.error('Error getting watch history:', error);
+        return [];
+    }
+}
+
+/**
  * Toggle watchlist for a content item
  */
 export async function toggleWatchlist(contentId, data, type = 'movie') {
@@ -113,27 +134,6 @@ export async function toggleWatchlist(contentId, data, type = 'movie') {
     } catch (error) {
         console.error('Error toggling watchlist:', error);
         throw error;
-    }
-}
-
-/**
- * Get user watch history
- */
-export async function getWatchHistory(userId) {
-    if (!userId) {
-        return [];
-    }
-    try {
-        const q = query(
-            collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history'),
-            orderBy('updatedAt', 'desc'),
-            limit(10)
-        );
-        const snap = await getDocs(q);
-        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch (error) {
-        console.error('Error getting watch history:', error);
-        return [];
     }
 }
 
