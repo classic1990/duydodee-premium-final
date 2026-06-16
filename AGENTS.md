@@ -13,6 +13,18 @@ git pull origin main
 This ensures you're working on the latest code that other agents may have pushed.  
 After making changes, always `git push origin main` when done (if the user confirms).
 
+### 📌 คำสั่งภาษาไทยสำหรับ AI Agent
+
+| ขั้นตอน | คำสั่ง |
+|---------|--------|
+| **ก่อนเริ่มทำงานทุกครั้ง** | `git pull origin main` |
+| **ดูสถานะไฟล์ที่เปลี่ยน** | `git status` |
+| **ดูรายละเอียดที่แก้** | `git diff` |
+| **เพิ่มไฟล์ทั้งหมด** | `git add -A` |
+| ** commit พร้อมข้อความ** | `git commit -m "ข้อความ"` |
+| **อัปโหลดขึ้น GitHub** | `git push origin main` |
+| **ดูประวัติ commits** | `git log --oneline -5` |
+
 ## 🔐 CREDENTIALS
 
 All Firebase + API keys are in `.env.local` (not committed).  
