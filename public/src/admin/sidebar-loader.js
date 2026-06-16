@@ -40,6 +40,10 @@ export async function injectAdminSidebar() {
 
         // 4. ตั้งค่า Mobile Toggle (ถ้ามีปุ่มและ Overlay ในหน้านั้น)
         if (toggleBtn && overlay) {
+            // Fix accessibility: Ensure button has discernible text for screen readers
+            if (!toggleBtn.hasAttribute('title') && !toggleBtn.hasAttribute('aria-label')) {
+                toggleBtn.setAttribute('title', 'เมนูควบคุม');
+            }
             toggleBtn.onclick = () => {
                 sidebarContainer.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');

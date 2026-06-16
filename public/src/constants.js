@@ -8,6 +8,7 @@ export const SCHEMA = {
         MOVIES: 'movies',
         SERIES: 'series',
         USERS: 'users',
+        WATCHLIST: 'watchlist',
         HERO: 'hero_slides',
         ACTIVITY_LOGS: 'activity_logs',
         DAILY_STATS: 'daily_stats',

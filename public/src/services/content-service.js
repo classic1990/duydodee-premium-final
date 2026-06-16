@@ -1,6 +1,7 @@
 import { db, toggleWatchlist, functions, httpsCallable } from './firebase.js';
 import { SCHEMA } from '../constants.js';
 import { UIUtils } from '../utils/ui-utils.js';
+import { SearchService } from './search-service.js';
 import {
     collection, collectionGroup, getDocs, doc, getDoc, setDoc,
     query, where, orderBy, limit, startAfter,
@@ -12,51 +13,66 @@ import {
  * Centralized business logic with hybrid Client/Server execution.
  */
 export const ContentService = {
+    async checkInWatchlist(uid, contentId) {
+        try {
+            const watchlistRef = doc(db, SCHEMA.COLLECTIONS.USERS, uid, SCHEMA.COLLECTIONS.WATCHLIST, contentId);
+            const snap = await getDoc(watchlistRef);
+            return snap.exists();
+        } catch (error) {
+            console.error('ContentService Error [checkInWatchlist]:', error);
+            return false;
+        }
+    },
+
     toggleWatchlist,
 
     /**
-     * Increment view count using Firebase Functions (Secure) with fallback
+     * Increment view count directly in Firestore (Client-side)
      */
     async incrementViewCount(type, id) {
         try {
-            // Try Firebase Function first
-            const incrementFn = httpsCallable(functions, 'incrementViewCount');
-            await incrementFn({ type, id });
-        } catch (error) {
-            console.error('ContentService Fallback [incrementViewCount]:', error);
-            // Always use local fallback to avoid CORS issues
-            try {
-                const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
-                await setDoc(doc(db, collName, id), {
-                    views: increment(1),
-                    lastViewedAt: serverTimestamp()
-                }, { merge: true });
+            const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
 
-                const today = new Date().toISOString().split('T')[0];
-                await setDoc(doc(db, SCHEMA.COLLECTIONS.DAILY_STATS, today), {
-                    views: increment(1),
-                    lastUpdated: serverTimestamp()
-                }, { merge: true });
-            } catch (fallbackError) {
-                console.error('ContentService Fallback Failed:', fallbackError);
-            }
+            // Increment view count directly
+            await setDoc(doc(db, collName, id), {
+                views: increment(1),
+                lastViewedAt: serverTimestamp()
+            }, { merge: true });
+
+            // Update daily stats
+            const today = new Date().toISOString().split('T')[0];
+            await setDoc(doc(db, SCHEMA.COLLECTIONS.DAILY_STATS, today), {
+                views: increment(1),
+                lastUpdated: serverTimestamp()
+            }, { merge: true });
+        } catch (error) {
+            console.error('ContentService Error [incrementViewCount]:', error);
         }
     },
 
     /**
-     * Search items across collections using Firebase Functions
+     * Search items across collections
+     * Priority: Algolia > Firebase Functions > Local Firestore
      */
     async searchItems(term, limitCount = 12) {
         if (!term || term.length < 2) {
             return { movies: [], series: [] };
         }
+        // Try Algolia first
+        const algoliaResults = await SearchService.search(term, { hitsPerPage: limitCount });
+        if (algoliaResults) {
+            const movies = algoliaResults.filter(r => r.type === 'movie' || !r.type);
+            const series = algoliaResults.filter(r => r.type === 'series');
+            return { movies, series };
+        }
+        // Fallback to Firebase Functions
         try {
             const searchFn = httpsCallable(functions, 'searchContent');
             const result = await searchFn({ term, limit: limitCount });
             return result.data.results;
         } catch (error) {
             console.error('ContentService Error [searchItems]:', error);
-            // Fallback to local prefix matching
+            // Final fallback to local prefix matching
             return {
                 movies: await this._localSearch('movie', term, limitCount),
                 series: await this._localSearch('series', term, limitCount)

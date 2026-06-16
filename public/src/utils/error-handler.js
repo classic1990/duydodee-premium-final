@@ -19,6 +19,36 @@ class ErrorHandler {
 
         // Log environment info
         this.logEnvironmentInfo();
+
+        // Auto-init Sentry from CDN if DSN configured
+        this.initSentry();
+    }
+
+    initSentry() {
+        const dsn = window.__SENTRY_DSN__;
+        if (!dsn) {
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://browser.sentry-cdn.com/8.0.0/bundle.min.js';
+        script.onload = () => {
+            Sentry.init({
+                dsn,
+                environment: this.getEnvironment(),
+                tracesSampleRate: 0.1
+            });
+        };
+        document.head.appendChild(script);
+    }
+
+    getEnvironment() {
+        try {
+            return typeof process !== 'undefined' && process.env && process.env.NODE_ENV
+                ? process.env.NODE_ENV
+                : 'production';
+        } catch {
+            return 'production';
+        }
     }
 
     handleError(event) {
@@ -80,10 +110,10 @@ class ErrorHandler {
     }
 
     async sendToTrackingService(error) {
-        // Check if Sentry is configured
+        // Sentry (configured via VITE_SENTRY_DSN in index.html)
         if (window.Sentry) {
             try {
-                Sentry.captureException(error);
+                Sentry.captureException(error instanceof Error ? error : new Error(error.message));
             } catch (e) {
                 console.error('Failed to send error to Sentry:', e);
             }

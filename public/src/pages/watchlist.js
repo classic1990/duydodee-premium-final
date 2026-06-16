@@ -1,5 +1,6 @@
 import { db, auth, onAuthStateChanged, collection, getDocs } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
+import { SCHEMA } from '../constants.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.initNavbar();
@@ -23,7 +24,7 @@ async function loadWatchlist(uid) {
     UI.renderSkeleton(grid, 6);
 
     try {
-        const snap = await getDocs(collection(db, 'users', uid, 'bookmarks'));
+        const snap = await getDocs(collection(db, SCHEMA.COLLECTIONS.USERS, uid, SCHEMA.COLLECTIONS.WATCHLIST));
 
         // Remove skeletons
         grid.innerHTML = '';

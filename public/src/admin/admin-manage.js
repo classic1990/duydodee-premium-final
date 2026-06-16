@@ -26,7 +26,7 @@ import { AuthService } from '../services/auth-service.js';
 async function init() {
     UI.setLoading(true);
     try {
-    // Admin access check using environment configuration
+        // Admin access check using environment configuration
         const { user } = await checkAdminAccess();
         if (!config.isAdmin(user.email)) {
             // 🔒 SECURITY: Double check Google login
@@ -124,7 +124,7 @@ async function initTopContentChart() {
     }
 
     try {
-    // ดึงข้อมูล 10 อันดับแรก
+        // ดึงข้อมูล 10 อันดับแรก
         const [mSnap, sSnap] = await Promise.all([
             getDocs(
                 query(
@@ -234,7 +234,7 @@ async function initChart() {
         const stats = snap.docs.map((d) => d.data()).reverse();
 
         const labels =
-      stats.length > 0 ? stats.map((s) => s.date) : ['จุดเริ่มต้นข้อมูล'];
+            stats.length > 0 ? stats.map((s) => s.date) : ['จุดเริ่มต้นข้อมูล'];
         const data = stats.length > 0 ? stats.map((s) => s.views) : [0];
 
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -337,14 +337,18 @@ async function fetchStats() {
         ]);
 
         const totalViews =
-      (movieViewsSnap.data().total || 0) + (seriesViewsSnap.data().total || 0);
+            (movieViewsSnap.data().total || 0) + (seriesViewsSnap.data().total || 0);
         const totalContent = moviesCount.data().count + seriesCount.data().count;
 
         UI.setCounter('stat-views', totalViews);
         UI.setCounter('stat-content', totalContent);
         UI.setCounter('stat-users', usersCount.data().count);
     } catch (err) {
-        console.error(err);
+        console.error('Stats Fetch Error:', err);
+        // Provide fallback indicator for failed stats
+        UI.setCounter('stat-views', '-');
+        UI.setCounter('stat-content', '-');
+        UI.setCounter('stat-users', '-');
     }
 }
 
@@ -430,6 +434,12 @@ async function fetchRecentAssets(filterCat = 'ALL') {
         UI.refreshIcons();
     } catch (err) {
         console.error('Dashboard Feed Error:', err);
+        // Handle permission errors for content view
+        const isPermissionError = err.code === 'permission-denied' || err.message?.includes('permissions');
+        container.innerHTML = `<div class="col-span-full py-12 text-center Thai-font">
+            <p class="text-red-500 text-xs font-bold">${isPermissionError ? '❌ ไม่มีสิทธิ์เข้าถึงข้อมูลคอนเทนต์' : '❌ เกิดข้อผิดพลาดในการโหลดข้อมูล'}</p>
+            <button onclick="location.reload()" class="mt-4 text-[10px] text-gray-500 underline uppercase tracking-widest">ลองใหม่อีกครั้ง</button>
+        </div>`;
     }
 }
 

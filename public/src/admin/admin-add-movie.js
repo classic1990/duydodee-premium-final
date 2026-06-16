@@ -3,6 +3,7 @@ import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { injectAdminSidebar } from './sidebar-loader.js';
+import { ValidationUtils } from '../utils/validation-utils.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE REGISTRATION ENGINE
@@ -14,37 +15,21 @@ import { injectAdminSidebar } from './sidebar-loader.js';
 let videoUrlInput, titleInput, descInput, posterPreview, selectedPosterUrlInput, thumbnailOptionsContainer, noPreview, previewTitle;
 
 /**
- * Validates YouTube URL format
+ * Validates YouTube URL format (using ValidationUtils)
  * @param {string} url - URL to validate
  * @returns {boolean} True if valid YouTube URL
  */
 function isValidYouTubeUrl(url) {
-    if (!url || typeof url !== 'string') {
-        return false;
-    }
-    const patterns = [
-        /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]+/,
-        /^(https?:\/\/)?(www\.)?youtu\.be\/[\w-]+/,
-        /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/[\w-]+/
-    ];
-    return patterns.some(pattern => pattern.test(url.trim()));
+    return ValidationUtils.isValidYouTubeURL(url);
 }
 
 /**
- * Sanitizes user input to prevent XSS
+ * Sanitizes user input to prevent XSS (using ValidationUtils)
  * @param {string} input - Raw input string
  * @returns {string} Sanitized string
  */
 function sanitizeInput(input) {
-    if (!input || typeof input !== 'string') {
-        return '';
-    }
-    return input
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .trim();
+    return ValidationUtils.sanitizeString(input);
 }
 
 /**
@@ -59,11 +44,11 @@ function validateFormData(formData) {
         errors.push('กรุณาระบุลิงก์ YouTube ที่ถูกต้อง');
     }
 
-    if (!formData.title || formData.title.length < 2) {
+    if (!ValidationUtils.isValidTitle(formData.title)) {
         errors.push('กรุณาระบุชื่อเรื่องอย่างน้อย 2 ตัวอักษร');
     }
 
-    if (formData.title.length > 200) {
+    if (formData.title && formData.title.length > 200) {
         errors.push('ชื่อเรื่องต้องไม่เกิน 200 ตัวอักษร');
     }
 

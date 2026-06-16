@@ -21,6 +21,7 @@ const CACHE_EXPIRY = {
 // Hashed build assets (CSS/JS) are cached lazily by the fetch handler instead.
 const CACHE_URLS = [
   '/',
+  '/offline.html',
 ];
 
 // Install event - cache static assets

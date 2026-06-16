@@ -405,4 +405,5 @@ For support and questions:
 
 ---
 
+**Last Updated:** 2026-06-14
 **Built with ❤️ using Firebase, Vite, and TailwindCSS**

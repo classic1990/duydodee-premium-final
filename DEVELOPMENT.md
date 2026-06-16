@@ -620,6 +620,34 @@ console.log('Current user:', AuthService.auth.currentUser);
 
 ## 🎯 Quick Reference
 
+### Firebase Functions (Server-side)
+
+**Project Structure:**
+- `functions/index.js` (Entry point)
+- `functions/src/` (Modularized functions)
+  - `admin.js` (Admin-only operations)
+  - `content.js` (Content-related operations)
+  - `support.js` (Support ticket operations)
+  - `utils/` (Shared helpers)
+
+**Developing Locally:**
+Use the Firebase emulator to test functions locally:
+```bash
+firebase emulators:start --only functions
+```
+
+**Deploying Functions:**
+Deploy all functions:
+```bash
+firebase deploy --only functions
+```
+Deploy specific functions:
+```bash
+firebase deploy --only functions:incrementViewCount,functions:searchContent
+```
+
+---
+
 ### Common Commands
 
 ```bash

@@ -10,11 +10,11 @@ export const MovieCards = {
 
         let posterUrl = item.poster || item.posterURL;
 
-        // Always use high quality for better appearance
+        // 🚀 PERFORMANCE: Use 'medium' (hqdefault) for grid cards to save bandwidth
         if (item.videoUrl && item.videoUrl.includes('youtube.com')) {
-            posterUrl = UIUtils.getSafePoster(item.videoUrl, 'high');
+            posterUrl = UIUtils.getSafePoster(item.videoUrl, 'medium');
         } else {
-            posterUrl = UIUtils.getSafePoster(posterUrl, 'high');
+            posterUrl = UIUtils.getSafePoster(posterUrl, 'medium');
         }
 
         return `
@@ -133,7 +133,7 @@ export const MovieCards = {
         const watchUrl = UIUtils.getMediaWatchPath(data.category, data.type, data.id);
         const editUrl = `/admin/admin-edit-${data.type}.html?id=${data.id}`;
         const typeLabel = data.type === 'movie' ? 'ภาพยนตร์' : 'ซีรีส์';
-        const safePoster = UIUtils.getSafePoster(data.poster || data.posterURL, 'high');
+        const safePoster = UIUtils.getSafePoster(data.poster || data.posterURL, 'medium');
 
         return `
             <div class="movie-card group animate-fade-in">
@@ -168,7 +168,7 @@ export const MovieCards = {
         const type = item.type || 'movie';
         const category = item.category || 'Premium';
         const watchUrl = UIUtils.getMediaWatchPath(category, type, item.id);
-        const poster = UIUtils.getSafePoster(item.poster || item.posterURL, 'high');
+        const poster = UIUtils.getSafePoster(item.poster || item.posterURL, 'medium');
         const progress = item.progress || 0;
         const title = item.title || 'Unknown Title';
 

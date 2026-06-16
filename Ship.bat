@@ -7,8 +7,10 @@ SETLOCAL EnableDelayedExpansion
 
 REM Load environment variables from .env file if exists
 if exist .env (
-    for /f "tokens=1,2 delims==" %%a in ('type .env ^| findstr /v "^#"') do (
-        set "%%a=%%b"
+    for /f "usebackq tokens=1,2 delims==" %%a in (`type .env ^| findstr /v "^#"`) do (
+        set "VAR_NAME=%%a"
+        set "VAR_VALUE=%%b"
+        set "!VAR_NAME!=!VAR_VALUE!"
     )
 )
 
@@ -99,11 +101,11 @@ call npm run lint -- --fix || (%P_WARN% "Linting warnings detected. Auto-fix app
 :: 6. SECURITY AUDIT
 %P_TASK% "Step 6/10: Performing Security Vulnerability Audit..." -ForegroundColor Cyan
 %P_WARN% "Basic security check: Checking for hardcoded secrets..." -ForegroundColor Gray
-findstr /S /I "api_key\|apikey\|secret\|password\|private_key" public\src\config\*.js >nul 2>&1
+findstr /S /I /M "api_key apikey secret password private_key" *.js *.ts *.json >nul 2>&1
 if %errorlevel% equ 0 (
-    %P_WARN% "Potential hardcoded secrets detected in config files. Please review manually." -ForegroundColor Yellow
+    %P_WARN% "Potential hardcoded secrets detected. Please review your source files." -ForegroundColor Yellow
 ) else (
-    %P_OK% "No obvious hardcoded secrets detected." -ForegroundColor Green
+    %P_OK% "No obvious hardcoded secrets detected in root/src." -ForegroundColor Green
 )
 %P_OK% "Security Audit Completed."
 
@@ -121,7 +123,7 @@ call npm test -- --passWithNoTests --silent || (%P_ERR% "Unit tests failed. Imme
 %P_TASK% "Step 9/10: Generating Production Distribution..." -ForegroundColor Cyan
 if exist "dist" (
     %P_INFO% "Cleaning previous build artifacts..." -ForegroundColor Gray
-    rmdir /s /q "dist"
+    rd /s /q "dist" >nul 2>&1 || %P_WARN% "Could not fully clean 'dist' folder. Proceeding anyway..." -ForegroundColor Yellow
 )
 call npm run build || (%P_ERR% "Vite Build Failed." -ForegroundColor Red & goto :FAILED)
 
@@ -129,7 +131,7 @@ call npm run build || (%P_ERR% "Vite Build Failed." -ForegroundColor Red & goto 
 if exist "dist" (
     %P_INFO% "Build Statistics:" -ForegroundColor Gray
     for /f %%A in ('dir /s /b "dist\*.*" ^| find /c /v ""') do set FILE_COUNT=%%A
-    for /f "tokens=3" %%A in ('dir /s "dist" ^| find "bytes"') do set SIZE=%%A
+    for /f "tokens=3" %%A in ('dir /s "dist" ^| find "File(s)"') do set SIZE=%%A
     powershell -Command "Write-Host '   Files: !FILE_COUNT! | Size: !SIZE! bytes' -ForegroundColor DarkGray"
 )
 

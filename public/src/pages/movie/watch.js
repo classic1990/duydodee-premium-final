@@ -81,8 +81,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             // 4. Bookmark Button Handler
             const bookmarkBtn = document.getElementById('bookmark-btn');
             const bookmarkIcon = document.getElementById('bookmark-icon');
+
+            // Initial watchlist check
+            AuthService.onStateChanged(async (user) => {
+                if (user) {
+                    const isBookmarked = await ContentService.checkInWatchlist(user.uid, movieId);
+                    if (isBookmarked && bookmarkIcon) {
+                        bookmarkIcon.classList.add('fill-brand-primary', 'text-brand-primary');
+                    }
+                }
+            });
+
             if (bookmarkBtn) {
                 bookmarkBtn.onclick = async () => {
+                    const user = AuthService.auth.currentUser;
+                    if (!user) {
+                        UI.showToast('กรุณาเข้าสู่ระบบก่อนใช้งาน', 'warning');
+                        return;
+                    }
                     const status = await ContentService.toggleWatchlist(movieId, movie, 'movie');
                     if (status.status === 'added') {
                         UI.showToast('เพิ่มลงในรายการรับชมแล้ว', 'success');

@@ -1,5 +1,8 @@
 import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
+import { ValidationUtils } from '../../utils/validation-utils.js';
+import { AccessibilityUtils } from '../../utils/accessibility-utils.js';
+import { UIUXEnhancements } from '../../utils/uix-enhancements.js';
 
 /**
  * 🔐 DUYDOODEE LOGIN ENGINE - MASTER EDITION (V2.1 Secure)
@@ -7,6 +10,12 @@ import { UI } from '../../components/ui.js';
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();
     UI.initNavbar();
+
+    // Initialize accessibility improvements
+    AccessibilityUtils.init();
+
+    // Initialize UI/UX enhancements
+    UIUXEnhancements.init();
 
     const loginForm = document.getElementById('login-form');
     const googleBtn = document.getElementById('google-login-btn');
@@ -24,8 +33,38 @@ async function handleEmailLogin(e) {
     const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('password').value;
 
-    if (!email || !pass) {
-        return UI.showToast('กรุณากรอกอีเมลและรหัสผ่าน', 'error');
+    // Validate email
+    if (!email) {
+        UI.showToast('กรุณากรอกอีเมล', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('กรุณากรอกอีเมล');
+        }
+        return;
+    }
+
+    if (!ValidationUtils.isValidEmail(email)) {
+        UI.showToast('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('รูปแบบอีเมลไม่ถูกต้อง');
+        }
+        return;
+    }
+
+    // Validate password
+    if (!pass) {
+        UI.showToast('กรุณากรอกรหัสผ่าน', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('กรุณากรอกรหัสผ่าน');
+        }
+        return;
+    }
+
+    if (pass.length < 6) {
+        UI.showToast('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+        }
+        return;
     }
 
     UI.setLoading(true);

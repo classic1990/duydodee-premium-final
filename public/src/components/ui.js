@@ -31,6 +31,11 @@ export const UI = {
     setCounter: (id, count) => {
         const el = document.getElementById(id);
         if (el) {
+            // Clear existing interval if it exists
+            if (el.dataset.intervalId) {
+                clearInterval(parseInt(el.dataset.intervalId));
+            }
+
             let current = 0;
             const target = parseInt(count);
             const step = Math.ceil(target / 20);
@@ -39,10 +44,12 @@ export const UI = {
                 if (current >= target) {
                     el.innerText = target.toLocaleString();
                     clearInterval(interval);
+                    delete el.dataset.intervalId; // Clean up
                 } else {
                     el.innerText = current.toLocaleString();
                 }
             }, 50);
+            el.dataset.intervalId = interval;
         }
     },
 

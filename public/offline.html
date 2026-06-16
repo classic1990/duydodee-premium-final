@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUYดูDEE - ออฟไลน์</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <style>
+        body { background: #050505; color: #fff; }
+        .offline-glow { text-shadow: 0 0 40px rgba(229,9,20,0.5); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-8">
+    <div class="text-center max-w-md animate-fade-in">
+        <div class="w-24 h-24 rounded-[2rem] bg-brand-obsidian border border-white/10 flex items-center justify-center mx-auto mb-8">
+            <svg class="w-12 h-12 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636a9 9 0 11-12.728 0M12 2v7m0 0l-3-3m3 3l3-3"/>
+            </svg>
+        </div>
+        <h1 class="text-3xl font-black text-white uppercase tracking-tighter mb-4 offline-glow">
+            ไม่มี<span class="text-brand-primary">สัญญาณ</span>
+        </h1>
+        <p class="text-gray-500 Thai-font text-lg leading-relaxed mb-10">
+            กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ<br>
+ และลองอีกครั้ง
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="location.reload()" 
+                    class="px-8 py-4 bg-brand-primary text-black text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-brand-primary/90 transition-all shadow-glow-red">
+                ลองอีกครั้ง
+            </button>
+            <a href="/" 
+               class="px-8 py-4 bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">
+                กลับหน้าหลัก
+            </a>
+        </div>
+    </div>
+</body>
+</html>

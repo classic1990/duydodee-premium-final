@@ -16,6 +16,12 @@ const VipPaymentService = {
         searchTerm: ''
     },
 
+    // Helper to identify permission related issues
+    isPermissionError(error) {
+        return error.code === 'permission-denied' ||
+            (error.message && error.message.toLowerCase().includes('permission'));
+    },
+
     async fetchPayments() {
         try {
             const q = query(collection(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS), orderBy('createdAt', 'desc'));
@@ -64,7 +70,12 @@ const VipPaymentService = {
             VipPaymentView.renderTable(this.state.currentPayments);
         } catch (e) {
             console.error('Verify Payment Error:', e);
-            UI.showToast('เกิดข้อผิดพลาดในการดำเนินการ', 'error');
+
+            const message = this.isPermissionError(e)
+                ? 'คุณไม่มีสิทธิ์ดำเนินการปรับสถานะสมาชิก (Permission Denied)'
+                : 'เกิดข้อผิดพลาดในการดำเนินการ';
+
+            UI.showToast(message, 'error');
             this.logAdminActivity('vip-verify-error', { paymentId: id, userId, error: e.message, duration: performance.now() - startTime });
         } finally {
             UI.setLoading(false);
@@ -257,8 +268,15 @@ async function init() {
             );
 
             VipPaymentView.showLoading();
-            const payments = await VipPaymentService.fetchPayments();
-            VipPaymentView.renderTable(payments);
+            try {
+                const payments = await VipPaymentService.fetchPayments();
+                VipPaymentView.renderTable(payments);
+            } catch (err) {
+                const message = VipPaymentService.isPermissionError(err)
+                    ? 'คุณไม่มีสิทธิ์เข้าถึงข้อมูลการชำระเงิน (Permission Denied)'
+                    : 'ไม่สามารถโหลดข้อมูลประวัติการชำระเงินได้';
+                VipPaymentView.renderError(message, () => init());
+            }
         } catch (err) {
             console.error('VIP Management Init Failed:', err);
             UI.showToast('สิทธิการเข้าถึงถูกปฏิเสธ', 'error');

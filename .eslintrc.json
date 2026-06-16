@@ -78,6 +78,8 @@
     "build/**",
     "node_modules/**",
     "*.min.js",
-    "public/sw.js"
+    "public/sw.js",
+    "*.ts",
+    "*.tsx"
   ]
 }

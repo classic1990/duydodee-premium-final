@@ -113,15 +113,22 @@ export const VideoPlayer = {
 
             if (videoId) {
                 const initPlayer = () => {
+                    // 🛡️ Ensure YT and YT.Player are fully loaded before init
+                    if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+                        setTimeout(initPlayer, 100);
+                        return;
+                    }
+
                     const player = new YT.Player('player-api-node', {
                         videoId: videoId,
+                        host: 'https://www.youtube.com', // 🛡️ Explicit host to help origin handshake
                         playerVars: {
                             'autoplay': 1,
                             'controls': 1,
                             'playsinline': 1,
                             'rel': 0,
                             'modestbranding': 1,
-                            'origin': window.location.origin,
+                            'origin': window.location.origin, // 🛡️ Ensure origin is host page
                             'enablejsapi': 1,
                             'widget_referrer': window.location.href
                         },
@@ -135,12 +142,24 @@ export const VideoPlayer = {
                     });
                 };
 
-                if (!window.YT) {
-                    const tag = document.createElement('script');
-                    tag.src = 'https://www.youtube.com/iframe_api';
-                    const firstScriptTag = document.getElementsByTagName('script')[0];
-                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    window.onYouTubeIframeAPIReady = initPlayer;
+                if (typeof window.YT === 'undefined' || typeof window.YT.Player === 'undefined') {
+                    // Check if script already exists to avoid duplicate tags
+                    if (!document.getElementById('youtube-iframe-api')) {
+                        const tag = document.createElement('script');
+                        tag.id = 'youtube-iframe-api';
+                        tag.src = 'https://www.youtube.com/iframe_api';
+                        const firstScriptTag = document.getElementsByTagName('script')[0];
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                    }
+
+                    // Handle existing or new callback
+                    const previousCallback = window.onYouTubeIframeAPIReady;
+                    window.onYouTubeIframeAPIReady = () => {
+                        if (previousCallback) {
+                            previousCallback();
+                        }
+                        initPlayer();
+                    };
                 } else {
                     initPlayer();
                 }

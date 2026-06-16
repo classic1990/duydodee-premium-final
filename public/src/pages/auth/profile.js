@@ -11,13 +11,13 @@ import {
     signOut,
     doc,
     getDoc,
-    writeBatch,
     onSnapshot,
     where,
     updateDoc,
     serverTimestamp
 } from '../../services/firebase.js';
 import { UI } from '../../components/ui.js';
+import { AuthService } from '../../services/auth-service.js';
 
 /**
  * 👤 PROFILE ENGINE - Professional Member View
@@ -232,28 +232,28 @@ async function loadWatchHistory(user) {
     if (!grid) {
         return;
     }
-    try {
-    // Increase limit to 20 for horizontal scrolling
-        const q = query(
-            collection(db, SCHEMA.COLLECTIONS.USERS, user.uid, 'history'),
-            orderBy('watchedAt', 'desc'),
-            limit(20)
-        );
-        const snap = await getDocs(q);
 
-        if (snap.empty) {
+    // Add "View All" link
+    const titleSection = document.querySelector('h2')?.parentElement;
+    if (titleSection && !document.getElementById('view-all-history')) {
+        const viewAll = document.createElement('a');
+        viewAll.id = 'view-all-history';
+        viewAll.href = '/history.html';
+        viewAll.className = 'text-[9px] text-brand-primary uppercase hover:underline ml-auto';
+        viewAll.innerText = 'ดูทั้งหมด';
+        titleSection.appendChild(viewAll);
+    }
+
+    try {
+        const history = await AuthService.getWatchHistory(user.uid, 20);
+
+        if (history.length === 0) {
             UI.renderEmptyState(grid, 'คุณยังไม่มีประวัติการรับชม');
             return;
         }
 
         // Render using createHistoryCard (Landscape format)
-        grid.innerHTML = snap.docs
-            .map((docSnap) => {
-                const item = docSnap.data();
-                return UI.createHistoryCard(item);
-            })
-            .join('');
-
+        grid.innerHTML = history.map(item => UI.createHistoryCard(item)).join('');
         UI.refreshIcons();
     } catch (err) {
         console.error('History Error:', err);
@@ -264,31 +264,16 @@ async function loadWatchHistory(user) {
     const clearBtn = document.getElementById('clear-history-btn');
     if (clearBtn) {
         clearBtn.onclick = async () => {
-            if (
-                // eslint-disable-next-line no-alert
-                !confirm(
-                    'คุณต้องการลบประวัติการรับชมทั้งหมดใช่หรือไม่? (ไม่สามารถย้อนคืนได้)'
-                )
-            ) {
+            if (!confirm('คุณต้องการลบประวัติการรับชมทั้งหมดใช่หรือไม่?')) {
                 return;
             }
-
             UI.setLoading(true);
             try {
-                const q = query(
-                    collection(db, SCHEMA.COLLECTIONS.USERS, user.uid, 'history')
-                );
-                const snap = await getDocs(q);
-
-                const batch = writeBatch(db);
-                snap.forEach((d) => batch.delete(d.ref));
-                await batch.commit();
-
+                await AuthService.clearWatchHistory(user.uid);
                 UI.showToast('ล้างประวัติการรับชมเรียบร้อยแล้ว', 'success');
                 grid.innerHTML = '';
                 UI.renderEmptyState(grid, 'คุณยังไม่มีประวัติการรับชม');
             } catch (error) {
-                console.error('Clear History Error:', error);
                 UI.showToast('เกิดข้อผิดพลาดในการลบประวัติ', 'error');
             } finally {
                 UI.setLoading(false);

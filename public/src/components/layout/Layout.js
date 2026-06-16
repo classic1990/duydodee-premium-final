@@ -36,6 +36,8 @@ export const Layout = {
 
     initAuthStatus: (UI) => {
         const dArea = document.getElementById('user-profile-area');
+        const mArea = document.getElementById('user-profile-area-mobile');
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
@@ -44,20 +46,44 @@ export const Layout = {
                     );
                     const userData = userDoc.exists() ? userDoc.data() : {};
                     const isAdmin = await checkIsAdmin(user);
-                    if (dArea) {
-                        dArea.innerHTML = `
+
+                    const profileHTML = `
                         <div class="flex items-center gap-4">
                             ${isAdmin ? '<a href="/admin/admin-manage.html" class="hidden md:flex items-center gap-2 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-xl text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all"><i data-lucide="layout-dashboard" class="w-3 h-3"></i> Dashboard</a>' : ''}
                             <a href="/profile.html" class="w-10 h-10 rounded-xl border border-white/10 overflow-hidden"><img src="${userData.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-full h-full object-cover"></a>
                         </div>`;
+
+                    const mobileProfileHTML = `
+                        <a href="/profile.html" class="flex flex-col items-center gap-1 p-2 text-brand-primary transition-all duration-300 group relative">
+                            <div class="w-6 h-6 rounded-lg border border-brand-primary/30 overflow-hidden group-hover:scale-110 transition-transform">
+                                <img src="${userData.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-[9px] font-black Thai-font uppercase tracking-tighter">โปรไฟล์</span>
+                            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full"></span>
+                        </a>`;
+
+                    if (dArea) {
+                        dArea.innerHTML = profileHTML;
+                    }
+                    if (mArea) {
+                        mArea.innerHTML = mobileProfileHTML;
                     }
                 } catch (e) {
-                    console.error(e);
+                    console.error('Auth Status Init Error:', e);
                 }
             } else {
+                const loginHTML = '<a href="/login.html" class="btn-primary py-2 px-6 text-[10px]">เข้าสู่ระบบ</a>';
+                const mobileLoginHTML = `
+                    <a href="/login.html" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group">
+                        <i data-lucide="user" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[9px] font-bold Thai-font">เข้าสู่ระบบ</span>
+                    </a>`;
+
                 if (dArea) {
-                    dArea.innerHTML =
-            '<a href="/login.html" class="btn-primary py-2 px-6 text-[10px]">เข้าสู่ระบบ</a>';
+                    dArea.innerHTML = loginHTML;
+                }
+                if (mArea) {
+                    mArea.innerHTML = mobileLoginHTML;
                 }
             }
             UI.refreshIcons();

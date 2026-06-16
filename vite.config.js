@@ -12,7 +12,8 @@ const STATIC_ROOT_FILES = [
   'manifest.json',
   'robots.txt',
   'sitemap.xml',
-  'favicon.ico'
+  'favicon.ico',
+  'offline.html',
 ];
 
 /**
@@ -56,6 +57,7 @@ export default defineConfig({
         'watch-series': resolve('public/watch-series.html'),
         'forgot-password': resolve('public/forgot-password.html'),
         'watchlist': resolve('public/watchlist.html'),
+        'history': resolve('public/history.html'),
         '404': resolve('public/404.html'),
         'admin/admin-manage': resolve('public/admin/admin-manage.html'),
         'admin/admin-add-movie': resolve('public/admin/admin-add-movie.html'),

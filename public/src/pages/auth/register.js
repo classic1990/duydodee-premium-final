@@ -1,5 +1,7 @@
 import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
+import { ValidationUtils } from '../../utils/validation-utils.js';
+import { AccessibilityUtils } from '../../utils/accessibility-utils.js';
 
 /**
  * 📝 DUYดูDEE REGISTER ENGINE (V2.2 - Security & Social Edition)
@@ -7,6 +9,9 @@ import { UI } from '../../components/ui.js';
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();
     UI.initNavbar();
+
+    // Initialize accessibility improvements
+    AccessibilityUtils.init();
 
     const regForm = document.getElementById('register-form');
     const googleBtn = document.getElementById('google-register-btn');
@@ -32,20 +37,42 @@ async function handleEmailRegister(e) {
     const email = emailInput.value.trim();
     const pass = passInput.value;
     const confirmPass = confirmPassInput.value;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // 🛡️ Validation
-    if (!name) {
-        return UI.showToast('กรุณากรอกชื่อที่ใช้แสดง', 'error');
+    // 🛡️ Enhanced Validation
+    if (!ValidationUtils.isValidName(name)) {
+        UI.showToast('ชื่อต้องมีอย่างน้อย 2 ตัวอักษร', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('ชื่อต้องมีอย่างน้อย 2 ตัวอักษร');
+        }
+        return;
     }
-    if (!emailRegex.test(email)) {
-        return UI.showToast('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+
+    if (!ValidationUtils.isValidEmail(email)) {
+        UI.showToast('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('รูปแบบอีเมลไม่ถูกต้อง');
+        }
+        return;
     }
-    if (pass.length < 6) {
-        return UI.showToast('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', 'error');
+
+    if (!ValidationUtils.isValidPassword(pass)) {
+        const strengthInfo = ValidationUtils.getPasswordStrength(pass);
+        const errorMessages = strengthInfo.errors.length > 0
+            ? strengthInfo.errors.join(', ')
+            : 'รหัสผ่านไม่ปลอดภัยเพียงพอ';
+        UI.showToast(errorMessages, 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader(errorMessages);
+        }
+        return;
     }
+
     if (pass !== confirmPass) {
-        return UI.showToast('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง', 'error');
+        UI.showToast('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง', 'error');
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
+        }
+        return;
     }
 
     UI.setLoading(true);

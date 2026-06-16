@@ -31,8 +31,8 @@
 - [ ] ทดสอบ login ได้
 - [ ] ทดสอบ Firebase operations ได้
 - [ ] Branch protection ทดสอบแล้ว
-- [ ] อ่าน README.md
-- [ ] อ่าน AGENTS.md (ถ้าจะเขียนโค้ด)
+- [x] อ่าน README.md
+- [x] อ่าน AGENTS.md (ถ้าจะเขียนโค้ด)
 
 ---
 
@@ -45,8 +45,8 @@
 
 ---
 
-**Status:**
-- 🔴 Critical: 0/5 เสร็จ
-- 🛡️ Recommended: 0/5 เสร็จ
-- 📋 After: 0/5 เสร็จ
+**Status (Updated: 2026-06-14):**
+- 🔴 Critical: 0/5 เสร็จ (รอ Manual Action)
+- 🛡️ Recommended: 0/5 เสร็จ (รอ Manual Action)
+- 📋 After: 2/5 เสร็จ
 - 🧹 Cleanup: 4/4 เสร็จ ✅

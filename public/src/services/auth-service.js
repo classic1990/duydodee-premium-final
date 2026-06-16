@@ -2,7 +2,7 @@ import errorHandler from '../utils/error-handler.js';
 import {
     auth, db, doc, getDoc, setDoc, addDoc, serverTimestamp,
     collection, query, orderBy, limit, getDocs, googleProvider,
-    updateProfile, updateDoc, increment
+    updateProfile, updateDoc, increment, writeBatch, deleteDoc
 } from './firebase-config.js';
 import {
     onAuthStateChanged, signOut, signInWithPopup, signInWithEmailAndPassword,
@@ -122,6 +122,26 @@ export const AuthService = {
         } catch (e) {
             errorHandler.logError({ type: 'error', message: 'History Fetch Error', stack: e.stack });
             return [];
+        }
+    },
+
+    /**
+     * Clear watch history
+     */
+    async clearWatchHistory(userId) {
+        if (!userId) {
+            return;
+        }
+        try {
+            const historyRef = collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history');
+            const snap = await getDocs(historyRef);
+            const batch = writeBatch(db);
+            snap.docs.forEach(d => batch.delete(d.ref));
+            await batch.commit();
+            return true;
+        } catch (e) {
+            errorHandler.logError({ type: 'error', message: 'History Clear Error', stack: e.stack });
+            throw e;
         }
     },
 

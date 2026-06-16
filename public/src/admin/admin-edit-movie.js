@@ -3,6 +3,7 @@ import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { injectAdminSidebar } from './sidebar-loader.js';
+import { ValidationUtils } from '../utils/validation-utils.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE EDIT ENGINE
