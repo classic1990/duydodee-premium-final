@@ -147,57 +147,60 @@ export const Modals = {
                     </div>
                 </div>`;
 
-            document.getElementById('submit-payment').onclick = async (e) => {
-                e.preventDefault();
+            const submitButton = document.getElementById('submit-payment');
+            if (submitButton) {
+                submitButton.addEventListener('click', async (e) => {
+                    e.preventDefault();
 
-                if (!selectedPlan.id) {
-                    return UI.showToast('กรุณาเลือกแผน VIP', 'error');
-                }
+                    if (!selectedPlan.id) {
+                        return UI.showToast('กรุณาเลือกแผน VIP', 'error');
+                    }
 
-                const senderName = document.getElementById('senderName').value.trim();
-                const senderBank = document.getElementById('senderBank').value.trim();
-                const transferAmount = parseFloat(document.getElementById('transferAmount').value);
-                const transferTime = document.getElementById('transferTime').value.trim();
-                const contactEmail = document.getElementById('contactEmail').value.trim();
-                const slipBank = document.getElementById('slipBank').value.trim();
-                const agreeTerms = document.getElementById('agreeTerms').checked;
+                    const senderName = document.getElementById('senderName').value.trim();
+                    const senderBank = document.getElementById('senderBank').value.trim();
+                    const transferAmount = parseFloat(document.getElementById('transferAmount').value);
+                    const transferTime = document.getElementById('transferTime').value.trim();
+                    const contactEmail = document.getElementById('contactEmail').value.trim();
+                    const slipBank = document.getElementById('slipBank').value.trim();
+                    const agreeTerms = document.getElementById('agreeTerms').checked;
 
-                if (!senderName || !senderBank || !transferAmount || !transferTime || !agreeTerms) {
-                    return UI.showToast('กรุณากรอกข้อมูลให้ครบ', 'error');
-                }
+                    if (!senderName || !senderBank || !transferAmount || !transferTime || !agreeTerms) {
+                        return UI.showToast('กรุณากรอกข้อมูลให้ครบ', 'error');
+                    }
 
-                if (transferAmount < selectedPlan.price) {
-                    return UI.showToast(`ยอดชำระเงินไม่ถูกต้อง อย่างน้อย ${selectedPlan.price} ฿`, 'error');
-                }
+                    if (transferAmount < selectedPlan.price) {
+                        return UI.showToast(`ยอดชำระเงินไม่ถูกต้อง อย่างน้อย ${selectedPlan.price} ฿`, 'error');
+                    }
 
-                UI.setLoading(true);
-                try {
-                    await addDoc(collection(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS), {
-                        planId: selectedPlan.id,
-                        planName: selectedPlan.name,
-                        planPrice: selectedPlan.price,
-                        planDuration: VIP_PLANS[Object.keys(VIP_PLANS).find(k => VIP_PLANS[k].id === selectedPlan.id)].duration,
-                        senderName: senderName,
-                        senderBank: senderBank,
-                        transferAmount: transferAmount,
-                        transferTime: transferTime,
-                        contactEmail: contactEmail,
-                        slipBank: slipBank,
-                        status: 'pending',
-                        createdAt: serverTimestamp(),
-                        userId: auth.currentUser.uid,
-                        userEmail: auth.currentUser.email,
-                        userName: auth.currentUser.displayName
-                    });
-                    UI.showToast('ส่งข้อมูลสมัคร VIP เรียบร้อยแล้ว เจ้าหน้าที่จะตรวจสอบและอัปเกรดภายการภายใน 24 ชั่วโมง', 'success');
-                    modal.remove();
-                } catch (error) {
-                    console.error('Payment submission error:', error);
-                    UI.showToast('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่', 'error');
-                } finally {
-                    UI.setLoading(false);
-                }
-            };
+                    UI.setLoading(true);
+                    try {
+                        await addDoc(collection(db, SCHEMA.COLLECTIONS.VIP_PAYMENTS), {
+                            planId: selectedPlan.id,
+                            planName: selectedPlan.name,
+                            planPrice: selectedPlan.price,
+                            planDuration: VIP_PLANS[Object.keys(VIP_PLANS).find(k => VIP_PLANS[k].id === selectedPlan.id)].duration,
+                            senderName: senderName,
+                            senderBank: senderBank,
+                            transferAmount: transferAmount,
+                            transferTime: transferTime,
+                            contactEmail: contactEmail,
+                            slipBank: slipBank,
+                            status: 'pending',
+                            createdAt: serverTimestamp(),
+                            userId: auth.currentUser.uid,
+                            userEmail: auth.currentUser.email,
+                            userName: auth.currentUser.displayName
+                        });
+                        UI.showToast('ส่งข้อมูลสมัคร VIP เรียบร้อยแล้ว เจ้าหน้าที่จะตรวจสอบและอัปเกรดภายการภายใน 24 ชั่วโมง', 'success');
+                        modal.remove();
+                    } catch (error) {
+                        console.error('Payment submission error:', error);
+                        UI.showToast('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่', 'error');
+                    } finally {
+                        UI.setLoading(false);
+                    }
+                });
+            }
         } catch (e) {
             console.error('Error loading payment info:', e);
             UI.showToast('โหลดข้อมูลบัญชีไม่ได้', 'error');
