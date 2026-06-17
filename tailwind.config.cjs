@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class', // Enable class-based dark mode
   content: [
     "./public/**/*.{html,js}",
   ],
@@ -13,13 +14,20 @@ module.exports = {
       },
       colors: {
         brand: {
-          // Premium Black Palette
+          // Premium Black Palette (Dark Mode)
           black: '#050505',     // Deep Matte Black
           'black-light': '#0a0a0a',
           obsidian: '#0d0d0f',  // Premium Dark Surface
           charcoal: '#121214',   // Lighter Dark Surface
           surface: '#1a1a1d',   // Elevated Surface
           'surface-light': '#252529',
+          
+          // Light Mode Palette
+          white: '#ffffff',     // Pure White
+          'white-dark': '#f5f5f5',  // Light Grey Surface
+          'white-surface': '#f9fafb',  // Light Surface
+          'white-charcoal': '#e5e7eb',  // Light Grey
+          'white-obsidian': '#d1d5db',  // Medium Grey
           
           // Premium Red Palette - Enhanced
           primary: '#E50914',   // Netflix-style Vibrant Red
@@ -49,10 +57,17 @@ module.exports = {
           info: '#3b82f6',
         },
         text: {
+          // Dark Mode Text
           main: '#ffffff',      // Pure White
           'main-dim': '#f0f0f0',
           muted: '#b3b3b3',     // Light Grey
           'muted-dark': '#808080',
+          
+          // Light Mode Text
+          'dark-main': '#111827',  // Dark Grey
+          'dark-dim': '#1f2937',   // Medium Grey
+          'dark-muted': '#6b7280', // Light Grey
+          'dark-muted-dim': '#9ca3af', // Very Light Grey
         }
       },
       fontSize: {

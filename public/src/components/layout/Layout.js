@@ -20,6 +20,14 @@ export const Layout = {
         }
 
         UI.initTheme();
+
+        // Add theme toggle button to navbar
+        const themeToggleContainer = document.getElementById('theme-toggle-container');
+        if (themeToggleContainer) {
+            themeToggleContainer.innerHTML = UI.createButton();
+            UI.refreshIcons();
+        }
+
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 nav.classList.add('nav-glass', 'py-3');

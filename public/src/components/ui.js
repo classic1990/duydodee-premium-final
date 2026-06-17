@@ -9,6 +9,7 @@ import { Layout } from './layout/Layout.js';
 import { HeroSlider } from './layout/HeroSlider.js';
 import { VideoPlayer } from './player/VideoPlayer.js';
 import { Modals } from './modals/Modals.js';
+import { ThemeToggle } from './ThemeToggle.js';
 
 export const UI = {
     // Utilities from UIUtils
@@ -20,6 +21,7 @@ export const UI = {
     ...HeroSlider,
     ...VideoPlayer,
     ...Modals,
+    ...ThemeToggle,
 
     // UI Orchestration Helpers
     refreshIcons: () => {

@@ -2,6 +2,7 @@
  * 🎨 DUYดูDEE PREMIUM STYLES
  * Cinematic dark theme with premium red/gold accents
  * Optimized for performance and accessibility
+ * Now supports light/dark mode toggle
  */
 
 @import "./fonts.css";
@@ -11,11 +12,41 @@
 @tailwind utilities;
 
 /* ============================================
+   🎨 THEME VARIABLES - CSS Custom Properties
+   ============================================ */
+:root {
+  /* Dark Mode (Default) */
+  --bg-primary: #050505;
+  --bg-secondary: #0d0d0f;
+  --bg-tertiary: #1a1a1d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(13, 13, 15, 0.6);
+}
+
+.light {
+  /* Light Mode */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
    🏗️ BASE LAYER - Global Styles
    ============================================ */
 @layer base {
   body {
     @apply bg-brand-black text-white font-body selection:bg-brand-primary/50;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .light body {
+    @apply bg-brand-white text-brand-dark-main font-body selection:bg-brand-primary/50;
   }
 }
 

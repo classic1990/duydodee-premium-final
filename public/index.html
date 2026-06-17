@@ -126,6 +126,9 @@
 
             <!-- Right Side Actions -->
             <div class="flex items-center gap-4 md:gap-6 lg:gap-8 flex-1 justify-end lg:flex-none">
+                <!-- Theme Toggle Button -->
+                <div id="theme-toggle-container"></div>
+                
                 <!-- VIP Button with Enhanced Glow -->
                 <button onclick="UI.renderVIPUpgradeModal()" class="btn-vip !py-2.5 !px-5 hidden md:flex relative overflow-hidden group" aria-label="สมัครสมาชิก VIP">
                     <span class="relative z-10">สมัคร VIP</span>
@@ -163,6 +166,13 @@
                 <span class="text-[10px] font-bold Thai-font">ซีรีส์จีน</span>
                 <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
+            <!-- Mobile Theme Toggle -->
+            <button id="mobile-theme-toggle" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative" onclick="ThemeToggle.handleClick()">
+                <i data-lucide="sun" class="w-6 h-6 group-hover:scale-110 transition-transform mobile-sun-icon"></i>
+                <i data-lucide="moon" class="w-6 h-6 group-hover:scale-110 transition-transform mobile-moon-icon hidden"></i>
+                <span class="text-[10px] font-bold Thai-font">ธีม</span>
+                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+            </button>
             <div id="user-profile-area-mobile" class="flex flex-col items-center gap-1.5 p-2.5 text-gray-500 hover:text-brand-primary transition-all duration-300 group relative">
                 <div class="w-6 h-6 group-hover:scale-110 transition-transform"></div>
                 <span class="text-[10px] font-bold Thai-font">โปรไฟล์</span>
