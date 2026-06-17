@@ -1,4 +1,5 @@
 import { auth, onAuthStateChanged, getWatchHistory, db, doc, getDoc, SCHEMA } from '../services/firebase.js';
+import { RecommendationService } from '../services/recommendation-service.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
 import { ContentService } from '../services/content-service.js';
@@ -77,7 +78,7 @@ function setupFilterButtons() {
 }
 
 /**
- * 💡 Load Personalized Content
+ * 💡 Load Personalized Content (Enhanced with AI Recommendations)
  */
 async function loadPersonalizedContent(uid) {
     const section = document.getElementById('personalized-section');
@@ -88,32 +89,28 @@ async function loadPersonalizedContent(uid) {
     }
 
     try {
-        const userSnap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid));
-        if (!userSnap.exists()) {
-            return;
-        }
-
-        const prefs = userSnap.data().preferredCategories || {};
-        const categories = Object.keys(prefs);
-        if (categories.length === 0) {
-            return;
-        }
-
-        // Find top category
-        const topCategory = categories.reduce((a, b) => prefs[a] > prefs[b] ? a : b);
-
-        const { items } = await ContentService.fetchItemsByCategory(['movie', 'series'], topCategory, {
-            pageSize: 7
+        // Use enhanced RecommendationService
+        const recommendations = await RecommendationService.getRecommendations(uid, {
+            limitCount: 7,
+            includeWatched: false
         });
 
-        if (items.length > 0) {
+        if (recommendations.length > 0) {
             section.classList.remove('hidden');
-            titleEl.innerText = `แนะนำจากความชอบของคุณ: ${topCategory}`;
-            grid.innerHTML = items.map(item => UI.createMovieCard(item)).join('');
+            titleEl.innerText = 'แนะนำสำหรับคุณ';
+
+            // Shuffle recommendations for variety
+            const shuffled = recommendations.sort(() => Math.random() - 0.5);
+
+            grid.innerHTML = shuffled.map(item => UI.createMovieCard(item)).join('');
             UI.refreshIcons();
+        } else {
+            // Hide section if no recommendations
+            section.classList.add('hidden');
         }
     } catch (error) {
         console.error('Personalized Load Error:', error);
+        section.classList.add('hidden');
     }
 }
 

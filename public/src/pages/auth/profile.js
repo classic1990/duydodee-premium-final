@@ -18,6 +18,7 @@ import {
 } from '../../services/firebase.js';
 import { UI } from '../../components/ui.js';
 import { AuthService } from '../../services/auth-service.js';
+import { RecommendationService } from '../../services/recommendation-service.js';
 
 /**
  * 👤 PROFILE ENGINE - Professional Member View
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadBookmarks(user);
             await loadUserTickets(user);
             await loadWatchHistory(user);
+            await loadRecommendations(user);
         } else {
             window.location.href = '/login.html';
         }
@@ -280,5 +282,34 @@ async function loadWatchHistory(user) {
                 UI.setLoading(false);
             }
         };
+    }
+}
+
+/**
+ * 🎯 Load Personalized Recommendations
+ */
+async function loadRecommendations(user) {
+    const section = document.getElementById('recommendations-section');
+    const grid = document.getElementById('recommendations-grid');
+    if (!grid) {
+        return;
+    }
+
+    try {
+        const recommendations = await RecommendationService.getRecommendations(user.uid, {
+            limitCount: 6,
+            includeWatched: false
+        });
+
+        if (recommendations.length > 0) {
+            section.classList.remove('hidden');
+            grid.innerHTML = recommendations.map(item => UI.createMovieCard(item)).join('');
+            UI.refreshIcons();
+        } else {
+            section.classList.add('hidden');
+        }
+    } catch (error) {
+        console.error('Recommendations Error:', error);
+        section.classList.add('hidden');
     }
 }
