@@ -3,7 +3,7 @@
  * Personalized content recommendations based on user behavior
  */
 
-import { db, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from './firebase-config.js';
+import { db, doc, getDoc } from './firebase-config.js';
 import { SCHEMA } from '../constants.js';
 
 export const RecommendationService = {

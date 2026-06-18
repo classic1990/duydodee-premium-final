@@ -1,4 +1,4 @@
-import { db, collection, getDocs, SCHEMA, query, where, orderBy, limit, doc, getDoc } from '../services/firebase.js';
+import { db, collection, getDocs, SCHEMA, query, where, orderBy, limit } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -163,7 +163,7 @@ function updateExecutiveSummary(dailyStats) {
     updateGrowthIndicator('conversion-growth', growth.conversionGrowth);
 }
 
-function calculateGrowth(dailyStats) {
+function calculateGrowth(_dailyStats) {
     // Simple growth calculation (current vs previous period)
     // In real implementation, would compare with previous period
     return {

@@ -12,7 +12,6 @@ export const ThemeToggle = {
      */
     createButton() {
         const isDark = ThemeService.isDarkMode();
-        const icon = isDark ? 'sun' : 'moon';
         const label = isDark ? 'สว่าง' : 'มืด';
 
         return `

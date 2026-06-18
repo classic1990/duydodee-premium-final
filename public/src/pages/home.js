@@ -1,4 +1,4 @@
-import { auth, onAuthStateChanged, getWatchHistory, db, doc, getDoc, SCHEMA } from '../services/firebase.js';
+import { auth, onAuthStateChanged, getWatchHistory } from '../services/firebase.js';
 import { RecommendationService } from '../services/recommendation-service.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
