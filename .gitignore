@@ -47,6 +47,10 @@ inject_assets.js
 .DS_Store
 Thumbs.db
 
+# Windows shortcuts and batch files
+*.lnk
+Ship.bat
+
 # Tool specific
 coverage/
 .qodo/

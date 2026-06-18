@@ -1,3 +1,10 @@
+/**
+ * 🎨 DUYดูDEE PREMIUM STYLES
+ * Cinematic dark theme with premium red/gold accents
+ * Optimized for performance and accessibility
+ * Now supports light/dark mode toggle
+ */
+
 @import "./fonts.css";
 
 *, ::before, ::after{
@@ -108,9 +115,8 @@
   --tw-contain-style:  ;
 }
 
-/*
-! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
-*/
+/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
+ */
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -530,6 +536,34 @@ body::-moz-selection{
 }
 
 body::selection{
+  background-color: rgb(229 9 20 / 0.5);
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+.light body{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  font-family: Inter, Prompt, sans-serif;
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+}
+
+.light body *::-moz-selection{
+  background-color: rgb(229 9 20 / 0.5);
+}
+
+.light body *::selection{
+  background-color: rgb(229 9 20 / 0.5);
+}
+
+.light body::-moz-selection{
+  background-color: rgb(229 9 20 / 0.5);
+}
+
+.light body::selection{
   background-color: rgb(229 9 20 / 0.5);
 }
 .\!container{
@@ -954,6 +988,9 @@ body::selection{
 .inline-flex{
   display: inline-flex;
 }
+.\!table{
+  display: table !important;
+}
 .table{
   display: table;
 }
@@ -1203,6 +1240,9 @@ body::selection{
 .max-w-\[180px\]{
   max-width: 180px;
 }
+.max-w-\[200px\]{
+  max-width: 200px;
+}
 .max-w-\[440px\]{
   max-width: 440px;
 }
@@ -1258,6 +1298,11 @@ body::selection{
 }
 .-rotate-90{
   --tw-rotate: -90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.scale-0{
+  --tw-scale-x: 0;
+  --tw-scale-y: 0;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .scale-100{
@@ -1512,6 +1557,9 @@ body::selection{
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
 }
+.divide-brand-primary\/10 > :not([hidden]) ~ :not([hidden]){
+  border-color: rgb(229 9 20 / 0.1);
+}
 .divide-white\/5 > :not([hidden]) ~ :not([hidden]){
   border-color: rgb(255 255 255 / 0.05);
 }
@@ -1532,6 +1580,11 @@ body::selection{
 }
 .overflow-x-hidden{
   overflow-x: hidden;
+}
+.truncate{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .\!rounded-2xl{
   border-radius: 1rem !important;
@@ -1597,6 +1650,9 @@ body::selection{
 .border-b{
   border-bottom-width: 1px;
 }
+.border-l-4{
+  border-left-width: 4px;
+}
 .border-r{
   border-right-width: 1px;
 }
@@ -1628,6 +1684,9 @@ body::selection{
 .border-brand-primary{
   --tw-border-opacity: 1;
   border-color: rgb(229 9 20 / var(--tw-border-opacity, 1));
+}
+.border-brand-primary\/0{
+  border-color: rgb(229 9 20 / 0);
 }
 .border-brand-primary\/10{
   border-color: rgb(229 9 20 / 0.1);
@@ -1737,6 +1796,9 @@ body::selection{
 .bg-black\/70{
   background-color: rgb(0 0 0 / 0.7);
 }
+.bg-black\/80{
+  background-color: rgb(0 0 0 / 0.8);
+}
 .bg-black\/90{
   background-color: rgb(0 0 0 / 0.9);
 }
@@ -1776,6 +1838,10 @@ body::selection{
   --tw-bg-opacity: 1;
   background-color: rgb(18 18 20 / var(--tw-bg-opacity, 1));
 }
+.bg-brand-gold{
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 175 55 / var(--tw-bg-opacity, 1));
+}
 .bg-brand-gold\/10{
   background-color: rgb(212 175 55 / 0.1);
 }
@@ -1799,11 +1865,12 @@ body::selection{
 .bg-brand-primary\/5{
   background-color: rgb(229 9 20 / 0.05);
 }
-.bg-brand-primary\/50{
-  background-color: rgb(229 9 20 / 0.5);
-}
 .bg-brand-primary\/95{
   background-color: rgb(229 9 20 / 0.95);
+}
+.bg-brand-surface{
+  --tw-bg-opacity: 1;
+  background-color: rgb(26 26 29 / var(--tw-bg-opacity, 1));
 }
 .bg-cyan-500{
   --tw-bg-opacity: 1;
@@ -1853,10 +1920,6 @@ body::selection{
 }
 .bg-transparent{
   background-color: transparent;
-}
-.bg-white{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 .bg-white\/10{
   background-color: rgb(255 255 255 / 0.1);
@@ -2490,6 +2553,9 @@ body::selection{
 .text-brand-gold{
   --tw-text-opacity: 1;
   color: rgb(212 175 55 / var(--tw-text-opacity, 1));
+}
+.text-brand-gold\/50{
+  color: rgb(212 175 55 / 0.5);
 }
 .text-brand-primary{
   --tw-text-opacity: 1;
@@ -3143,6 +3209,9 @@ body::selection{
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
 }
+/* ============================================
+     🌟 PREMIUM EFFECTS
+     ============================================ */
 /* 🔥 Premium Red Poster Glow Effect */
 .poster-glow{
   position: relative;
@@ -3216,6 +3285,9 @@ body::selection{
     opacity: 1;
   }
 /* Particle Background */
+/* ============================================
+     📝 INPUT & FORM COMPONENTS
+     ============================================ */
 /* Premium Input */
 .input-premium{
   width: 100%;
@@ -3241,6 +3313,9 @@ body::selection{
     box-shadow: 0 0 20px rgba(229, 9, 20, 0.2);
 }
 /* Animated Border Gradient */
+/* ============================================
+     🎯 BADGES & BUTTONS
+     ============================================ */
 /* Premium Badge */
 .badge-premium{
   border-radius: 9999px;
@@ -3257,6 +3332,9 @@ body::selection{
     box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
 }
 /* Premium Button Variants */
+/* ============================================
+     ✨ ANIMATIONS & TRANSITIONS
+     ============================================ */
 /* Scroll Animation */
 /* Text Gradient */
 .text-gradient-premium {
@@ -3267,7 +3345,77 @@ body::selection{
   }
 /* Morphing Blob */
 /* Spotlight Effect */
+/* Premium Transitions */
+/* ============================================
+     📐 LAYOUT UTILITIES
+     ============================================ */
+/* Responsive Container */
+/* Safe Area Padding for Mobile */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+/* ============================================
+     🖼️ IMAGE OPTIMIZATION
+     ============================================ */
+/* Premium Image Optimization */
+.lazy-loading{
+  opacity: 0.5;
+  --tw-blur: blur(4px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+.lazy-loaded{
+  opacity: 1;
+  --tw-blur: blur(0);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+/* Image Quality Enhancements */
+img{
+  max-width: 100%;
+    image-rendering: auto;
+}
+@supports (image-rendering: -webkit-optimize-contrast) {
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+  }
 
+/* ============================================
+   🎨 THEME VARIABLES - CSS Custom Properties
+   ============================================ */
+:root {
+  /* Dark Mode (Default) */
+  --bg-primary: #050505;
+  --bg-secondary: #0d0d0f;
+  --bg-tertiary: #1a1a1d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(13, 13, 15, 0.6);
+}
+
+.light {
+  /* Light Mode */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   🏗️ BASE LAYER - Global Styles
+   ============================================ */
+
+/* ============================================
+   🛠️ UTILITIES LAYER - Component Classes
+   ============================================ */
+
+/* ============================================
+   🧊 SCROLLBAR & GLOBAL STYLES
+   ============================================ */
   /* 🧊 Scrollbar UI */
   ::-webkit-scrollbar {
     width: 8px;
@@ -3288,6 +3436,9 @@ body::selection{
   background-color: rgb(229 9 20 / 0.5);
 }
 
+/* ============================================
+   🎬 KEYFRAME ANIMATIONS
+   ============================================ */
   /* Custom Animations */
   @keyframes gradientMove {
     0% { background-position: 0% 50%; }
@@ -3299,74 +3450,6 @@ body::selection{
     0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
     50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
     100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  }
-
-  /* Premium Transitions */
-  .transition-premium {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Responsive Container */
-  .container-premium{
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 80rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-  @media (min-width: 640px){
-
-  .container-premium{
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-  @media (min-width: 1024px){
-
-  .container-premium{
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-  /* Safe Area Padding for Mobile */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  /* 🖼️ Premium Image Optimization */
-  .img-premium{
-  height: 100%;
-  width: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
-  .lazy-loading{
-  opacity: 0.5;
-  --tw-blur: blur(4px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-    transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-  .lazy-loaded{
-  opacity: 1;
-  --tw-blur: blur(0);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-  /* Image Quality Enhancements */
-  img{
-  max-width: 100%;
-    image-rendering: auto;
-}
-
-  @supports (image-rendering: -webkit-optimize-contrast) {
-    img {
-      image-rendering: -webkit-optimize-contrast;
-    }
   }
 
   .selection\:bg-brand-copper\/30 *::-moz-selection{
@@ -3545,6 +3628,10 @@ body::selection{
   color: rgb(0 0 0 / var(--tw-text-opacity, 1));
 }
 
+  .hover\:text-brand-gold\/100:hover{
+  color: rgb(212 175 55 / 1);
+}
+
   .hover\:text-brand-primary:hover{
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
@@ -3577,6 +3664,12 @@ body::selection{
 
   .hover\:underline:hover{
   text-decoration-line: underline;
+}
+
+  .hover\:shadow-\[0_0_15px_5px_rgb\(0\2c 255\2c 255\2c 0\.5\)\]:hover{
+  --tw-shadow: 0 0 15px 5px rgb(0,255,255,0.5);
+  --tw-shadow-colored: 0 0 15px 5px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
   .hover\:shadow-\[0_0_30px_rgba\(251\2c 191\2c 36\2c 0\.4\)\]:hover{
@@ -3649,6 +3742,10 @@ body::selection{
   border-color: rgb(229 9 20 / 0.5);
 }
 
+  .focus\:border-brand-primary\/80:focus{
+  border-color: rgb(229 9 20 / 0.8);
+}
+
   .focus\:bg-black\/60:focus{
   background-color: rgb(0 0 0 / 0.6);
 }
@@ -3681,6 +3778,14 @@ body::selection{
   --tw-scale-x: .95;
   --tw-scale-y: .95;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+  .active\:border-l-4:active{
+  border-left-width: 4px;
+}
+
+  .active\:border-brand-primary\/80:active{
+  border-color: rgb(229 9 20 / 0.8);
 }
 
   .disabled\:pointer-events-none:disabled{
@@ -3832,6 +3937,10 @@ body::selection{
   .group\/slip:hover .group-hover\/slip\:text-brand-primary{
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
+}
+
+  .group:hover .group-hover\:text-brand-gold\/10{
+  color: rgb(212 175 55 / 0.1);
 }
 
   .group:hover .group-hover\:text-brand-primary{

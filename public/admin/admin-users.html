@@ -26,11 +26,11 @@
         <div class="flex flex-col md:flex-row gap-4">
             <div class="relative flex-1">
                 <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600"></i>
-                <input type="text" id="user-search" 
-                       placeholder="ค้นหาชื่อหรืออีเมลสมาชิก..." 
-                       class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white text-xs outline-none focus:border-brand-primary/50 transition-all Thai-font">
+<input type="text" id="user-search" 
+                        placeholder="ค้นหาชื่อหรืออีเมลสมาชิก..." 
+                        class="w-full bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl py-4 pl-14 pr-6 text-white text-xs outline-none focus:border-brand-primary/80 transition-all Thai-font">
             </div>
-            <select id="role-filter" class="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white text-xs outline-none focus:border-brand-primary/50 transition-all Thai-font w-full md:w-48">
+            <select id="role-filter" class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl px-6 py-4 text-white text-xs outline-none focus:border-brand-primary/80 transition-all Thai-font w-full md:w-48">
                 <option value="all">ทุกระดับสมาชิก</option>
                 <option value="super-admin">ผู้บริหาร</option>
                 <option value="admin">แอดมิน</option>
@@ -39,10 +39,10 @@
             </select>
         </div>
 
-        <div class="glass-premium overflow-hidden">
+        <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl p-6 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="bg-white/5 border-b border-white/5">
+                    <thead class="bg-black/40 backdrop-blur-md border-b border-brand-primary/20">
                         <tr>
                             <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Member</th>
                             <th class="p-5 text-center text-[10px] font-black uppercase tracking-widest text-gray-500">Role</th>
@@ -51,7 +51,7 @@
                             <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="user-list" class="divide-y divide-white/5">
+                    <tbody id="user-list" class="divide-y divide-brand-primary/10">
                         <!-- User rows will be injected here -->
                     </tbody>
                 </table>
@@ -61,9 +61,9 @@
         <div id="pagination-container" class="flex justify-center py-4"></div>
 
         <!-- 📝 Edit User Modal -->
-        <div id="edit-user-modal" class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/90 backdrop-blur-xl p-4">
-            <div class="glass-premium border border-white/10 rounded-[2.5rem] p-10 max-w-lg w-full relative animate-zoom-in">
-                <button onclick="this.closest('#edit-user-modal').classList.add('hidden')" class="absolute top-8 right-8 text-gray-500 hover:text-white">
+        <div id="edit-user-modal" class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+            <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-[2.5rem] p-10 max-w-lg w-full relative animate-zoom-in">
+                <button onclick="this.closest('#edit-user-modal').classList.add('hidden')" class="absolute top-8 right-8 text-gray-500 hover:text-white hover:scale-105 hover:shadow-[0_0_15px_5px_rgb(0,255,255,0.5)] transition-all duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
                 <div class="text-center mb-8">
@@ -74,25 +74,25 @@
                     <input type="hidden" id="edit-uid">
                     <div class="space-y-2">
                         <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">Display Name</label>
-                        <input type="text" id="edit-displayName" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-xs text-white focus:border-brand-primary outline-none transition-all Thai-font">
+                        <input type="text" id="edit-displayName" class="w-full bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-xl p-4 text-xs text-white focus:border-brand-primary/80 outline-none transition-all Thai-font">
                     </div>
                     <div class="space-y-2">
                         <label class="text-[9px] font-black text-gray-600 uppercase tracking-widest ml-1">User Role</label>
-                        <select id="edit-role" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-xs text-white focus:border-brand-primary outline-none transition-all Thai-font">
+                        <select id="edit-role" class="w-full bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-xl p-4 text-xs text-white focus:border-brand-primary/80 outline-none transition-all Thai-font">
                             <option value="member">Member (สมาชิกทั่วไป)</option>
                             <option value="vip">VIP (พรีเมียม)</option>
                             <option value="admin">Admin (ผู้ดูแลระบบ)</option>
                             <option value="super-admin">Super Admin (ผู้บริหาร)</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-primary w-full !py-5 shadow-lg shadow-brand-primary/20">Update Member Information</button>
+                    <button type="submit" class="bg-brand-primary text-black text-[10px] font-black uppercase rounded-xl hover:scale-105 hover:shadow-[0_0_15px_5px_rgb(0,255,255,0.5)] transition-all duration-300 w-full !py-5">Update Member Information</button>
                 </form>
             </div>
         </div>
     </main>
 
     <div id="admin-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[40] hidden"></div>
-    <button id="sidebar-toggle-btn" class="lg:hidden fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-brand-primary text-black shadow-2xl z-[60] flex items-center justify-center">
+    <button id="sidebar-toggle-btn" class="lg:hidden fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-brand-primary text-black shadow-2xl z-[60] flex items-center justify-center hover:scale-105 hover:shadow-[0_0_15px_5px_rgb(0,255,255,0.5)] transition-all duration-300">
         <i data-lucide="menu"></i>
     </button>
 

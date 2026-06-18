@@ -154,7 +154,8 @@ export const ContentService = {
             };
         } catch (error) {
             console.error('ContentService Error [fetchItems]:', error);
-            throw error;
+            // Return safe default to prevent UI breaking
+            return { items: [], lastDoc: null, empty: true };
         }
     },
 
@@ -220,7 +221,8 @@ export const ContentService = {
                 };
             } catch (error) {
                 console.error(`ContentService Error [fetchItemsByCategory]:`, error);
-                throw error;
+                // Return safe default to prevent UI breaking
+                return { items: [], lastDoc: null, empty: true };
             }
         } else {
             // Merged multi-collection query (local sorting)
@@ -258,7 +260,8 @@ export const ContentService = {
                 };
             } catch (error) {
                 console.error('ContentService Error [fetchItemsByCategory] merged:', error);
-                throw error;
+                // Return safe default to prevent UI breaking
+                return { items: [], lastDoc: null, empty: true };
             }
         }
     }

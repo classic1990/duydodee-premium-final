@@ -17,6 +17,11 @@ export const MovieCards = {
             posterUrl = UIUtils.getSafePoster(posterUrl, 'medium');
         }
 
+        // Ensure fallback to logo if still empty
+        if (!posterUrl) {
+            posterUrl = '/assets/logo/DUYDODEE.png';
+        }
+
         return `
             <div class="movie-card poster-glow group relative w-full aspect-[2/3] rounded-2xl overflow-hidden bg-brand-charcoal border border-white/5 cursor-pointer shadow-2xl card-3d cinematic-border"
                  onclick="window.location.href='${watchUrl}'">

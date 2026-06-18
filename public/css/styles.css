@@ -46,7 +46,7 @@
   }
 
   .light body {
-    @apply bg-brand-white text-brand-dark-main font-body selection:bg-brand-primary/50;
+    @apply bg-brand-white text-gray-900 font-body selection:bg-brand-primary/50;
   }
 }
 

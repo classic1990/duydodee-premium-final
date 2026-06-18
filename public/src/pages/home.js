@@ -3,6 +3,7 @@ import { RecommendationService } from '../services/recommendation-service.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
 import { ContentService } from '../services/content-service.js';
+import { SEOService } from '../services/seo-service.js';
 
 /**
  * 🎬 DUYดูDEE HOME ENGINE - Premium Master Edition
@@ -13,6 +14,9 @@ let hasMore = true;
 let currentFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize SEO
+    SEOService.initHomeSEO();
+
     UI.injectStarfield();
     UI.initNavbar();
 

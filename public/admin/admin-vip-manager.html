@@ -10,7 +10,7 @@
     <main class="p-10 max-w-7xl mx-auto space-y-10">
         <header class="flex items-center justify-between">
             <div class="flex items-center gap-6">
-                <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
+                <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-black/40 backdrop-blur-md border border-brand-primary/20 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
                     <i data-lucide="chevron-left"></i>
                 </button>
                 <div>
@@ -26,26 +26,26 @@
 
         <!-- 📊 VIP Status Overview -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="glass-premium p-6 border border-white/5">
+            <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 p-6 border border-white/5">
                 <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">สมาชิก VIP ทั้งหมด</span>
                 <h2 id="total-vip" class="text-3xl font-black text-brand-gold">0</h2>
             </div>
-            <div class="glass-premium p-6 border border-white/5">
+            <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 p-6 border border-white/5">
                 <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">กำลังจะหมดอายุ (3 วัน)</span>
                 <h2 id="expiring-soon" class="text-3xl font-black text-red-500">0</h2>
             </div>
-            <div class="glass-premium p-6 border border-white/5">
+            <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 p-6 border border-white/5">
                 <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">จะหมดอายุ (7 วัน)</span>
                 <h2 id="expiring-week" class="text-3xl font-black text-amber-500">0</h2>
             </div>
-            <div class="glass-premium p-6 border border-white/5">
+            <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 p-6 border border-white/5">
                 <span class="text-[9px] font-black text-gray-600 uppercase tracking-widest">สถานะปกติ</span>
                 <h2 id="active-normal" class="text-3xl font-black text-green-500">0</h2>
             </div>
         </div>
 
         <!-- 📋 VIP Users Table -->
-        <div class="glass-premium overflow-hidden border border-white/5">
+        <div class="bg-black/40 backdrop-blur-md border border-brand-primary/20 overflow-hidden border border-white/5">
             <table class="w-full text-left">
                 <thead class="bg-white/5 text-[9px] font-black uppercase tracking-widest text-gray-500">
                     <tr>

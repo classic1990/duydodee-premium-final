@@ -306,10 +306,16 @@ async function loadRecommendations(user) {
             grid.innerHTML = recommendations.map(item => UI.createMovieCard(item)).join('');
             UI.refreshIcons();
         } else {
-            section.classList.add('hidden');
+            // Show empty state
+            section.classList.remove('hidden');
+            UI.renderEmptyState(grid, 'ยังไม่มีคำแนะนำส่วนบุคคล');
+            UI.refreshIcons();
         }
     } catch (error) {
         console.error('Recommendations Error:', error);
-        section.classList.add('hidden');
+        // Show empty state on error
+        section.classList.remove('hidden');
+        UI.renderEmptyState(grid, 'ไม่สามารถโหลดคำแนะนำได้');
+        UI.refreshIcons();
     }
 }

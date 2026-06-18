@@ -15,12 +15,12 @@
 <body class="bg-brand-black text-white selection:bg-brand-primary/50">
 
     <!-- 🧭 SIDEBAR -->
-    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar"></aside>
+    <aside class="fixed left-0 top-0 bottom-0 w-80 bg-brand-black/90 backdrop-blur-sm border-r border-brand-primary/20 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar"></aside>
 
     <main class="lg:ml-80 min-h-screen p-6 relative z-10">
         
         <!-- Mobile Sidebar Toggle -->
-        <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
+        <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-black/40 backdrop-blur-md border border-brand-primary/20 text-white hover:text-brand-primary hover:scale-105 hover:shadow-[0_0_15px_5px_rgb(0,255,255,0.5)] transition-all duration-300">
             <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
 
@@ -29,7 +29,7 @@
                 <h1 class="text-h1 heading-highlight">จัดการ <span class="text-brand-primary">ภาพยนตร์</span></h1>
                 <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ควบคุมและบริหารจัดการทรัพยากรภาพยนตร์</p>
             </div>
-            <a href="/admin/admin-add-movie.html" class="btn-primary">
+            <a href="/admin/admin-add-movie.html" class="bg-brand-primary text-black text-[10px] font-black uppercase rounded-xl hover:scale-105 hover:shadow-[0_0_15px_5px_rgb(0,255,255,0.5)] transition-all duration-300 flex items-center gap-2">
                 <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มภาพยนตร์ใหม่
             </a>
         </header>
@@ -38,11 +38,11 @@
         <div class="mb-8">
             <div class="relative max-w-2xl">
                 <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600"></i>
-                <input type="text" id="movie-search" placeholder="ค้นหาด้วยชื่อเรื่อง หมวดหมู่ หรือไอดี..." class="w-full bg-black/40 border border-white/10 rounded-xl py-4 pl-14 pr-8 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all text-xs Thai-font">
+                <input type="text" id="movie-search" placeholder="ค้นหาด้วยชื่อเรื่อง หมวดหมู่ หรือไอดี..." class="w-full bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-xl py-4 pl-14 pr-8 text-white placeholder-gray-700 outline-none focus:border-brand-primary/80 transition-all text-xs Thai-font">
             </div>
         </div>
 
-        <section class="glass-premium rounded-2xl overflow-hidden border border-white/5">
+        <section class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl overflow-hidden border border-white/5">
             <table class="w-full text-left border-collapse min-w-[600px]">
                 <thead>
                     <tr class="bg-white/[0.02] border-b border-white/5 text-[9px] font-black text-gray-500 uppercase tracking-widest Thai-font">

@@ -109,7 +109,7 @@ export const AuthService = {
      */
     async clearWatchHistory(userId) {
         if (!userId) {
-            return;
+            return false;
         }
         try {
             const historyRef = collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history');
@@ -120,7 +120,7 @@ export const AuthService = {
             return true;
         } catch (e) {
             errorHandler.logError({ type: 'error', message: 'History Clear Error', stack: e.stack });
-            throw e;
+            return false;
         }
     },
 
