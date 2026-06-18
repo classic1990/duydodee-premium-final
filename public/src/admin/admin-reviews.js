@@ -2,30 +2,32 @@ import { ReviewService } from '../services/review-service.js';
 import { ReviewCard } from '../components/ReviewCard.js';
 import { AuthService } from '../services/auth-service.js';
 import { SidebarLoader } from './sidebar-loader.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 let currentFilter = 'all';
 let reviews = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Load sidebar
-    SidebarLoader.load();
+    try {
+        // Load sidebar
+        SidebarLoader.load();
 
-    // Check admin access
-    const user = AuthService.auth.currentUser;
-    if (!user) {
-        window.location.href = '/login.html';
-        return;
+        // 🔒 SECURITY: Strict admin access check
+        const { user } = await checkAdminAccess();
+
+        // Setup filter buttons
+        setupFilters();
+
+        // Load reviews
+        await loadReviews();
+
+        // Make admin functions available globally
+        window.adminDeleteReview = handleAdminDeleteReview;
+        window.adminClearReport = handleAdminClearReport;
+    } catch (error) {
+        console.error('Admin access failed:', error);
+        window.location.href = '/';
     }
-
-    // Setup filter buttons
-    setupFilters();
-
-    // Load reviews
-    await loadReviews();
-
-    // Make admin functions available globally
-    window.adminDeleteReview = handleAdminDeleteReview;
-    window.adminClearReport = handleAdminClearReport;
 });
 
 function setupFilters() {

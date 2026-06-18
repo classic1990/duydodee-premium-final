@@ -1,12 +1,24 @@
 import { UI } from '../components/ui.js';
+import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
  * 🤖 DUYดูDEE AI ASSISTANT (Neural Link)
  * Handles AI chat logic and system interactions
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    initAIAssistant();
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // 🔒 SECURITY: Admin access check before initializing AI assistant
+        await checkAdminAccess();
+        initAIAssistant();
+    } catch (error) {
+        console.error('AI Assistant: Admin access required', error);
+        // AI assistant requires admin access, hide it if not authorized
+        const panel = document.getElementById('ai-assistant-panel');
+        if (panel) {
+            panel.style.display = 'none';
+        }
+    }
 });
 
 function initAIAssistant() {
