@@ -1,4 +1,3 @@
-import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 /**
@@ -26,7 +25,6 @@ function initAIAssistant() {
     const header = document.getElementById('ai-header');
     const input = document.getElementById('ai-input');
     const sendBtn = document.getElementById('ai-send');
-    const chatBody = document.getElementById('ai-chat-body');
     const toggleIcon = document.getElementById('ai-toggle-icon');
 
     if (!panel || !header) {

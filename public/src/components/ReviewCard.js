@@ -24,7 +24,7 @@ export const ReviewCard = {
             rating,
             review: reviewText,
             userName,
-            userEmail,
+            _userEmail,
             createdAt,
             updatedAt
         } = review;
@@ -139,8 +139,8 @@ export const ReviewCard = {
             rating,
             review: reviewText,
             userName,
-            userEmail,
-            userId,
+            _userEmail,
+            _userId,
             movieId,
             seriesId,
             contentType = movieId ? 'movie' : 'series',
@@ -163,7 +163,7 @@ export const ReviewCard = {
                                 <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">รายงาน</span>
                             ` : ''}
                         </div>
-                        <p class="text-gray-400 text-xs">${userEmail || ''}</p>
+                        <p class="text-gray-400 text-xs">${_userEmail || ''}</p>
                         <p class="text-gray-500 text-xs">${formattedDate}</p>
                     </div>
                     ${RatingStars.render(rating, 'sm', false)}

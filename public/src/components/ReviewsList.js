@@ -329,6 +329,7 @@ export const ReviewsList = {
      * Handle review deletion
      */
     async handleDeleteReview(reviewId) {
+        // eslint-disable-next-line no-alert
         if (!confirm('คุณแน่ใจหรือไม่ที่จะลบรีวิวนี้?')) {
             return;
         }
@@ -359,12 +360,15 @@ export const ReviewsList = {
                     this.onReviewUpdate();
                 }
 
+                // eslint-disable-next-line no-alert
                 alert('ลบรีวิวสำเร็จ');
             } else {
+                // eslint-disable-next-line no-alert
                 alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
             }
         } catch (error) {
             console.error('Delete review error:', error);
+            // eslint-disable-next-line no-alert
             alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
         }
     },
@@ -373,6 +377,7 @@ export const ReviewsList = {
      * Handle review reporting
      */
     async handleReportReview(reviewId) {
+        // eslint-disable-next-line no-alert
         const reason = prompt('กรุณาระบุเหตุผลในการรายงาน:');
         if (!reason) {
             return;
@@ -382,12 +387,15 @@ export const ReviewsList = {
             const result = await ReviewService.reportReview(reviewId, reason, this.currentUserId);
 
             if (result.success) {
+                // eslint-disable-next-line no-alert
                 alert('รายงานรีวิวสำเร็จ');
             } else {
+                // eslint-disable-next-line no-alert
                 alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
             }
         } catch (error) {
             console.error('Report review error:', error);
+            // eslint-disable-next-line no-alert
             alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
         }
     }

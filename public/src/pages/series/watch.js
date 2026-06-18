@@ -185,7 +185,7 @@ async function showReviewForm(seriesId, user) {
         userDisplayName: user.displayName || user.email?.split('@')[0] || 'User',
         userEmail: user.email,
         existingReview: existingReview,
-        onSubmit: (result) => {
+        onSubmit: (_result) => {
             // Hide form, show write button
             reviewFormContainer.classList.add('hidden');
             writeReviewSection.classList.remove('hidden');

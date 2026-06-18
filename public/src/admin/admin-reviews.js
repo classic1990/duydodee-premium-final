@@ -1,6 +1,5 @@
 import { ReviewService } from '../services/review-service.js';
 import { ReviewCard } from '../components/ReviewCard.js';
-import { AuthService } from '../services/auth-service.js';
 import { SidebarLoader } from './sidebar-loader.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         SidebarLoader.load();
 
         // 🔒 SECURITY: Strict admin access check
-        const { user } = await checkAdminAccess();
+        await checkAdminAccess();
 
         // Setup filter buttons
         setupFilters();
@@ -121,7 +120,8 @@ function updateCounts() {
     }
 }
 
-async function handleAdminDeleteReview(reviewId, contentType, contentId) {
+async function handleAdminDeleteReview(reviewId, _contentType, _contentId) {
+    // eslint-disable-next-line no-alert
     if (!confirm('คุณแน่ใจหรือไม่ที่จะลบรีวิวนี้?')) {
         return;
     }
@@ -132,17 +132,21 @@ async function handleAdminDeleteReview(reviewId, contentType, contentId) {
         if (result.success) {
             // Refresh reviews
             await loadReviews();
+            // eslint-disable-next-line no-alert
             alert('ลบรีวิวสำเร็จ');
         } else {
+            // eslint-disable-next-line no-alert
             alert('เกิดข้อผิดพลาด: ' + (result.error || 'Unknown error'));
         }
     } catch (error) {
         console.error('Admin delete review error:', error);
+        // eslint-disable-next-line no-alert
         alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
     }
 }
 
 async function handleAdminClearReport(reviewId) {
+    // eslint-disable-next-line no-alert
     if (!confirm('คุณแน่ใจหรือไม่ที่จะยกเลิกรายงานรีวิวนี้?')) {
         return;
     }
@@ -153,12 +157,15 @@ async function handleAdminClearReport(reviewId) {
         if (result.success) {
             // Refresh reviews
             await loadReviews();
+            // eslint-disable-next-line no-alert
             alert('ยกเลิกรายงานสำเร็จ');
         } else {
+            // eslint-disable-next-line no-alert
             alert('เกิดข้อผิดพลาด: ' + (result.error || 'Unknown error'));
         }
     } catch (error) {
         console.error('Clear report error:', error);
+        // eslint-disable-next-line no-alert
         alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
     }
 }

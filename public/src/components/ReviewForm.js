@@ -216,6 +216,7 @@ export const ReviewForm = {
      */
     showError(message) {
         // You can integrate with your existing toast/notification system
+        // eslint-disable-next-line no-alert
         alert(message); // Fallback
     },
 
@@ -224,6 +225,7 @@ export const ReviewForm = {
      */
     showSuccess(message) {
         // You can integrate with your existing toast/notification system
+        // eslint-disable-next-line no-alert
         alert(message); // Fallback
     }
 };

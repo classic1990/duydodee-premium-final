@@ -12,7 +12,6 @@ import {
     orderBy,
     limit,
     serverTimestamp,
-    increment,
     runTransaction
 } from './firebase.js';
 import { SCHEMA } from '../constants.js';

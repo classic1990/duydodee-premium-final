@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const exportPptBtn = document.getElementById('export-ppt-btn');
     if (exportPptBtn) {
-        exportPptBtn.onclick = () => exportToPPT();
+        exportPptBtn.onclick = () => exportToPowerPoint();
     }
 
     const exportRevenueBtn = document.getElementById('export-revenue-btn');

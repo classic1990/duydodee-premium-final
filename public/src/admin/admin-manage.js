@@ -446,7 +446,7 @@ async function fetchRecentAssets(filterCat = 'ALL') {
 /**
  * 🏆 Render the top 3 content podium (Hall of Fame)
  */
-async function renderRankingPodium() {
+async function _renderRankingPodium() {
     try {
         const [mSnap, sSnap] = await Promise.all([
             getDocs(query(collection(db, SCHEMA.COLLECTIONS.MOVIES), orderBy('views', 'desc'), limit(3))),

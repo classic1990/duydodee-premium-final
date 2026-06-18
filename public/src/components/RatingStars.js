@@ -112,7 +112,7 @@ export const RatingStars = {
     /**
      * Render interactive stars HTML
      */
-    _renderInteractiveStars(currentRating, onRate) {
+    _renderInteractiveStars(currentRating, _onRate) {
         let starsHTML = '';
         for (let i = 1; i <= 5; i++) {
             const isFilled = i <= currentRating;
