@@ -42,8 +42,13 @@ export default defineConfig({
       compress: {
         drop_console: true, // Remove console.log in production
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove specific functions
+      },
+      mangle: {
+        safari10: true, // Support Safari 10+
       },
     },
+    target: 'es2015', // Target modern browsers for better optimization
     rollupOptions: {
       input: {
         index: resolve('public/index.html'),
@@ -88,9 +93,29 @@ export default defineConfig({
           if (id.includes('/src/components/ui.js')) {
             return 'ui-components';
           }
+          // Security utilities chunk
+          if (id.includes('/src/security/')) {
+            return 'security-utils';
+          }
+          // Performance utilities chunk
+          if (id.includes('/src/performance/')) {
+            return 'performance-utils';
+          }
+          // Admin components chunk
+          if (id.includes('/src/admin/')) {
+            return 'admin-components';
+          }
           // Services chunk
           if (id.includes('/src/services/')) {
             return 'services';
+          }
+          // Components chunk
+          if (id.includes('/src/components/')) {
+            return 'components';
+          }
+          // Utils chunk
+          if (id.includes('/src/utils/')) {
+            return 'utils';
           }
           // NOTE: Do NOT group page entry modules (e.g. /src/admin/ or
           // /src/pages/) into shared chunks. Each HTML page is its own entry and
@@ -115,6 +140,8 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 1000,
     reportCompressedSize: false, // Faster builds
+    maxParallelFileOps: 8, // Increase parallel operations for faster builds
+    hashAlgorithm: 'xxhash64', // Use faster hashing algorithm
   },
   plugins: [
     {
