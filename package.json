@@ -20,8 +20,7 @@
     "clean": "rm -rf dist .firebase",
     "predeploy": "npm run lint && npm run build:prod",
     "deploy": "firebase deploy",
-    "deploy:hosting": "firebase deploy --only hosting",
-    "prepare": "husky"
+    "deploy:hosting": "firebase deploy --only hosting"
   },
   "keywords": [],
   "author": "",
