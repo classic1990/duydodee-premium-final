@@ -127,4 +127,6 @@ export const ThemeToggle = {
 // Auto-initialize on import
 if (typeof window !== 'undefined') {
     ThemeToggle.init();
+    // Make available globally for inline event handlers
+    window.ThemeToggle = ThemeToggle;
 }

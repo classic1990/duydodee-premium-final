@@ -314,6 +314,9 @@
     <!-- 🛡️ Error Handler (load first for global error tracking) -->
     <script type="module" src="/src/utils/error-handler.js"></script>
 
+    <!-- 🌓 Theme Toggle (load before home page to ensure availability) -->
+    <script type="module" src="/src/components/ThemeToggle.js"></script>
+
     <script type="module" src="/src/pages/home.js"></script>
     <script>
         if ('serviceWorker' in navigator) {

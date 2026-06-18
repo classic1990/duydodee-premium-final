@@ -11,6 +11,8 @@ import {
     doc,
     SCHEMA
 } from '../../services/firebase.js';
+import { ThemeToggle } from '../ThemeToggle.js';
+import { ThemeService } from '../../services/theme-service.js';
 
 export const Layout = {
     initNavbar: (UI) => {
@@ -19,12 +21,12 @@ export const Layout = {
             return;
         }
 
-        UI.initTheme();
+        ThemeService.init();
 
         // Add theme toggle button to navbar
         const themeToggleContainer = document.getElementById('theme-toggle-container');
         if (themeToggleContainer) {
-            themeToggleContainer.innerHTML = UI.createButton();
+            themeToggleContainer.innerHTML = ThemeToggle.createButton();
             UI.refreshIcons();
         }
 
