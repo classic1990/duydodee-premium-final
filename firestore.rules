@@ -30,6 +30,10 @@ service cloud.firestore {
       match /bookmarks/{bookmarkId} {
         allow read, write: if isOwner(userId) || isAdmin();
       }
+
+      match /watchlist/{watchlistId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
 
     // 🎬 Content Collections (Public read; signed-in users may only
@@ -61,6 +65,12 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow create, update: if isAdmin();
       allow delete: if isAdmin();
+    }
+
+    // 🎯 VIP Plans: Public read, Admin write
+    match /vip_plans/{planId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     // 🎫 Support Tickets: Admin read/write, user create
