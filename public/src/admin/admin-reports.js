@@ -70,6 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
+    const exportPptBtn = document.getElementById('export-ppt-btn');
+    if (exportPptBtn) {
+        exportPptBtn.onclick = () => exportToPPT();
+    }
+
     const exportRevenueBtn = document.getElementById('export-revenue-btn');
     if (exportRevenueBtn) {
         exportRevenueBtn.onclick = () => exportRevenueToCSV();
@@ -575,4 +580,47 @@ function downloadCSV(csvContent, filename) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function exportToPowerPoint() {
+    try {
+        // eslint-disable-next-line no-undef
+        const pptx = new PptxGenJS();
+
+        // 1. Title Slide
+        const slide1 = pptx.addSlide();
+        slide1.background = { color: '050507' };
+        slide1.addText('DUYดูDEE PREMIUM', { x: 1, y: 1.5, w: '80%', fontSize: 44, bold: true, color: 'E50914', fontFace: 'Arial' });
+        slide1.addText('Executive Performance Report', { x: 1, y: 2.2, w: '80%', fontSize: 24, color: 'FFFFFF', fontFace: 'Arial' });
+        slide1.addText(`Date: ${new Date().toLocaleDateString('th-TH')}`, { x: 1, y: 3.5, w: '80%', fontSize: 14, color: 'B38728' });
+
+        // 2. Summary Slide
+        const slide2 = pptx.addSlide();
+        slide2.background = { color: '050507' };
+        slide2.addText('EXECUTIVE SUMMARY', { x: 0.5, y: 0.5, w: '90%', fontSize: 24, bold: true, color: 'E50914' });
+
+        const views = document.getElementById('report-total-views')?.innerText || '0';
+        const users = document.getElementById('report-active-users')?.innerText || '0';
+        const revenue = document.getElementById('report-vip-revenue')?.innerText || '0';
+
+        slide2.addTable([
+            [{ text: 'Metric', options: { bold: true, color: 'FFFFFF', fill: '222222' } }, { text: 'Value', options: { bold: true, color: 'FFFFFF', fill: '222222' } }],
+            ['Total Views', views],
+            ['Active Users', users],
+            ['VIP Revenue', revenue]
+        ], { x: 0.5, y: 1.5, w: 9, color: 'FFFFFF', fontSize: 18, border: { pt: 1, color: '333333' } });
+
+        // 3. Charts Slide (Mental link to the UI charts)
+        const slide3 = pptx.addSlide();
+        slide3.background = { color: '050507' };
+        slide3.addText('ANALYTICS VISUALIZATION', { x: 0.5, y: 0.5, w: '90%', fontSize: 24, bold: true, color: 'E50914' });
+        slide3.addText('Please refer to the dashboard for live interactive charts.', { x: 0.5, y: 1.5, w: '90%', fontSize: 14, color: 'AAAAAA' });
+
+        // Export
+        pptx.writeFile({ fileName: `DUYDODEE-Report-${new Date().getTime()}.pptx` });
+        UI.showToast('Exporting PowerPoint Presentation...', 'success');
+    } catch (error) {
+        console.error('PPT Export Error:', error);
+        UI.showToast('เกิดข้อผิดพลาดในการสร้างไฟล์ PPT', 'error');
+    }
 }

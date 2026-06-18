@@ -1,6 +1,9 @@
 import { ContentService } from '../../services/content-service.js';
 import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
+import { ReviewsList } from '../../components/ReviewsList.js';
+import { ReviewForm } from '../../components/ReviewForm.js';
+import { ReviewService } from '../../services/review-service.js';
 
 let isRendering = false;
 let progressInterval = null; // 🧹 Store interval ID for cleanup
@@ -119,6 +122,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 5. Load Related
             loadRelated(movie.category, movieId);
+
+            // 6. Setup Reviews
+            setupReviews(movieId);
         } else {
             // Fallback to series check
             const series = await ContentService.getItemById('series', movieId);
@@ -147,6 +153,97 @@ async function loadRelated(category, currentId) {
     } catch (err) {
         console.error('Related Error:', err);
     }
+}
+
+// ⭐ Reviews Functionality
+function setupReviews(movieId) {
+    const writeReviewSection = document.getElementById('write-review-section');
+    const writeReviewBtn = document.getElementById('write-review-btn');
+
+    // Show write review button for logged in users
+    const user = AuthService.auth.currentUser;
+    if (user) {
+        writeReviewSection.classList.remove('hidden');
+
+        if (writeReviewBtn) {
+            writeReviewBtn.addEventListener('click', () => {
+                showReviewForm(movieId, user);
+            });
+        }
+    }
+
+    // Load reviews list
+    ReviewsList.init({
+        contentType: 'movie',
+        contentId: movieId,
+        currentUserId: user?.uid || null,
+        onReviewUpdate: () => {
+            // Refresh reviews after update
+            ReviewsList.init({
+                contentType: 'movie',
+                contentId: movieId,
+                currentUserId: user?.uid || null
+            });
+        }
+    });
+
+    // Setup global functions for review actions
+    window.handleDeleteReview = (reviewId) => {
+        ReviewsList.handleDeleteReview(reviewId);
+    };
+
+    window.handleReportReview = (reviewId) => {
+        ReviewsList.handleReportReview(reviewId);
+    };
+}
+
+async function showReviewForm(movieId, user) {
+    const reviewFormContainer = document.getElementById('review-form-container');
+    const writeReviewSection = document.getElementById('write-review-section');
+
+    if (!reviewFormContainer) {
+        return;
+    }
+
+    // Hide write button, show form
+    writeReviewSection.classList.add('hidden');
+    reviewFormContainer.classList.remove('hidden');
+
+    // Check for existing review
+    const existingReview = await ReviewService.getUserReview('movie', movieId, user.uid);
+
+    ReviewForm.init({
+        contentType: 'movie',
+        contentId: movieId,
+        userId: user.uid,
+        userDisplayName: user.displayName || user.email?.split('@')[0] || 'User',
+        userEmail: user.email,
+        existingReview: existingReview,
+        onSubmit: (result) => {
+            // Hide form, show write button
+            reviewFormContainer.classList.add('hidden');
+            writeReviewSection.classList.remove('hidden');
+
+            // Refresh reviews
+            ReviewsList.init({
+                contentType: 'movie',
+                contentId: movieId,
+                currentUserId: user.uid,
+                onReviewUpdate: () => {
+                    ReviewsList.init({
+                        contentType: 'movie',
+                        contentId: movieId,
+                        currentUserId: user.uid
+                    });
+                }
+            });
+        },
+        onCancel: () => {
+            // Hide form, show write button
+            reviewFormContainer.classList.add('hidden');
+            writeReviewSection.classList.remove('hidden');
+        }
+    });
 }
 
 // 🧹 Cleanup function to prevent memory leaks

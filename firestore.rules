@@ -20,7 +20,7 @@ service cloud.firestore {
 
     // 👤 User Profiles
     match /users/{userId} {
-      allow read: if isSignedIn();
+      allow read: if isOwner(userId) || isAdmin();
       allow write: if isOwner(userId) || isAdmin();
       
       match /history/{historyId} {
@@ -37,15 +37,17 @@ service cloud.firestore {
     }
 
     // 🎬 Content Collections (Public read; signed-in users may only
-    // increment the view counter, nothing else)
+    // increment the view counter and update ratings, nothing else)
     match /movies/{movieId} {
       allow read: if true;
-      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
+      allow update: if isSignedIn() && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) ||
+                                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']));
     }
 
     match /series/{seriesId} {
       allow read: if true;
-      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']);
+      allow update: if isSignedIn() && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) ||
+                                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']));
     }
 
     match /hero_slides/{slideId} {
@@ -60,10 +62,11 @@ service cloud.firestore {
       allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'lastUpdated']);
     }
 
-    // 💳 VIP Payments: Admin read/write
+    // 💳 VIP Payments: Admin read/write, user create
     match /vip_payments/{paymentId} {
-      allow read: if isAdmin();
-      allow create, update: if isAdmin();
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid && request.resource.data.status == 'pending';
+      allow update: if isAdmin();
       allow delete: if isAdmin();
     }
 
@@ -76,8 +79,16 @@ service cloud.firestore {
     // 🎫 Support Tickets: Admin read/write, user create
     match /support_tickets/{ticketId} {
       allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
-      allow create: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
       allow update: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']));
+    }
+
+    // ⭐ Reviews: Public read, signed-in users can create/edit own reviews
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
 
     // 📝 Activity Logs: Admin only

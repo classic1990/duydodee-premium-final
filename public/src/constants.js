@@ -15,7 +15,8 @@ export const SCHEMA = {
         TICKETS: 'support_tickets',
         VIP_PAYMENTS: 'vip_payments',
         VIP_PLANS: 'vip_plans',
-        CHATS: 'chats'
+        CHATS: 'chats',
+        REVIEWS: 'reviews'
     },
     CATEGORIES: {
         VERTICAL: 'ซีรีส์แนวตั้ง',

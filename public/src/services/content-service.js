@@ -7,6 +7,7 @@ import {
 import { SCHEMA } from '../constants.js';
 import { UIUtils } from '../utils/ui-utils.js';
 import { SearchService } from './search-service.js';
+import { ReviewService } from './review-service.js';
 
 /**
  * 🚀 DUYดูDEE CONTENT SERVICE (Master Edition)
@@ -264,6 +265,71 @@ export const ContentService = {
                 // Return safe default to prevent UI breaking
                 return { items: [], lastDoc: null, empty: true };
             }
+        }
+    },
+
+    // --- Rating & Review Methods ---
+
+    /**
+     * Get content rating information (wrapper for ReviewService)
+     */
+    async getContentRating(type, id) {
+        try {
+            return await ReviewService.getContentRating(type, id);
+        } catch (error) {
+            console.error('ContentService Error [getContentRating]:', error);
+            return { averageRating: 0, totalReviews: 0 };
+        }
+    },
+
+    /**
+     * Get top rated items
+     */
+    async getTopRatedItems(type, limitCount = 10) {
+        try {
+            const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
+            const q = query(
+                collection(db, collName),
+                where('totalReviews', '>', 0),
+                orderBy('averageRating', 'desc'),
+                limit(limitCount)
+            );
+            const snap = await getDocs(q);
+            return snap.docs.map(d => ({ id: d.id, ...d.data(), type }));
+        } catch (error) {
+            console.error('ContentService Error [getTopRatedItems]:', error);
+            return [];
+        }
+    },
+
+    /**
+     * Get items with ratings included in the query
+     */
+    async fetchItemsWithRating(type, options = {}) {
+        const { pageSize = 12, lastDoc = null, sortBy = 'createdAt', direction = 'desc', minReviews = 0 } = options;
+        const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
+
+        try {
+            let q = collection(db, collName);
+
+            if (minReviews > 0) {
+                q = query(q, where('totalReviews', '>=', minReviews));
+            }
+
+            let orderQ = query(q, orderBy(sortBy, direction), limit(pageSize));
+            if (lastDoc) {
+                orderQ = query(orderQ, startAfter(lastDoc));
+            }
+
+            const snap = await getDocs(orderQ);
+            return {
+                items: snap.docs.map(d => ({ id: d.id, ...d.data(), type })),
+                lastDoc: snap.docs[snap.docs.length - 1] || null,
+                empty: snap.empty
+            };
+        } catch (error) {
+            console.error('ContentService Error [fetchItemsWithRating]:', error);
+            return { items: [], lastDoc: null, empty: true };
         }
     }
 };

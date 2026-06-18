@@ -154,6 +154,95 @@
                 </div>
             </section>
 
+            <!-- 📊 Viewing Analytics -->
+            <section id="analytics-section" class="space-y-6 hidden animate-fade-in">
+                <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1 h-6 bg-purple-500 rounded-full shadow-[0_0_15px_#a855f7]"></div>
+                        <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight Thai-font">สถิติการรับชม <span class="text-gray-600 text-xs italic ml-2">Analytics</span></h2>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <!-- Total Watch Time -->
+                    <div class="glass-premium p-4 md:p-6 border border-white/5 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                            <i data-lucide="clock" class="w-5 h-5 text-purple-400"></i>
+                        </div>
+                        <p id="stat-total-time" class="text-lg md:text-xl font-black text-white Thai-font">--</p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest">รวมเวลารับชม</p>
+                    </div>
+
+                    <!-- Total Content -->
+                    <div class="glass-premium p-4 md:p-6 border border-white/5 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                            <i data-lucide="film" class="w-5 h-5 text-blue-400"></i>
+                        </div>
+                        <p id="stat-total-content" class="text-lg md:text-xl font-black text-white Thai-font">--</p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest">เรื่องที่ดู</p>
+                    </div>
+
+                    <!-- Completed -->
+                    <div class="glass-premium p-4 md:p-6 border border-white/5 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+                        </div>
+                        <p id="stat-completed" class="text-lg md:text-xl font-black text-white Thai-font">--</p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest">ดูจบแล้ว</p>
+                    </div>
+
+                    <!-- Avg Completion -->
+                    <div class="glass-premium p-4 md:p-6 border border-white/5 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                            <i data-lucide="percent" class="w-5 h-5 text-orange-400"></i>
+                        </div>
+                        <p id="stat-avg-completion" class="text-lg md:text-xl font-black text-white Thai-font">--</p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest">เสร็จเฉลี่ย</p>
+                    </div>
+                </div>
+
+                <!-- Detailed Analytics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Category Breakdown -->
+                    <div class="glass-premium p-6 border border-white/5 space-y-4">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <i data-lucide="pie-chart" class="w-4 h-4 text-purple-400"></i>
+                            ประเภทที่ดูบ่อย
+                        </h3>
+                        <div id="category-breakdown" class="space-y-3">
+                            <!-- Category bars will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Viewing Patterns -->
+                    <div class="glass-premium p-6 border border-white/5 space-y-4">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-blue-400"></i>
+                            ช่วงเวลาที่ดูบ่อย
+                        </h3>
+                        <div id="viewing-patterns" class="space-y-3">
+                            <!-- Time slot bars will be injected here -->
+                        </div>
+                        <div class="pt-2 border-t border-white/5">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest">ช่วงเวลาที่ชอบ:</p>
+                            <p id="peak-time" class="text-sm font-black text-purple-400 Thai-font mt-1">--</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Content -->
+                    <div class="glass-premium p-6 border border-white/5 space-y-4 md:col-span-2">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <i data-lucide="trophy" class="w-4 h-4 text-yellow-400"></i>
+                            Top 5 ที่ดูบ่อยสุด
+                        </h3>
+                        <div id="top-content" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                            <!-- Top content cards will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- 🕒 Watch History -->
             <section class="space-y-6">
                 <div class="flex items-center justify-between border-b border-white/5 pb-4">

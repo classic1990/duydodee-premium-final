@@ -1,4 +1,5 @@
 import { UIUtils } from '../../utils/ui-utils.js';
+import { RatingStars } from '../RatingStars.js';
 
 export const MovieCards = {
     createMovieCard: (item) => {
@@ -54,6 +55,11 @@ export const MovieCards = {
                                 <i data-lucide="play" class="w-3 h-3 fill-current"></i> 
                                 <span>รับชมเลย</span>
                             </div>
+                            ${item.averageRating && item.totalReviews > 0 ? `
+                                <div class="flex items-center gap-1 ml-auto">
+                                    ${RatingStars.renderBadge(item.averageRating, item.totalReviews)}
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 </div>
@@ -109,6 +115,11 @@ export const MovieCards = {
                         <div class="space-y-1 md:space-y-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                             <span class="text-[10px] md:text-xs font-black text-brand-primary uppercase tracking-[0.3em] Thai-font block drop-shadow-md">${movie.category || 'Trending Now'}</span>
                             <h4 class="text-xl md:text-3xl font-black text-white Thai-font line-clamp-1 drop-shadow-lg group-hover:text-brand-primary transition-colors">${UIUtils.escapeHTML(movie.title)}</h4>
+                            ${movie.averageRating && movie.totalReviews > 0 ? `
+                                <div class="flex items-center gap-2 mt-2">
+                                    ${RatingStars.render(movie.averageRating, 'sm', true, movie.totalReviews)}
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                     

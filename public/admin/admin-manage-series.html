@@ -20,30 +20,267 @@
     <!-- 🧭 SIDEBAR -->
     <aside class="fixed left-0 top-0 bottom-0 w-80 bg-[#08080a]/80 backdrop-blur-3xl border-r border-white/5 z-[450] transition-transform duration-500 -translate-x-full lg:translate-x-0 flex flex-col" id="sidebar"></aside>
 
-    <main class="lg:ml-80 min-h-screen p-8 md:p-16 relative z-10">
+    <main class="lg:ml-80 min-h-screen p-4 md:p-8 relative z-10">
         <!-- Mobile Sidebar Toggle -->
         <button id="sidebar-toggle-btn" class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
             <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
-            <div>
-                <h1 class="text-h1 heading-highlight">จัดการ <span class="text-brand-primary">ซีรีส์</span></h1>
-                <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] mt-1 Thai-font">ควบคุมและบริหารจัดการทรัพยากรซีรีส์แบบตอน</p>
-            </div>
-            <a href="/admin/admin-add-series.html" class="btn-primary">
-                <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มซีรีส์ใหม่
-            </a>
-        </header>
+        
+        <!-- 🎯 COMMAND CENTER DASHBOARD -->
+        <div class="mb-8 space-y-6">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
+                            <i data-lucide="command" class="w-5 h-5 text-brand-primary"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight">COMMAND CENTER</h1>
+                            <p class="text-[9px] font-black text-brand-primary uppercase tracking-[0.4em]">System Overview & Neural Analytics</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="/admin/admin-add-series.html" class="btn-primary">
+                    <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มซีรีส์ใหม่
+                </a>
+            </header>
 
-        <!-- Search Node -->
-        <div class="mb-8">
+            <!-- 📊 STATS OVERVIEW -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Total Operators -->
+                <div class="glass-premium p-4 border border-white/5 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                            <i data-lucide="users" class="w-4 h-4 text-purple-400"></i>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Operators</p>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-white Thai-font">0</p>
+                </div>
+
+                <!-- Total Engagement -->
+                <div class="glass-premium p-4 border border-white/5 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                            <i data-lucide="eye" class="w-4 h-4 text-blue-400"></i>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Engagement</p>
+                    </div>
+                    <p id="stat-views" class="text-2xl md:text-3xl font-black text-white Thai-font">2,372 Views</p>
+                </div>
+
+                <!-- Active Database -->
+                <div class="glass-premium p-4 border border-white/5 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                            <i data-lucide="database" class="w-4 h-4 text-green-400"></i>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Active Database</p>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-white Thai-font">134 Units</p>
+                </div>
+
+                <!-- Verified Citizens -->
+                <div class="glass-premium p-4 border border-white/5 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-orange-400"></i>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Verified Citizens</p>
+                    </div>
+                    <p id="stat-users" class="text-2xl md:text-3xl font-black text-white Thai-font">3 Users</p>
+                </div>
+            </div>
+
+            <!-- 🏆 HALL OF FAME & TRAFFIC PULSE -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Hall of Fame -->
+                <div class="glass-premium p-6 border border-white/5 rounded-2xl lg:col-span-2">
+                    <h3 class="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i data-lucide="trophy" class="w-4 h-4 text-yellow-400"></i>
+                        Hall of Fame
+                        <span class="text-gray-600 text-[9px] ml-auto">Top 3 Most Wanted Content</span>
+                    </h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center space-y-2">
+                            <div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-white/5 bg-brand-obsidian">
+                                <img src="/assets/logo/DUYDODEE.png" class="w-full h-full object-cover opacity-80" onerror="this.src='/assets/logo/DUYDODEE.png'">
+                                <div class="absolute top-2 left-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                                    <span class="text-[10px] font-black text-black">02</span>
+                                </div>
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                                    <p class="text-[9px] font-black text-white Thai-font">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="relative aspect-[2/3] rounded-xl overflow-hidden border-2 border-yellow-500/30 bg-brand-obsidian">
+                                <img src="/assets/logo/DUYDODEE.png" class="w-full h-full object-cover opacity-80" onerror="this.src='/assets/logo/DUYDODEE.png'">
+                                <div class="absolute top-2 left-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                                    <span class="text-[10px] font-black text-black">01</span>
+                                </div>
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                                    <p class="text-[9px] font-black text-white Thai-font">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-white/5 bg-brand-obsidian">
+                                <img src="/assets/logo/DUYDODEE.png" class="w-full h-full object-cover opacity-80" onerror="this.src='/assets/logo/DUYDODEE.png'">
+                                <div class="absolute top-2 left-2 w-6 h-6 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                                    <span class="text-[10px] font-black text-black">03</span>
+                                </div>
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                                    <p class="text-[9px] font-black text-white Thai-font">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Traffic Pulse & Market Dominance -->
+                <div class="glass-premium p-6 border border-white/5 rounded-2xl space-y-4">
+                    <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                        Traffic Pulse
+                    </h3>
+                    <div class="h-32 flex items-end gap-1">
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/20 to-cyan-500/5 rounded-t" style="height: 60%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/30 to-cyan-500/10 rounded-t" style="height: 80%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/40 to-cyan-500/15 rounded-t" style="height: 45%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/50 to-cyan-500/20 rounded-t" style="height: 90%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/60 to-cyan-500/25 rounded-t" style="height: 70%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/70 to-cyan-500/30 rounded-t" style="height: 55%"></div>
+                        <div class="flex-1 bg-gradient-to-t from-cyan-500/80 to-cyan-500/35 rounded-t" style="height: 85%"></div>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-white/5">
+                        <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Market Dominance</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[9px] text-gray-400 w-16">ซีรีส์แนวตั้ง</span>
+                                <div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-brand-primary rounded-full" style="width: 75%"></div>
+                                </div>
+                                <span class="text-[9px] text-brand-primary font-black">75%</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[9px] text-gray-400 w-16">ซีรีส์จีน</span>
+                                <div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-purple-500 rounded-full" style="width: 60%"></div>
+                                </div>
+                                <span class="text-[9px] text-purple-400 font-black">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 💰 VIP PAYMENT INFO -->
+        <div class="glass-premium p-6 border border-white/5 rounded-2xl mb-8">
+            <h3 class="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                <i data-lucide="credit-card" class="w-4 h-4 text-green-400"></i>
+                ข้อมูลบัญชีรับเงิน (ปัจจุบัน)
+                <span class="text-gray-600 text-[9px] ml-auto">อัปเดตข้อมูลการชำระเงิน VIP</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Account Info Form -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest block mb-2">เลขบัญชี/วอลเล็ต</label>
+                        <input type="text" id="account-number" placeholder="097xxxxxxx" class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all text-xs Thai-font">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest block mb-2">ชื่อบัญชี</label>
+                        <input type="text" id="account-name" placeholder="ชื่อบัญชี" class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all text-xs Thai-font">
+                    </div>
+                    <button onclick="updateAccountInfo()" class="w-full btn-primary py-3 text-xs">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> อัปเดตข้อมูลบัญชี
+                    </button>
+                </div>
+
+                <!-- Payment Verification Table -->
+                <div>
+                    <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">ตรวจสอบการชำระเงิน VIP</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[8px] font-black text-gray-500 uppercase tracking-widest">
+                                    <th class="pb-2">ข้อมูลผู้โอน</th>
+                                    <th class="pb-2">จำนวนเงิน</th>
+                                    <th class="pb-2">สถานะ</th>
+                                    <th class="pb-2 text-right">ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payment-verification-table" class="divide-y divide-white/[0.03] text-[10px]">
+                                <!-- Sample data -->
+                                <tr>
+                                    <td class="py-2 text-white Thai-font">geges</td>
+                                    <td class="py-2 text-brand-primary font-black">฿11</td>
+                                    <td class="py-2"><span class="px-2 py-0.5 bg-green-500/10 text-green-400 text-[8px] font-black rounded">ยืนยันแล้ว</span></td>
+                                    <td class="py-2 text-right">
+                                        <button class="text-blue-400 hover:text-blue-300 text-[9px] font-black">ตรวจสอบ</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-white Thai-font">geges</td>
+                                    <td class="py-2 text-brand-primary font-black">฿1</td>
+                                    <td class="py-2"><span class="px-2 py-0.5 bg-green-500/10 text-green-400 text-[8px] font-black rounded">ยืนยันแล้ว</span></td>
+                                    <td class="py-2 text-right">
+                                        <button class="text-blue-400 hover:text-blue-300 text-[9px] font-black">ตรวจสอบ</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-white Thai-font">ryryr</td>
+                                    <td class="py-2 text-brand-primary font-black">฿1,111</td>
+                                    <td class="py-2"><span class="px-2 py-0.5 bg-green-500/10 text-green-400 text-[8px] font-black rounded">ยืนยันแล้ว</span></td>
+                                    <td class="py-2 text-right">
+                                        <button class="text-blue-400 hover:text-blue-300 text-[9px] font-black">ตรวจสอบ</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📚 RECENT CONTENT -->
+        <div class="glass-premium p-6 border border-white/5 rounded-2xl mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                    <i data-lucide="film" class="w-4 h-4 text-purple-400"></i>
+                    คลังเนื้อหาล่าสุด
+                </h3>
+                <select id="content-filter" class="bg-black/40 border border-white/10 rounded-lg py-2 px-3 text-white text-[10px] font-black outline-none focus:border-brand-primary/50">
+                    <option value="all">ทุกหมวดหมู่</option>
+                    <option value="movie">ภาพยนตร์</option>
+                    <option value="series">ซีรีส์</option>
+                </select>
+            </div>
+            
+            <div id="recent-content-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Sample content cards will be injected here -->
+            </div>
+        </div>
+
+        <!-- 🔍 SERIES MANAGEMENT SECTION -->
+        <div class="space-y-4">
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">จัดการ <span class="text-brand-primary">ซีรีส์</span></h2>
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] Thai-font">ควบคุมและบริหารจัดการทรัพยากรซีรีส์แบบตอน</span>
+            </div>
+
+            <!-- Search Node -->
             <div class="relative max-w-2xl">
                 <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600"></i>
                 <input type="text" id="series-search" placeholder="ค้นหาด้วยชื่อซีรีส์ หมวดหมู่ หรือไอดี..." class="w-full bg-black/40 border border-white/10 rounded-xl py-4 pl-14 pr-8 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all text-xs Thai-font">
             </div>
         </div>
 
-        <section class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl overflow-hidden border border-white/5">
+        <section class="bg-black/40 backdrop-blur-md border border-brand-primary/20 rounded-2xl overflow-hidden border border-white/5 mt-6">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-white/[0.02] border-b border-white/5 text-[9px] font-black text-gray-500 uppercase tracking-widest Thai-font">
@@ -62,14 +299,42 @@
         <div id="pagination-container" class="flex justify-center py-10 gap-2"></div>
     </main>
 
+    <!-- 🤖 AI NEURAL LINK ASSISTANT -->
+    <div id="ai-assistant-panel" class="fixed bottom-0 right-4 w-96 bg-[#08080a]/95 backdrop-blur-3xl border border-brand-primary/30 rounded-t-2xl shadow-2xl z-[600] transition-transform duration-500 translate-y-[calc(100%-60px)]">
+        <div id="ai-header" class="h-15 flex items-center justify-between p-4 border-b border-white/10 cursor-pointer">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center">
+                    <i data-lucide="bot" class="w-4 h-4 text-brand-primary"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-black text-white uppercase tracking-widest">A.I. NEURAL LINK</p>
+                    <p class="text-[8px] text-brand-primary">System Online</p>
+                </div>
+            </div>
+            <i data-lucide="chevron-up" id="ai-toggle-icon" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+        </div>
+        
+        <div class="p-4 space-y-4 h-80 overflow-y-auto">
+            <div class="bg-gradient-to-r from-brand-primary/10 to-purple-500/10 p-3 rounded-xl border border-brand-primary/20">
+                <p class="text-[10px] text-white Thai-font leading-relaxed">สวัสดีครับแอดมิน ผมคือระบบ Neural Link พร้อมช่วยเหลือคุณในการวิเคราะห์ข้อมูลและจัดการระบบ มีอะไรให้ช่วยไหมครับ?</p>
+            </div>
+            
+            <div id="ai-chat-body" class="space-y-3">
+                <!-- AI messages will appear here -->
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-white/10">
+            <div class="flex gap-2">
+                <input type="text" id="ai-input" placeholder="Type command or ask question..." class="flex-1 bg-black/40 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-gray-700 outline-none focus:border-brand-primary/50 transition-all text-xs">
+                <button id="ai-send" class="px-4 bg-brand-primary rounded-lg text-black font-black text-xs hover:bg-brand-primary/90 transition-colors">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="/src/admin/admin-manage-series.js"></script>
+    <script type="module" src="/src/admin/admin-ai-assistant.js"></script>
 </body>
 </html>
-
-        <div id="pagination-container" class="flex justify-center py-10 gap-2"></div>
-    </main>
-
-    <script type="module" src="/src/admin/admin-manage-series.js"></script>
-</body>
-</html>
-

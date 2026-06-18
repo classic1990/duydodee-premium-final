@@ -19,6 +19,7 @@ import {
 import { UI } from '../../components/ui.js';
 import { AuthService } from '../../services/auth-service.js';
 import { RecommendationService } from '../../services/recommendation-service.js';
+import { AnalyticsService } from '../../services/analytics-service.js';
 
 /**
  * 👤 PROFILE ENGINE - Professional Member View
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadUserTickets(user);
             await loadWatchHistory(user);
             await loadRecommendations(user);
+            await loadAnalytics(user);
         } else {
             window.location.href = '/login.html';
         }
@@ -318,4 +320,142 @@ async function loadRecommendations(user) {
         UI.renderEmptyState(grid, 'ไม่สามารถโหลดคำแนะนำได้');
         UI.refreshIcons();
     }
+}
+
+/**
+ * 📊 Load Viewing Analytics
+ */
+async function loadAnalytics(user) {
+    const section = document.getElementById('analytics-section');
+    if (!section) {
+        return;
+    }
+
+    try {
+        const analytics = await AnalyticsService.getUserAnalytics(user.uid);
+
+        // Show section if there's any data
+        if (analytics.totalContentWatched > 0) {
+            section.classList.remove('hidden');
+
+            // Update stats overview
+            document.getElementById('stat-total-time').textContent = analytics.totalWatchTime.formatted;
+            document.getElementById('stat-total-content').textContent = analytics.totalContentWatched;
+            document.getElementById('stat-completed').textContent = analytics.completedContent;
+            document.getElementById('stat-avg-completion').textContent = analytics.averageCompletionRate + '%';
+
+            // Render category breakdown
+            renderCategoryBreakdown(analytics.categoryBreakdown);
+
+            // Render viewing patterns
+            renderViewingPatterns(analytics.viewingPatterns);
+
+            // Render top content
+            renderTopContent(analytics.topContent);
+
+            UI.refreshIcons();
+        }
+    } catch (error) {
+        console.error('Analytics Error:', error);
+    }
+}
+
+/**
+ * Render category breakdown with progress bars
+ */
+function renderCategoryBreakdown(categories) {
+    const container = document.getElementById('category-breakdown');
+    if (!container) {
+        return;
+    }
+
+    if (categories.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm Thai-font">ยังไม่มีข้อมูล</p>';
+        return;
+    }
+
+    container.innerHTML = categories.map(cat => `
+        <div class="space-y-1">
+            <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium Thai-font">${UI.escapeHTML(cat.name)}</span>
+                <span class="text-gray-500">${cat.count} เรื่อง (${cat.percentage}%)</span>
+            </div>
+            <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-500" style="width: ${cat.percentage}%"></div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Render viewing patterns with progress bars
+ */
+function renderViewingPatterns(patterns) {
+    const container = document.getElementById('viewing-patterns');
+    const peakTimeEl = document.getElementById('peak-time');
+    if (!container || !peakTimeEl) {
+        return;
+    }
+
+    const slots = patterns.slots || {};
+    const slotEntries = Object.entries(slots);
+
+    if (slotEntries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm Thai-font">ยังไม่มีข้อมูล</p>';
+        return;
+    }
+
+    // Find max count for scaling
+    const maxCount = Math.max(...slotEntries.map(([_, data]) => data.count));
+
+    container.innerHTML = slotEntries.map(([_key, data]) => {
+        const width = maxCount > 0 ? (data.count / maxCount) * 100 : 0;
+        return `
+            <div class="space-y-1">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-white font-medium Thai-font">${data.label}</span>
+                    <span class="text-gray-500">${data.count} ครั้ง (${data.percentage}%)</span>
+                </div>
+                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500" style="width: ${width}%"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Update peak time
+    if (patterns.peakTime) {
+        peakTimeEl.textContent = patterns.peakTime.label;
+    }
+}
+
+/**
+ * Render top content cards
+ */
+function renderTopContent(topContent) {
+    const container = document.getElementById('top-content');
+    if (!container) {
+        return;
+    }
+
+    if (topContent.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm Thai-font col-span-full">ยังไม่มีข้อมูล</p>';
+        return;
+    }
+
+    container.innerHTML = topContent.map((item, index) => `
+        <div class="group cursor-pointer animate-fade-in">
+            <div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-white/5 bg-brand-obsidian">
+                <img src="${item.poster || '/assets/logo/DUYDODEE.png'}" 
+                     class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-500" 
+                     onerror="this.onerror=null;this.src='/assets/logo/DUYDODEE.png'">
+                <div class="absolute top-2 left-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span class="text-[10px] font-black text-black">${index + 1}</span>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
+                    <p class="text-[9px] font-black text-white line-clamp-2 Thai-font">${UI.escapeHTML(item.title)}</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }

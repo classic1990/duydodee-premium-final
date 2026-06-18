@@ -443,4 +443,48 @@ async function fetchRecentAssets(filterCat = 'ALL') {
     }
 }
 
+/**
+ * 🏆 Render the top 3 content podium (Hall of Fame)
+ */
+async function renderRankingPodium() {
+    try {
+        const [mSnap, sSnap] = await Promise.all([
+            getDocs(query(collection(db, SCHEMA.COLLECTIONS.MOVIES), orderBy('views', 'desc'), limit(3))),
+            getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES), orderBy('views', 'desc'), limit(3)))
+        ]);
+
+        const all = [
+            ...mSnap.docs.map(d => ({ ...d.data(), id: d.id })),
+            ...sSnap.docs.map(d => ({ ...d.data(), id: d.id }))
+        ]
+            .sort((a, b) => (b.views || 0) - (a.views || 0))
+            .slice(0, 3);
+
+        // Map positions (1st is index 0, 2nd is index 1, 3rd is index 2)
+        const positions = [
+            { poster: 'rank-1-poster', title: 'rank-1-title' },
+            { poster: 'rank-2-poster', title: 'rank-2-title' },
+            { poster: 'rank-3-poster', title: 'rank-3-title' }
+        ];
+
+        all.forEach((item, index) => {
+            const pos = positions[index];
+            const posterEl = document.getElementById(pos.poster);
+            const titleEl = document.getElementById(pos.title);
+
+            if (posterEl) {
+                const img = posterEl.querySelector('img');
+                if (img) {
+                    img.src = item.poster || item.posterURL || '/assets/logo/DUYDODEE.png';
+                }
+            }
+            if (titleEl) {
+                titleEl.innerText = item.title;
+            }
+        });
+    } catch (error) {
+        console.error('Podium Render Error:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', init);
