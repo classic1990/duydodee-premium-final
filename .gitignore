@@ -3,6 +3,23 @@ node_modules/
 dist/
 build/
 
+# AI & Development Tools (Production - Not needed)
+.agents/
+.climpire/
+.climpire-worktrees/
+.devin/
+.firebase/
+.kilo/
+.qodo/
+.windsurf/
+.gemini/
+
+# Backup & Temporary Files
+backup/
+files/
+*.bak
+*.tmp
+
 # TypeScript (not yet configured, TS files cause lint errors)
 *.ts
 *.tsx
