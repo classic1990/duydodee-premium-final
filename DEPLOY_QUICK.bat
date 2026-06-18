@@ -4,7 +4,7 @@ title DUYDODEE Quick Deploy
 color 0B
 
 echo ================================================================
-echo  DUYDODEE QUICK DEPLOY
+echo  DUYDODEE QUICK DEPLOY (Free Tier Optimized)
 echo ================================================================
 echo.
 
@@ -25,14 +25,15 @@ echo [4/6] Build production...
 call npm run build:prod
 echo.
 
-echo [5/6] Deploy to Firebase...
-call firebase deploy --only hosting
+echo [5/6] Deploy to Firebase (Hosting + Firestore)...
+call firebase deploy
 echo.
 
 echo [6/6] Done!
 echo.
 echo ================================================================
 echo  DUYDODEE IS LIVE: https://duydodeesport.web.app
+echo  Functions Removed - Free Tier Optimized
 echo ================================================================
 echo.
 

@@ -18,6 +18,15 @@ const mockIncrement = jest.fn();
 const mockWriteBatch = jest.fn();
 const mockDeleteDoc = jest.fn();
 
+// Mock Firebase Auth functions
+const mockOnAuthStateChanged = jest.fn();
+const mockSignOut = jest.fn();
+const mockSignInWithPopup = jest.fn();
+const mockSignInWithEmailAndPassword = jest.fn();
+const mockCreateUserWithEmailAndPassword = jest.fn();
+const mockSendEmailVerification = jest.fn();
+const mockUpdateProfile = jest.fn();
+
 // Mock all dependencies first
 jest.mock('./firebase-config.js', () => ({
     auth: {
@@ -38,18 +47,14 @@ jest.mock('./firebase-config.js', () => ({
     updateDoc: (...args) => mockUpdateDoc(...args),
     increment: (...args) => mockIncrement(...args),
     writeBatch: (...args) => mockWriteBatch(...args),
-    deleteDoc: (...args) => mockDeleteDoc(...args)
-}));
-
-// Mock Firebase Auth functions
-jest.mock('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js', () => ({
-    onAuthStateChanged: jest.fn(),
-    signOut: jest.fn(),
-    signInWithPopup: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-    createUserWithEmailAndPassword: jest.fn(),
-    sendEmailVerification: jest.fn(),
-    updateProfile: jest.fn()
+    deleteDoc: (...args) => mockDeleteDoc(...args),
+    onAuthStateChanged: (...args) => mockOnAuthStateChanged(...args),
+    signOut: (...args) => mockSignOut(...args),
+    signInWithPopup: (...args) => mockSignInWithPopup(...args),
+    signInWithEmailAndPassword: (...args) => mockSignInWithEmailAndPassword(...args),
+    createUserWithEmailAndPassword: (...args) => mockCreateUserWithEmailAndPassword(...args),
+    sendEmailVerification: (...args) => mockSendEmailVerification(...args),
+    updateProfile: (...args) => mockUpdateProfile(...args)
 }));
 
 // Mock constants

@@ -126,13 +126,12 @@ echo ================================================================
 echo  [INFO] Project: duydodeesport
 echo  [INFO] Version: V44.0-PROFESSIONAL-EDITION
 echo  [INFO] Branch: main
-echo  [INFO] Target: Hosting + Firestore
+echo  [INFO] Target: Hosting + Firestore (Free Tier)
+echo  [INFO] Functions: Removed (optimized for Free Tier)
 echo ================================================================
 echo.
 
-echo [INFO] Verifying Firebase project connection...
-call firebase login 2>nul
-echo [INFO] Deploying to Firebase Hosting and Firestore...
+echo [INFO] Deploying to Firebase Hosting and Firestore (Free Tier)...
 echo.
 
 call firebase deploy

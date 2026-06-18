@@ -2,12 +2,10 @@ import errorHandler from '../utils/error-handler.js';
 import {
     auth, db, doc, getDoc, setDoc, serverTimestamp,
     collection, getDocs, googleProvider,
-    updateProfile, updateDoc, increment, writeBatch
-} from './firebase-config.js';
-import {
+    updateProfile, updateDoc, increment, writeBatch,
     onAuthStateChanged, signOut, signInWithPopup, signInWithEmailAndPassword,
     createUserWithEmailAndPassword, sendEmailVerification
-} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+} from './firebase-config.js';
 import { SCHEMA } from '../constants.js';
 import config from '../config/index.js';
 

@@ -12,6 +12,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:all": "npm test && cd functions && npm test",
     "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
     "lint": "eslint public/src/**/*.js",
     "lint:fix": "eslint public/src/**/*.js --fix",
