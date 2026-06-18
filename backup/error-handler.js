@@ -24,29 +24,19 @@ class ErrorHandler {
         this.initSentry();
     }
 
-    async initSentry() {
-        // Use centralized config instead of window.__SENTRY_DSN__ (global leak)
-        let dsn = null;
-        try {
-            const configModule = await import('../config/index.js');
-            dsn = configModule.default.get('sentry.dsn');
-        } catch {
-            // Fallback: check legacy window property if config unavailable
-            dsn = window.__SENTRY_DSN__ || null;
-        }
+    initSentry() {
+        const dsn = window.__SENTRY_DSN__;
         if (!dsn) {
             return;
         }
         const script = document.createElement('script');
         script.src = 'https://browser.sentry-cdn.com/8.0.0/bundle.min.js';
         script.onload = () => {
-            if (typeof Sentry !== 'undefined') {
-                Sentry.init({
-                    dsn,
-                    environment: this.getEnvironment(),
-                    tracesSampleRate: 0.1
-                });
-            }
+            Sentry.init({
+                dsn,
+                environment: this.getEnvironment(),
+                tracesSampleRate: 0.1
+            });
         };
         document.head.appendChild(script);
     }

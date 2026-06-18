@@ -43,11 +43,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // 1. Render Player
             const player = await UI.renderiPhonePlayer(movie, [], 0, false);
 
-            // 2. Single auth state change handler — merged to avoid memory leak from multiple subscriptions
-            const bookmarkBtn = document.getElementById('bookmark-btn');
-            const bookmarkIcon = document.getElementById('bookmark-icon');
-
-            const unsubscribeAuth = AuthService.onStateChanged(async (user) => {
+            // 2. Single auth state change handler for all auth-dependent operations
+            AuthService.onStateChanged(user => {
                 if (user) {
                     // Setup periodic progress saving (every 15s)
                     if (player && typeof player.getCurrentTime === 'function') {
@@ -78,26 +75,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                         AuthService.saveWatchHistory(user.uid, { ...movie, type: 'movie' }, 0);
                         historySaved = true;
                     }
+                }
+            });
 
-                    // Initial watchlist state check (merged here to avoid second subscription)
+            // 4. Bookmark Button Handler
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+            const bookmarkIcon = document.getElementById('bookmark-icon');
+
+            // Initial watchlist check
+            AuthService.onStateChanged(async (user) => {
+                if (user) {
                     const isBookmarked = await ContentService.checkInWatchlist(user.uid, movieId);
                     if (isBookmarked && bookmarkIcon) {
                         bookmarkIcon.classList.add('fill-brand-primary', 'text-brand-primary');
                     }
                 }
             });
-
-            // 🧹 Cleanup on page unload
-            window.addEventListener('beforeunload', () => {
-                if (unsubscribeAuth) {
-                    unsubscribeAuth();
-                }
-                if (progressInterval) {
-                    clearInterval(progressInterval);
-                }
-            }, { once: true });
-
-            // 4. Bookmark Button Handler
 
             if (bookmarkBtn) {
                 bookmarkBtn.onclick = async () => {

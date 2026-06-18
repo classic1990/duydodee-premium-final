@@ -214,7 +214,7 @@ function renderUsers(users) {
                         <img src="${UI.getSafePoster(user.photoURL || '/assets/logo/DUYDODEE.png')}" class="w-10 h-10 rounded-xl object-cover border border-white/10 shadow-lg">
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-white Thai-font">${UI.escapeHTML(user.displayName || 'Unknown')}</span>
-                            <span class="text-[10px] text-gray-600 font-medium">${UI.escapeHTML(user.email || '')}</span>
+                            <span class="text-[10px] text-gray-600 font-medium">${user.email}</span>
                         </div>
                     </div>
                 </td>

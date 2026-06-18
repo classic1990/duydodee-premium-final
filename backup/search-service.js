@@ -39,10 +39,6 @@ export const SearchService = {
      * const results = await SearchService.search('action', { hitsPerPage: 12 });
      */
     async search(query, options = { hitsPerPage: 20 }) {
-        // Lazy init: ensure client is initialized before searching
-        if (!index) {
-            await SearchService.init();
-        }
         if (index) {
             try {
                 const { hits } = await index.search(query, options);

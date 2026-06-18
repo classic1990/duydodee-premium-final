@@ -64,21 +64,17 @@ async function loadVipUsers() {
 
             totalVip++;
 
-            const safePhotoURL = UI.escapeHTML(user.photoURL || '/assets/logo/DUYDODEE.png');
-            const safeDisplayName = UI.escapeHTML(user.displayName || 'Unknown');
-            const safeEmail = UI.escapeHTML(user.email || '-');
-
             const row = `
                 <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td class="py-4 px-2">
                         <div class="flex items-center gap-3">
-                            <img src="${safePhotoURL}" class="w-8 h-8 rounded-full object-cover">
+                            <img src="${user.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-8 h-8 rounded-full object-cover">
                             <div>
-                                <div class="text-sm font-bold text-white">${safeDisplayName}</div>
+                                <div class="text-sm font-bold text-white">${user.displayName || 'Unknown'}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="py-4 px-2 text-sm opacity-60">${safeEmail}</td>
+                    <td class="py-4 px-2 text-sm opacity-60">${user.email || '-'}</td>
                     <td class="py-4 px-2 text-sm">${expiryDate ? expiryDate.toLocaleDateString('th-TH') : '-'}</td>
                     <td class="py-4 px-2 text-sm ${statusClass}">${statusText}</td>
                     <td class="py-4 px-2 text-right">

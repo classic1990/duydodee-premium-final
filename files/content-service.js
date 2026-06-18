@@ -1,6 +1,6 @@
 import {
     db, toggleWatchlist, functions, httpsCallable,
-    collection, collectionGroup, getDocs, doc, getDoc, setDoc, updateDoc,
+    collection, collectionGroup, getDocs, doc, getDoc, setDoc,
     query, where, orderBy, limit, startAfter,
     increment, serverTimestamp
 } from './firebase.js';

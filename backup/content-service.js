@@ -1,6 +1,6 @@
 import {
     db, toggleWatchlist, functions, httpsCallable,
-    collection, collectionGroup, getDocs, doc, getDoc, setDoc, updateDoc,
+    collection, collectionGroup, getDocs, doc, getDoc, setDoc,
     query, where, orderBy, limit, startAfter,
     increment, serverTimestamp
 } from './firebase.js';
@@ -28,17 +28,16 @@ export const ContentService = {
 
     /**
      * Increment view count directly in Firestore (Client-side)
-     * ⚠️ Firestore rules only permit updating the 'views' field on movies/series.
-     *    Use updateDoc (not setDoc/merge) so the diff check in the rule works correctly.
      */
     async incrementViewCount(type, id) {
         try {
             const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
 
-            // Use updateDoc so Firestore security rule diff check passes (only 'views' field)
-            await updateDoc(doc(db, collName, id), {
-                views: increment(1)
-            });
+            // Increment view count directly
+            await setDoc(doc(db, collName, id), {
+                views: increment(1),
+                lastViewedAt: serverTimestamp()
+            }, { merge: true });
 
             // Update daily stats
             const today = new Date().toISOString().split('T')[0];

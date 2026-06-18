@@ -89,12 +89,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 🧹 Cleanup on page unload
             window.addEventListener('beforeunload', () => {
-                if (unsubscribeAuth) {
-                    unsubscribeAuth();
-                }
-                if (progressInterval) {
-                    clearInterval(progressInterval);
-                }
+                if (unsubscribeAuth) unsubscribeAuth();
+                if (progressInterval) clearInterval(progressInterval);
             }, { once: true });
 
             // 4. Bookmark Button Handler

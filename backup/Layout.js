@@ -11,7 +11,8 @@ import {
     doc,
     SCHEMA
 } from '../../services/firebase.js';
-import { UIUtils } from '../../utils/ui-utils.js';
+import { ThemeToggle } from '../ThemeToggle.js';
+import { ThemeService } from '../../services/theme-service.js';
 
 export const Layout = {
     initNavbar: (UI) => {
@@ -20,12 +21,12 @@ export const Layout = {
             return;
         }
 
-        UI.initTheme();
+        ThemeService.init();
 
         // Add theme toggle button to navbar
         const themeToggleContainer = document.getElementById('theme-toggle-container');
         if (themeToggleContainer) {
-            themeToggleContainer.innerHTML = UI.createButton();
+            themeToggleContainer.innerHTML = ThemeToggle.createButton();
             UI.refreshIcons();
         }
 
@@ -56,18 +57,16 @@ export const Layout = {
                     const userData = userDoc.exists() ? userDoc.data() : {};
                     const isAdmin = await checkIsAdmin(user);
 
-                    const safePhotoURL = UIUtils.escapeHTML(userData.photoURL || '/assets/logo/DUYDODEE.png');
-
                     const profileHTML = `
                         <div class="flex items-center gap-4">
                             ${isAdmin ? '<a href="/admin/admin-manage.html" class="hidden md:flex items-center gap-2 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-xl text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all"><i data-lucide="layout-dashboard" class="w-3 h-3"></i> Dashboard</a>' : ''}
-                            <a href="/profile.html" class="w-10 h-10 rounded-xl border border-white/10 overflow-hidden"><img src="${safePhotoURL}" class="w-full h-full object-cover"></a>
+                            <a href="/profile.html" class="w-10 h-10 rounded-xl border border-white/10 overflow-hidden"><img src="${userData.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-full h-full object-cover"></a>
                         </div>`;
 
                     const mobileProfileHTML = `
                         <a href="/profile.html" class="flex flex-col items-center gap-1 p-2 text-brand-primary transition-all duration-300 group relative">
                             <div class="w-6 h-6 rounded-lg border border-brand-primary/30 overflow-hidden group-hover:scale-110 transition-transform">
-                                <img src="${safePhotoURL}" class="w-full h-full object-cover">
+                                <img src="${userData.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-full h-full object-cover">
                             </div>
                             <span class="text-[9px] font-black Thai-font uppercase tracking-tighter">โปรไฟล์</span>
                             <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-primary rounded-full"></span>
@@ -104,16 +103,13 @@ export const Layout = {
     setupSidebar: (user = null, isAdmin = false) => {
         const userSection = document.getElementById('sidebar-user-info');
         if (user && userSection) {
-            const safePhotoURL = UIUtils.escapeHTML(user.photoURL || '/assets/logo/DUYDODEE.png');
-            const safeDisplayName = UIUtils.escapeHTML(user.displayName || 'Premium User');
-            const safeEmail = UIUtils.escapeHTML(user.email || '');
             userSection.innerHTML =
         `
                 <div class="flex items-center gap-4 mb-8">
-                    <img src="${safePhotoURL}" class="w-12 h-12 rounded-xl border border-brand-primary/30">
+                    <img src="${user.photoURL || '/assets/logo/DUYDODEE.png'}" class="w-12 h-12 rounded-xl border border-brand-primary/30">
                     <div>
-                        <p class="text-white font-bold text-sm">${safeDisplayName}</p>
-                        <p class="text-gray-500 text-[10px]">${safeEmail}</p>
+                        <p class="text-white font-bold text-sm">${user.displayName || 'Premium User'}</p>
+                        <p class="text-gray-500 text-[10px]">${user.email}</p>
                     </div>
                 </div>` +
         (isAdmin
