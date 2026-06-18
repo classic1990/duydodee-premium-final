@@ -21,6 +21,8 @@
                 <img src="/assets/logo/DUYDODEE.png" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-xl group-hover:scale-105 transition-transform">
                 <span class="text-xl md:text-2xl font-heading font-black text-white uppercase">DUY<span class="text-brand-primary">ดูDEE</span></span>
             </a>
+            <!-- Theme Toggle Button -->
+            <div id="theme-toggle-container"></div>
             <div id="user-profile-area"></div>
         </div>
     </nav>
@@ -68,6 +70,12 @@
                 <i data-lucide="tv" class="w-5 h-5"></i>
                 <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
             </a>
+            <!-- Mobile Theme Toggle -->
+            <button id="mobile-theme-toggle" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group" onclick="ThemeToggle.handleClick()">
+                <i data-lucide="sun" class="w-5 h-5 group-hover:scale-110 transition-transform mobile-sun-icon"></i>
+                <i data-lucide="moon" class="w-5 h-5 group-hover:scale-110 transition-transform mobile-moon-icon hidden"></i>
+                <span class="text-[9px] font-bold Thai-font">ธีม</span>
+            </button>
             <div id="user-profile-area-mobile"></div>
         </div>
     </nav>
@@ -78,6 +86,9 @@
         </div>
     </footer>
 
+    <!-- 🌓 Theme Toggle -->
+    <script type="module" src="/src/components/ThemeToggle.js"></script>
+    
     <script type="module" src="/src/pages/search.js"></script>
 </body>
 </html>

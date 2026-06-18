@@ -45,6 +45,9 @@
             </div>
 
             <div class="flex items-center gap-4 md:gap-6 flex-1 justify-end lg:flex-none">
+                <!-- Theme Toggle Button -->
+                <div id="theme-toggle-container"></div>
+                
                 <div id="user-profile-area"></div>
             </div>
         </div>
@@ -65,6 +68,12 @@
                 <i data-lucide="tv" class="w-5 h-5"></i>
                 <span class="text-[9px] font-bold Thai-font">ซีรีส์จีน</span>
             </a>
+            <!-- Mobile Theme Toggle -->
+            <button id="mobile-theme-toggle" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-primary transition-all duration-300 group" onclick="ThemeToggle.handleClick()">
+                <i data-lucide="sun" class="w-5 h-5 group-hover:scale-110 transition-transform mobile-sun-icon"></i>
+                <i data-lucide="moon" class="w-5 h-5 group-hover:scale-110 transition-transform mobile-moon-icon hidden"></i>
+                <span class="text-[9px] font-bold Thai-font">ธีม</span>
+            </button>
             <div id="user-profile-area-mobile"></div>
         </div>
     </nav>
@@ -181,6 +190,9 @@
         </div>
     </footer>
 
+    <!-- 🌓 Theme Toggle -->
+    <script type="module" src="/src/components/ThemeToggle.js"></script>
+    
     <script type="module" src="/src/pages/auth/profile.js"></script>
     <script>
         lucide.createIcons();
