@@ -33,13 +33,13 @@ class Config {
         return {
             // Firebase Configuration
             firebase: {
-                apiKey: safeEnv.VITE_FIREBASE_API_KEY,
-                authDomain: safeEnv.VITE_FIREBASE_AUTH_DOMAIN,
-                projectId: safeEnv.VITE_FIREBASE_PROJECT_ID,
-                storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET,
-                messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID,
-                appId: safeEnv.VITE_FIREBASE_APP_ID,
-                measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID
+                apiKey: safeEnv.VITE_FIREBASE_API_KEY || '', // Firebase SDK will use console warning if missing
+                authDomain: safeEnv.VITE_FIREBASE_AUTH_DOMAIN || '',
+                projectId: safeEnv.VITE_FIREBASE_PROJECT_ID || '',
+                storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET || '',
+                messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+                appId: safeEnv.VITE_FIREBASE_APP_ID || '',
+                measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID || ''
             },
 
             // Admin Configuration
