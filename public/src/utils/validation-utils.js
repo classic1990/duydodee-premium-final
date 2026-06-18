@@ -3,6 +3,8 @@
  * Input validation and sanitization functions
  */
 
+import DOMPurify from 'dompurify';
+
 export const ValidationUtils = {
     /**
      * Validate email format
@@ -159,9 +161,23 @@ export const ValidationUtils = {
         if (!str || typeof str !== 'string') {
             return '';
         }
-        return str.trim()
-            .replace(/[<>]/g, '') // Remove potential HTML tags
-            .substring(0, 1000); // Limit length
+        return DOMPurify.sanitize(str.trim(), {
+            ALLOWED_TAGS: [], // Remove all HTML tags
+            ALLOWED_ATTR: [] // Remove all attributes
+        }).substring(0, 1000); // Limit length
+    },
+
+    /**
+     * Sanitize HTML content (allow specific safe tags)
+     */
+    sanitizeHTML: (html, allowedTags = []) => {
+        if (!html || typeof html !== 'string') {
+            return '';
+        }
+        return DOMPurify.sanitize(html, {
+            ALLOWED_TAGS: allowedTags,
+            ALLOWED_ATTR: []
+        });
     },
 
     /**
@@ -318,6 +334,38 @@ export const ValidationUtils = {
             isValid,
             errors
         };
+    },
+
+    /**
+     * Safe innerHTML setter using DOMPurify
+     */
+    setSafeHTML: (element, html, allowedTags = []) => {
+        if (!element || !html) {
+            return false;
+        }
+        try {
+            element.innerHTML = ValidationUtils.sanitizeHTML(html, allowedTags);
+            return true;
+        } catch (error) {
+            console.error('Safe HTML setting failed:', error);
+            return false;
+        }
+    },
+
+    /**
+     * Safe text content setter (avoids XSS completely)
+     */
+    setSafeText: (element, text) => {
+        if (!element) {
+            return false;
+        }
+        try {
+            element.textContent = String(text || '');
+            return true;
+        } catch (error) {
+            console.error('Safe text setting failed:', error);
+            return false;
+        }
     }
 };
 
