@@ -311,19 +311,36 @@
         </div>
     </footer>
 
-    <!-- 🛡️ Error Handler (load first for global error tracking) -->
-    <script type="module" src="/src/utils/error-handler.js"></script>
-
-    <!-- 🌓 Theme Toggle (load before home page to ensure availability) -->
-    <script type="module" src="/src/components/ThemeToggle.js"></script>
-
     <script type="module" src="/src/pages/home.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('✅ Service Worker registered:', registration))
-                    .catch(error => console.error('❌ Service Worker registration failed:', error));
+            window.addEventListener('load', async () => {
+                try {
+                    // 🧹 Unregister old Workbox/stale service workers first
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (const reg of registrations) {
+                        const swUrl = reg.active?.scriptURL || reg.installing?.scriptURL || reg.waiting?.scriptURL || '';
+                        // If an old workbox-based SW is registered, remove it
+                        if (swUrl && !swUrl.endsWith('/sw.js')) {
+                            await reg.unregister();
+                            console.log('🗑️ Unregistered old SW:', swUrl);
+                        }
+                    }
+
+                    // 🧹 Clear all old caches (Workbox-named ones)
+                    const cacheKeys = await caches.keys();
+                    await Promise.all(
+                        cacheKeys
+                            .filter(k => !k.startsWith('duydodee-'))
+                            .map(k => caches.delete(k).then(() => console.log('🗑️ Deleted old cache:', k)))
+                    );
+
+                    // ✅ Register our custom SW
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('✅ Service Worker registered:', registration);
+                } catch (error) {
+                    console.error('❌ Service Worker registration failed:', error);
+                }
             });
         }
     </script>
