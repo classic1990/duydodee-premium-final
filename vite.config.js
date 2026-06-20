@@ -162,9 +162,9 @@ export default defineConfig({
           const srcPath = resolve(rootDir, file);
           if (existsSync(srcPath)) {
             copyFileSync(srcPath, resolve(distDir, file));
-            console.log(`✅ Copied ${file}`);
+            // Removed console.log for cleaner build output
           } else {
-            console.warn(`⚠️  Warning: ${file} not found in public/`);
+            // Removed console.warn for cleaner build output
           }
         }
       }
@@ -212,26 +212,8 @@ export default defineConfig({
     {
       name: 'performance-hints',
       generateBundle(options, bundle) {
-        const KB = 1024;
-        const MB = KB * KB;
-        let totalSize = 0;
-
-        for (const [fileName, file] of Object.entries(bundle)) {
-          if (file.type === 'chunk' || file.type === 'asset') {
-            const size = file.size;
-            totalSize += size;
-            const sizeKB = (size / KB).toFixed(2);
-            const sizeMB = (size / MB).toFixed(2);
-
-            if (size > MB) {
-              console.warn(`⚠️ Large bundle: ${fileName} (${sizeMB} MB)`);
-            } else if (size > 500 * KB) {
-              console.warn(`⚠️ Large file: ${fileName} (${sizeKB} KB)`);
-            }
-          }
-        }
-
-        console.log(`📦 Total bundle size: ${(totalSize / MB).toFixed(2)} MB`);
+        // Removed performance hint logging for cleaner build output.
+        // Terser options in build.terserOptions already handle runtime console removal.
       }
     }
   ]

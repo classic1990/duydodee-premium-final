@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "npm run build:css && vite",
-    "build": "vite build",
-    "build:prod": "vite build --mode production",
+    "build": "npm run build:css && vite build",
+    "build:prod": "npm run build:css && vite build --mode production",
     "preview": "vite preview",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
