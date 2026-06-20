@@ -65,7 +65,7 @@ function Show-Menu {
     Write-Host "   [3] " -NoNewline -ForegroundColor Yellow
     Write-Host "📦 Build Only (Build CSS + Build Production)"
     Write-Host "   [4] " -NoNewline -ForegroundColor Yellow
-    Write-Host "🛡️  Deploy Security Rules & Indexes Only"
+    Write-Host "🛡️  Deploy Security Rules and Indexes Only"
     Write-Host "   [5] " -NoNewline -ForegroundColor Yellow
     Write-Host "💻 Run Local Development Server (npm run dev)"
     Write-Host "   [6] " -NoNewline -ForegroundColor Yellow
