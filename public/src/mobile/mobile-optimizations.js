@@ -26,8 +26,12 @@ export class MobileOptimizer {
      * Detect device type
      */
     static getDeviceType() {
-        if (this.isMobile()) return 'mobile';
-        if (this.isTablet()) return 'tablet';
+        if (this.isMobile()) {
+            return 'mobile';
+        }
+        if (this.isTablet()) {
+            return 'tablet';
+        }
         return 'desktop';
     }
 
@@ -42,7 +46,9 @@ export class MobileOptimizer {
      * Apply mobile-specific optimizations
      */
     static applyMobileOptimizations() {
-        if (!this.isMobile()) return;
+        if (!this.isMobile()) {
+            return;
+        }
 
         // Disable certain animations on mobile for performance
         document.body.classList.add('mobile-optimized');
@@ -174,10 +180,15 @@ export class ResponsiveFonts {
 
         // Base font size based on screen width
         let baseFontSize = 16;
-        if (screenWidth < 480) baseFontSize = 14;
-        else if (screenWidth < 768) baseFontSize = 15;
-        else if (screenWidth < 1024) baseFontSize = 16;
-        else baseFontSize = 18;
+        if (screenWidth < 480) {
+            baseFontSize = 14;
+        } else if (screenWidth < 768) {
+            baseFontSize = 15;
+        } else if (screenWidth < 1024) {
+            baseFontSize = 16;
+        } else {
+            baseFontSize = 18;
+        }
 
         root.style.fontSize = `${baseFontSize}px`;
 
@@ -206,7 +217,9 @@ export class TouchGestures {
         });
 
         element.addEventListener('touchend', (e) => {
-            if (!startX || !startY) return;
+            if (!startX || !startY) {
+                return;
+            }
 
             const endX = e.changedTouches[0].clientX;
             const endY = e.changedTouches[0].clientY;

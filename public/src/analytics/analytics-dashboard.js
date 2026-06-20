@@ -28,22 +28,22 @@ export class AnalyticsDashboard {
      */
     async loadDashboardData() {
         try {
-            const { db, collection, getDocs, query, where, orderBy, limit } = await import('../services/firebase.js');
-            
+            const { db, collection, getDocs, query, _where, orderBy, limit } = await import('../services/firebase.js');
+
             // Load recent analytics events
             const q = query(
                 collection(db, 'analytics_events'),
                 orderBy('createdAt', 'desc'),
                 limit(1000)
             );
-            
+
             const snapshot = await getDocs(q);
             this.data = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
 
-            console.log('Analytics data loaded:', this.data.length, 'events');
+            // console.log('Analytics data loaded:', this.data.length, 'events');
         } catch (error) {
             console.error('Failed to load analytics data:', error);
             this.data = [];
@@ -133,7 +133,7 @@ export class AnalyticsDashboard {
      */
     renderOverviewCards() {
         const stats = this.calculateOverviewStats();
-        
+
         return `
             <div class="overview-cards grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 ${this.createStatCard('Total Events', stats.totalEvents, 'activity', 'brand-primary')}
@@ -166,7 +166,7 @@ export class AnalyticsDashboard {
      */
     calculateOverviewStats() {
         const filteredData = this.getFilteredData();
-        
+
         return {
             totalEvents: filteredData.length,
             pageViews: filteredData.filter(e => e.eventName === 'page_view').length,
@@ -209,7 +209,7 @@ export class AnalyticsDashboard {
     initializeCharts() {
         // Chart.js would be loaded here
         // For now, this is a placeholder
-        console.log('Charts initialized');
+        // console.log('Charts initialized');
     }
 
     /**
@@ -217,7 +217,7 @@ export class AnalyticsDashboard {
      */
     renderDetailedTable() {
         const filteredData = this.getFilteredData().slice(0, 50); // Limit to 50 rows
-        
+
         return `
             <div class="detailed-table bg-[#0a0a0c]/80 backdrop-blur-3xl border border-white/5 rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -289,7 +289,7 @@ export class AnalyticsDashboard {
             const days = daysMap[this.filters.dateRange] || 7;
             const cutoffDate = new Date();
             cutoffDate.setDate(cutoffDate.getDate() - days);
-            
+
             filtered = filtered.filter(event => {
                 const eventDate = new Date(event.createdAt);
                 return eventDate >= cutoffDate;
@@ -313,7 +313,9 @@ export class AnalyticsDashboard {
      * Mask user ID for privacy
      */
     maskUserId(userId) {
-        if (!userId) return 'Anonymous';
+        if (!userId) {
+            return 'Anonymous';
+        }
         return userId.substring(0, 8) + '...';
     }
 
@@ -321,7 +323,9 @@ export class AnalyticsDashboard {
      * Format timestamp
      */
     formatTimestamp(timestamp) {
-        if (!timestamp) return '-';
+        if (!timestamp) {
+            return '-';
+        }
         const date = new Date(timestamp);
         return date.toLocaleString('th-TH', {
             day: '2-digit',
@@ -345,7 +349,7 @@ export class AnalyticsDashboard {
      */
     exportData(format = 'json') {
         const data = this.analytics.exportAnalytics(format);
-        
+
         const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');

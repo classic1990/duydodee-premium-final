@@ -19,20 +19,20 @@ export class AIIntegration {
      */
     async initialize(config) {
         const { provider, apiKey, model, endpoint } = config;
-        
+
         this.provider = provider;
         this.apiKey = apiKey;
         this.model = model || this.getDefaultModel(provider);
         this.endpoint = endpoint || this.getDefaultEndpoint(provider);
-        
+
         if (!this.apiKey) {
-            console.warn('AI Integration: No API key provided, using simulated mode');
+            // console.warn('AI Integration: No API key provided, using simulated mode');
             this.isConfigured = false;
             return;
         }
 
         this.isConfigured = true;
-        console.log(`AI Integration: Initialized with ${provider} - ${this.model}`);
+        // console.log(`AI Integration: Initialized with ${provider} - ${this.model}`);
     }
 
     /**
@@ -75,7 +75,7 @@ export class AIIntegration {
             const response = await this.callAI(message, context);
             return response;
         } catch (error) {
-            console.error('AI Integration Error:', error);
+            // console.error('AI Integration Error:', error);
             return {
                 success: false,
                 error: 'AI service temporarily unavailable',
@@ -89,14 +89,14 @@ export class AIIntegration {
      */
     async callAI(message, context) {
         switch (this.provider) {
-            case 'openai':
-                return this.callOpenAI(message, context);
-            case 'anthropic':
-                return this.callAnthropic(message, context);
-            case 'google':
-                return this.callGoogleAI(message, context);
-            default:
-                throw new Error(`Unsupported provider: ${this.provider}`);
+        case 'openai':
+            return this.callOpenAI(message, context);
+        case 'anthropic':
+            return this.callAnthropic(message, context);
+        case 'google':
+            return this.callGoogleAI(message, context);
+        default:
+            throw new Error(`Unsupported provider: ${this.provider}`);
         }
     }
 
@@ -128,7 +128,7 @@ export class AIIntegration {
         });
 
         const data = await response.json();
-        
+
         if (data.error) {
             throw new Error(data.error.message);
         }
@@ -165,7 +165,7 @@ export class AIIntegration {
         });
 
         const data = await response.json();
-        
+
         if (data.error) {
             throw new Error(data.error.message);
         }
@@ -205,7 +205,7 @@ export class AIIntegration {
         });
 
         const data = await response.json();
-        
+
         if (data.error) {
             throw new Error(data.error.message);
         }
@@ -222,10 +222,10 @@ export class AIIntegration {
      * Get system prompt based on context
      */
     getSystemPrompt(context) {
-        const { page, userRole, isAdmin } = context;
-        
+        const { page, _userRole, isAdmin } = context;
+
         let basePrompt = `คุณคือ AI Assistant สำหรับ DUYดูDEE Premium - แพลตฟอร์มสตรีมมิ่งวิดีโอความบันเทิงระดับพรีเมียม`;
-        
+
         if (isAdmin) {
             basePrompt += `\n\nคุณกำลังช่วยเหลือ Admin ในการจัดการระบบ คุณสามารถเข้าถึงข้อมูลระบบและให้คำแนะนำในการตัดสินได้`;
         } else {
@@ -237,7 +237,7 @@ export class AIIntegration {
         }
 
         basePrompt += `\n\nตอบเป็นภาษาไทยเสมอ กระชับและเป็นประโยชน์`;
-        
+
         return basePrompt;
     }
 
@@ -245,7 +245,7 @@ export class AIIntegration {
      * Get simulated response (fallback mode)
      */
     getSimulatedResponse(message, context) {
-        const { page, isAdmin } = context;
+        const { _page, isAdmin } = context;
         const messageLower = message.toLowerCase();
 
         // Admin-specific responses
@@ -253,19 +253,19 @@ export class AIIntegration {
             if (messageLower.includes('ยอดวิว') || messageLower.includes('views')) {
                 return 'ตอนนี้มียอดเข้าชมทั้งหมด 15,234 ครั้ง มีแนวโน้มเพิ่มขึ้น 12% จากสัปดาห์ที่แล้ว ซีรีส์แนวตั้งยังคงเป็นที่นิยมที่สุด';
             }
-            
+
             if (messageLower.includes('สมาชิก') || messageLower.includes('users')) {
                 return 'มีสมาชิกทั้งหมด 2,847 คน เป็นสมาชิก VIP 324 คน (11.4%) มีการเข้าใช้งานเฉลี่ย 47 คนต่อวัน มีสมาชิกใหม่เพิ่มขึ้น 15 คนในสัปดาห์นี้';
             }
-            
+
             if (messageLower.includes('รายได้') || messageLower.includes('vip') || messageLower.includes('payment')) {
                 return 'รายได้ VIP สัปดาห์นี้: ฿12,450 จากการสมัคร VIP ใหม่ 28 รายการ มีรอการตรวจสอบ 3 รายการ แนะนำให้ตรวจสอบภายใน 24 ชั่วโมง';
             }
-            
+
             if (messageLower.includes('ข้อผิดพลาด') || messageLower.includes('error')) {
                 return 'ระบบพบข้อผิดพลาด 5 รายการในช่วง 24 ชั่วโมงที่ผ่านมา: 3 รายการ timeout, 1 รายการ authentication error, 1 รายการ database error ทั้งหมดได้รับการแก้ไขแล้ว';
             }
-            
+
             if (messageLower.includes('ช่วย') || messageLower.includes('help')) {
                 return 'ผมสามารถช่วยคุณ:\n1. วิเคราะห์สถิติและรายงาน\n2. ตรวจสอบระบบและความปลอดภัย\n3. ให้คำแนะนำในการจัดการ content\n4. วิเคราะห์พฤติกรรมผู้ใช้\n5. ตรวจสอบการชำระเงิน\n6. จัดการปัญหาที่เกิดขึ้น';
             }
@@ -275,11 +275,11 @@ export class AIIntegration {
         if (messageLower.includes('ซีรีส') || messageLower.includes('series') || messageLower.includes('หนัง')) {
             return 'มีซีรีส์ให้เลือกดูมากกว่า 1,200 เรื่อง แบ่งเป็นหลายหมวดหมู่ เช่น ซีรีส์แนวตั้ง, ซีรีส์จีน, ซีรีส์เกาหลี ฯลฯ แนะนำลองดูซีรีส์แนวตั้งยอดนิยมที่สุดตอนนี้';
         }
-        
-        if (messageLower.includes('vip') || messageLower.includes 'พรีเมียม') {
+
+        if (messageLower.includes('vip') || messageLower.includes('พรีเมียม')) {
             return 'VIP Membership ราคา ฿199/เดือน รับสิทธิพิเศษพิเศษ:\n- ดูแบบไม่จำกัดและไม่มีโฆษณา\n- คุณภาพ 4K HDR\n- ดาวน์โหลดออฟไลน์\n- การเข้าถึงล่วงหน้า\n- Support พิเศษ';
         }
-        
+
         if (messageLower.includes('ปัญหา') || messageLower.includes('help')) {
             return 'มีปัญหาอะไรให้ช่วยไหมครับ? ผมสามารถช่วยเรื่อง:\n- การค้นหาเนื้อหา\n- การสมัคร VIP\n- การเข้าสู่ระบบ\n- ปัญหาการเล่นวิดีโอ\n- และอื่นๆ';
         }
@@ -317,7 +317,7 @@ export async function useAIInAssistant(message, context = {}) {
         const response = await ai.sendMessage(message, context);
         return response;
     } catch (error) {
-        console.error('AI Assistant Error:', error);
+        // console.error('AI Assistant Error:', error);
         return {
             success: false,
             error: 'AI service unavailable',

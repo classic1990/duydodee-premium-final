@@ -3,6 +3,8 @@
  * Implements intelligent caching for optimal performance
  */
 
+importScripts('/src/services/firebase-fallback.js'); // Load firebaseFallback for offline mock
+
 const CACHE_NAME = 'duydodee-v2';
 const STATIC_CACHE = 'duydodee-static-v2';
 const DYNAMIC_CACHE = 'duydodee-dynamic-v2';
@@ -58,9 +60,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Strategy 1: Cache First for static assets (CSS, JS, images)
+  // Strategy 1: Cache First for static assets (CSS, JS, images, fonts, assets)
   if (
-    url.pathname.match(/\.(css|js|woff2|png|jpg|jpeg|gif|svg|ico)$/) ||
+    url.pathname.match(/\.(css|js|woff2|png|jpg|jpeg|gif|svg|ico|ttf|eot)$/) ||
     url.pathname.startsWith('/assets/')
   ) {
     event.respondWith(cacheFirstStrategy(event.request));
@@ -73,9 +75,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategy 3: Network Only for Firebase API calls
-  if (url.hostname.includes('firebaseio.com') || url.hostname.includes('firestore.googleapis.com')) {
-    event.respondWith(networkOnlyStrategy(event.request));
+  // Strategy 3: Firebase APIs – try network first, fallback to cache/offline
+  const isFirebaseRequest =
+    url.hostname.includes('firebaseio.com') ||
+    url.hostname.includes('firestore.googleapis.com') ||
+    url.hostname.includes('firebasestorage.googleapis.com') ||
+    url.hostname.includes('www.googleapis.com'); // adjust as needed
+  if (isFirebaseRequest) {
+    event.respondWith(firebaseNetworkFirstStrategy(event.request));
     return;
   }
 
@@ -87,34 +94,42 @@ self.addEventListener('fetch', (event) => {
  * Cache First Strategy - Try cache first, fallback to network
  */
 async function cacheFirstStrategy(request) {
-  let cache;
-  const cacheName = request.url.match(/\.(png|jpg|jpeg|gif|svg|ico)$/) ||
-                  request.url.startsWith('/assets/')
-                  ? IMAGE_CACHE
-                  : STATIC_CACHE;
+  // Determine correct cache based on file extension or path
+  let cacheName = STATIC_CACHE; // default
+  const url = new URL(request.url);
+  const path = url.pathname.toLowerCase();
+
+  if (path.match(/\.(png|jpg|jpeg|gif|svg|ico)$/)) {
+    cacheName = IMAGE_CACHE;
+  } else if (path.match(/\.(css|js|woff2|ttf|eot)$/) || path.startsWith('/assets/')) {
+    cacheName = STATIC_CACHE;
+  }
 
   try {
-    cache = await caches.open(cacheName);
+    const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
 
     if (cached) {
-      // Check if cache is still valid
-      const date = cached.headers.get('date');
-      if (date && isCacheValid(date, CACHE_EXPIRY.STATIC)) {
+      // Validate cache age using Date header if available, else fall back to timestamp stored in cache metadata
+      const dateHeader = cached.headers.get('date');
+      if (dateHeader && isCacheValid(dateHeader, getMaxAgeForCache(cacheName))) {
         return cached;
       }
+      // If no date header, we could optionally store a timestamp when caching, but for now treat as stale
     }
 
     const networkResponse = await fetch(request);
 
     // Only cache GET requests - Cache API doesn't support POST by default
     if (networkResponse.ok && request.method === 'GET') {
+      // Put a clone in the cache
       cache.put(request, networkResponse.clone());
     }
 
     return networkResponse;
   } catch (error) {
     console.error('Cache First Strategy Error:', error);
+    const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
     if (cached) return cached;
     throw error;
@@ -138,19 +153,68 @@ async function networkFirstStrategy(request) {
     return networkResponse;
   } catch (error) {
     console.error('Network First Strategy Error:', error);
-    const cached = await cache.match(request);
-    if (cached) {
-      // Return cached version with offline warning
-      const response = cached.clone();
-      const modifiedResponse = new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers
-      });
-      modifiedResponse.headers.set('X-Offline', 'true');
-      return modifiedResponse;
+    try {
+      if (!cache) {
+        cache = await caches.open(DYNAMIC_CACHE);
+      }
+      const cached = await cache.match(request);
+      if (cached) {
+        // Return cached version with offline warning
+        const response = cached.clone();
+        const modifiedResponse = new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers
+        });
+        modifiedResponse.headers.set('X-Offline', 'true');
+        return modifiedResponse;
+      }
+    } catch (cacheError) {
+      console.error('Cache fallback error:', cacheError);
     }
+
+    // Return offline page as last resort
+    try {
+      const offlineCache = await caches.open(STATIC_CACHE);
+      const offlinePage = await offlineCache.match('/offline.html');
+      if (offlinePage) {
+        return offlinePage;
+      }
+    } catch (offlineError) {
+      console.error('Offline page fallback error:', offlineError);
+    }
+
     throw error;
+  }
+}
+
+/**
+ * Firebase-specific Network First Strategy with fallback to firebaseFallback mock data
+ */
+async function firebaseNetworkFirstStrategy(request) {
+  try {
+    const networkResponse = await fetch(request);
+    return networkResponse;
+  } catch (error) {
+    console.error('Firebase Network First Strategy Error:', error);
+    // Attempt to serve mock data from firebaseFallback if applicable
+    // For simplicity, we return a generic JSON error or offline page
+    // In a real app you would map the request to specific mock data
+    try {
+      // Try to serve offline page as fallback
+      const offlineCache = await caches.open(STATIC_CACHE);
+      const offlinePage = await offlineCache.match('/offline.html');
+      if (offlinePage) {
+        return offlinePage;
+      }
+    } catch (offlineError) {
+      console.error('Offline page fallback error:', offlineError);
+    }
+    // If even offline page fails, respond with a generic error
+    return new Response(JSON.stringify({ error: 'Firebase service unavailable, please check your connection.' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
 
@@ -169,6 +233,18 @@ function isCacheValid(dateString, maxAgeSeconds) {
   const now = new Date();
   const ageInSeconds = (now - cacheDate) / 1000;
   return ageInSeconds < maxAgeSeconds;
+}
+
+/**
+ * Get max age seconds based on cache name
+ */
+function getMaxAgeForCache(cacheName) {
+  switch (cacheName) {
+    case STATIC_CACHE: return CACHE_EXPIRY.STATIC;
+    case DYNAMIC_CACHE: return CACHE_EXPIRY.DYNAMIC;
+    case IMAGE_CACHE: return CACHE_EXPIRY.IMAGES;
+    default: return CACHE_EXPIRY.DYNAMIC;
+  }
 }
 
 /**
@@ -212,5 +288,3 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification('DUYดูDEE', options)
   );
 });
-
-

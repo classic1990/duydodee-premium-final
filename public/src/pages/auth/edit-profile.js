@@ -1,4 +1,4 @@
-import { auth, updateProfile, ref, storage, uploadBytes, getDownloadURL, db, doc, setDoc } from '../../services/firebase.js';
+import { auth, updateProfile, ref, storage, uploadBytes, getDownloadURL, db, doc, setDoc, useFallback, firebaseFallback, onAuthStateChanged } from '../../services/firebase.js';
 import { UI } from '../../components/ui.js';
 
 /**
@@ -14,22 +14,41 @@ document.addEventListener('DOMContentLoaded', () => {
         avatarTrigger.onclick = () => avatarInput.click();
     }
 
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            if (document.getElementById('display-name')) {
-                document.getElementById('display-name').value = user.displayName || '';
+    // Fallback mode: skip auth state listener
+    if (!useFallback && auth) {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                if (document.getElementById('display-name')) {
+                    document.getElementById('display-name').value = user.displayName || '';
+                }
+                if (document.getElementById('email')) {
+                    document.getElementById('email').value = user.email || '';
+                }
+                if (avatarPreview) {
+                    avatarPreview.src = user.photoURL || '/assets/logo/DUYDODEE.png';
+                }
+                UI.refreshIcons();
+            } else {
+                window.location.href = '/login.html';
             }
-            if (document.getElementById('email')) {
-                document.getElementById('email').value = user.email || '';
+        });
+    } else if (useFallback) {
+        // In fallback mode, load mock user data
+        firebaseFallback.getCurrentUser().then(user => {
+            if (user) {
+                if (document.getElementById('display-name')) {
+                    document.getElementById('display-name').value = user.displayName || '';
+                }
+                if (document.getElementById('email')) {
+                    document.getElementById('email').value = user.email || '';
+                }
+                if (avatarPreview) {
+                    avatarPreview.src = user.photoURL || '/assets/logo/DUYDODEE.png';
+                }
+                UI.refreshIcons();
             }
-            if (avatarPreview) {
-                avatarPreview.src = user.photoURL || '/assets/logo/DUYDODEE.png';
-            }
-            UI.refreshIcons();
-        } else {
-            window.location.href = '/login.html';
-        }
-    });
+        });
+    }
 
     if (avatarInput) {
         avatarInput.onchange = (e) => {
@@ -51,7 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.onsubmit = async (e) => {
             e.preventDefault();
-            const user = auth.currentUser;
+            let user;
+            if (useFallback) {
+                user = await firebaseFallback.getCurrentUser();
+            } else {
+                user = auth.currentUser;
+            }
             if (!user) {
                 return;
             }

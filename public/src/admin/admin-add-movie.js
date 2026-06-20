@@ -1,9 +1,8 @@
 import { db, collection, addDoc, serverTimestamp, SCHEMA, logActivity } from '../services/firebase.js';
 import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
-import { checkAdminAccess } from '../middleware/auth-guard.js';
-import { injectAdminSidebar } from './sidebar-loader.js';
-import { ValidationUtils } from '../utils/validation-utils.js';
+import { AdminInit } from './shared/admin-init.js';
+import { AdminValidators } from './shared/admin-validators.js';
 
 /**
  * 🎬 DUYดูDEE MOVIE REGISTRATION ENGINE
@@ -14,64 +13,8 @@ import { ValidationUtils } from '../utils/validation-utils.js';
 // Module-scoped variables
 let videoUrlInput, titleInput, descInput, posterPreview, selectedPosterUrlInput, thumbnailOptionsContainer, noPreview, previewTitle;
 
-/**
- * Validates YouTube URL format (using ValidationUtils)
- * @param {string} url - URL to validate
- * @returns {boolean} True if valid YouTube URL
- */
-function isValidYouTubeUrl(url) {
-    return ValidationUtils.isValidYouTubeURL(url);
-}
-
-/**
- * Sanitizes user input to prevent XSS (using ValidationUtils)
- * @param {string} input - Raw input string
- * @returns {string} Sanitized string
- */
-function sanitizeInput(input) {
-    return ValidationUtils.sanitizeString(input);
-}
-
-/**
- * Validates form data before submission
- * @param {Object} formData - Form data object
- * @returns {Object} Validation result with isValid and errors
- */
-function validateFormData(formData) {
-    const errors = [];
-
-    if (!formData.videoUrl || !isValidYouTubeUrl(formData.videoUrl)) {
-        errors.push('กรุณาระบุลิงก์ YouTube ที่ถูกต้อง');
-    }
-
-    if (!ValidationUtils.isValidTitle(formData.title)) {
-        errors.push('กรุณาระบุชื่อเรื่องอย่างน้อย 2 ตัวอักษร');
-    }
-
-    if (formData.title && formData.title.length > 200) {
-        errors.push('ชื่อเรื่องต้องไม่เกิน 200 ตัวอักษร');
-    }
-
-    if (formData.description && formData.description.length > 1000) {
-        errors.push('คำอธิบายต้องไม่เกิน 1000 ตัวอักษร');
-    }
-
-    return {
-        isValid: errors.length === 0,
-        errors
-    };
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        await injectAdminSidebar();
-        UI.initAdminSidebar();
-        initForm();
-    } catch (err) {
-        console.error('Access Denied:', err);
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    AdminInit.initPage(initForm);
 });
 
 function initForm() {
@@ -213,15 +156,15 @@ async function handleAddMovie(e) {
     UI.setLoading(true);
 
     const formData = {
-        videoUrl: sanitizeInput(videoUrlInput?.value || ''),
-        title: sanitizeInput(titleInput?.value || ''),
+        videoUrl: AdminValidators.sanitizeInput(videoUrlInput?.value || ''),
+        title: AdminValidators.sanitizeInput(titleInput?.value || ''),
         category: document.getElementById('category').value,
-        badge: sanitizeInput(document.getElementById('badge')?.value || 'HD'),
-        description: sanitizeInput(descInput?.value || '')
+        badge: AdminValidators.sanitizeInput(document.getElementById('badge')?.value || 'HD'),
+        description: AdminValidators.sanitizeInput(descInput?.value || '')
     };
 
-    // Validate form data
-    const validation = validateFormData(formData);
+    // Validate form data using shared validators
+    const validation = AdminValidators.validateMovieForm(formData);
     if (!validation.isValid) {
         UI.showToast(validation.errors.join(', '), 'error');
         UI.setLoading(false);

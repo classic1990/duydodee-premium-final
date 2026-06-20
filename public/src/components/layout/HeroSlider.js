@@ -17,6 +17,15 @@ export const HeroSlider = {
 
         const backgroundImage = document.getElementById('hero-background-image');
 
+        // Fallback mode: show default hero when db is null
+        if (!db) {
+            if (backgroundImage) {
+                backgroundImage.style.display = 'block';
+            }
+            container.innerHTML = '<div class="relative z-10 max-w-4xl"><div class="space-y-4 md:space-y-6"><h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter italic leading-none animate-slide-up">ยินดีต้อนรับสู่ <span class="text-brand-primary">DUYดูDEE</span></h1><p class="text-sm md:text-base text-gray-300 max-w-2xl animate-slide-up" style="animation-delay: 0.1s">สัมผัสประสบการณ์การรับชมภาพยนตร์และซีรีส์คุณภาพสูงระดับ 4K HDR</p></div></div>';
+            return;
+        }
+
         try {
             const q = query(
                 collection(db, SCHEMA.COLLECTIONS.HERO),

@@ -6,13 +6,22 @@ import {
     collection,
     addDoc,
     serverTimestamp,
-    SCHEMA
+    SCHEMA,
+    useFallback,
+    firebaseFallback
 } from '../../services/firebase.js';
 import { VIP_PLANS } from '../../constants.js';
 
 export const Modals = {
     renderVIPUpgradeModal: async (UI) => {
-        if (!auth.currentUser) {
+        // Fallback mode: show message that VIP is not available in simulation mode
+        if (useFallback || !auth) {
+            UI.showToast('ระบบ VIP ไม่พร้อมในโหมดจำลอง', 'warning');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) {
             UI.showToast('กรุณาเข้าสู่ระบบก่อนสมัคร VIP', 'error');
             return;
         }
@@ -187,9 +196,9 @@ export const Modals = {
                             slipBank: slipBank,
                             status: 'pending',
                             createdAt: serverTimestamp(),
-                            userId: auth.currentUser.uid,
-                            userEmail: auth.currentUser.email,
-                            userName: auth.currentUser.displayName
+                            userId: user.uid,
+                            userEmail: user.email,
+                            userName: user.displayName
                         });
                         UI.showToast('ส่งข้อมูลสมัคร VIP เรียบร้อยแล้ว เจ้าหน้าที่จะตรวจสอบและอัปเกรดภายการภายใน 24 ชั่วโมง', 'success');
                         modal.remove();
@@ -208,7 +217,13 @@ export const Modals = {
     },
 
     renderTicketModal: async (UI) => {
-        if (!auth.currentUser) {
+        let user;
+        if (useFallback) {
+            user = await firebaseFallback.getCurrentUser();
+        } else {
+            user = auth.currentUser;
+        }
+        if (!user) {
             return UI.showToast('กรุณาเข้าสู่ระบบก่อนแจ้งปัญหา', 'error');
         }
 
@@ -242,13 +257,13 @@ export const Modals = {
             e.preventDefault();
             UI.setLoading(true);
             try {
-                const userDoc = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, auth.currentUser.uid));
+                const userDoc = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, user.uid));
                 const isVIP = userDoc.data()?.role === 'vip';
 
                 await addDoc(collection(db, SCHEMA.COLLECTIONS.TICKETS), {
-                    userId: auth.currentUser.uid,
-                    userName: auth.currentUser.displayName || 'Member',
-                    userEmail: auth.currentUser.email,
+                    userId: user.uid,
+                    userName: user.displayName || 'Member',
+                    userEmail: user.email,
                     subject: document.getElementById('ticket-subject').value,
                     message: document.getElementById('ticket-message').value,
                     status: 'open',

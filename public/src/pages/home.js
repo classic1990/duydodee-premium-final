@@ -1,4 +1,5 @@
-import { auth, onAuthStateChanged, getWatchHistory } from '../services/firebase.js';
+import { auth, onAuthStateChanged, getWatchHistory, useFallback } from '../services/firebase.js';
+import { AuthService } from '../services/auth-service.js';
 import { RecommendationService } from '../services/recommendation-service.js';
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadLibrary();
 
     // 3. Auth-based Sections
-    onAuthStateChanged(auth, async (user) => {
+    AuthService.onStateChanged(async (user) => {
         if (user) {
             loadHistory(user.uid);
             loadPersonalizedContent(user.uid); // Add this

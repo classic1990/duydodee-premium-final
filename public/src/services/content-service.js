@@ -2,7 +2,7 @@ import {
     db, toggleWatchlist, functions, httpsCallable,
     collection, collectionGroup, getDocs, doc, getDoc, setDoc, updateDoc,
     query, where, orderBy, limit, startAfter,
-    increment, serverTimestamp
+    increment, serverTimestamp, useFallback, firebaseFallback
 } from './firebase.js';
 import { SCHEMA } from '../constants.js';
 import { UIUtils } from '../utils/ui-utils.js';
@@ -143,6 +143,17 @@ export const ContentService = {
     async fetchItems(type, options = {}) {
         const { pageSize = 12, lastDoc = null, sortBy = 'createdAt', direction = 'desc' } = options;
         const collName = type === 'series' ? SCHEMA.COLLECTIONS.SERIES : SCHEMA.COLLECTIONS.MOVIES;
+
+        // Fallback mode: return mock data
+        if (useFallback) {
+            const mockItems = firebaseFallback.mockData.movies || [];
+            return {
+                items: mockItems.slice(0, pageSize).map(item => ({ ...item, type })),
+                lastDoc: mockItems.length > 0 ? mockItems[mockItems.length - 1] : null,
+                empty: mockItems.length === 0
+            };
+        }
+
         try {
             let q = query(collection(db, collName), orderBy(sortBy, direction), limit(pageSize));
             if (lastDoc) {
@@ -202,6 +213,16 @@ export const ContentService = {
     async fetchItemsByCategory(collections, categoryInput, options = {}) {
         const { pageSize = 12, lastDoc = null, sortBy = 'createdAt', direction = 'desc', isAllCategories = false } = options;
         const collectionsArray = Array.isArray(collections) ? collections : [collections];
+
+        // Fallback mode: return mock data
+        if (useFallback) {
+            const mockItems = firebaseFallback.mockData.movies || [];
+            return {
+                items: mockItems.slice(0, pageSize),
+                lastDoc: mockItems.length > 0 ? mockItems[mockItems.length - 1].id : null,
+                empty: mockItems.length === 0
+            };
+        }
 
         if (collectionsArray.length === 1) {
             const type = collectionsArray[0];

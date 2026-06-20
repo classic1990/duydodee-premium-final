@@ -1,4 +1,5 @@
-import { db, collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, SCHEMA, auth } from '../services/firebase.js';
+import { db, collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, SCHEMA, auth, useFallback, firebaseFallback } from '../services/firebase.js';
+import { AuthService } from '../services/auth-service.js';
 import { UI } from '../components/ui.js';
 import { injectAdminSidebar } from './sidebar-loader.js';
 
@@ -8,7 +9,12 @@ import { injectAdminSidebar } from './sidebar-loader.js';
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Check authentication
-        const user = auth.currentUser;
+        let user;
+        if (useFallback) {
+            user = await firebaseFallback.getCurrentUser();
+        } else {
+            user = auth.currentUser;
+        }
         if (!user) {
             window.location.href = '/login.html';
             return;

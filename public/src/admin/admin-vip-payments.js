@@ -1,4 +1,4 @@
-import { db, collection, query, orderBy, getDocs, doc, updateDoc, getDoc, SCHEMA, auth, logActivity } from '../services/firebase.js';
+import { db, collection, query, orderBy, getDocs, doc, updateDoc, getDoc, SCHEMA, auth, logActivity, useFallback, firebaseFallback } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 import { injectAdminSidebar } from './sidebar-loader.js';
@@ -267,7 +267,12 @@ const VipPaymentView = {
 // 3. Controller (Main Logic)
 async function init() {
     try {
-        const user = auth.currentUser;
+        let user;
+        if (useFallback) {
+            user = await firebaseFallback.getCurrentUser();
+        } else {
+            user = auth.currentUser;
+        }
         if (!user) {
             window.location.href = '/login.html';
             return;

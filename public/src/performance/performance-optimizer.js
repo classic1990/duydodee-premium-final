@@ -40,7 +40,9 @@ export class LazyLoader {
      */
     static async lazyLoadComponent(modulePath, elementId) {
         const element = document.getElementById(elementId);
-        if (!element) return null;
+        if (!element) {
+            return null;
+        }
 
         try {
             const module = await import(modulePath);
@@ -71,8 +73,8 @@ export class LazyLoader {
             const link = document.createElement('link');
             link.rel = 'preload';
             link.href = url;
-            link.as = url.endsWith('.js') ? 'script' : 
-                      url.endsWith('.css') ? 'style' : 'fetch';
+            link.as = url.endsWith('.js') ? 'script' :
+                url.endsWith('.css') ? 'style' : 'fetch';
             document.head.appendChild(link);
         });
     }
@@ -85,16 +87,16 @@ export class CodeSplitter {
     static async loadModule(moduleName) {
         try {
             switch (moduleName) {
-                case 'firebase':
-                    return await import('../services/firebase.js');
-                case 'auth':
-                    return await import('../services/auth-service.js');
-                case 'content':
-                    return await import('../services/content-service.js');
-                case 'review':
-                    return await import('../services/review-service.js');
-                default:
-                    throw new Error(`Unknown module: ${moduleName}`);
+            case 'firebase':
+                return await import('../services/firebase.js');
+            case 'auth':
+                return await import('../services/auth-service.js');
+            case 'content':
+                return await import('../services/content-service.js');
+            case 'review':
+                return await import('../services/review-service.js');
+            default:
+                throw new Error(`Unknown module: ${moduleName}`);
             }
         } catch (error) {
             console.error(`Failed to load module: ${moduleName}`, error);
@@ -132,7 +134,9 @@ export class CacheManager {
      */
     static get(key) {
         const item = this.cache.get(key);
-        if (!item) return null;
+        if (!item) {
+            return null;
+        }
 
         if (Date.now() > item.expiresAt) {
             this.cache.delete(key);
@@ -221,12 +225,12 @@ export class PerformanceUtils {
     /**
      * Measure function performance
      */
-    static measurePerformance(func, label = 'Function') {
-        return function (...args) {
-            const start = performance.now();
+    static measurePerformance(func, _label = 'Function') {
+        return function(...args) {
+            const _start = performance.now();
             const result = func.apply(this, args);
-            const end = performance.now();
-            console.log(`${label} took ${end - start}ms`);
+            const _end = performance.now();
+            // console.log(`${label} took ${end - start}ms`);
             return result;
         };
     }
@@ -250,8 +254,12 @@ export class MemoryManager {
      */
     static cleanupTimers(timers) {
         timers.forEach(timer => {
-            if (timer.timeout) clearTimeout(timer.timeout);
-            if (timer.interval) clearInterval(timer.interval);
+            if (timer.timeout) {
+                clearTimeout(timer.timeout);
+            }
+            if (timer.interval) {
+                clearInterval(timer.interval);
+            }
         });
     }
 
@@ -284,12 +292,13 @@ export class MemoryManager {
     static logMemoryUsage() {
         const usage = this.getMemoryUsage();
         if (usage) {
-            console.log('Memory Usage:', {
-                used: `${(usage.used / 1048576).toFixed(2)} MB`,
-                total: `${(usage.total / 1048576).toFixed(2)} MB`,
-                limit: `${(usage.limit / 1048576).toFixed(2)} MB`,
-                percentage: `${((usage.used / usage.limit) * 100).toFixed(2)}%`
-            });
+            // Memory usage logging disabled for production
+            // console.log('Memory Usage:', {
+            //     used: `${(usage.used / 1048576).toFixed(2)} MB`,
+            //     total: `${(usage.total / 1048576).toFixed(2)} MB`,
+            //     limit: `${(usage.limit / 1048576).toFixed(2)} MB`,
+            //     percentage: `${((usage.used / usage.limit) * 100).toFixed(2)}%`
+            // });
         }
     }
 }
@@ -345,21 +354,23 @@ export class PerformanceMonitor {
      * Log Performance Metrics
      */
     static logMetrics() {
-        console.table(this.getMetrics());
+        // console.table(this.getMetrics());
     }
 
     /**
      * Monitor Core Web Vitals
      */
     static monitorCoreWebVitals() {
-        if (!('PerformanceObserver' in window)) return;
+        if (!('PerformanceObserver' in window)) {
+            return;
+        }
 
         // Largest Contentful Paint
         try {
             const lcpObserver = new PerformanceObserver((list) => {
                 const entries = list.getEntries();
-                const lastEntry = entries[entries.length - 1];
-                console.log('LCP:', lastEntry.startTime);
+                const _lastEntry = entries[entries.length - 1];
+                // console.log('LCP:', lastEntry.startTime);
             });
             lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
         } catch (e) {
@@ -370,8 +381,8 @@ export class PerformanceMonitor {
         try {
             const fidObserver = new PerformanceObserver((list) => {
                 const entries = list.getEntries();
-                const fid = entries[0].processingStart - entries[0].startTime;
-                console.log('FID:', fid);
+                const _fid = entries[0].processingStart - entries[0].startTime;
+                // console.log('FID:', fid);
             });
             fidObserver.observe({ entryTypes: ['first-input'] });
         } catch (e) {
@@ -381,13 +392,13 @@ export class PerformanceMonitor {
         // Cumulative Layout Shift
         try {
             const clsObserver = new PerformanceObserver((list) => {
-                let clsValue = 0;
+                let _clsValue = 0;
                 for (const entry of list.getEntries()) {
                     if (!entry.hadRecentInput) {
-                        clsValue += entry.value;
+                        _clsValue += entry.value;
                     }
                 }
-                console.log('CLS:', clsValue);
+                // console.log('CLS:', clsValue);
             });
             clsObserver.observe({ entryTypes: ['layout-shift'] });
         } catch (e) {
@@ -404,14 +415,16 @@ export class ResourceOptimizer {
      * Optimize images by using WebP format
      */
     static optimizeImageURL(url, format = 'webp', quality = 80) {
-        if (!url) return url;
-        
+        if (!url) {
+            return url;
+        }
+
         // Add optimization parameters for image services
         if (url.includes('cloudinary.com') || url.includes('imgix.com')) {
             const separator = url.includes('?') ? '&' : '?';
             return `${url}${separator}format=${format}&quality=${quality}`;
         }
-        
+
         return url;
     }
 
@@ -458,7 +471,7 @@ export class ServiceWorkerManager {
         if ('serviceWorker' in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register('/sw.js');
-                console.log('Service Worker registered:', registration);
+                // console.log('Service Worker registered:', registration);
                 return registration;
             } catch (error) {
                 console.error('Service Worker registration failed:', error);
@@ -476,7 +489,7 @@ export class ServiceWorkerManager {
             const registration = await navigator.serviceWorker.getRegistration();
             if (registration) {
                 await registration.update();
-                console.log('Service Worker updated');
+                // console.log('Service Worker updated');
             }
         }
     }
@@ -490,7 +503,7 @@ export class ServiceWorkerManager {
             await Promise.all(
                 cacheNames.map(cacheName => caches.delete(cacheName))
             );
-            console.log('Service Worker cache cleared');
+            // console.log('Service Worker cache cleared');
         }
     }
 }

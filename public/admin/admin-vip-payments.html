@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024, initial-scale=0.5, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ประวัติการชำระเงิน VIP | DUYดูDEE EXECUTIVE</title>
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/css/fonts.css">
-    <link rel="icon" type="image/png" href="/assets/logo/DUYDODEE.png">
+    <link rel="icon" type="image/png" href="assets/logo/DUYDODEE.png">
     <script src="https://unpkg.com/lucide@0.410.0"></script>
     <meta name="theme-color" content="#050507">
 </head>
@@ -32,7 +32,8 @@
 
         <!-- Mobile Toggle -->
         <button id="sidebar-toggle-btn"
-            class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all">
+            class="lg:hidden fixed top-5 left-5 z-[500] p-3 rounded-full bg-[#08080a]/80 backdrop-blur-xl border border-white/10 text-white hover:text-brand-primary transition-all"
+            aria-label="เปิดเมนูนำทาง" title="เปิดเมนูนำทาง">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
 
@@ -41,7 +42,8 @@
             <input type="text" id="filter-search" placeholder="ค้นหาชื่อผู้โอน..."
                 class="bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-[10px] outline-none focus:border-brand-primary transition-all Thai-font w-64">
             <select id="filter-status"
-                class="bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-[10px] outline-none focus:border-brand-primary transition-all Thai-font">
+                class="bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-[10px] outline-none focus:border-brand-primary transition-all Thai-font"
+                aria-label="กรองสถานะการชำระเงิน" title="กรองสถานะการชำระเงิน">
                 <option value="ALL">ทุกสถานะ</option>
                 <option value="pending">รอตรวจสอบ</option>
                 <option value="confirmed">ยืนยันแล้ว</option>

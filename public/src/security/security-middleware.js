@@ -10,7 +10,7 @@ import {
     checkRateLimit,
     isBot,
     maskSensitiveData,
-    isAllowedOrigin
+    _isAllowedOrigin
 } from './security-utils.js';
 
 /**
@@ -26,21 +26,23 @@ export class SecurityMiddleware {
      * ตรวจสอบและ sanitize user input
      */
     static sanitizeInput(input, type = 'text') {
-        if (!input) return '';
+        if (!input) {
+            return '';
+        }
 
         const sanitized = String(input).trim();
 
         switch (type) {
-            case 'html':
-                return sanitizeHTML(sanitized);
-            case 'url':
-                return isSafeURL(sanitized) ? sanitized : '';
-            case 'email':
-                return isSafeEmail(sanitized) ? sanitized : '';
-            case 'number':
-                return sanitized.replace(/[^0-9.-]/g, '');
-            default:
-                return sanitized.replace(/[<>]/g, '');
+        case 'html':
+            return sanitizeHTML(sanitized);
+        case 'url':
+            return isSafeURL(sanitized) ? sanitized : '';
+        case 'email':
+            return isSafeEmail(sanitized) ? sanitized : '';
+        case 'number':
+            return sanitized.replace(/[^0-9.-]/g, '');
+        default:
+            return sanitized.replace(/[<>]/g, '');
         }
     }
 
@@ -80,7 +82,7 @@ export class SecurityMiddleware {
      */
     verifyCSRFToken(identifier, token) {
         const stored = this.csrfTokens.get(identifier);
-        
+
         if (!stored || stored.token !== token) {
             return false;
         }
@@ -179,7 +181,9 @@ export class SecurityMiddleware {
      * ตรวจสอบ session timeout
      */
     static checkSessionTimeout(lastActivity, timeoutMs = 1800000) { // 30 minutes
-        if (!lastActivity) return true;
+        if (!lastActivity) {
+            return true;
+        }
         return Date.now() - lastActivity > timeoutMs;
     }
 
@@ -248,7 +252,7 @@ export class SecurityMiddleware {
     /**
      * ตรวจสอบ IP reputation
      */
-    static async checkIPReputation(ip) {
+    static async checkIPReputation(_ip) {
         // In production, integrate with IP reputation services
         // For now, return false (not blocked)
         return false;
@@ -258,14 +262,16 @@ export class SecurityMiddleware {
      * Sanitize object data recursively
      */
     static sanitizeObject(obj, options = {}) {
-        if (!obj || typeof obj !== 'object') return obj;
+        if (!obj || typeof obj !== 'object') {
+            return obj;
+        }
 
         const sanitized = {};
 
         for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 const value = obj[key];
-                
+
                 if (typeof value === 'string') {
                     if (options.htmlFields && options.htmlFields.includes(key)) {
                         sanitized[key] = sanitizeHTML(value);

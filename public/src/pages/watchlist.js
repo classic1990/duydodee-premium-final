@@ -1,11 +1,12 @@
-import { db, auth, onAuthStateChanged, collection, getDocs } from '../services/firebase.js';
+import { db, auth, onAuthStateChanged, collection, getDocs, useFallback } from '../services/firebase.js';
+import { AuthService } from '../services/auth-service.js';
 import { UI } from '../components/ui.js';
 import { SCHEMA } from '../constants.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     UI.initNavbar();
 
-    onAuthStateChanged(auth, async (user) => {
+    AuthService.onStateChanged(async (user) => {
         if (user) {
             loadWatchlist(user.uid);
         } else {

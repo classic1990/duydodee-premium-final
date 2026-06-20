@@ -19,13 +19,15 @@ export class TestHelpers {
      */
     static async waitForElement(selector, timeout = 5000) {
         const startTime = Date.now();
-        
+
         while (Date.now() - startTime < timeout) {
             const element = document.querySelector(selector);
-            if (element) return element;
+            if (element) {
+                return element;
+            }
             await this.wait(100);
         }
-        
+
         throw new Error(`Element ${selector} not found within ${timeout}ms`);
     }
 
@@ -34,12 +36,14 @@ export class TestHelpers {
      */
     static async waitForElementVisible(selector, timeout = 5000) {
         const element = await this.waitForElement(selector, timeout);
-        
+
         while (Date.now() - Date.now() < timeout) {
-            if (this.isElementVisible(element)) return element;
+            if (this.isElementVisible(element)) {
+                return element;
+            }
             await this.wait(100);
         }
-        
+
         throw new Error(`Element ${selector} not visible within ${timeout}ms`);
     }
 
@@ -91,12 +95,12 @@ export class SecurityTestHelpers {
         ];
 
         let isVulnerable = false;
-        
+
         for (const dangerousInput of dangerousInputs) {
             try {
                 const div = document.createElement('div');
                 div.innerHTML = dangerousInput;
-                
+
                 // Check if script executes
                 if (div.querySelector('script') || div.querySelector('iframe')) {
                     isVulnerable = true;
@@ -122,10 +126,10 @@ export class SecurityTestHelpers {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '/test-endpoint';
-        
+
         const hasCSRFToken = !!document.querySelector('input[name="csrf_token"]');
         const hasSameSiteCookie = document.cookie.includes('SameSite');
-        
+
         return {
             hasCSRFToken,
             hasSameSiteCookie,
@@ -215,11 +219,11 @@ export class IntegrationTestHelpers {
      */
     static async testFirebaseConnection() {
         try {
-            const { db, collection, getDoc, doc } = await import('../services/firebase.js');
-            
+            const { db, _collection, getDoc, doc } = await import('../services/firebase.js');
+
             // Try to read a simple document
             const testDoc = await getDoc(doc(db, 'test', 'connection-test'));
-            
+
             return {
                 connected: true,
                 response: testDoc
@@ -238,7 +242,7 @@ export class IntegrationTestHelpers {
     static async testAuthFlow() {
         try {
             const { AuthService } = await import('../services/auth-service.js');
-            
+
             // Test auth state change
             return new Promise((resolve) => {
                 const unsubscribe = AuthService.onStateChanged((user) => {
@@ -262,14 +266,14 @@ export class IntegrationTestHelpers {
      */
     static async testFirestoreRules() {
         try {
-            const { db, collection, getDoc, doc } = await import('../services/firebase.js');
-            
+            const { db, _collection, getDoc, doc } = await import('../services/firebase.js');
+
             // Test reading public data
-            const publicDoc = await getDoc(doc(db, 'movies', 'test'));
-            
+            const _publicDoc = await getDoc(doc(db, 'movies', 'test'));
+
             // Test reading protected data (should fail)
             const protectedDoc = await getDoc(doc(db, 'users', 'test'));
-            
+
             return {
                 publicRead: true,
                 protectedRead: !protectedDoc.exists() // Should fail
@@ -302,25 +306,25 @@ export class TestRunner {
      * Run all tests
      */
     async runTests() {
-        console.log('🧪 Starting Test Suite...');
-        
+        // console.log('🧪 Starting Test Suite...');
+
         for (const test of this.tests) {
             try {
-                console.log(`Running: ${test.name}`);
+                // console.log(`Running: ${test.name}`);
                 const result = await test.testFunction();
                 this.results.push({
                     name: test.name,
                     passed: true,
                     result
                 });
-                console.log(`✅ ${test.name} passed`);
+                // console.log(`✅ ${test.name} passed`);
             } catch (error) {
                 this.results.push({
                     name: test.name,
                     passed: false,
                     error: error.message
                 });
-                console.log(`❌ ${test.name} failed: ${error.message}`);
+                // console.log(`❌ ${test.name} failed: ${error.message}`);
             }
         }
 
@@ -332,21 +336,21 @@ export class TestRunner {
      * Print test results
      */
     printResults() {
-        const passed = this.results.filter(r => r.passed).length;
-        const failed = this.results.filter(r => !r.passed).length;
-        const total = this.results.length;
+        const _passed = this.results.filter(r => r.passed).length;
+        const _failed = this.results.filter(r => !r.passed).length;
+        const _total = this.results.length;
 
-        console.log('\n📊 Test Results:');
-        console.log(`Total: ${total}`);
-        console.log(`Passed: ${passed}`);
-        console.log(`Failed: ${failed}`);
-        console.log(`Success Rate: ${((passed / total) * 100).toFixed(1)}%`);
+        // console.log('\n📊 Test Results:');
+        // console.log(`Total: ${_total}`);
+        // console.log(`Passed: ${_passed}`);
+        // console.log(`Failed: ${_failed}`);
+        // console.log(`Success Rate: ${((_passed / _total) * 100).toFixed(1)}%`);
 
-        if (failed > 0) {
-            console.log('\n❌ Failed Tests:');
+        if (_failed > 0) {
+            console.log('\n❌ Failed Tests:'); // Keep error logging
             this.results
                 .filter(r => !r.passed)
-                .forEach(r => console.log(`- ${r.name}: ${r.error}`));
+                .forEach(r => console.log(`- ${r.name}: ${r.error}`)); // Keep error logging
         }
     }
 

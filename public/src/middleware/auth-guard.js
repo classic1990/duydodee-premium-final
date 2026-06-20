@@ -15,14 +15,14 @@ export async function checkAdminAccess() {
                 await new Promise(r => setTimeout(r, 500));
             }
 
-            if (!AuthService.auth.currentUser) {
+            if (!user) {
                 unsubscribe();
                 window.location.href = '/login.html';
                 return reject('Unauthorized: No session found.');
             }
 
             unsubscribe();
-            const currentUser = AuthService.auth.currentUser;
+            const currentUser = user;
 
             try {
                 const isAdmin = await AuthService.checkIsAdmin(currentUser);

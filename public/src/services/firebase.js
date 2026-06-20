@@ -9,6 +9,8 @@ import {
     storage,
     functions,
     googleProvider,
+    firebaseFallback,
+    useFallback,
     signInWithPopup,
     onAuthStateChanged,
     signOut,
@@ -68,7 +70,17 @@ export async function checkIsAdmin(user) {
  * Log activity to Firestore
  */
 export async function logActivity(action, details) {
-    const user = auth.currentUser;
+    if (useFallback) {
+        console.log('🔄 [Fallback] Activity logged:', action, details);
+        return;
+    }
+
+    let user;
+    if (useFallback) {
+        user = await firebaseFallback.getCurrentUser();
+    } else {
+        user = auth.currentUser;
+    }
     if (!user) {
         return;
     }
@@ -90,6 +102,12 @@ export async function logActivity(action, details) {
  * Get user watch history
  */
 export async function getWatchHistory(userId, count = 10) {
+    if (useFallback) {
+        return firebaseFallback.get('watchHistory').then(result => {
+            return result.docs.map(d => d.data());
+        }).catch(() => []);
+    }
+
     if (!userId) {
         return [];
     }
@@ -111,7 +129,36 @@ export async function getWatchHistory(userId, count = 10) {
  * Toggle watchlist for a content item
  */
 export async function toggleWatchlist(contentId, data, type = 'movie') {
-    const user = auth.currentUser;
+    if (useFallback) {
+        const user = await firebaseFallback.getCurrentUser();
+        if (!user) {
+            throw new Error('Authentication required');
+        }
+
+        const existing = firebaseFallback.mockData.watchlist.find(
+            w => w.userId === user.uid && w.movieId === contentId
+        );
+
+        if (existing) {
+            await firebaseFallback.delete('watchlist', contentId);
+            return { added: false };
+        } else {
+            await firebaseFallback.add('watchlist', {
+                userId: user.uid,
+                movieId: contentId,
+                ...data,
+                type
+            });
+            return { added: true };
+        }
+    }
+
+    let user;
+    if (useFallback) {
+        user = await firebaseFallback.getCurrentUser();
+    } else {
+        user = auth.currentUser;
+    }
     if (!user) {
         throw new Error('Authentication required');
     }
@@ -147,6 +194,8 @@ export {
     storage,
     functions,
     googleProvider,
+    firebaseFallback,
+    useFallback,
     signInWithPopup,
     onAuthStateChanged,
     signOut,

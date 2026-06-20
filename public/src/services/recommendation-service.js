@@ -3,7 +3,7 @@
  * Personalized content recommendations based on user behavior
  */
 
-import { db, doc, getDoc } from './firebase-config.js';
+import { db, doc, getDoc, useFallback, firebaseFallback } from './firebase-config.js';
 import { SCHEMA } from '../constants.js';
 
 export const RecommendationService = {
@@ -19,6 +19,12 @@ export const RecommendationService = {
             excludeIds = [],
             includeWatched = false
         } = options;
+
+        // Fallback mode: return mock recommendations
+        if (useFallback) {
+            const mockItems = firebaseFallback.mockData.movies || [];
+            return mockItems.slice(0, limitCount);
+        }
 
         if (!userId) {
             return this.getPopularContent(limitCount, excludeIds);

@@ -14,7 +14,9 @@ import {
     where,
     updateDoc,
     serverTimestamp,
-    getWatchHistory
+    getWatchHistory,
+    useFallback,
+    firebaseFallback
 } from '../../services/firebase.js';
 import { UI } from '../../components/ui.js';
 import { AuthService } from '../../services/auth-service.js';
@@ -27,14 +29,20 @@ import { AnalyticsService } from '../../services/analytics-service.js';
 document.addEventListener('DOMContentLoaded', () => {
     UI.initNavbar();
 
-    onAuthStateChanged(auth, async (user) => {
+    AuthService.onStateChanged(async (user) => {
         if (user) {
-            await loadUserProfile(user);
-            await loadBookmarks(user);
-            await loadUserTickets(user);
-            await loadWatchHistory(user);
-            await loadRecommendations(user);
-            await loadAnalytics(user);
+            // Only load Firestore data if not in fallback mode
+            if (!useFallback && db) {
+                await loadUserProfile(user);
+                await loadBookmarks(user);
+                await loadUserTickets(user);
+                await loadWatchHistory(user);
+                await loadRecommendations(user);
+                await loadAnalytics(user);
+            } else {
+                // In fallback mode, only load basic profile info
+                await loadUserProfile(user);
+            }
         } else {
             window.location.href = '/login.html';
         }
@@ -46,6 +54,26 @@ async function loadUserProfile(user) {
     const emailEl = document.getElementById('user-email');
     const photoEl = document.getElementById('profile-pic');
     const logoutBtn = document.getElementById('logout-btn');
+
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        if (nameEl) {
+            nameEl.textContent = user.displayName || 'User';
+        }
+        if (emailEl) {
+            emailEl.textContent = user.email || 'user@example.com';
+        }
+        if (photoEl) {
+            photoEl.src = user.photoURL || '/assets/B1.png';
+        }
+        if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+                await AuthService.logout();
+                window.location.href = '/login.html';
+            };
+        }
+        return;
+    }
 
     if (!nameEl || !emailEl) {
         return;
@@ -105,6 +133,12 @@ async function loadBookmarks(user) {
         return;
     }
 
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        section.classList.add('hidden');
+        return;
+    }
+
     try {
         const q = query(
             collection(db, SCHEMA.COLLECTIONS.USERS, user.uid, 'bookmarks'),
@@ -134,6 +168,12 @@ async function loadUserTickets(user) {
     const grid = document.getElementById('user-tickets-grid');
     const section = document.getElementById('tickets-section');
     if (!grid || !section) {
+        return;
+    }
+
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        section.classList.add('hidden');
         return;
     }
 
@@ -237,6 +277,12 @@ async function loadWatchHistory(user) {
         return;
     }
 
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        UI.renderEmptyState(grid, 'คุณยังไม่มีประวัติการรับชม');
+        return;
+    }
+
     // Add "View All" link
     const titleSection = document.querySelector('h2')?.parentElement;
     if (titleSection && !document.getElementById('view-all-history')) {
@@ -297,6 +343,12 @@ async function loadRecommendations(user) {
         return;
     }
 
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        section.classList.add('hidden');
+        return;
+    }
+
     try {
         const recommendations = await RecommendationService.getRecommendations(user.uid, {
             limitCount: 6,
@@ -328,6 +380,12 @@ async function loadRecommendations(user) {
 async function loadAnalytics(user) {
     const section = document.getElementById('analytics-section');
     if (!section) {
+        return;
+    }
+
+    // Fallback mode: skip Firestore operations
+    if (useFallback || !db) {
+        section.classList.add('hidden');
         return;
     }
 

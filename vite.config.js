@@ -21,6 +21,7 @@ const STATIC_ROOT_FILES = [
  * Implements code splitting, optimizations, and performance enhancements
  */
 export default defineConfig({
+  base: '/',
   root: 'public',
   envDir: '../',
   server: {
@@ -42,13 +43,19 @@ export default defineConfig({
       compress: {
         drop_console: true, // Remove console.log in production
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove specific functions
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'], // Remove specific functions
+        dead_code: true, // Remove dead code
+        unused: true, // Remove unused variables
       },
       mangle: {
         safari10: true, // Support Safari 10+
+        properties: {
+          regex: /^_/, // Mangle properties starting with underscore
+        },
       },
     },
-    target: 'es2015', // Target modern browsers for better optimization
+    target: 'es2020', // Target modern browsers for better optimization
+    modulePreload: { polyfill: false }, // Disable module preload polyfill
     rollupOptions: {
       input: {
         index: resolve('public/index.html'),
@@ -81,7 +88,8 @@ export default defineConfig({
         'admin/admin-user-vip': resolve('public/admin/admin-user-vip.html'),
         'admin/admin-vip-manager': resolve('public/admin/admin-vip-manager.html'),
         'admin/admin-vip-plans': resolve('public/admin/admin-vip-plans.html'),
-        'admin/admin-reports': resolve('public/admin/admin-reports.html')
+        'admin/admin-reports': resolve('public/admin/admin-reports.html'),
+        'admin/admin-reviews': resolve('public/admin/admin-reviews.html')
       },
       output: {
         manualChunks(id) {

@@ -1,5 +1,6 @@
 // 💠 Firebase Configuration - DUYDOODEE Master Edition
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import firebaseFallback from './firebase-fallback.js';
 import {
     getAuth,
     GoogleAuthProvider,
@@ -54,12 +55,27 @@ import config from '../config/index.js';
 // Use environment configuration with fallback to existing config
 const firebaseConfig = config.get('firebase');
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
-const functions = getFunctions(app);
-const googleProvider = new GoogleAuthProvider();
+// Check if we should use fallback mode
+const useFallback = firebaseFallback.isFallbackModeEnabled();
+
+let app, db, auth, storage, functions, googleProvider;
+
+if (useFallback) {
+    console.warn('🔄 Using Firebase Fallback Mode - Simulation Mode Active');
+    app = null;
+    db = null;
+    auth = null;
+    storage = null;
+    functions = null;
+    googleProvider = null;
+} else {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+    storage = getStorage(app);
+    functions = getFunctions(app);
+    googleProvider = new GoogleAuthProvider();
+}
 
 export {
     db,
@@ -67,6 +83,8 @@ export {
     storage,
     functions,
     googleProvider,
+    firebaseFallback,
+    useFallback,
     signInWithPopup,
     onAuthStateChanged,
     signOut,

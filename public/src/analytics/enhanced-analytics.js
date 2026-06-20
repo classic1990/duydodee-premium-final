@@ -64,7 +64,7 @@ export class EnhancedAnalytics {
             this.flush();
         }
 
-        console.log('Analytics Event:', eventName, properties);
+        // console.log('Analytics Event:', eventName, properties);
     }
 
     /**
@@ -236,16 +236,16 @@ export class EnhancedAnalytics {
      * Get session duration
      */
     getSessionDuration() {
-        const sessionEvents = this.events.filter(e => 
+        const sessionEvents = this.events.filter(e =>
             e.eventName === 'session_start' || e.eventName === 'session_end'
         );
-        
+
         if (sessionEvents.length >= 2) {
             const start = new Date(sessionEvents[0].timestamp).getTime();
             const end = new Date(sessionEvents[sessionEvents.length - 1].timestamp).getTime();
             return (end - start) / 1000; // in seconds
         }
-        
+
         return null;
     }
 
@@ -253,7 +253,9 @@ export class EnhancedAnalytics {
      * Flush events to backend
      */
     async flush() {
-        if (this.buffer.length === 0) return;
+        if (this.buffer.length === 0) {
+            return;
+        }
 
         const eventsToSend = [...this.buffer];
         this.buffer = [];
@@ -261,7 +263,7 @@ export class EnhancedAnalytics {
         try {
             // Send to Firebase Analytics or custom endpoint
             await this.sendToBackend(eventsToSend);
-            console.log('Analytics flushed:', eventsToSend.length, 'events');
+            // console.log('Analytics flushed:', eventsToSend.length, 'events');
         } catch (error) {
             console.error('Analytics flush failed:', error);
             // Re-add to buffer on failure
@@ -275,7 +277,7 @@ export class EnhancedAnalytics {
     async sendToBackend(events) {
         try {
             const { db, collection, addDoc, serverTimestamp } = await import('../services/firebase.js');
-            
+
             for (const event of events) {
                 await addDoc(collection(db, 'analytics_events'), {
                     ...event,
@@ -302,8 +304,12 @@ export class EnhancedAnalytics {
      */
     getDeviceType() {
         const width = window.innerWidth;
-        if (width < 768) return 'mobile';
-        if (width < 1024) return 'tablet';
+        if (width < 768) {
+            return 'mobile';
+        }
+        if (width < 1024) {
+            return 'tablet';
+        }
         return 'desktop';
     }
 
@@ -312,13 +318,23 @@ export class EnhancedAnalytics {
      */
     getBrowserInfo() {
         const ua = navigator.userAgent;
-        
-        if (ua.includes('Chrome')) return 'Chrome';
-        if (ua.includes('Firefox')) return 'Firefox';
-        if (ua.includes('Safari')) return 'Safari';
-        if (ua.includes('Edge')) return 'Edge';
-        if (ua.includes('Opera')) return 'Opera';
-        
+
+        if (ua.includes('Chrome')) {
+            return 'Chrome';
+        }
+        if (ua.includes('Firefox')) {
+            return 'Firefox';
+        }
+        if (ua.includes('Safari')) {
+            return 'Safari';
+        }
+        if (ua.includes('Edge')) {
+            return 'Edge';
+        }
+        if (ua.includes('Opera')) {
+            return 'Opera';
+        }
+
         return 'Unknown';
     }
 
@@ -327,13 +343,23 @@ export class EnhancedAnalytics {
      */
     getOSInfo() {
         const ua = navigator.userAgent;
-        
-        if (ua.includes('Windows')) return 'Windows';
-        if (ua.includes('Mac')) return 'macOS';
-        if (ua.includes('Linux')) return 'Linux';
-        if (ua.includes('Android')) return 'Android';
-        if (ua.includes('iOS')) return 'iOS';
-        
+
+        if (ua.includes('Windows')) {
+            return 'Windows';
+        }
+        if (ua.includes('Mac')) {
+            return 'macOS';
+        }
+        if (ua.includes('Linux')) {
+            return 'Linux';
+        }
+        if (ua.includes('Android')) {
+            return 'Android';
+        }
+        if (ua.includes('iOS')) {
+            return 'iOS';
+        }
+
         return 'Unknown';
     }
 
@@ -368,16 +394,16 @@ export class EnhancedAnalytics {
         // Group events by type
         this.events.forEach(event => {
             summary.eventsByType[event.eventName] = (summary.eventsByType[event.eventName] || 0) + 1;
-            
+
             if (event.properties.path) {
                 summary.topPages[event.properties.path] = (summary.topPages[event.properties.path] || 0) + 1;
             }
-            
+
             if (event.eventName === 'interaction') {
                 const action = `${event.properties.elementType}_${event.properties.action}`;
                 summary.userActions[action] = (summary.userActions[action] || 0) + 1;
             }
-            
+
             if (event.eventName === 'error') {
                 summary.errors.push({
                     type: event.properties.errorType,
@@ -415,7 +441,9 @@ export class EnhancedAnalytics {
      * Convert events to CSV
      */
     convertToCSV(events) {
-        if (events.length === 0) return '';
+        if (events.length === 0) {
+            return '';
+        }
 
         const headers = Object.keys(events[0]);
         const csvRows = [headers.join(',')];
@@ -477,7 +505,7 @@ export function initializeAnalytics() {
     });
 
     // Track engagement periodically
-    let sessionStartTime = Date.now();
+    const sessionStartTime = Date.now();
     setInterval(() => {
         const duration = Math.floor((Date.now() - sessionStartTime) / 1000);
         analytics.trackEngagement(duration, maxScrollDepth);

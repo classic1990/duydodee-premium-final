@@ -9,8 +9,10 @@ import {
     onAuthStateChanged,
     getDoc,
     doc,
-    SCHEMA
+    SCHEMA,
+    useFallback
 } from '../../services/firebase.js';
+import { AuthService } from '../../services/auth-service.js';
 import { UIUtils } from '../../utils/ui-utils.js';
 
 export const Layout = {
@@ -47,14 +49,29 @@ export const Layout = {
         const dArea = document.getElementById('user-profile-area');
         const mArea = document.getElementById('user-profile-area-mobile');
 
-        onAuthStateChanged(auth, async (user) => {
+        // Use AuthService.onStateChanged which handles fallback mode
+        AuthService.onStateChanged(async (user) => {
             if (user) {
                 try {
-                    const userDoc = await getDoc(
-                        doc(db, SCHEMA.COLLECTIONS.USERS, user.uid)
-                    );
-                    const userData = userDoc.exists() ? userDoc.data() : {};
-                    const isAdmin = await checkIsAdmin(user);
+                    let userData = {};
+                    let isAdmin = false;
+
+                    if (useFallback) {
+                        // In fallback mode, use mock user data
+                        userData = {
+                            photoURL: '/assets/logo/DUYDODEE.png',
+                            displayName: user.displayName || 'Developer User',
+                            email: user.email
+                        };
+                        isAdmin = user.isAdmin || false;
+                    } else {
+                        // In production mode, fetch from Firestore
+                        const userDoc = await getDoc(
+                            doc(db, SCHEMA.COLLECTIONS.USERS, user.uid)
+                        );
+                        userData = userDoc.exists() ? userDoc.data() : {};
+                        isAdmin = await checkIsAdmin(user);
+                    }
 
                     const safePhotoURL = UIUtils.escapeHTML(userData.photoURL || '/assets/logo/DUYDODEE.png');
 
@@ -121,7 +138,7 @@ export const Layout = {
             : '');
         }
 
-        if (isAdmin) {
+        if (isAdmin && !useFallback) {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
                 const q = query(

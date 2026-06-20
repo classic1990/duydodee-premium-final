@@ -89,3 +89,5 @@ credentials.json
 # Build outputs
 *.log
 .aider*
+.env.production
+.env.staging

@@ -4,7 +4,8 @@ import {
     collection, getDocs, googleProvider,
     updateProfile, updateDoc, increment, writeBatch,
     onAuthStateChanged, signOut, signInWithPopup, signInWithEmailAndPassword,
-    createUserWithEmailAndPassword, sendEmailVerification
+    createUserWithEmailAndPassword, sendEmailVerification,
+    firebaseFallback, useFallback
 } from './firebase-config.js';
 import { SCHEMA } from '../constants.js';
 import config from '../config/index.js';
@@ -19,6 +20,13 @@ export const AuthService = {
      * Listen for auth state changes
      */
     onStateChanged(callback) {
+        if (useFallback) {
+            // In fallback mode, immediately call callback with mock user
+            firebaseFallback.getCurrentUser().then(user => {
+                callback(user);
+            });
+            return () => {}; // Mock unsubscribe
+        }
         return onAuthStateChanged(auth, callback);
     },
 
@@ -29,6 +37,11 @@ export const AuthService = {
     async checkIsAdmin(user) {
         if (!user) {
             return false;
+        }
+
+        // In fallback mode, check mock user admin status
+        if (useFallback) {
+            return user.isAdmin || false;
         }
 
         // 🔒 SECURITY CHECK: Verify user logged in with Google only
@@ -75,6 +88,27 @@ export const AuthService = {
         if (!userId || !item.id) {
             return;
         }
+
+        if (useFallback) {
+            try {
+                await firebaseFallback.add('watchHistory', {
+                    userId,
+                    movieId: item.id,
+                    title: item.title,
+                    poster: item.poster,
+                    category: item.category || 'Premium',
+                    type: item.type || 'movie',
+                    progress,
+                    epIndex: item.epIndex || 0,
+                    watchedAt: Date.now()
+                });
+                console.log('🔄 [Fallback] Watch history saved');
+            } catch (e) {
+                errorHandler.logError({ type: 'error', message: 'History Save Error', stack: e.stack });
+            }
+            return;
+        }
+
         try {
             const historyRef = doc(db, SCHEMA.COLLECTIONS.USERS, userId, 'history', item.id);
             const data = {
@@ -109,6 +143,21 @@ export const AuthService = {
         if (!userId) {
             return false;
         }
+
+        if (useFallback) {
+            try {
+                // Clear all watch history for this user in mock data
+                firebaseFallback.mockData.watchHistory = firebaseFallback.mockData.watchHistory.filter(
+                    w => w.userId !== userId
+                );
+                console.log('🔄 [Fallback] Watch history cleared');
+                return true;
+            } catch (e) {
+                errorHandler.logError({ type: 'error', message: 'History Clear Error', stack: e.stack });
+                return false;
+            }
+        }
+
         try {
             const historyRef = collection(db, SCHEMA.COLLECTIONS.USERS, userId, 'history');
             const snap = await getDocs(historyRef);
@@ -126,6 +175,16 @@ export const AuthService = {
      * Sign out
      */
     async logout() {
+        if (useFallback) {
+            try {
+                await firebaseFallback.signOut();
+                return true;
+            } catch (error) {
+                errorHandler.logError({ type: 'error', message: 'Logout error', stack: error.stack });
+                throw error;
+            }
+        }
+
         try {
             await signOut(auth);
             return true;
@@ -139,6 +198,16 @@ export const AuthService = {
      * Google Login
      */
     async loginWithGoogle() {
+        if (useFallback) {
+            try {
+                const result = await firebaseFallback.signIn('dev@duydodee.dev', 'test123');
+                return result.user;
+            } catch (error) {
+                errorHandler.logError({ type: 'error', message: 'Google Login error', stack: error.stack });
+                throw error;
+            }
+        }
+
         try {
             const result = await signInWithPopup(auth, googleProvider);
             await this.syncUserToFirestore(result.user);
@@ -153,6 +222,16 @@ export const AuthService = {
      * Email Login
      */
     async loginWithEmail(email, password) {
+        if (useFallback) {
+            try {
+                const result = await firebaseFallback.signIn(email, password);
+                return result.user;
+            } catch (error) {
+                errorHandler.logError({ type: 'error', message: 'Email Login error', stack: error.stack });
+                throw error;
+            }
+        }
+
         try {
             const result = await signInWithEmailAndPassword(auth, email, password);
             await this.syncUserToFirestore(result.user);
@@ -167,6 +246,16 @@ export const AuthService = {
      * Email Register
      */
     async registerWithEmail(name, email, password) {
+        if (useFallback) {
+            try {
+                const result = await firebaseFallback.signUp(email, password, name);
+                return result.user;
+            } catch (error) {
+                errorHandler.logError({ type: 'error', message: 'Email Register error', stack: error.stack });
+                throw error;
+            }
+        }
+
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const user = result.user;
@@ -187,6 +276,13 @@ export const AuthService = {
         if (!user) {
             return;
         }
+
+        if (useFallback) {
+            // In fallback mode, user data is already in mock users
+            console.log('🔄 [Fallback] User sync skipped (using mock data)');
+            return;
+        }
+
         const userRef = doc(db, SCHEMA.COLLECTIONS.USERS, user.uid);
         try {
             const snap = await getDoc(userRef);
@@ -221,6 +317,11 @@ export const AuthService = {
      * Check if user is banned
      */
     async isUserBanned(uid) {
+        if (useFallback) {
+            // In fallback mode, no users are banned
+            return false;
+        }
+
         try {
             const snap = await getDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid));
             return snap.exists() && snap.data().isBanned === true;

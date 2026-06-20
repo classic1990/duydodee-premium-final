@@ -4,6 +4,7 @@ import { UI } from '../../components/ui.js';
 import { ReviewsList } from '../../components/ReviewsList.js';
 import { ReviewForm } from '../../components/ReviewForm.js';
 import { ReviewService } from '../../services/review-service.js';
+import { useFallback, firebaseFallback } from '../../services/firebase.js';
 
 let isRendering = false;
 let progressInterval = null; // 🧹 Store interval ID for cleanup
@@ -104,7 +105,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (bookmarkBtn) {
                 bookmarkBtn.onclick = async () => {
-                    const user = AuthService.auth.currentUser;
+                    let user;
+                    if (useFallback) {
+                        user = await firebaseFallback.getCurrentUser();
+                    } else {
+                        user = AuthService.auth.currentUser;
+                    }
                     if (!user) {
                         UI.showToast('กรุณาเข้าสู่ระบบก่อนใช้งาน', 'warning');
                         return;
@@ -156,12 +162,17 @@ async function loadRelated(category, currentId) {
 }
 
 // ⭐ Reviews Functionality
-function setupReviews(movieId) {
+async function setupReviews(movieId) {
     const writeReviewSection = document.getElementById('write-review-section');
     const writeReviewBtn = document.getElementById('write-review-btn');
 
     // Show write review button for logged in users
-    const user = AuthService.auth.currentUser;
+    let user;
+    if (useFallback) {
+        user = await firebaseFallback.getCurrentUser();
+    } else {
+        user = AuthService.auth.currentUser;
+    }
     if (user) {
         writeReviewSection.classList.remove('hidden');
 

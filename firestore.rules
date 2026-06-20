@@ -21,8 +21,13 @@ service cloud.firestore {
     // 👤 User Profiles
     match /users/{userId} {
       allow read: if isOwner(userId) || isAdmin();
-      allow write: if isOwner(userId) || isAdmin();
-      
+      // Restrict user writes to only safe fields - privileged fields (role, isVIP, isBanned) can only be set by admins
+      allow create: if isOwner(userId) && request.resource.data.role == 'member';
+      allow update: if isOwner(userId) &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['displayName', 'photoURL', 'updatedAt', 'lastLogin', 'preferredCategories', 'email']);
+      allow write: if isAdmin(); // Admins can write any field
+
       match /history/{historyId} {
         allow read, write: if isOwner(userId) || isAdmin();
       }
@@ -40,14 +45,20 @@ service cloud.firestore {
     // increment the view counter and update ratings, nothing else)
     match /movies/{movieId} {
       allow read: if true;
-      allow update: if isSignedIn() && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) ||
-                                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']));
+      allow update: if isSignedIn() &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) &&
+         request.resource.data.views >= resource.data.views) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']) &&
+         request.resource.data.views >= resource.data.views);
     }
 
     match /series/{seriesId} {
       allow read: if true;
-      allow update: if isSignedIn() && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) ||
-                                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']));
+      allow update: if isSignedIn() &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) &&
+         request.resource.data.views >= resource.data.views) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'averageRating', 'totalReviews']) &&
+         request.resource.data.views >= resource.data.views);
     }
 
     match /hero_slides/{slideId} {
@@ -59,7 +70,9 @@ service cloud.firestore {
     match /daily_stats/{statId} {
       allow read: if true;
       allow create: if isSignedIn();
-      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'lastUpdated']);
+      allow update: if isSignedIn() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'lastUpdated']) &&
+        request.resource.data.views >= resource.data.views;
     }
 
     // 💳 VIP Payments: Admin read/write, user create

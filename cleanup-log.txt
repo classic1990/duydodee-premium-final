@@ -1,0 +1,200 @@
+[Sat 06/20/2026 14:25:45.16] Cleanup started 
+
+> web@1.0.0 lint:fix
+> eslint public/src/**/*.js --fix
+
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\components\layout\Layout.js
+  3:5  warning  'auth' is defined but never used. Allowed unused vars must match /^_/u                no-unused-vars
+  9:5  warning  'onAuthStateChanged' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\pages\auth\profile.js
+   9:5  warning  'onAuthStateChanged' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  18:5  warning  'useFallback' is defined but never used. Allowed unused vars must match /^_/u         no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\pages\history.js
+  1:14  warning  'auth' is defined but never used. Allowed unused vars must match /^_/u                no-unused-vars
+  1:20  warning  'onAuthStateChanged' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  1:77  warning  'useFallback' is defined but never used. Allowed unused vars must match /^_/u         no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\pages\home.js
+  1:10  warning  'auth' is defined but never used. Allowed unused vars must match /^_/u                no-unused-vars
+  1:16  warning  'onAuthStateChanged' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  1:53  warning  'useFallback' is defined but never used. Allowed unused vars must match /^_/u         no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\pages\watchlist.js
+  1:14  warning  'auth' is defined but never used. Allowed unused vars must match /^_/u                no-unused-vars
+  1:20  warning  'onAuthStateChanged' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  1:61  warning  'useFallback' is defined but never used. Allowed unused vars must match /^_/u         no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\services\auth-service.js
+  105:17  warning  Unexpected console statement  no-console
+  153:17  warning  Unexpected console statement  no-console
+  282:13  warning  Unexpected console statement  no-console
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\services\firebase-fallback.js
+  246:28  warning  'file' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\services\firebase.js
+  74:9  warning  Unexpected console statement  no-console
+
+D:\DUYDODEE-HD\duydodee-premium-final-main\public\src\testing\enhanced-test-utils.js
+  350:13  warning  Unexpected console statement  no-console
+  353:31  warning  Unexpected console statement  no-console
+
+✖ 20 problems (0 errors, 20 warnings)
+
+[Sat 06/20/2026 14:25:46.57] No lint issues 
+web@1.0.0 D:\DUYDODEE-HD\duydodee-premium-final-main
++-- @babel/plugin-syntax-import-meta@7.10.4
++-- @babel/preset-env@7.29.7
++-- @emnapi/core@1.10.0 extraneous
++-- @emnapi/runtime@1.10.0 extraneous
++-- @emnapi/wasi-threads@1.2.1 extraneous
++-- @napi-rs/wasm-runtime@1.1.5 extraneous
++-- @tybys/wasm-util@0.10.2 extraneous
++-- @types/jest@30.0.0
++-- algoliasearch@5.55.0
++-- autoprefixer@10.5.0
++-- babel-jest@30.4.1
++-- cssnano@7.1.9
++-- dompurify@3.4.11
++-- eslint-plugin-html@8.1.4
++-- eslint@8.57.1
++-- jest-environment-jsdom@30.4.1
++-- jest@30.4.2
++-- postcss-cli@11.0.1
++-- postcss@8.5.15
++-- tailwindcss@3.4.19
++-- terser@5.48.0
++-- tslib@2.8.1 extraneous
+`-- vite@8.0.16
+
+# npm audit report
+
+js-yaml  <=4.1.1
+Severity: moderate
+JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases - https://github.com/advisories/GHSA-h67p-54hq-rp68
+fix available via `npm audit fix --force`
+Will install babel-jest@25.0.0, which is a breaking change
+node_modules/js-yaml
+  @istanbuljs/load-nyc-config  *
+  Depends on vulnerable versions of js-yaml
+  node_modules/@istanbuljs/load-nyc-config
+    babel-plugin-istanbul  >=6.0.0-beta.0
+    Depends on vulnerable versions of @istanbuljs/load-nyc-config
+    node_modules/babel-plugin-istanbul
+      @jest/transform  >=25.1.0
+      Depends on vulnerable versions of babel-plugin-istanbul
+      node_modules/@jest/transform
+        @jest/core  >=25.1.0
+        Depends on vulnerable versions of @jest/reporters
+        Depends on vulnerable versions of @jest/transform
+        Depends on vulnerable versions of jest-config
+        Depends on vulnerable versions of jest-resolve-dependencies
+        Depends on vulnerable versions of jest-runner
+        Depends on vulnerable versions of jest-runtime
+        Depends on vulnerable versions of jest-snapshot
+        node_modules/@jest/core
+          jest  >=25.1.0
+          Depends on vulnerable versions of @jest/core
+          Depends on vulnerable versions of jest-cli
+          node_modules/jest
+        @jest/reporters  >=25.1.0
+        Depends on vulnerable versions of @jest/transform
+        node_modules/@jest/reporters
+        jest-runner  >=25.1.0
+        Depends on vulnerable versions of @jest/transform
+        Depends on vulnerable versions of jest-runtime
+        node_modules/jest-runner
+          jest-config  >=25.1.0
+          Depends on vulnerable versions of babel-jest
+          Depends on vulnerable versions of jest-circus
+          Depends on vulnerable versions of jest-runner
+          node_modules/jest-config
+            jest-cli  >=25.1.0
+            Depends on vulnerable versions of @jest/core
+            Depends on vulnerable versions of jest-config
+            node_modules/jest-cli
+        jest-runtime  >=25.1.0
+        Depends on vulnerable versions of @jest/globals
+        Depends on vulnerable versions of @jest/transform
+        Depends on vulnerable versions of jest-snapshot
+        node_modules/jest-runtime
+          jest-circus  >=25.2.4
+          Depends on vulnerable versions of @jest/expect
+          Depends on vulnerable versions of jest-runtime
+          Depends on vulnerable versions of jest-snapshot
+          node_modules/jest-circus
+        jest-snapshot  >=27.0.0-next.0
+        Depends on vulnerable versions of @jest/transform
+        node_modules/jest-snapshot
+          @jest/expect  *
+          Depends on vulnerable versions of jest-snapshot
+          node_modules/@jest/expect
+            @jest/globals  >=28.0.0-alpha.0
+            Depends on vulnerable versions of @jest/expect
+            node_modules/@jest/globals
+          jest-resolve-dependencies  >=27.0.0-next.0
+          Depends on vulnerable versions of jest-snapshot
+          node_modules/jest-resolve-dependencies
+      babel-jest  >=25.1.0
+      Depends on vulnerable versions of @jest/transform
+      Depends on vulnerable versions of babel-plugin-istanbul
+      node_modules/babel-jest
+
+17 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+[Sat 06/20/2026 14:25:49.73] Vulnerabilities found 
+[Sat 06/20/2026 14:25:49.74] package.json found 
+
+> web@1.0.0 test
+> jest --passWithNoTests
+
+PASS public/src/utils/ui-utils.test.js
+PASS public/src/utils/validation-utils.test.js
+PASS public/src/components/cards/MovieCards.test.js
+PASS public/src/services/auth-service.test.js
+  ● Console
+
+    console.log
+      🌍 Environment Info: {
+        userAgent: 'Mozilla/5.0 (win32) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/26.1.0',
+        language: 'en-US',
+        platform: '',
+        screenResolution: '0x0',
+        viewport: '1024x768',
+        connection: undefined,
+        memory: undefined,
+        cores: 12
+      }
+
+      at ErrorHandler.log [as logEnvironmentInfo] (public/src/utils/error-handler.js:274:17)
+
+    console.warn
+      Security Alert: Non-Google login attempt for admin access
+
+    [0m [90m 48 |[39m         [36mif[39m ([33m![39m[36mthis[39m[33m.[39misGoogleUser(user)) {
+     [90m 49 |[39m             [90m// Using error handler for security alert[39m
+    [31m[1m>[22m[39m[90m 50 |[39m             console[33m.[39mwarn([32m'Security Alert: Non-Google login attempt for admin access'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 51 |[39m             [36mreturn[39m [36mfalse[39m[33m;[39m
+     [90m 52 |[39m         }
+     [90m 53 |[39m[0m
+
+      at Object.warn [as checkIsAdmin] (public/src/services/auth-service.js:50:21)
+      at Object.checkIsAdmin (public/src/services/auth-service.test.js:147:46)
+
+PASS public/src/utils/error-handler.test.js
+
+Test Suites: 1 skipped, 5 passed, 5 of 6 total
+Tests:       1 skipped, 140 passed, 141 total
+Snapshots:   0 total
+Time:        1.051 s
+Ran all test suites.
+[Sat 06/20/2026 14:25:51.58] All tests passed 

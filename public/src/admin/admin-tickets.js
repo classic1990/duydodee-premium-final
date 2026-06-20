@@ -1,11 +1,16 @@
-import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp, checkIsAdmin } from '../services/firebase.js';
+import { db, collection, query, orderBy, onSnapshot, updateDoc, doc, SCHEMA, auth, arrayUnion, serverTimestamp, checkIsAdmin, useFallback, firebaseFallback } from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { injectAdminSidebar } from './sidebar-loader.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Check admin access first
-        const user = auth.currentUser;
+        let user;
+        if (useFallback) {
+            user = await firebaseFallback.getCurrentUser();
+        } else {
+            user = auth.currentUser;
+        }
         if (!user || !(await checkIsAdmin(user))) {
             window.location.href = '/login.html';
             return;
@@ -122,7 +127,7 @@ function loadTickets() {
 
                 await updateDoc(doc(db, SCHEMA.COLLECTIONS.TICKETS, tid), {
                     replies: arrayUnion({
-                        adminName: auth.currentUser?.displayName || 'Admin',
+                        adminName: auth?.currentUser?.displayName || 'Admin',
                         message: msg,
                         createdAt: new Date()
                     }),

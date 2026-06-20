@@ -1,6 +1,6 @@
 import { ReviewService } from '../services/review-service.js';
 import { ReviewCard } from '../components/ReviewCard.js';
-import { SidebarLoader } from './sidebar-loader.js';
+import { injectAdminSidebar } from './sidebar-loader.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
 let currentFilter = 'all';
@@ -9,7 +9,7 @@ let reviews = [];
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Load sidebar
-        SidebarLoader.load();
+        await injectAdminSidebar();
 
         // 🔒 SECURITY: Strict admin access check
         await checkAdminAccess();

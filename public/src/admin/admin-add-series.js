@@ -1,9 +1,8 @@
 import { db, collection, serverTimestamp, doc, SCHEMA, logActivity, writeBatch } from '../services/firebase.js';
 import { ContentService } from '../services/content-service.js';
 import { UI } from '../components/ui.js';
-import { checkAdminAccess } from '../middleware/auth-guard.js';
-import { injectAdminSidebar } from './sidebar-loader.js';
-import { ValidationUtils } from '../utils/validation-utils.js';
+import { AdminInit } from './shared/admin-init.js';
+import { AdminValidators } from './shared/admin-validators.js';
 
 /**
  * 📺 DUYดูDEE SERIES REGISTRATION ENGINE
@@ -14,60 +13,8 @@ import { ValidationUtils } from '../utils/validation-utils.js';
 let episodeCount = 0;
 let posterPreview, noPreview, selectedPosterUrlInput, thumbnailOptionsContainer, previewTitle;
 
-/**
- * Validates YouTube URL format (using ValidationUtils)
- * @param {string} url - URL to validate
- * @returns {boolean} True if valid YouTube URL
- */
-function isValidYouTubeUrl(url) {
-    return ValidationUtils.isValidYouTubeURL(url);
-}
-
-/**
- * Sanitizes user input to prevent XSS (using ValidationUtils)
- * @param {string} input - Raw input string
- * @returns {string} Sanitized string
- */
-function sanitizeInput(input) {
-    return ValidationUtils.sanitizeString(input);
-}
-
-/**
- * Validates form data before submission
- * @param {Object} formData - Form data object
- * @returns {Object} Validation result with isValid and errors
- */
-function validateFormData(formData) {
-    const errors = [];
-
-    if (!formData.title || formData.title.length < 2) {
-        errors.push('กรุณาระบุชื่อเรื่องอย่างน้อย 2 ตัวอักษร');
-    }
-
-    if (formData.title.length > 200) {
-        errors.push('ชื่อเรื่องต้องไม่เกิน 200 ตัวอักษร');
-    }
-
-    if (formData.description && formData.description.length > 1000) {
-        errors.push('คำอธิบายต้องไม่เกิน 1000 ตัวอักษร');
-    }
-
-    return {
-        isValid: errors.length === 0,
-        errors
-    };
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        await injectAdminSidebar();
-        UI.initAdminSidebar();
-        initForm();
-    } catch (err) {
-        console.error('Access Denied:', err);
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    AdminInit.initPage(initForm);
 });
 
 function initForm() {
@@ -254,14 +201,14 @@ async function handleAddSeries(e) {
     UI.setLoading(true);
 
     const formData = {
-        title: sanitizeInput(document.getElementById('title').value),
+        title: AdminValidators.sanitizeInput(document.getElementById('title').value),
         category: document.getElementById('category').value,
-        badge: sanitizeInput(document.getElementById('badge')?.value || 'NEW'),
-        description: sanitizeInput(document.getElementById('description').value)
+        badge: AdminValidators.sanitizeInput(document.getElementById('badge')?.value || 'NEW'),
+        description: AdminValidators.sanitizeInput(document.getElementById('description').value)
     };
 
-    // Validate form data
-    const validation = validateFormData(formData);
+    // Validate form data using shared validators
+    const validation = AdminValidators.validateSeriesForm(formData);
     if (!validation.isValid) {
         UI.showToast(validation.errors.join(', '), 'error');
         UI.setLoading(false);
@@ -274,11 +221,11 @@ async function handleAddSeries(e) {
     const invalidUrls = [];
 
     for (const [index, div] of episodeDivs.entries()) {
-        const epTitle = sanitizeInput(div.querySelector('[name="ep-title"]').value);
-        const epUrl = sanitizeInput(div.querySelector('.ep-url-input').value);
+        const epTitle = AdminValidators.sanitizeInput(div.querySelector('[name="ep-title"]').value);
+        const epUrl = AdminValidators.sanitizeInput(div.querySelector('.ep-url-input').value);
         const vid = UI.extractYouTubeId(epUrl);
 
-        if (!epUrl || !isValidYouTubeUrl(epUrl)) {
+        if (!epUrl || !AdminValidators.isValidYouTubeUrl(epUrl)) {
             invalidUrls.push(`ตอนที่ ${index + 1}`);
             div.querySelector('.ep-url-input')?.classList.add('border-red-500', 'ring-4', 'ring-red-500/10');
         } else if (vid) {

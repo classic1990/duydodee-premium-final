@@ -27,26 +27,28 @@ export function sanitizeHTML(dirty, options = {}) {
  * @returns {boolean} true ถ้า URL ปลอดภัย
  */
 export function isSafeURL(url) {
-    if (!url || typeof url !== 'string') return false;
-    
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
+
     try {
         const parsedUrl = new URL(url);
-        
+
         // อนุญาตเฉพาะ http, https
         if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
             return false;
         }
-        
+
         // ป้องกัน javascript: protocol
         if (url.toLowerCase().startsWith('javascript:')) {
             return false;
         }
-        
+
         // ป้องกัน data: protocol (ยกเว้น images บางกรณี)
         if (url.toLowerCase().startsWith('data:')) {
             return false;
         }
-        
+
         return true;
     } catch (error) {
         return false;
@@ -59,20 +61,28 @@ export function isSafeURL(url) {
  * @returns {boolean} true ถ้า email ปลอดภัย
  */
 export function isSafeEmail(email) {
-    if (!email || typeof email !== 'string') return false;
-    
+    if (!email || typeof email !== 'string') {
+        return false;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return false;
-    
+    if (!emailRegex.test(email)) {
+        return false;
+    }
+
     // ป้องกัน email ยาวเกินไป
-    if (email.length > 254) return false;
-    
+    if (email.length > 254) {
+        return false;
+    }
+
     // ป้องกัน characters พิเศษบางตัว
     const dangerousChars = ['<', '>', '"', "'", '&'];
     for (const char of dangerousChars) {
-        if (email.includes(char)) return false;
+        if (email.includes(char)) {
+            return false;
+        }
     }
-    
+
     return true;
 }
 
@@ -85,63 +95,78 @@ export function checkPasswordStrength(password) {
     if (!password || typeof password !== 'string') {
         return { score: 0, strength: 'weak', errors: ['Password is required'] };
     }
-    
+
     const errors = [];
     const warnings = [];
-    
+
     // ความยาว
     if (password.length < 8) {
         errors.push('Password must be at least 8 characters');
     } else if (password.length < 12) {
         warnings.push('Consider using 12+ characters for better security');
     }
-    
+
     // Uppercase
     if (!/[A-Z]/.test(password)) {
         errors.push('Password must contain uppercase letters');
     }
-    
+
     // Lowercase
     if (!/[a-z]/.test(password)) {
         errors.push('Password must contain lowercase letters');
     }
-    
+
     // Numbers
     if (!/\d/.test(password)) {
         errors.push('Password must contain numbers');
     }
-    
+
     // Special characters
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
         warnings.push('Consider adding special characters for better security');
     }
-    
+
     // Common patterns
     const commonPatterns = [
         /password/i, /123456/, /qwerty/i, /admin/i,
         /abcdef/i, /111111/, /000000/, /123123/
     ];
-    
+
     for (const pattern of commonPatterns) {
         if (pattern.test(password)) {
             errors.push('Password contains common patterns that are easy to guess');
             break;
         }
     }
-    
+
     // Calculate score
     let score = 0;
-    if (password.length >= 8) score += 1;
-    if (password.length >= 12) score += 1;
-    if (/[A-Z]/.test(password)) score += 1;
-    if (/[a-z]/.test(password)) score += 1;
-    if (/\d/.test(password)) score += 1;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
-    
+    if (password.length >= 8) {
+        score += 1;
+    }
+    if (password.length >= 12) {
+        score += 1;
+    }
+    if (/[A-Z]/.test(password)) {
+        score += 1;
+    }
+    if (/[a-z]/.test(password)) {
+        score += 1;
+    }
+    if (/\d/.test(password)) {
+        score += 1;
+    }
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        score += 1;
+    }
+
     let strength = 'weak';
-    if (score >= 5) strength = 'strong';
-    else if (score >= 3) strength = 'medium';
-    
+    if (score >= 5) {
+        strength = 'strong';
+    } else if (score >= 3) {
+        strength = 'medium';
+    }
+
     return { score, strength, errors, warnings };
 }
 
@@ -175,22 +200,22 @@ export function verifyCSRFToken(token, storedToken) {
 export function checkRateLimit(identifier, maxRequests = 100, windowMs = 60000) {
     const now = Date.now();
     const key = `rate_limit_${identifier}`;
-    
+
     try {
         const storedData = localStorage.getItem(key);
         let requests = storedData ? JSON.parse(storedData) : [];
-        
+
         // ลบ requests เก่ากว่า windowMs
         requests = requests.filter(timestamp => now - timestamp < windowMs);
-        
+
         if (requests.length >= maxRequests) {
             return false;
         }
-        
+
         // เพิ่ม request ปัจจุบัน
         requests.push(now);
         localStorage.setItem(key, JSON.stringify(requests));
-        
+
         return true;
     } catch (error) {
         console.error('Rate limit check error:', error);
@@ -204,14 +229,16 @@ export function checkRateLimit(identifier, maxRequests = 100, windowMs = 60000) 
  * @returns {boolean} true ถ้าเป็น bot
  */
 export function isBot(userAgent) {
-    if (!userAgent || typeof userAgent !== 'string') return false;
-    
+    if (!userAgent || typeof userAgent !== 'string') {
+        return false;
+    }
+
     const botPatterns = [
         /bot/i, /crawler/i, /spider/i, /scraper/i,
         /curl/i, /wget/i, /python/i, /java/i,
         /headless/i, /phantom/i, /selenium/i
     ];
-    
+
     return botPatterns.some(pattern => pattern.test(userAgent));
 }
 
@@ -222,15 +249,17 @@ export function isBot(userAgent) {
  * @returns {string} Data ที่ถูก mask
  */
 export function maskSensitiveData(data, visibleChars = 4) {
-    if (!data || typeof data !== 'string') return '***';
-    
+    if (!data || typeof data !== 'string') {
+        return '***';
+    }
+
     if (data.length <= visibleChars) {
         return '*'.repeat(data.length);
     }
-    
+
     const visible = data.substring(0, visibleChars);
     const masked = '*'.repeat(data.length - visibleChars);
-    
+
     return visible + masked;
 }
 
@@ -241,8 +270,10 @@ export function maskSensitiveData(data, visibleChars = 4) {
  * @returns {boolean} true ถ้า origin ถูกต้อง
  */
 export function isAllowedOrigin(origin, allowedOrigins) {
-    if (!origin || typeof origin !== 'string') return false;
-    
+    if (!origin || typeof origin !== 'string') {
+        return false;
+    }
+
     const allowed = allowedOrigins.split(',').map(o => o.trim());
     return allowed.includes(origin);
 }
