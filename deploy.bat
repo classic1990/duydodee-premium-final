@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 title DUYDODEE - Professional Deployment System
 color 0B
 chcp 65001 >nul
@@ -6,18 +6,18 @@ chcp 65001 >nul
 :MAIN_MENU
 cls
 echo =====================================================================
-echo    🚀 DUYDODEE EXECUTIVE - DEPLOYMENT SYSTEM
+echo    DUYDODEE EXECUTIVE - DEPLOYMENT SYSTEM
 echo =====================================================================
-echo    [1] ⚡ Quick Deploy (Build CSS + Build Prod + Deploy Hosting Only)
-echo    [2] 🔥 Full Deploy (Run Lint + Build CSS + Build Prod + Deploy All)
-echo    [3] 📦 Build Only (Build CSS + Build Production)
-echo    [4] 🛡️  Deploy Security Rules & Indexes Only
-echo    [5] 💻 Run Local Development Server (npm run dev)
-echo    [6] 🔍 Pre-deployment Checks (Node, Git, Firebase CLI, Install)
-echo    [0] 🚪 Exit
+echo    [1] Quick Deploy (Build CSS + Build Prod + Deploy Hosting Only)
+echo    [2] Full Deploy (Run Lint + Build CSS + Build Prod + Deploy All)
+echo    [3] Build Only (Build CSS + Build Production)
+echo    [4] Deploy Security Rules and Indexes Only
+echo    [5] Run Local Development Server (npm run dev)
+echo    [6] Pre-deployment Checks (Node, Git, Firebase CLI, Install)
+echo    [0] Exit
 echo =====================================================================
 echo.
-set /p choice="กรุณาเลือกรายการที่ต้องการ (0-6): "
+set /p choice="Select Option (0-6): "
 
 if "%choice%"=="1" goto QUICK_DEPLOY
 if "%choice%"=="2" goto FULL_DEPLOY
@@ -31,37 +31,34 @@ goto INVALID_CHOICE
 :PRE_CHECKS
 cls
 echo =====================================================================
-echo   🔍 ตรวจสอบความต้องการของระบบ (Prerequisite Checks)...
+echo   Checking system prerequisites...
 echo =====================================================================
 echo.
 
-:: Check Node.js
 where node >nul 2>nul
 if %errorlevel% neq 0 (
     color 0C
-    echo [ERROR] ไม่พบ Node.js ในระบบของคุณ! กรุณาติดตั้ง Node.js ก่อนดำเนินการต่อ.
+    echo [ERROR] Node.js not found! Please install Node.js first.
     pause
     goto MAIN_MENU
 )
 for /f "tokens=*" %%i in ('node -v') do set NODE_VER=%%i
 echo  [SUCCESS] Node.js: %NODE_VER%
 
-:: Check npm
 where npm >nul 2>nul
 if %errorlevel% neq 0 (
     color 0C
-    echo [ERROR] ไม่พบ npm ในระบบของคุณ!
+    echo [ERROR] npm not found!
     pause
     goto MAIN_MENU
 )
 for /f "tokens=*" %%i in ('npm -v') do set NPM_VER=%%i
 echo  [SUCCESS] npm: v%NPM_VER%
 
-:: Check Firebase CLI
 where firebase >nul 2>nul
 if %errorlevel% neq 0 (
     echo.
-    echo  [WARNING] ไม่พบ Firebase CLI ทั่วไปในระบบ (จะลองใช้ npx firebase แทน)
+    echo  [WARNING] Firebase CLI not found globally. Will try 'npx firebase'
     set FIREBASE_CMD=npx firebase
 ) else (
     for /f "tokens=*" %%i in ('firebase --version') do set FB_VER=%%i
@@ -69,23 +66,22 @@ if %errorlevel% neq 0 (
     set FIREBASE_CMD=firebase
 )
 
-:: Check node_modules
 if not exist node_modules (
     echo.
-    echo  [INFO] ไม่พบโฟลเดอร์ node_modules กำลังติดตั้ง dependencies...
+    echo  [INFO] node_modules not found. Installing dependencies...
     call npm install
     if %errorlevel% neq 0 (
         color 0C
-        echo [ERROR] การติดตั้ง dependencies ล้มเหลว!
+        echo [ERROR] npm install failed!
         pause
         goto MAIN_MENU
     )
 ) else (
-    echo  [SUCCESS] Dependencies (node_modules) พร้อมใช้งาน
+    echo  [SUCCESS] Dependencies (node_modules) are ready
 )
 echo.
 echo =====================================================================
-echo  ✅ ระบบของคุณพร้อมสำหรับการดิพลอยแล้ว!
+echo  System is ready for deployment!
 echo =====================================================================
 echo.
 pause
@@ -94,20 +90,20 @@ goto MAIN_MENU
 :QUICK_DEPLOY
 cls
 echo =====================================================================
-echo   ⚡ กำลังดำเนินการ Quick Deploy (Vite Build + Firebase Hosting Only)...
+echo   Running Quick Deploy (Vite Build + Firebase Hosting Only)...
 echo =====================================================================
 echo.
 call :RUN_CHECKS_SILENT
 
-echo  [1/3] 🎨 กำลังสร้าง CSS (Tailwind/PostCSS)...
+echo  [1/3] Compiling Tailwind CSS...
 call npm run build:css
 if %errorlevel% neq 0 goto BUILD_FAILED
 
-echo  [2/3] 📦 กำลังสร้าง Production Build ด้วย Vite...
+echo  [2/3] Building production bundle...
 call npm run build:prod
 if %errorlevel% neq 0 goto BUILD_FAILED
 
-echo  [3/3] 🚀 กำลังดิพลอยไปที่ Firebase Hosting...
+echo  [3/3] Deploying to Firebase Hosting...
 call %FIREBASE_CMD% deploy --only hosting
 if %errorlevel% neq 0 goto DEPLOY_FAILED
 
@@ -116,32 +112,32 @@ goto DEPLOY_SUCCESS
 :FULL_DEPLOY
 cls
 echo =====================================================================
-echo   🔥 กำลังดำเนินการ Full Deploy (Test + Lint + Build + Deploy ทั้งหมด)...
+echo   Running Full Deploy (Test + Lint + Build + Deploy All)...
 echo =====================================================================
 echo.
 call :RUN_CHECKS_SILENT
 
-echo  [1/5] 🧪 กำลังรันการทดสอบ (Unit Tests)...
+echo  [1/5] Running Tests...
 call npm run test
 if %errorlevel% neq 0 (
-    echo  [WARNING] การทดสอบพบข้อผิดพลาด แต่จะข้ามไปขั้นตอนถัดไป...
+    echo  [WARNING] Tests failed. Continuing anyway...
 )
 
-echo  [2/5] 🔍 กำลังตรวจสอบโค้ด (ESLint)...
+echo  [2/5] Running Linter...
 call npm run lint
 if %errorlevel% neq 0 (
-    echo  [WARNING] ตรวจสอบโค้ดพบข้อผิดพลาด/ข้อแนะนำ
+    echo  [WARNING] Lint warnings or errors found.
 )
 
-echo  [3/5] 🎨 กำลังสร้าง CSS (Tailwind/PostCSS)...
+echo  [3/5] Compiling Tailwind CSS...
 call npm run build:css
 if %errorlevel% neq 0 goto BUILD_FAILED
 
-echo  [4/5] 📦 กำลังสร้าง Production Build...
+echo  [4/5] Building production bundle...
 call npm run build:prod
 if %errorlevel% neq 0 goto BUILD_FAILED
 
-echo  [5/5] 🚀 กำลังดิพลอยทรัพยากรทั้งหมด (Hosting, Rules, Indexes) ไปยัง Firebase...
+echo  [5/5] Deploying all resources to Firebase...
 call %FIREBASE_CMD% deploy
 if %errorlevel% neq 0 goto DEPLOY_FAILED
 
@@ -150,23 +146,23 @@ goto DEPLOY_SUCCESS
 :BUILD_ONLY
 cls
 echo =====================================================================
-echo   📦 กำลังสร้าง Build ไฟล์สำหรับตรวจสอบระบบ...
+echo   Building project files...
 echo =====================================================================
 echo.
 call :RUN_CHECKS_SILENT
 
-echo  [1/2] 🎨 กำลังสร้าง CSS...
+echo  [1/2] Compiling CSS...
 call npm run build:css
 if %errorlevel% neq 0 goto BUILD_FAILED
 
-echo  [2/2] 📦 กำลังสร้าง Vite Production Build...
+echo  [2/2] Building Vite Production Bundle...
 call npm run build:prod
 if %errorlevel% neq 0 goto BUILD_FAILED
 
 color 0A
 echo.
 echo =====================================================================
-echo  ✅ สร้าง Build สำเร็จแล้ว! โค้ดพร้อมในโฟลเดอร์ /dist
+echo  Build successful! Files are in the /dist folder.
 echo =====================================================================
 echo.
 pause
@@ -176,7 +172,7 @@ goto MAIN_MENU
 :DEPLOY_RULES
 cls
 echo =====================================================================
-echo   🛡️  กำลังดิพลอย Firestore Security Rules และ Indexes...
+echo   Deploying Firestore Rules and Indexes...
 echo =====================================================================
 echo.
 call :RUN_CHECKS_SILENT
@@ -187,7 +183,7 @@ if %errorlevel% neq 0 goto DEPLOY_FAILED
 color 0A
 echo.
 echo =====================================================================
-echo  ✅ ดิพลอย Rules และ Indexes สำเร็จแล้ว!
+echo  Rules and Indexes deployed successfully!
 echo =====================================================================
 echo.
 pause
@@ -197,7 +193,7 @@ goto MAIN_MENU
 :RUN_DEV
 cls
 echo =====================================================================
-echo   💻 กำลังรัน Development Server...
+echo   Starting Local Development Server...
 echo =====================================================================
 echo.
 call npm run dev
@@ -207,7 +203,7 @@ goto MAIN_MENU
 where node >nul 2>nul
 if %errorlevel% neq 0 (
     color 0C
-    echo [ERROR] ไม่พบ Node.js ในระบบของคุณ!
+    echo [ERROR] Node.js is not installed!
     pause
     goto MAIN_MENU
 )
@@ -223,7 +219,7 @@ exit /b
 color 0C
 echo.
 echo =====================================================================
-echo  ❌ การบิลด์โครงการ (Build Process) ล้มเหลว! กรุณาตรวจสอบโค้ดของคุณ
+echo  [ERROR] Build failed! Please check your code.
 echo =====================================================================
 echo.
 pause
@@ -234,8 +230,8 @@ goto MAIN_MENU
 color 0C
 echo.
 echo =====================================================================
-echo  ❌ การดิพลอย (Deploy) ล้มเหลว!
-echo  (กรุณาตรวจสอบว่าได้ล็อกอิน Firebase แล้วด้วยคำสั่ง "firebase login")
+echo  [ERROR] Deployment failed!
+echo  Please verify you are logged in using "firebase login".
 echo =====================================================================
 echo.
 pause
@@ -246,8 +242,8 @@ goto MAIN_MENU
 color 0A
 echo.
 echo =====================================================================
-echo  🎉 ดิพลอยโครงการสำเร็จแล้ว!
-echo  คุณสามารถเข้าดูเว็บไซต์ได้ที่: https://duydodeesport.web.app
+echo  Deployment completed successfully!
+echo  Visit: https://duydodeesport.web.app
 echo =====================================================================
 echo.
 pause
@@ -257,13 +253,13 @@ goto MAIN_MENU
 :INVALID_CHOICE
 color 0C
 echo.
-echo ตัวเลือกไม่ถูกต้อง! กรุณาเลือก 0 ถึง 6
+echo Invalid option! Please select 0 to 6.
 timeout /t 2 >nul
 color 0B
 goto MAIN_MENU
 
 :EXIT
 cls
-echo 👋 ขอบคุณที่ใช้งานระบบดิพลอยอัตโนมัติ ขอให้มีวันที่ดีครับ!
+echo Thank you for using the deployment system. Goodbye!
 timeout /t 2 >nul
 exit /b
