@@ -149,7 +149,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     reportCompressedSize: false, // Faster builds
     maxParallelFileOps: 8, // Increase parallel operations for faster builds
-    hashAlgorithm: 'xxhash64', // Use faster hashing algorithm
   },
   plugins: [
     {
