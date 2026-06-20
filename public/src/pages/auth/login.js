@@ -1,20 +1,17 @@
+import '../../../css/output.css'; // Global styles
+import '../../../css/fonts.css'; // Custom fonts
+
 import { AuthService } from '../../services/auth-service.js';
 import { UI } from '../../components/ui.js';
 import { ValidationUtils } from '../../utils/validation-utils.js';
 import { AccessibilityUtils } from '../../utils/accessibility-utils.js';
 import { UIUXEnhancements } from '../../utils/uix-enhancements.js';
 
-/**
- * 🔐 DUYDOODEE LOGIN ENGINE - MASTER EDITION (V2.1 Secure)
- */
 document.addEventListener('DOMContentLoaded', () => {
     UI.injectStarfield();
     UI.initNavbar();
 
-    // Initialize accessibility improvements
     AccessibilityUtils.init();
-
-    // Initialize UI/UX enhancements
     UIUXEnhancements.init();
 
     const loginForm = document.getElementById('login-form');
@@ -30,10 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function handleEmailLogin(e) {
     e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const pass = document.getElementById('password').value;
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
 
-    // Validate email
+    const email = emailInput ? emailInput.value.trim() : '';
+    const pass = passwordInput ? passwordInput.value : '';
+
     if (!email) {
         UI.showToast('กรุณากรอกอีเมล', 'error');
         if (window.announceToScreenReader) {
@@ -50,7 +49,6 @@ async function handleEmailLogin(e) {
         return;
     }
 
-    // Validate password
     if (!pass) {
         UI.showToast('กรุณากรอกรหัสผ่าน', 'error');
         if (window.announceToScreenReader) {
@@ -73,7 +71,7 @@ async function handleEmailLogin(e) {
         const user = await AuthService.loginWithEmail(email, pass);
         await postLogin(user);
     } catch (error) {
-        console.error('Email Login Error:', error);
+        console.error('Email Login Error:', error); // Keep console.error for debugging
         let msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
         if (error.code === 'auth/user-not-found') {
             msg = 'ไม่พบผู้ใช้งานนี้';
@@ -88,29 +86,42 @@ async function handleEmailLogin(e) {
 
 async function handleGoogleLogin() {
     const btn = document.getElementById('google-login-btn');
-    const originalContent = btn.innerHTML;
+    let originalContent = '';
+    if (btn) {
+        originalContent = btn.innerHTML;
+    }
 
     UI.setLoading(true);
-    btn.innerHTML = '<div class="flex items-center gap-3"><div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div><span>กำลังเชื่อมต่อ...</span></div>';
-    btn.disabled = true;
+    if (btn) {
+        btn.innerHTML = '<div class="flex items-center gap-3"><div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div><span>กำลังเชื่อมต่อ...</span></div>';
+        btn.disabled = true;
+    }
 
     try {
         const user = await AuthService.loginWithGoogle();
         await postLogin(user);
-        UI.setLoading(false);
     } catch (error) {
-        console.error('🚨 Login Error:', error);
+        console.error('🚨 Login Error:', error); // Keep console.error for debugging
         if (error.code !== 'auth/popup-closed-by-user') {
             UI.showToast('เชื่อมต่อ Google ไม่สำเร็จ', 'error');
         }
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
+    } finally {
+        if (btn) {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+        }
         UI.setLoading(false);
     }
 }
 
 async function postLogin(user) {
-    // 📧 1. Check Email Verification (Optional but Recommended)
+    if (!user) {
+        UI.showToast('เกิดข้อผิดพลาดในการเข้าสู่ระบบ: ไม่พบข้อมูลผู้ใช้งาน', 'error');
+        UI.setLoading(false);
+        return;
+    }
+
+    // Check Email Verification (Optional but Recommended)
     if (user.providerId === 'password' && !user.emailVerified) {
         UI.showToast('กรุณายืนยันอีเมลของคุณก่อนเข้าใช้งาน', 'error');
         UI.setLoading(false);
