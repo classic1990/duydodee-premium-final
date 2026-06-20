@@ -1,6 +1,9 @@
 import { auth, onAuthStateChanged, getWatchHistory, useFallback } from '../services/firebase.js';
 import { AuthService } from '../services/auth-service.js';
 import { RecommendationService } from '../services/recommendation-service.js';
+import '../../css/output.css'; // Import global styles
+import '../../css/fonts.css'; // Import custom fonts
+
 import { UI } from '../components/ui.js';
 import { UI_CONFIG } from '../constants.js';
 import { ContentService } from '../services/content-service.js';
