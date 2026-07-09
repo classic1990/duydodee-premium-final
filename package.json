@@ -1,0 +1,50 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "> แพลตฟอร์มบริหารจัดการทรัพยากรกราฟิกฟุตบอลระดับพรีเมียม (Cinematic Sport Edition)",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "npm run build:css && vite",
+    "build": "npm run build:css && vite build",
+    "build:prod": "npm run build:css && vite build --mode production",
+    "preview": "vite preview",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build:css": "npx postcss ./public/css/styles.css -o ./public/css/output.css --config postcss.config.cjs",
+    "lint": "eslint public/src/**/*.js",
+    "lint:fix": "eslint public/src/**/*.js --fix",
+    "format": "prettier --write \"public/src/**/*.js\"",
+    "clean": "rm -rf dist .firebase",
+    "predeploy": "npm run lint && npm run build:prod",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@babel/plugin-syntax-import-meta": "^7.10.4",
+    "@babel/preset-env": "^7.29.5",
+    "@types/jest": "^30.0.0",
+    "autoprefixer": "^10.4.20",
+    "babel-jest": "^30.4.1",
+    "cssnano": "^7.0.6",
+    "eslint": "^8.57.0",
+    "eslint-plugin-html": "^8.1.1",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^3.4.14",
+    "terser": "^5.48.0",
+    "vite": "^8.0.14"
+  },
+  "dependencies": {
+    "algoliasearch": "^5.55.0",
+    "dompurify": "^3.4.11"
+  }
+}

@@ -1,0 +1,93 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# AI & Development Tools (Production - Not needed)
+.agents/
+.climpire/
+.climpire-worktrees/
+.devin/
+.firebase/
+.kilo/
+.qodo/
+.windsurf/
+.gemini/
+
+# Backup & Temporary Files
+backup/
+files/
+*.bak
+*.tmp
+
+# TypeScript (not yet configured, TS files cause lint errors)
+*.ts
+*.tsx
+
+# AI CLI worktrees
+.climpire-worktrees/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+.firebaserc
+
+# Skills & Tools (AI/CLI Only - Not for production)
+.skills/
+*.skill
+
+# Documentation (Keep minimal)
+docs/
+BUGFIXES.md
+
+# Config Files (Environment Specific)
+cors.json
+restore_admin.cjs
+
+# Temporary/Maintenance Scripts
+check_db.js
+inject_assets.js
+AUDIT_PERFORMANCE.bat
+
+# Development Tools Configuration
+.lintstagedrc.json
+.secrets-patterns
+
+# IDEs/Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Windows shortcuts and batch files
+*.lnk
+Ship.bat
+
+# Tool specific
+coverage/
+.qodo/
+.windsurf/
+.gemini/
+
+# Credentials & Keys (CRITICAL - Never commit these!)
+serviceAccountKey.json
+*.json.key
+firebase-key.json
+credentials.json
+
+# Build outputs
+*.log
+.aider*
+.env.production
+.env.staging

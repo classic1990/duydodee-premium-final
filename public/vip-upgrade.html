@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก VIP | DUYดูDEE PREMIUM</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <script src="https://unpkg.com/lucide@0.410.0"></script>
+</head>
+<body class="bg-brand-black text-white font-body selection:bg-brand-primary/30">
+    
+    <main class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        <!-- 👑 Hero Section -->
+        <div class="max-w-2xl space-y-8 animate-fade-up">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-[2rem] bg-brand-primary/10 border border-brand-primary/20 shadow-[0_0_40px_rgba(251,191,36,0.15)] mb-4">
+                <i data-lucide="crown" class="w-12 h-12 text-brand-primary"></i>
+            </div>
+            
+            <h1 class="text-h1 italic">ยกระดับประสบการณ์ <br><span class="text-brand-primary">VIP PREMIUM</span></h1>
+            <p class="text-body text-lg leading-relaxed max-w-lg mx-auto">ปลดล็อกคอนเทนต์ความบันเทิงระดับ 4K HDR คุณภาพสูงสุด พร้อมสิทธิพิเศษแบบเอ็กซ์คลูซีฟสำหรับสมาชิก VIP เท่านั้น</p>
+            
+            <!-- 💎 Benefits Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto mt-12">
+                <div class="glass-premium p-6 rounded-2xl flex items-center gap-4 text-left">
+                    <i data-lucide="check-circle-2" class="w-6 h-6 text-brand-primary"></i>
+                    <div>
+                        <h3 class="text-h3">รับชม 4K HDR</h3>
+                        <p class="text-[10px] text-gray-400">คมชัดสูงสุดทุกอณู</p>
+                    </div>
+                </div>
+                <div class="glass-premium p-6 rounded-2xl flex items-center gap-4 text-left">
+                    <i data-lucide="check-circle-2" class="w-6 h-6 text-brand-primary"></i>
+                    <div>
+                        <h3 class="text-h3">ไม่มีโฆษณาคั่น</h3>
+                        <p class="text-[10px] text-gray-400">เต็มอิ่มต่อเนื่อง</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🔘 Call to Action -->
+            <div class="pt-8">
+                <button onclick="UI.renderVIPUpgradeModal()" class="btn-primary !px-12 !py-4 text-lg glow-primary">
+                    สมัครสมาชิก VIP ทันที
+                </button>
+            </div>
+            
+            <a href="/" class="block text-[10px] text-gray-600 uppercase tracking-[0.2em] font-black hover:text-white transition-all">กลับหน้าหลัก</a>
+        </div>
+    </main>
+
+    <script type="module" src="/src/components/ui.js"></script>
+    <script>
+        // Wait for UI to load
+        window.addEventListener('load', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
+

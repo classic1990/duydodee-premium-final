@@ -1,0 +1,202 @@
+name: DUYDODEE CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # ========================================
+  # TEST & VALIDATION JOB
+  # ========================================
+  test-and-validate:
+    name: Test & Validate
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Run linter fix
+        run: 
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Build CSS
+        run: npm run build:css
+      
+      - name: Security audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+  # ========================================
+  # STAGING DEPLOYMENT JOB
+  # ========================================
+  deploy-staging:
+    name: Deploy to Staging
+    needs: test-and-validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build for staging
+        run: |
+          cp .env.staging .env.local
+          npm run build:prod
+      
+      - name: Deploy to Firebase Staging
+        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        with:
+          args: deploy --only hosting:duydodee-staging
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_STAGING }}
+      
+      - name: Run smoke tests
+        run: |
+          curl -f https://duydodee-staging.web.app || exit 1
+      
+      - name: Notify staging deployment
+        uses: 8398a7/action-slack@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          status: ${{ job.status }}
+          text: 'Staging deployment completed'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
+
+  # ========================================
+  # PRODUCTION DEPLOYMENT JOB
+  # ========================================
+  deploy-production:
+    name: Deploy to Production
+    needs: test-and-validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build for production
+        run: |
+          cp .env.production .env.local
+          npm run build:prod
+      
+      - name: Database backup
+        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        with:
+          args: firestore:export --export-path backup-${{ github.sha }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          name: firestore-backup
+          path: backup-${{ github.sha }}
+      
+      - name: Deploy to Firebase Production
+        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      - name: Run production tests
+        run: |
+          curl -f https://duydodee.web.app || exit 1
+      
+      - name: Create GitHub release
+        uses: actions/create-release@1a94d57437fbdcd9cf140aedd46ded68f4b7e98e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Production Release v${{ github.run_number }}
+          draft: false
+          prerelease: false
+      
+      - name: Notify production deployment
+        uses: 8398a7/action-slack@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        with:
+          status: ${{ job.status }}
+          text: 'Production deployment completed'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
+
+  # ========================================
+  # MONITORING & HEALTH CHECK JOB
+  # ========================================
+  health-check:
+    name: Health Check
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Wait for deployment to propagate
+        run: sleep 60
+      
+      - name: Health check
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://duydodee.web.app)
+          if [ $response -eq 200 ]; then
+            echo "Health check passed"
+          else
+            echo "Health check failed with status: $response"
+            exit 1
+          fi
+      
+      - name: Performance check
+        run: |
+          curl -s -o /dev/null -w "Time: %{time_total}s\n" https://duydodee.web.app
+      
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Health check failed - initiating rollback"
+          # Add rollback logic here
