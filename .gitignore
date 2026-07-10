@@ -31,6 +31,8 @@ files/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
 
 # Firebase
 .firebase/
@@ -44,7 +46,6 @@ ui-debug.log*
 *.skill
 
 # Documentation (Keep minimal)
-docs/
 BUGFIXES.md
 
 # Config Files (Environment Specific)
@@ -89,5 +90,3 @@ credentials.json
 # Build outputs
 *.log
 .aider*
-.env.production
-.env.staging

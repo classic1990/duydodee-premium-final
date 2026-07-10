@@ -23,10 +23,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -39,7 +39,7 @@ jobs:
         continue-on-error: true
       
       - name: Run linter fix
-        run: 
+        run: npm run lint:fix
       
       - name: Run tests
         run: npm test
@@ -79,7 +79,7 @@ jobs:
           npm run build:prod
       
       - name: Deploy to Firebase Staging
-        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting:duydodee-staging
         env:
@@ -90,7 +90,7 @@ jobs:
           curl -f https://duydodee-staging.web.app || exit 1
       
       - name: Notify staging deployment
-        uses: 8398a7/action-slack@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           text: 'Staging deployment completed'
@@ -109,10 +109,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -126,20 +126,20 @@ jobs:
           npm run build:prod
       
       - name: Database backup
-        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        uses: w9jds/firebase-action@master
         with:
           args: firestore:export --export-path backup-${{ github.sha }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       
       - name: Upload backup artifact
-        uses: actions/upload-artifact@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: actions/upload-artifact@v4
         with:
           name: firestore-backup
           path: backup-${{ github.sha }}
       
       - name: Deploy to Firebase Production
-        uses: firebase/firebase-tools-actions@4d4a3b1691fa22a5c1c49c5c3c5c5c5c5c5c5c5c
+        uses: w9jds/firebase-action@master
         with:
           args: deploy
         env:
@@ -160,7 +160,7 @@ jobs:
           prerelease: false
       
       - name: Notify production deployment
-        uses: 8398a7/action-slack@f43a0e5ff2bd294095638e18286ca9a3d1956744
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           text: 'Production deployment completed'
