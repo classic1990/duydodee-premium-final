@@ -87,14 +87,10 @@ self.addEventListener('fetch', (e) => {
   }
 
   // Determine caching strategy based on request type
-  const strategy = determineCacheStrategy(url, e.request);
-  
-  if (strategy) {
-    e.respondWith(strategy(e.request, url));
-  }
+  e.respondWith(determineCacheStrategy(url, e.request));
 });
 
-function determineCacheStrategy(url, request) {
+async function determineCacheStrategy(url, request) {
   const isSameOrigin = url.origin === self.location.origin;
   const isImage = url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg|ico)$/i);
   const isVideo = url.pathname.match(/\.(mp4|webm|ogg)$/i);
@@ -105,7 +101,7 @@ function determineCacheStrategy(url, request) {
   
   // HTML pages - Network First for fresh content
   if (isHTML && isSameOrigin) {
-    return networkFirstStrategy(request);
+    return await networkFirstStrategy(request);
   }
   
   // Images - Cache First with stale-while-revalidate
@@ -211,10 +207,14 @@ async function staleWhileRevalidateStrategy(request, cacheName, maxSize = MAX_CA
   // Always fetch from network in background
   const fetchPromise = fetch(request).then(networkResponse => {
     if (networkResponse && networkResponse.status === 200) {
+      // Clone the response for the cache
+      const responseToCache = networkResponse.clone();
+      
       // Update cache
       trimCache(cacheName, maxSize).then(() => {
-        cache.put(request, networkResponse.clone());
+        cache.put(request, responseToCache);
       });
+      return networkResponse;
     }
     return networkResponse;
   }).catch(error => {

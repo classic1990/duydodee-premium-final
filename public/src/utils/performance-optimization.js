@@ -13,18 +13,21 @@ class PerformanceOptimizer {
   // Lazy Loading for Images
   initLazyLoading() {
     if ('IntersectionObserver' in window) {
-      this.lazyLoadObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            this.loadImage(img);
-            observer.unobserve(img);
-          }
-        });
-      }, {
-        rootMargin: '50px 0px',
-        threshold: 0.01
-      });
+      this.lazyLoadObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              this.loadImage(img);
+              observer.unobserve(img);
+            }
+          });
+        },
+        {
+          rootMargin: '50px 0px',
+          threshold: 0.01
+        }
+      );
     }
   }
 
@@ -61,8 +64,10 @@ class PerformanceOptimizer {
 
   // Image Optimization
   optimizeImageUrl(url, width, height, quality = 80) {
-    if (!url) return '';
-    
+    if (!url) {
+      return '';
+    }
+
     // Add Firebase Storage optimization parameters
     if (url.includes('firebasestorage.googleapis.com')) {
       const optimizedUrl = new URL(url);
@@ -70,15 +75,17 @@ class PerformanceOptimizer {
       optimizedUrl.searchParams.set('quality', quality);
       return optimizedUrl.toString();
     }
-    
+
     return url;
   }
 
   generateResponsiveSrcset(baseUrl, sizes = [320, 480, 768, 1024, 1200]) {
-    return sizes.map(size => {
-      const optimizedUrl = this.optimizeImageUrl(baseUrl, size);
-      return `${optimizedUrl} ${size}w`;
-    }).join(', ');
+    return sizes
+      .map((size) => {
+        const optimizedUrl = this.optimizeImageUrl(baseUrl, size);
+        return `${optimizedUrl} ${size}w`;
+      })
+      .join(', ');
   }
 
   // Debounce Function
@@ -101,7 +108,7 @@ class PerformanceOptimizer {
       if (!inThrottle) {
         func.apply(this, args);
         inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
+        setTimeout(() => (inThrottle = false), limit);
       }
     };
   }
@@ -125,14 +132,14 @@ class PerformanceOptimizer {
     const result = fn();
     const end = performance.now();
     const duration = end - start;
-    
+
     console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
-    
+
     // Send to analytics if available
     if (window.errorMonitoring) {
       window.errorMonitoring.trackPerformance(name, duration);
     }
-    
+
     return result;
   }
 
@@ -142,20 +149,20 @@ class PerformanceOptimizer {
       const result = await asyncFn();
       const end = performance.now();
       const duration = end - start;
-      
+
       console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
-      
+
       if (window.errorMonitoring) {
         window.errorMonitoring.trackPerformance(name, duration);
       }
-      
+
       return result;
     } catch (error) {
       const end = performance.now();
       const duration = end - start;
-      
+
       console.error(`[Performance] ${name} failed after ${duration.toFixed(2)}ms`, error);
-      
+
       if (window.errorMonitoring) {
         window.errorMonitoring.captureError(error, {
           type: 'performance_error',
@@ -163,7 +170,7 @@ class PerformanceOptimizer {
           duration: duration
         });
       }
-      
+
       throw error;
     }
   }
@@ -178,11 +185,11 @@ class PerformanceOptimizer {
 
   // Preload Critical Resources
   preloadResources(urls) {
-    urls.forEach(url => {
+    urls.forEach((url) => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.href = url;
-      
+
       if (url.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
         link.as = 'image';
       } else if (url.match(/\.(css)$/i)) {
@@ -190,14 +197,14 @@ class PerformanceOptimizer {
       } else if (url.match(/\.(js)$/i)) {
         link.as = 'script';
       }
-      
+
       document.head.appendChild(link);
     });
   }
 
   // Prefetch Resources
   prefetchResources(urls) {
-    urls.forEach(url => {
+    urls.forEach((url) => {
       const link = document.createElement('link');
       link.rel = 'prefetch';
       link.href = url;
@@ -218,26 +225,31 @@ class PerformanceOptimizer {
       weight: weight,
       style: style
     });
-    
-    font.load().then((loadedFont) => {
-      document.fonts.add(loadedFont);
-      document.body.classList.add(`${fontFamily}-loaded`);
-    }).catch((error) => {
-      console.error('Font loading failed:', error);
-    });
+
+    font
+      .load()
+      .then((loadedFont) => {
+        document.fonts.add(loadedFont);
+        document.body.classList.add(`${fontFamily}-loaded`);
+      })
+      .catch((error) => {
+        console.error('Font loading failed:', error);
+      });
   }
 
   // Video Optimization
   optimizeVideoUrl(url, quality = '720') {
-    if (!url) return '';
-    
+    if (!url) {
+      return '';
+    }
+
     // Add video optimization parameters
     if (url.includes('firebasestorage.googleapis.com')) {
       const optimizedUrl = new URL(url);
       optimizedUrl.searchParams.set('quality', quality);
       return optimizedUrl.toString();
     }
-    
+
     return url;
   }
 
@@ -268,9 +280,9 @@ class PerformanceOptimizer {
     const updateVisibleItems = () => {
       const startIndex = Math.floor(scrollTop / itemHeight);
       const endIndex = Math.min(startIndex + visibleItems, totalItems);
-      
+
       container.innerHTML = '';
-      
+
       for (let i = startIndex; i < endIndex; i++) {
         if (items[i]) {
           const item = renderItem(items[i], i);
@@ -301,7 +313,7 @@ class PerformanceOptimizer {
       try {
         const registration = await navigator.serviceWorker.register(swPath);
         console.log('Service Worker registered:', registration);
-        
+
         // Check for updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
@@ -312,7 +324,7 @@ class PerformanceOptimizer {
             }
           });
         });
-        
+
         return registration;
       } catch (error) {
         console.error('Service Worker registration failed:', error);
@@ -343,11 +355,19 @@ class PerformanceOptimizer {
   // Adaptive Quality based on Network
   getAdaptiveQuality() {
     const networkInfo = this.getNetworkInfo();
-    if (!networkInfo) return '720';
-    
-    if (networkInfo.saveData) return '480';
-    if (networkInfo.effectiveType === '4g') return '1080';
-    if (networkInfo.effectiveType === '3g') return '720';
+    if (!networkInfo) {
+      return '720';
+    }
+
+    if (networkInfo.saveData) {
+      return '480';
+    }
+    if (networkInfo.effectiveType === '4g') {
+      return '1080';
+    }
+    if (networkInfo.effectiveType === '3g') {
+      return '720';
+    }
     return '480';
   }
 }

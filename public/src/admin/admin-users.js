@@ -1,4 +1,16 @@
-import { db, collection, getDocs, doc, updateDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA } from '../services/firebase.js';
+import {
+  db,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  getCountFromServer,
+  SCHEMA
+} from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -15,97 +27,116 @@ const userCache = new Map();
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        UI.initAdminSidebar();
-        initManageUsers();
-    } catch (err) {
-        console.error('Access Denied:', err);
-    }
+  try {
+    const { user } = await checkAdminAccess();
+    UI.setupSidebar(user);
+    UI.initAdminSidebar();
+    initManageUsers();
+  } catch (err) {
+    console.error('Access Denied:', err);
+  }
 });
 
 async function initManageUsers() {
-    UI.setLoading(true);
+  UI.setLoading(true);
 
-    await updateUserCount();
-    loadUsers();
-    setupSearch();
-    setupEditModal();
+  await updateUserCount();
+  loadUsers();
+  setupSearch();
+  setupEditModal();
 }
 
 async function updateUserCount() {
-    try {
-        const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.USERS));
-        totalUsers = countSnap.data().count;
-        const countEl = document.getElementById('user-count');
-        if (countEl) {
-            countEl.innerText = totalUsers.toLocaleString();
-        }
-    } catch (e) {
-        console.error('Count failed:', e);
+  try {
+    const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.USERS));
+    totalUsers = countSnap.data().count;
+    const countEl = document.getElementById('user-count');
+    if (countEl) {
+      countEl.innerText = totalUsers.toLocaleString();
     }
+  } catch (e) {
+    console.error('Count failed:', e);
+  }
 }
 
 async function loadUsers() {
-    if (isSearchMode) {
-        return;
+  if (isSearchMode) {
+    return;
+  }
+
+  const tableBody = document.getElementById('user-list');
+  if (!tableBody) {
+    return;
+  }
+
+  tableBody.innerHTML =
+    '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div></td></tr>';
+
+  try {
+    const cursor = cursors[currentPage - 1];
+    let q = query(
+      collection(db, SCHEMA.COLLECTIONS.USERS),
+      orderBy('createdAt', 'desc'),
+      limit(PAGE_SIZE)
+    );
+    if (cursor) {
+      q = query(q, startAfter(cursor));
     }
 
-    const tableBody = document.getElementById('user-list');
-    if (!tableBody) {
-        return;
+    const snap = await getDocs(q);
+    const users = snap.docs.map((doc) => ({ uid: doc.id, ...doc.data() }));
+
+    userCache.clear();
+    users.forEach((u) => userCache.set(u.uid, u));
+
+    if (!snap.empty) {
+      cursors[currentPage] = snap.docs[snap.docs.length - 1];
+      renderUsers(users);
+      updatePaginationUI();
+    } else {
+      renderUsers([]);
     }
-
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div></td></tr>';
-
-    try {
-        const cursor = cursors[currentPage - 1];
-        let q = query(collection(db, SCHEMA.COLLECTIONS.USERS), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursor) {
-            q = query(q, startAfter(cursor));
-        }
-
-        const snap = await getDocs(q);
-        const users = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
-
-        userCache.clear();
-        users.forEach(u => userCache.set(u.uid, u));
-
-        if (!snap.empty) {
-            cursors[currentPage] = snap.docs[snap.docs.length - 1];
-            renderUsers(users);
-            updatePaginationUI();
-        } else {
-            renderUsers([]);
-        }
-    } catch (error) {
-        console.error('Load Error:', error);
-        UI.showToast('ไม่สามารถโหลดข้อมูลสมาชิกได้', 'error');
-    } finally {
-        UI.setLoading(false);
-    }
+  } catch (error) {
+    console.error('Load Error:', error);
+    UI.showToast('ไม่สามารถโหลดข้อมูลสมาชิกได้', 'error');
+  } finally {
+    UI.setLoading(false);
+  }
 }
 
 function renderUsers(users) {
-    const tableBody = document.getElementById('user-list');
-    if (!tableBody) {
-        return;
-    }
+  const tableBody = document.getElementById('user-list');
+  if (!tableBody) {
+    return;
+  }
 
-    if (users.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center text-gray-500 Thai-font opacity-40">ไม่พบรายชื่อสมาชิก</td></tr>';
-        return;
-    }
+  if (users.length === 0) {
+    tableBody.innerHTML =
+      '<tr><td colspan="5" class="py-20 text-center text-gray-500 Thai-font opacity-40">ไม่พบรายชื่อสมาชิก</td></tr>';
+    return;
+  }
 
-    tableBody.innerHTML = users.map(user => {
-        const roleLabels = { 'super-admin': 'ผู้บริหาร', 'admin': 'แอดมิน', 'vip': 'พรีเมียม (VIP)', 'member': 'สมาชิกทั่วไป' };
-        const roleColors = { 'super-admin': 'text-purple-400 bg-purple-500/10 border-purple-500/20', 'admin': 'text-blue-400 bg-blue-500/10 border-blue-500/20', 'vip': 'text-brand-primary bg-brand-primary/10 border-brand-primary/20', 'member': 'text-gray-400 bg-white/5 border-white/10' };
+  tableBody.innerHTML = users
+    .map((user) => {
+      const roleLabels = {
+        'super-admin': 'ผู้บริหาร',
+        admin: 'แอดมิน',
+        vip: 'พรีเมียม (VIP)',
+        member: 'สมาชิกทั่วไป'
+      };
+      const roleColors = {
+        'super-admin': 'text-purple-400 bg-purple-500/10 border-purple-500/20',
+        admin: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+        vip: 'text-brand-primary bg-brand-primary/10 border-brand-primary/20',
+        member: 'text-gray-400 bg-white/5 border-white/10'
+      };
 
-        const statusLabel = user.isBanned ? 'ถูกระงับสิทธิ์' : 'ปกติ';
-        const statusColor = user.isBanned ? 'text-red-500 bg-red-500/10 border-red-500/20' : 'text-green-500 bg-green-500/10 border-green-500/20';
+      const statusLabel = user.isBanned ? 'ถูกระงับสิทธิ์' : 'ปกติ';
+      const statusColor = user.isBanned
+        ? 'text-red-500 bg-red-500/10 border-red-500/20'
+        : 'text-green-500 bg-green-500/10 border-green-500/20';
 
-        return `
+      return `
             <tr class="group hover:bg-white/[0.02] transition-all border-b border-white/5">
                 <td class="p-6">
                     <div class="flex items-center gap-4">
@@ -140,22 +171,23 @@ function renderUsers(users) {
                     </div>
                 </td>
             </tr>`;
-    }).join('');
+    })
+    .join('');
 
-    UI.refreshIcons();
+  UI.refreshIcons();
 }
 
 function updatePaginationUI() {
-    const container = document.getElementById('pagination-container');
-    if (!container || isSearchMode) {
-        if (container) {
-            container.innerHTML = '';
-        }
-        return;
+  const container = document.getElementById('pagination-container');
+  if (!container || isSearchMode) {
+    if (container) {
+      container.innerHTML = '';
     }
+    return;
+  }
 
-    const totalPages = Math.ceil(totalUsers / PAGE_SIZE) || 1;
-    container.innerHTML = `
+  const totalPages = Math.ceil(totalUsers / PAGE_SIZE) || 1;
+  container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md animate-fade-in">
             <button id="prev-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-20" ${currentPage === 1 ? 'disabled' : ''}>
                 <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -168,111 +200,119 @@ function updatePaginationUI() {
             </button>
         </div>`;
 
-    document.getElementById('prev-btn')?.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--; loadUsers();
-        }
-    });
-    document.getElementById('next-btn')?.addEventListener('click', () => {
-        currentPage++; loadUsers();
-    });
-    UI.refreshIcons();
+  document.getElementById('prev-btn')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      loadUsers();
+    }
+  });
+  document.getElementById('next-btn')?.addEventListener('click', () => {
+    currentPage++;
+    loadUsers();
+  });
+  UI.refreshIcons();
 }
 
 function setupSearch() {
-    const input = document.getElementById('user-search');
-    if (!input) {
+  const input = document.getElementById('user-search');
+  if (!input) {
+    return;
+  }
+  input.addEventListener(
+    'input',
+    UI.debounce(async (e) => {
+      const term = e.target.value.trim().toLowerCase();
+      if (!term) {
+        isSearchMode = false;
+        loadUsers();
         return;
-    }
-    input.addEventListener('input', UI.debounce(async (e) => {
-        const term = e.target.value.trim().toLowerCase();
-        if (!term) {
-            isSearchMode = false; loadUsers(); return;
-        }
+      }
 
-        isSearchMode = true;
-        const tableBody = document.getElementById('user-list');
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center Thai-font animate-pulse text-blue-400 text-xs">กำลังค้นหาในระบบ...</td></tr>';
+      isSearchMode = true;
+      const tableBody = document.getElementById('user-list');
+      tableBody.innerHTML =
+        '<tr><td colspan="5" class="py-10 text-center Thai-font animate-pulse text-blue-400 text-xs">กำลังค้นหาในระบบ...</td></tr>';
 
-        try {
-            const q = query(collection(db, SCHEMA.COLLECTIONS.USERS), limit(500));
-            const snap = await getDocs(q);
-            const allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
-            const filtered = allUsers.filter(u => u.email?.toLowerCase().includes(term) || u.displayName?.toLowerCase().includes(term));
+      try {
+        const q = query(collection(db, SCHEMA.COLLECTIONS.USERS), limit(500));
+        const snap = await getDocs(q);
+        const allUsers = snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
+        const filtered = allUsers.filter(
+          (u) =>
+            u.email?.toLowerCase().includes(term) || u.displayName?.toLowerCase().includes(term)
+        );
 
-            filtered.forEach(u => userCache.set(u.uid, u));
-            renderUsers(filtered);
-            document.getElementById('pagination-container').innerHTML = '';
-        } catch (e) {
-            console.error(e);
-        }
-    }, 400));
+        filtered.forEach((u) => userCache.set(u.uid, u));
+        renderUsers(filtered);
+        document.getElementById('pagination-container').innerHTML = '';
+      } catch (e) {
+        console.error(e);
+      }
+    }, 400)
+  );
 }
 
 function setupEditModal() {
-    const form = document.getElementById('edit-user-form');
-    if (!form) {
-        return;
-    }
+  const form = document.getElementById('edit-user-form');
+  if (!form) {
+    return;
+  }
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const uid = document.getElementById('edit-uid').value;
-        const role = document.getElementById('edit-role').value;
-        const displayName = document.getElementById('edit-displayName').value;
-
-        UI.setLoading(true);
-        try {
-            await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid), { role, displayName });
-            UI.showToast('อัปเดตข้อมูลสำเร็จ', 'success');
-            window.closeEditModal();
-            loadUsers();
-        } catch (err) {
-            UI.showToast('เกิดข้อผิดพลาดในการอัปเดต', 'error');
-        } finally {
-            UI.setLoading(false);
-        }
-    });
-}
-
-window.openEditModal = (uid) => {
-    const user = userCache.get(uid);
-    if (!user) {
-        return;
-    }
-
-    document.getElementById('edit-uid').value = uid;
-    document.getElementById('edit-displayName').value = user.displayName || '';
-    document.getElementById('edit-role').value = user.role || 'member';
-
-    const modal = document.getElementById('edit-user-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-};
-
-window.closeEditModal = () => {
-    const modal = document.getElementById('edit-user-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-};
-
-window.toggleBan = async (uid, currentStatus) => {
-    const action = currentStatus ? 'ปลดระงับ' : 'ระงับสิทธิ์';
-    if (!confirm(`ยืนยันการ${action}สมาชิกรายนี้?`)) {
-        return;
-    }
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const uid = document.getElementById('edit-uid').value;
+    const role = document.getElementById('edit-role').value;
+    const displayName = document.getElementById('edit-displayName').value;
 
     UI.setLoading(true);
     try {
-        await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid), { isBanned: !currentStatus });
-        UI.showToast(`${action}เรียบร้อยแล้ว`, 'success');
-        loadUsers();
-    } catch (e) {
-        UI.showToast('เกิดข้อผิดพลาด', 'error');
+      await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid), { role, displayName });
+      UI.showToast('อัปเดตข้อมูลสำเร็จ', 'success');
+      window.closeEditModal();
+      loadUsers();
+    } catch (err) {
+      UI.showToast('เกิดข้อผิดพลาดในการอัปเดต', 'error');
     } finally {
-        UI.setLoading(false);
+      UI.setLoading(false);
     }
+  });
+}
+
+window.openEditModal = (uid) => {
+  const user = userCache.get(uid);
+  if (!user) {
+    return;
+  }
+
+  document.getElementById('edit-uid').value = uid;
+  document.getElementById('edit-displayName').value = user.displayName || '';
+  document.getElementById('edit-role').value = user.role || 'member';
+
+  const modal = document.getElementById('edit-user-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
 };
 
+window.closeEditModal = () => {
+  const modal = document.getElementById('edit-user-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+};
 
+window.toggleBan = async (uid, currentStatus) => {
+  const action = currentStatus ? 'ปลดระงับ' : 'ระงับสิทธิ์';
+  if (!confirm(`ยืนยันการ${action}สมาชิกรายนี้?`)) {
+    return;
+  }
 
+  UI.setLoading(true);
+  try {
+    await updateDoc(doc(db, SCHEMA.COLLECTIONS.USERS, uid), { isBanned: !currentStatus });
+    UI.showToast(`${action}เรียบร้อยแล้ว`, 'success');
+    loadUsers();
+  } catch (e) {
+    UI.showToast('เกิดข้อผิดพลาด', 'error');
+  } finally {
+    UI.setLoading(false);
+  }
+};

@@ -39,26 +39,28 @@ class AccessibilityManager {
   handleEscapeKey() {
     // Close modals
     const modals = document.querySelectorAll('.modal.active');
-    modals.forEach(modal => {
+    modals.forEach((modal) => {
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
     });
 
     // Close dropdowns
     const dropdowns = document.querySelectorAll('.dropdown.active');
-    dropdowns.forEach(dropdown => {
+    dropdowns.forEach((dropdown) => {
       dropdown.classList.remove('active');
     });
   }
 
   handleTabKey(e) {
     const modal = document.querySelector('.modal.active');
-    if (!modal) return;
+    if (!modal) {
+      return;
+    }
 
     const focusableElements = modal.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    
+
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -77,7 +79,7 @@ class AccessibilityManager {
       'button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
 
-    interactiveElements.forEach(element => {
+    interactiveElements.forEach((element) => {
       element.style.outline = 'none';
       element.addEventListener('focus', () => {
         element.style.outline = '2px solid #4F46E5';
@@ -115,7 +117,7 @@ class AccessibilityManager {
   announce(message, priority = 'polite') {
     const regionId = priority === 'assertive' ? 'aria-alert-region' : 'aria-live-region';
     const region = document.getElementById(regionId);
-    
+
     if (region) {
       region.textContent = message;
       // Clear after announcement
@@ -135,14 +137,16 @@ class AccessibilityManager {
   }
 
   addSkipToContentLink() {
-    if (document.getElementById('skip-to-content')) return;
+    if (document.getElementById('skip-to-content')) {
+      return;
+    }
 
     const skipLink = document.createElement('a');
     skipLink.id = 'skip-to-content';
     skipLink.href = '#main-content';
     skipLink.textContent = 'Skip to main content';
     skipLink.className = 'skip-to-content';
-    
+
     // Add styles
     skipLink.style.cssText = `
       position: absolute;
@@ -154,11 +158,11 @@ class AccessibilityManager {
       z-index: 100;
       transition: top 0.3s;
     `;
-    
+
     skipLink.addEventListener('focus', () => {
       skipLink.style.top = '0';
     });
-    
+
     skipLink.addEventListener('blur', () => {
       skipLink.style.top = '-40px';
     });
@@ -187,7 +191,7 @@ class AccessibilityManager {
     const focusableElements = element.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    
+
     if (focusableElements.length > 0) {
       focusableElements[0].focus();
     }
@@ -230,7 +234,7 @@ class AccessibilityManager {
     // Get all text elements
     const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, a, button');
 
-    textElements.forEach(element => {
+    textElements.forEach((element) => {
       const styles = window.getComputedStyle(element);
       const color = styles.color;
       const backgroundColor = styles.backgroundColor;
@@ -250,24 +254,34 @@ class AccessibilityManager {
   }
 
   rgbToHex(rgb) {
-    if (rgb.startsWith('#')) return rgb;
-    
+    if (rgb.startsWith('#')) {
+      return rgb;
+    }
+
     const rgbValues = rgb.match(/\d+/g);
-    if (!rgbValues) return '#000000';
-    
-    return '#' + rgbValues.slice(0, 3).map(x => {
-      const hex = parseInt(x).toString(16);
-      return hex.length === 1 ? '0' + hex : hex;
-    }).join('');
+    if (!rgbValues) {
+      return '#000000';
+    }
+
+    return (
+      '#' +
+      rgbValues
+        .slice(0, 3)
+        .map((x) => {
+          const hex = parseInt(x, 10).toString(16);
+          return hex.length === 1 ? '0' + hex : hex;
+        })
+        .join('')
+    );
   }
 
   calculateContrastRatio(color1, color2) {
     const luminance1 = this.calculateLuminance(color1);
     const luminance2 = this.calculateLuminance(color2);
-    
+
     const lighter = Math.max(luminance1, luminance2);
     const darker = Math.min(luminance1, luminance2);
-    
+
     return (lighter + 0.05) / (darker + 0.05);
   }
 
@@ -276,10 +290,8 @@ class AccessibilityManager {
     const g = parseInt(hex.slice(3, 5), 16) / 255;
     const b = parseInt(hex.slice(5, 7), 16) / 255;
 
-    const a = [r, g, b].map(value => {
-      return value <= 0.03928
-        ? value / 12.92
-        : Math.pow((value + 0.055) / 1.055, 2.4);
+    const a = [r, g, b].map((value) => {
+      return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
     });
 
     return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
@@ -317,12 +329,12 @@ class AccessibilityManager {
   // Form Accessibility
   enhanceFormAccessibility(form) {
     const inputs = form.querySelectorAll('input, select, textarea');
-    
-    inputs.forEach(input => {
+
+    inputs.forEach((input) => {
       // Ensure labels are associated
       const id = input.id;
       const label = form.querySelector(`label[for="${id}"]`);
-      
+
       if (!label && input.placeholder) {
         // Create label if missing
         const newLabel = document.createElement('label');
@@ -356,7 +368,7 @@ class AccessibilityManager {
   showFormError(input, message) {
     const errorId = `${input.id}-error`;
     const errorContainer = document.getElementById(errorId);
-    
+
     if (errorContainer) {
       errorContainer.textContent = message;
       errorContainer.classList.remove('sr-only');
@@ -368,7 +380,7 @@ class AccessibilityManager {
   clearFormError(input) {
     const errorId = `${input.id}-error`;
     const errorContainer = document.getElementById(errorId);
-    
+
     if (errorContainer) {
       errorContainer.textContent = '';
       errorContainer.classList.add('sr-only');
@@ -430,7 +442,7 @@ class AccessibilityManager {
 
     // Add scope to headers
     const headers = table.querySelectorAll('th');
-    headers.forEach(header => {
+    headers.forEach((header) => {
       if (!header.hasAttribute('scope')) {
         header.setAttribute('scope', 'col');
       }
@@ -474,7 +486,7 @@ class AccessibilityManager {
   enhanceNavigationAccessibility(nav) {
     // Add nav role
     nav.setAttribute('role', 'navigation');
-    
+
     // Add aria-label
     if (!nav.hasAttribute('aria-label')) {
       nav.setAttribute('aria-label', 'Main navigation');
@@ -482,7 +494,7 @@ class AccessibilityManager {
 
     // Add current page indicator
     const links = nav.querySelectorAll('a');
-    links.forEach(link => {
+    links.forEach((link) => {
       if (link.href === window.location.href) {
         this.setARIAAttribute(link, 'current', 'page');
       }
@@ -493,7 +505,7 @@ class AccessibilityManager {
   showLoadingState(element, message = 'Loading...') {
     const loadingId = 'loading-indicator';
     let loadingIndicator = document.getElementById(loadingId);
-    
+
     if (!loadingIndicator) {
       loadingIndicator = document.createElement('div');
       loadingIndicator.id = loadingId;
@@ -502,18 +514,18 @@ class AccessibilityManager {
       loadingIndicator.className = 'sr-only';
       document.body.appendChild(loadingIndicator);
     }
-    
+
     loadingIndicator.textContent = message;
     this.setARIAAttribute(element, 'busy', 'true');
   }
 
   hideLoadingState(element) {
     const loadingIndicator = document.getElementById('loading-indicator');
-    
+
     if (loadingIndicator) {
       loadingIndicator.textContent = '';
     }
-    
+
     this.setARIAAttribute(element, 'busy', 'false');
   }
 
@@ -535,7 +547,7 @@ class AccessibilityManager {
   // Reduce Motion Support
   setupReducedMotion() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+
     if (prefersReducedMotion.matches) {
       document.documentElement.classList.add('reduced-motion');
     }

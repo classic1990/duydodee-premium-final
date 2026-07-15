@@ -1,24 +1,57 @@
-// 💠 Firebase Configuration - DUYDOODEE Master Edition
+// 💠 Firebase Configuration - DUYDODEE PREMIUM
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
-    getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
-    signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
-    getFirestore, collection, collectionGroup, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
-    query, where, orderBy, limit, serverTimestamp, increment, startAfter, writeBatch,
-    getCountFromServer, getAggregateFromServer, sum, onSnapshot
+  getFirestore,
+  collection,
+  collectionGroup,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
+  increment,
+  startAfter,
+  writeBatch,
+  getCountFromServer,
+  getAggregateFromServer,
+  sum,
+  onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  deleteObject
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+import { ENV } from '../config/env-config.js';
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'duydodeesport.firebaseapp.com',
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'duydodeesport',
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'duydodeesport.appspot.com',
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '30514101130',
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:30514101130:web:1ec44f2b09367468132e49',
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || 'G-7EC2RQZH22'
+  apiKey: ENV.FIREBASE.API_KEY,
+  authDomain: ENV.FIREBASE.AUTH_DOMAIN,
+  projectId: ENV.FIREBASE.PROJECT_ID,
+  storageBucket: ENV.FIREBASE.STORAGE_BUCKET,
+  messagingSenderId: ENV.FIREBASE.MESSAGING_SENDER_ID,
+  appId: ENV.FIREBASE.APP_ID,
+  measurementId: ENV.FIREBASE.MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -28,14 +61,40 @@ const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
 
 export {
-    db, auth, storage, googleProvider,
-    signInWithPopup, onAuthStateChanged, signOut,
-    signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail,
-    collection, collectionGroup, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
-    query, where, orderBy, limit, serverTimestamp, increment, startAfter, writeBatch,
-    getCountFromServer, getAggregateFromServer, sum, onSnapshot,
-    ref, getDownloadURL, uploadBytes, deleteObject
+  db,
+  auth,
+  storage,
+  googleProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail,
+  collection,
+  collectionGroup,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
+  increment,
+  startAfter,
+  writeBatch,
+  getCountFromServer,
+  getAggregateFromServer,
+  sum,
+  onSnapshot,
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  deleteObject
 };
-
-
-

@@ -1,4 +1,17 @@
-import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from '../services/firebase.js';
+import {
+  db,
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  getCountFromServer,
+  SCHEMA,
+  getMediaWatchPath
+} from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -15,120 +28,131 @@ let allSeriesCache = [];
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        UI.initAdminSidebar();
-        initManageSeries();
-    } catch (err) {
-        console.error('Access Denied:', err);
-    }
+  try {
+    const { user } = await checkAdminAccess();
+    UI.setupSidebar(user);
+    UI.initAdminSidebar();
+    initManageSeries();
+  } catch (err) {
+    console.error('Access Denied:', err);
+  }
 });
 
 async function initManageSeries() {
-    UI.setLoading(true);
-    await updateSeriesCount();
-    loadSeries();
+  UI.setLoading(true);
+  await updateSeriesCount();
+  loadSeries();
 
-    const searchInput = document.getElementById('series-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', UI.debounce((e) => {
-            handleSearch(e.target.value.toLowerCase().trim());
-        }, 400));
-    }
+  const searchInput = document.getElementById('series-search');
+  if (searchInput) {
+    searchInput.addEventListener(
+      'input',
+      UI.debounce((e) => {
+        handleSearch(e.target.value.toLowerCase().trim());
+      }, 400)
+    );
+  }
 }
 
 async function updateSeriesCount() {
-    try {
-        const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.SERIES));
-        totalSeries = countSnap.data().count;
-    } catch (e) {
-        console.error('Count failed:', e);
-    }
+  try {
+    const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.SERIES));
+    totalSeries = countSnap.data().count;
+  } catch (e) {
+    console.error('Count failed:', e);
+  }
 }
 
 async function loadSeries() {
-    if (isSearchMode) {
-        return;
+  if (isSearchMode) {
+    return;
+  }
+
+  const tableBody = document.getElementById('series-full-list');
+  if (!tableBody) {
+    return;
+  }
+
+  tableBody.innerHTML =
+    '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังดึงข้อมูลจากศูนย์ควบคุม</p></td></tr>';
+
+  try {
+    const cursor = cursors[currentPage - 1];
+    let q = query(
+      collection(db, SCHEMA.COLLECTIONS.SERIES),
+      orderBy('createdAt', 'desc'),
+      limit(PAGE_SIZE)
+    );
+    if (cursor) {
+      q = query(q, startAfter(cursor));
     }
 
-    const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) {
-        return;
+    const snap = await getDocs(q);
+
+    if (!snap.empty) {
+      cursors[currentPage] = snap.docs[snap.docs.length - 1];
+      renderSeries(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      updatePaginationUI();
+    } else if (currentPage > 1) {
+      currentPage--;
+      loadSeries();
+    } else {
+      renderSeries([]);
     }
-
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังดึงข้อมูลจากศูนย์ควบคุม</p></td></tr>';
-
-    try {
-        const cursor = cursors[currentPage - 1];
-        let q = query(collection(db, SCHEMA.COLLECTIONS.SERIES), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursor) {
-            q = query(q, startAfter(cursor));
-        }
-
-        const snap = await getDocs(q);
-
-        if (!snap.empty) {
-            cursors[currentPage] = snap.docs[snap.docs.length - 1];
-            renderSeries(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-            updatePaginationUI();
-        } else if (currentPage > 1) {
-            currentPage--;
-            loadSeries();
-        } else {
-            renderSeries([]);
-        }
-    } catch (error) {
-        console.error('Error loading series:', error);
-        UI.showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error');
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถเชื่อมต่อฐานข้อมูลได้</td></tr>';
-    } finally {
-        UI.setLoading(false);
-    }
+  } catch (error) {
+    console.error('Error loading series:', error);
+    UI.showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error');
+    tableBody.innerHTML =
+      '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถเชื่อมต่อฐานข้อมูลได้</td></tr>';
+  } finally {
+    UI.setLoading(false);
+  }
 }
 
 async function handleSearch(term) {
-    const tableBody = document.getElementById('series-full-list');
-    const pagContainer = document.getElementById('pagination-container');
+  const tableBody = document.getElementById('series-full-list');
+  const pagContainer = document.getElementById('pagination-container');
 
-    if (!term) {
-        isSearchMode = false;
-        pagContainer?.classList.remove('hidden');
-        loadSeries();
-        return;
+  if (!term) {
+    isSearchMode = false;
+    pagContainer?.classList.remove('hidden');
+    loadSeries();
+    return;
+  }
+
+  isSearchMode = true;
+  pagContainer?.classList.add('hidden');
+  tableBody.innerHTML =
+    '<tr><td colspan="5" class="py-10 text-center text-brand-primary Thai-font text-xs animate-pulse">กำลังค้นหาในคลังซีรีส์...</td></tr>';
+
+  try {
+    if (allSeriesCache.length === 0) {
+      const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES), limit(500)));
+      allSeriesCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     }
 
-    isSearchMode = true;
-    pagContainer?.classList.add('hidden');
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-brand-primary Thai-font text-xs animate-pulse">กำลังค้นหาในคลังซีรีส์...</td></tr>';
+    const filtered = allSeriesCache.filter(
+      (s) =>
+        s.title?.toLowerCase().includes(term) ||
+        s.category?.toLowerCase().includes(term) ||
+        s.id.toLowerCase().includes(term)
+    );
 
-    try {
-        if (allSeriesCache.length === 0) {
-            const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.SERIES), limit(500)));
-            allSeriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-
-        const filtered = allSeriesCache.filter(s =>
-            s.title?.toLowerCase().includes(term) ||
-            s.category?.toLowerCase().includes(term) ||
-            s.id.toLowerCase().includes(term)
-        );
-
-        renderSeries(filtered);
-    } catch (e) {
-        console.error('Search failed:', e);
-        UI.showToast('การค้นหาล้มเหลว', 'error');
-    }
+    renderSeries(filtered);
+  } catch (e) {
+    console.error('Search failed:', e);
+    UI.showToast('การค้นหาล้มเหลว', 'error');
+  }
 }
 
 function renderSeries(seriesList) {
-    const tableBody = document.getElementById('series-full-list');
-    if (!tableBody) {
-        return;
-    }
+  const tableBody = document.getElementById('series-full-list');
+  if (!tableBody) {
+    return;
+  }
 
-    if (seriesList.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
+  if (seriesList.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
             <div class="flex flex-col items-center gap-6">
                 <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                     <i data-lucide="tv" class="w-10 h-10 text-gray-500"></i>
@@ -136,11 +160,13 @@ function renderSeries(seriesList) {
                 <p class="text-sm font-black text-gray-500 uppercase tracking-[0.4em] Thai-font">ไม่มีข้อมูลซีรีส์ในระบบ</p>
             </div>
         </td></tr>`;
-        UI.refreshIcons();
-        return;
-    }
+    UI.refreshIcons();
+    return;
+  }
 
-    tableBody.innerHTML = seriesList.map(series => `
+  tableBody.innerHTML = seriesList
+    .map(
+      (series) => `
         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
             <td class="py-4 text-center">
                 <div class="relative inline-block">
@@ -190,23 +216,25 @@ function renderSeries(seriesList) {
                 </div>
             </td>
         </tr>
-    `).join('');
+    `
+    )
+    .join('');
 
-    UI.refreshIcons();
+  UI.refreshIcons();
 }
 
 function updatePaginationUI() {
-    const container = document.getElementById('pagination-container');
-    if (!container || isSearchMode) {
-        if (container) {
-            container.innerHTML = '';
-        }
-        return;
+  const container = document.getElementById('pagination-container');
+  if (!container || isSearchMode) {
+    if (container) {
+      container.innerHTML = '';
     }
+    return;
+  }
 
-    const totalPages = Math.ceil(totalSeries / PAGE_SIZE) || 1;
+  const totalPages = Math.ceil(totalSeries / PAGE_SIZE) || 1;
 
-    container.innerHTML = `
+  container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md">
             <button id="prev-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary hover:border-brand-primary/50 transition-all disabled:opacity-20 disabled:pointer-events-none" ${currentPage === 1 ? 'disabled' : ''}>
                 <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -223,36 +251,37 @@ function updatePaginationUI() {
         </div>
     `;
 
-    document.getElementById('prev-btn')?.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--; loadSeries();
-        }
-    });
-    document.getElementById('next-btn')?.addEventListener('click', () => {
-        currentPage++; loadSeries();
-    });
-    UI.refreshIcons();
+  document.getElementById('prev-btn')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      loadSeries();
+    }
+  });
+  document.getElementById('next-btn')?.addEventListener('click', () => {
+    currentPage++;
+    loadSeries();
+  });
+  UI.refreshIcons();
 }
 
 window.deleteSeries = async (id) => {
-    if (!confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
-        return;
-    }
+  if (
+    !confirm('ยืนยันการลบซีรีส์ชุดนี้และตอนทั้งหมดที่เกี่ยวข้อง? การกระทำนี้ไม่สามารถย้อนคืนได้')
+  ) {
+    return;
+  }
 
-    UI.setLoading(true);
-    try {
-        await deleteDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, id));
-        UI.showToast('ลบซีรีส์เรียบร้อยแล้ว', 'success');
+  UI.setLoading(true);
+  try {
+    await deleteDoc(doc(db, SCHEMA.COLLECTIONS.SERIES, id));
+    UI.showToast('ลบซีรีส์เรียบร้อยแล้ว', 'success');
 
-        await updateSeriesCount();
-        loadSeries();
-    } catch (error) {
-        console.error('Error deleting series:', error);
-        UI.showToast('ไม่สามารถลบข้อมูลได้', 'error');
-    } finally {
-        UI.setLoading(false);
-    }
+    await updateSeriesCount();
+    loadSeries();
+  } catch (error) {
+    console.error('Error deleting series:', error);
+    UI.showToast('ไม่สามารถลบข้อมูลได้', 'error');
+  } finally {
+    UI.setLoading(false);
+  }
 };
-
-
-

@@ -18,10 +18,10 @@ class AnalyticsService {
 
     // Load Google Analytics
     this.loadGoogleAnalytics();
-    
+
     // Setup page tracking
     this.setupPageTracking();
-    
+
     // Setup error tracking
     this.setupErrorTracking();
   }
@@ -36,6 +36,7 @@ class AnalyticsService {
 
       // Initialize gtag
       window.dataLayer = window.dataLayer || [];
+      const dataLayer = window.dataLayer;
       window.gtag = function() {
         dataLayer.push(arguments);
       };
@@ -83,7 +84,9 @@ class AnalyticsService {
   }
 
   trackPageView(path, title) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('event', 'page_view', {
@@ -116,7 +119,9 @@ class AnalyticsService {
   }
 
   trackError(errorName, errorDetails = {}) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('event', 'exception', {
@@ -131,7 +136,9 @@ class AnalyticsService {
 
   // Custom Event Tracking
   trackEvent(eventName, eventParameters = {}) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('event', eventName, eventParameters);
@@ -274,7 +281,9 @@ class AnalyticsService {
 
   // Custom Dimensions
   setUserProperties(properties) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('set', 'user_properties', properties);
@@ -284,7 +293,9 @@ class AnalyticsService {
   }
 
   setUserId(userId) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('config', this.trackingId, {
@@ -356,7 +367,9 @@ class AnalyticsService {
 
   // Disable tracking (for privacy)
   disableTracking() {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('config', this.trackingId, {
@@ -371,7 +384,9 @@ class AnalyticsService {
 
   // Enable tracking
   enableTracking() {
-    if (this.isEnabled) return;
+    if (this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('config', this.trackingId, {
@@ -386,7 +401,9 @@ class AnalyticsService {
 
   // Consent Management
   grantConsent() {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('consent', 'update', {
@@ -398,7 +415,9 @@ class AnalyticsService {
   }
 
   denyConsent() {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
 
     try {
       window.gtag('consent', 'update', {

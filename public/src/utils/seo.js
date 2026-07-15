@@ -7,7 +7,8 @@ class SEOManager {
   constructor() {
     this.siteName = import.meta.env.VITE_SITE_NAME || 'DUYDODEE PREMIUM';
     this.siteUrl = import.meta.env.VITE_SITE_URL || 'https://duydodee.web.app';
-    this.defaultDescription = 'แพลตฟอร์มบริหารจัดการทรัพยากรกราฟิกฟุตบอลระดับพรีเมียม (Cinematic Sport Edition)';
+    this.defaultDescription =
+      'แพลตฟอร์มบริหารจัดการทรัพยากรกราฟิกฟุตบอลระดับพรีเมียม (Cinematic Sport Edition)';
     this.init();
   }
 
@@ -36,7 +37,7 @@ class SEOManager {
     this.setMetaTag('og:url', window.location.href, 'property');
     this.setMetaTag('og:type', 'website', 'property');
     this.setMetaTag('og:site_name', this.siteName, 'property');
-    
+
     // Twitter Card
     this.setMetaTag('twitter:card', 'summary_large_image');
     this.setMetaTag('twitter:title', title);
@@ -46,26 +47,26 @@ class SEOManager {
 
   setMetaTag(name, content, attribute = 'name') {
     let meta = document.querySelector(`meta[${attribute}="${name}"]`);
-    
+
     if (!meta) {
       meta = document.createElement('meta');
       meta.setAttribute(attribute, name);
       document.head.appendChild(meta);
     }
-    
+
     meta.setAttribute('content', content);
   }
 
   // Update canonical URL
   updateCanonicalURL(url = window.location.href) {
     let canonical = document.querySelector('link[rel="canonical"]');
-    
+
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    
+
     canonical.setAttribute('href', url);
   }
 
@@ -90,13 +91,13 @@ class SEOManager {
 
   injectStructuredData(data) {
     let script = document.querySelector('script[type="application/ld+json"]');
-    
+
     if (!script) {
       script = document.createElement('script');
       script.setAttribute('type', 'application/ld+json');
       document.head.appendChild(script);
     }
-    
+
     script.textContent = JSON.stringify(data);
   }
 
@@ -234,8 +235,9 @@ class SEOManager {
 
   // Generate sitemap (for dynamic sitemaps)
   generateSitemapURLs(urls) {
-    return urls.map(url => {
-      return `
+    return urls
+      .map((url) => {
+        return `
         <url>
           <loc>${this.siteUrl}${url.loc}</loc>
           <lastmod>${url.lastmod || new Date().toISOString()}</lastmod>
@@ -243,25 +245,26 @@ class SEOManager {
           <priority>${url.priority || '0.5'}</priority>
         </url>
       `;
-    }).join('');
+      })
+      .join('');
   }
 
   // Generate robots.txt content
   generateRobotsTxt(disallowPaths = []) {
     let content = `User-agent: *\n`;
-    
-    disallowPaths.forEach(path => {
+
+    disallowPaths.forEach((path) => {
       content += `Disallow: ${path}\n`;
     });
-    
+
     content += `\nSitemap: ${this.siteUrl}/sitemap.xml`;
-    
+
     return content;
   }
 
   // Add hreflang tags for multilingual support
   addHreflangTags(languages) {
-    languages.forEach(lang => {
+    languages.forEach((lang) => {
       const link = document.createElement('link');
       link.setAttribute('rel', 'alternate');
       link.setAttribute('hreflang', lang.code);
@@ -272,7 +275,7 @@ class SEOManager {
 
   // Preconnect to external domains
   addPreconnectDomains(domains) {
-    domains.forEach(domain => {
+    domains.forEach((domain) => {
       const link = document.createElement('link');
       link.setAttribute('rel', 'preconnect');
       link.setAttribute('href', domain);
@@ -282,7 +285,7 @@ class SEOManager {
 
   // Add DNS prefetch
   addDNSPrefetch(domains) {
-    domains.forEach(domain => {
+    domains.forEach((domain) => {
       const link = document.createElement('link');
       link.setAttribute('rel', 'dns-prefetch');
       link.setAttribute('href', domain);

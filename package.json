@@ -1,7 +1,7 @@
 {
-  "name": "web",
+  "name": "duydodee-premium",
   "version": "1.0.0",
-  "description": "> แพลตฟอร์มบริหารจัดการทรัพยากรกราฟิกฟุตบอลระดับพรีเมียม (Cinematic Sport Edition)",
+  "description": "แพลตฟอร์มสตรีมมิ่ง 4K HDR ระดับพรีเมียม DUYดูDEE PREMIUM",
   "directories": {
     "doc": "docs"
   },
@@ -17,10 +17,13 @@
     "lint": "eslint public/src/**/*.js",
     "lint:fix": "eslint public/src/**/*.js --fix",
     "format": "prettier --write \"public/src/**/*.js\"",
+    "format:check": "prettier --check \"public/src/**/*.js\"",
     "clean": "rm -rf dist .firebase",
     "predeploy": "npm run lint && npm run build:prod",
     "deploy": "firebase deploy",
-    "deploy:hosting": "firebase deploy --only hosting"
+    "deploy:hosting": "firebase deploy --only hosting",
+    "validate": "npm run lint && npm run format:check && npm run test",
+    "quality": "npm run lint && npm run format && npm run test"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +42,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.14",
     "terser": "^5.48.0",
     "vite": "^8.0.14"

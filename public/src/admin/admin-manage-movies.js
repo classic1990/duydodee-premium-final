@@ -1,4 +1,17 @@
-import { db, collection, getDocs, doc, deleteDoc, query, orderBy, limit, startAfter, getCountFromServer, SCHEMA, getMediaWatchPath } from '../services/firebase.js';
+import {
+  db,
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  getCountFromServer,
+  SCHEMA,
+  getMediaWatchPath
+} from '../services/firebase.js';
 import { UI } from '../components/ui.js';
 import { checkAdminAccess } from '../middleware/auth-guard.js';
 
@@ -15,120 +28,131 @@ let allMoviesCache = [];
 let isSearchMode = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const { user } = await checkAdminAccess();
-        UI.setupSidebar(user);
-        UI.initAdminSidebar();
-        initManageMovies();
-    } catch (err) {
-        console.error('Access Denied:', err);
-    }
+  try {
+    const { user } = await checkAdminAccess();
+    UI.setupSidebar(user);
+    UI.initAdminSidebar();
+    initManageMovies();
+  } catch (err) {
+    console.error('Access Denied:', err);
+  }
 });
 
 async function initManageMovies() {
-    UI.setLoading(true);
+  UI.setLoading(true);
 
-    await updateMovieCount();
-    loadMovies();
+  await updateMovieCount();
+  loadMovies();
 
-    const searchInput = document.getElementById('movie-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', UI.debounce((e) => {
-            handleSearch(e.target.value.toLowerCase().trim());
-        }, 400));
-    }
+  const searchInput = document.getElementById('movie-search');
+  if (searchInput) {
+    searchInput.addEventListener(
+      'input',
+      UI.debounce((e) => {
+        handleSearch(e.target.value.toLowerCase().trim());
+      }, 400)
+    );
+  }
 }
 
 async function updateMovieCount() {
-    try {
-        const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.MOVIES));
-        totalMovies = countSnap.data().count;
-    } catch (e) {
-        console.error('Count failed:', e);
-    }
+  try {
+    const countSnap = await getCountFromServer(collection(db, SCHEMA.COLLECTIONS.MOVIES));
+    totalMovies = countSnap.data().count;
+  } catch (e) {
+    console.error('Count failed:', e);
+  }
 }
 
 async function loadMovies() {
-    if (isSearchMode) {
-        return;
+  if (isSearchMode) {
+    return;
+  }
+
+  const tableBody = document.getElementById('movies-full-list');
+  if (!tableBody) {
+    return;
+  }
+
+  tableBody.innerHTML =
+    '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังซิงค์ข้อมูลหนัง</p></td></tr>';
+
+  try {
+    let q = query(
+      collection(db, SCHEMA.COLLECTIONS.MOVIES),
+      orderBy('createdAt', 'desc'),
+      limit(PAGE_SIZE)
+    );
+    if (cursors[currentPage - 1]) {
+      q = query(q, startAfter(cursors[currentPage - 1]));
     }
 
-    const tableBody = document.getElementById('movies-full-list');
-    if (!tableBody) {
-        return;
+    const snap = await getDocs(q);
+
+    if (!snap.empty) {
+      cursors[currentPage] = snap.docs[snap.docs.length - 1];
+      renderMovies(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      updatePaginationUI();
+    } else if (currentPage > 1) {
+      currentPage--;
+      loadMovies();
+    } else {
+      renderMovies([]);
     }
-
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-20 text-center Thai-font"><div class="inline-block w-8 h-8 border-2 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div><p class="mt-4 text-[10px] text-gray-500 uppercase tracking-widest animate-pulse">กำลังซิงค์ข้อมูลหนัง</p></td></tr>';
-
-    try {
-        let q = query(collection(db, SCHEMA.COLLECTIONS.MOVIES), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-        if (cursors[currentPage - 1]) {
-            q = query(q, startAfter(cursors[currentPage - 1]));
-        }
-
-        const snap = await getDocs(q);
-
-        if (!snap.empty) {
-            cursors[currentPage] = snap.docs[snap.docs.length - 1];
-            renderMovies(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-            updatePaginationUI();
-        } else if (currentPage > 1) {
-            currentPage--;
-            loadMovies();
-        } else {
-            renderMovies([]);
-        }
-    } catch (error) {
-        console.error('Error loading movies:', error);
-        UI.showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error');
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถดึงข้อมูลได้</td></tr>';
-    } finally {
-        UI.setLoading(false);
-    }
+  } catch (error) {
+    console.error('Error loading movies:', error);
+    UI.showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error');
+    tableBody.innerHTML =
+      '<tr><td colspan="5" class="py-10 text-center text-red-500 Thai-font text-xs">ไม่สามารถดึงข้อมูลได้</td></tr>';
+  } finally {
+    UI.setLoading(false);
+  }
 }
 
 async function handleSearch(term) {
-    const tableBody = document.getElementById('movies-full-list');
-    const pagContainer = document.getElementById('pagination-container');
+  const tableBody = document.getElementById('movies-full-list');
+  const pagContainer = document.getElementById('pagination-container');
 
-    if (!term) {
-        isSearchMode = false;
-        pagContainer?.classList.remove('hidden');
-        loadMovies();
-        return;
+  if (!term) {
+    isSearchMode = false;
+    pagContainer?.classList.remove('hidden');
+    loadMovies();
+    return;
+  }
+
+  isSearchMode = true;
+  pagContainer?.classList.add('hidden');
+  tableBody.innerHTML =
+    '<tr><td colspan="5" class="py-10 text-center text-brand-primary Thai-font text-xs animate-pulse">กำลังค้นหาชื่อเรื่องที่ต้องการ...</td></tr>';
+
+  try {
+    if (allMoviesCache.length === 0) {
+      const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.MOVIES), limit(500)));
+      allMoviesCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     }
 
-    isSearchMode = true;
-    pagContainer?.classList.add('hidden');
-    tableBody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-brand-primary Thai-font text-xs animate-pulse">กำลังค้นหาชื่อเรื่องที่ต้องการ...</td></tr>';
+    const filtered = allMoviesCache.filter(
+      (m) =>
+        m.title?.toLowerCase().includes(term) ||
+        m.category?.toLowerCase().includes(term) ||
+        m.id.toLowerCase().includes(term)
+    );
 
-    try {
-        if (allMoviesCache.length === 0) {
-            const snap = await getDocs(query(collection(db, SCHEMA.COLLECTIONS.MOVIES), limit(500)));
-            allMoviesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-
-        const filtered = allMoviesCache.filter(m =>
-            m.title?.toLowerCase().includes(term) ||
-            m.category?.toLowerCase().includes(term) ||
-            m.id.toLowerCase().includes(term)
-        );
-
-        renderMovies(filtered);
-    } catch (e) {
-        console.error('Search failed:', e);
-        UI.showToast('การค้นหาล้มเหลว', 'error');
-    }
+    renderMovies(filtered);
+  } catch (e) {
+    console.error('Search failed:', e);
+    UI.showToast('การค้นหาล้มเหลว', 'error');
+  }
 }
 
 function renderMovies(movies) {
-    const tableBody = document.getElementById('movies-full-list');
-    if (!tableBody) {
-        return;
-    }
+  const tableBody = document.getElementById('movies-full-list');
+  if (!tableBody) {
+    return;
+  }
 
-    if (movies.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
+  if (movies.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5" class="py-24 text-center animate-fade-in opacity-40">
             <div class="flex flex-col items-center gap-6">
                 <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                     <i data-lucide="film" class="w-10 h-10 text-gray-500"></i>
@@ -136,11 +160,13 @@ function renderMovies(movies) {
                 <p class="text-sm font-black text-gray-500 uppercase tracking-[0.4em] Thai-font">ไม่มีข้อมูลภาพยนตร์ในระบบ</p>
             </div>
         </td></tr>`;
-        UI.refreshIcons();
-        return;
-    }
+    UI.refreshIcons();
+    return;
+  }
 
-    tableBody.innerHTML = movies.map(movie => `
+  tableBody.innerHTML = movies
+    .map(
+      (movie) => `
         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
             <td class="py-4 text-center">
                 <div class="relative inline-block">
@@ -190,23 +216,25 @@ function renderMovies(movies) {
                 </div>
             </td>
         </tr>
-    `).join('');
+    `
+    )
+    .join('');
 
-    UI.refreshIcons();
+  UI.refreshIcons();
 }
 
 function updatePaginationUI() {
-    const container = document.getElementById('pagination-container');
-    if (!container || isSearchMode) {
-        if (container) {
-            container.innerHTML = '';
-        }
-        return;
+  const container = document.getElementById('pagination-container');
+  if (!container || isSearchMode) {
+    if (container) {
+      container.innerHTML = '';
     }
+    return;
+  }
 
-    const totalPages = Math.ceil(totalMovies / PAGE_SIZE) || 1;
+  const totalPages = Math.ceil(totalMovies / PAGE_SIZE) || 1;
 
-    container.innerHTML = `
+  container.innerHTML = `
         <div class="flex items-center gap-6 bg-black/20 p-2 px-6 rounded-2xl border border-white/5 backdrop-blur-md">
             <button id="prev-btn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-brand-primary transition-all disabled:opacity-20 disabled:pointer-events-none" ${currentPage === 1 ? 'disabled' : ''}>
                 <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -223,36 +251,35 @@ function updatePaginationUI() {
         </div>
     `;
 
-    document.getElementById('prev-btn')?.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--; loadMovies();
-        }
-    });
-    document.getElementById('next-btn')?.addEventListener('click', () => {
-        currentPage++; loadMovies();
-    });
-    UI.refreshIcons();
+  document.getElementById('prev-btn')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      loadMovies();
+    }
+  });
+  document.getElementById('next-btn')?.addEventListener('click', () => {
+    currentPage++;
+    loadMovies();
+  });
+  UI.refreshIcons();
 }
 
 window.deleteMovie = async (id) => {
-    if (!confirm('ยืนยันการลบข้อมูลหนังเรื่องนี้? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
-        return;
-    }
+  if (!confirm('ยืนยันการลบข้อมูลหนังเรื่องนี้? การกระทำนี้ไม่สามารถย้อนคืนได้')) {
+    return;
+  }
 
-    UI.setLoading(true);
-    try {
-        await deleteDoc(doc(db, SCHEMA.COLLECTIONS.MOVIES, id));
-        UI.showToast('ลบข้อมูลเรียบร้อยแล้ว', 'success');
+  UI.setLoading(true);
+  try {
+    await deleteDoc(doc(db, SCHEMA.COLLECTIONS.MOVIES, id));
+    UI.showToast('ลบข้อมูลเรียบร้อยแล้ว', 'success');
 
-        await updateMovieCount();
-        loadMovies();
-    } catch (error) {
-        console.error('Error deleting movie:', error);
-        UI.showToast('ไม่สามารถลบข้อมูลได้', 'error');
-    } finally {
-        UI.setLoading(false);
-    }
+    await updateMovieCount();
+    loadMovies();
+  } catch (error) {
+    console.error('Error deleting movie:', error);
+    UI.showToast('ไม่สามารถลบข้อมูลได้', 'error');
+  } finally {
+    UI.setLoading(false);
+  }
 };
-
-
-

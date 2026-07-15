@@ -1622,9 +1622,6 @@ h3{
 .gap-4{
   gap: 1rem;
 }
-.gap-5{
-  gap: 1.25rem;
-}
 .gap-6{
   gap: 1.5rem;
 }
@@ -1831,9 +1828,6 @@ h3{
 .border-white\/20{
   border-color: rgb(255 255 255 / 0.2);
 }
-.border-white\/30{
-  border-color: rgb(255 255 255 / 0.3);
-}
 .border-white\/5{
   border-color: rgb(255 255 255 / 0.05);
 }
@@ -1847,10 +1841,6 @@ h3{
 .border-t-brand-primary{
   --tw-border-opacity: 1;
   border-top-color: rgb(229 9 20 / var(--tw-border-opacity, 1));
-}
-.border-t-white{
-  --tw-border-opacity: 1;
-  border-top-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
 }
 .\!bg-yellow-500\/20{
   background-color: rgb(234 179 8 / 0.2) !important;
@@ -2235,9 +2225,6 @@ h3{
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
-.pb-10{
-  padding-bottom: 2.5rem;
-}
 .pb-3{
   padding-bottom: 0.75rem;
 }
@@ -2369,6 +2356,9 @@ h3{
 }
 .uppercase{
   text-transform: uppercase;
+}
+.lowercase{
+  text-transform: lowercase;
 }
 .italic{
   font-style: italic;
@@ -2659,9 +2649,6 @@ h3{
 .ring-red-500\/10{
   --tw-ring-color: rgb(239 68 68 / 0.1);
 }
-.ring-yellow-500\/10{
-  --tw-ring-color: rgb(234 179 8 / 0.1);
-}
 .blur{
   --tw-blur: blur(8px);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -2841,9 +2828,6 @@ h3{
 }
 .hover\:bg-white\/10:hover{
   background-color: rgb(255 255 255 / 0.1);
-}
-.hover\:bg-white\/40:hover{
-  background-color: rgb(255 255 255 / 0.4);
 }
 .hover\:bg-white\/5:hover{
   background-color: rgb(255 255 255 / 0.05);
@@ -3111,10 +3095,6 @@ h3{
 
   .md\:gap-6{
     gap: 1.5rem;
-  }
-
-  .md\:gap-8{
-    gap: 2rem;
   }
 
   .md\:space-y-2 > :not([hidden]) ~ :not([hidden]){

@@ -3,6 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: 'public',
+  envDir: '../',
   server: {
     open: '/index.html',
     headers: {
@@ -12,7 +13,36 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug']
+      }
+    },
     rollupOptions: {
+      output: {
+        manualChunks(id) {
+          const normalizedId = id.replace(/\\/g, '/');
+          if (normalizedId.includes('node_modules/firebase') || normalizedId.includes('node_modules/@firebase')) {
+            return 'firebase-vendor';
+          }
+          if (
+            normalizedId.includes('src/utils/logger.js') ||
+            normalizedId.includes('src/utils/error-handler.js') ||
+            normalizedId.includes('src/utils/validator.js')
+          ) {
+            return 'utils';
+          }
+          if (
+            normalizedId.includes('src/services/auth-service.js') ||
+            normalizedId.includes('src/services/content-service.js')
+          ) {
+            return 'services';
+          }
+        }
+      },
       input: {
         main: resolve('public/index.html'),
         category: resolve('public/category.html'),
@@ -37,6 +67,7 @@ export default defineConfig({
         'admin-users': resolve('public/admin/admin-users.html'),
         'admin-vip-payments': resolve('public/admin/admin-vip-payments.html')
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000
   }
 });

@@ -56,9 +56,6 @@ export const checkIsAdmin = AuthService.checkIsAdmin;
 export const saveWatchHistory = AuthService.saveWatchHistory;
 export const getWatchHistory = AuthService.getWatchHistory;
 export const updateDailyStats = async (dateId, statData) => {
-    const { ContentService } = await import('./content-service.js');
-    return ContentService.updateDailyStats(dateId, statData);
+  const { ContentService } = await import('./content-service.js');
+  return ContentService.updateDailyStats(dateId, statData);
 };
-
-
-

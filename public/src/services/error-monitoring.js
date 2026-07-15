@@ -19,7 +19,7 @@ class ErrorMonitoringService {
 
     // Initialize Sentry (if CDN is available)
     this.initSentry();
-    
+
     // Setup global error handlers
     this.setupGlobalHandlers();
   }
@@ -38,14 +38,14 @@ class ErrorMonitoringService {
             tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
             replaysSessionSampleRate: 0.1, // 10% of sessions for replay
             replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors for replay
-            
+
             beforeSend(event, hint) {
               // Filter out sensitive data
               if (event.request) {
                 delete event.request.cookies;
                 delete event.request.headers;
               }
-              
+
               // Add custom context
               event.contexts = {
                 ...event.contexts,
@@ -54,11 +54,11 @@ class ErrorMonitoringService {
                   version: import.meta.env.VITE_APP_VERSION || '1.0.0'
                 }
               };
-              
+
               return event;
             }
           });
-          
+
           console.log('Sentry initialized successfully');
         }
       };
@@ -92,15 +92,22 @@ class ErrorMonitoringService {
     });
 
     // Handle resource loading errors
-    window.addEventListener('error', (event) => {
-      if (event.target !== window) {
-        this.captureError(new Error(`Resource load failed: ${event.target.src || event.target.href}`), {
-          type: 'resource_load_error',
-          tagName: event.target.tagName,
-          source: event.target.src || event.target.href
-        });
-      }
-    }, true);
+    window.addEventListener(
+      'error',
+      (event) => {
+        if (event.target !== window) {
+          this.captureError(
+            new Error(`Resource load failed: ${event.target.src || event.target.href}`),
+            {
+              type: 'resource_load_error',
+              tagName: event.target.tagName,
+              source: event.target.src || event.target.href
+            }
+          );
+        }
+      },
+      true
+    );
   }
 
   captureError(error, context = {}) {
@@ -147,7 +154,9 @@ class ErrorMonitoringService {
   }
 
   setUserContext(user) {
-    if (!this.isEnabled || !window.Sentry) return;
+    if (!this.isEnabled || !window.Sentry) {
+      return;
+    }
 
     try {
       window.Sentry.setUser({
@@ -162,7 +171,9 @@ class ErrorMonitoringService {
   }
 
   clearUserContext() {
-    if (!this.isEnabled || !window.Sentry) return;
+    if (!this.isEnabled || !window.Sentry) {
+      return;
+    }
 
     try {
       window.Sentry.setUser(null);
@@ -172,7 +183,9 @@ class ErrorMonitoringService {
   }
 
   addBreadcrumb(breadcrumb) {
-    if (!this.isEnabled || !window.Sentry) return;
+    if (!this.isEnabled || !window.Sentry) {
+      return;
+    }
 
     try {
       window.Sentry.addBreadcrumb({
@@ -185,7 +198,9 @@ class ErrorMonitoringService {
   }
 
   startTransaction(name, op) {
-    if (!this.isEnabled || !window.Sentry) return null;
+    if (!this.isEnabled || !window.Sentry) {
+      return null;
+    }
 
     try {
       return window.Sentry.startTransaction({
@@ -226,8 +241,9 @@ class ErrorMonitoringService {
       'auth/user-disabled': 'บัญชีผู้ใช้ถูกระงับ'
     };
 
-    const errorMessage = authErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการยืนยันตัวตน';
-    
+    const errorMessage =
+      authErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการยืนยันตัวตน';
+
     this.captureError(error, {
       type: 'auth_error',
       code: error.code,
@@ -239,13 +255,14 @@ class ErrorMonitoringService {
 
   handleNetworkError(error) {
     const networkErrors = {
-      'NETWORK_ERROR': 'ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้',
-      'TIMEOUT_ERROR': 'การเชื่อมต่อหมดเวลา',
-      'SERVER_ERROR': 'เซิร์ฟเวอร์ขัดข้อง'
+      NETWORK_ERROR: 'ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้',
+      TIMEOUT_ERROR: 'การเชื่อมต่อหมดเวลา',
+      SERVER_ERROR: 'เซิร์ฟเวอร์ขัดข้อง'
     };
 
-    const errorMessage = networkErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
-    
+    const errorMessage =
+      networkErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+
     this.captureError(error, {
       type: 'network_error',
       code: error.code,
@@ -259,11 +276,12 @@ class ErrorMonitoringService {
     const contentErrors = {
       'permission-denied': 'ไม่มีสิทธิ์เข้าถึงเนื้อหา',
       'not-found': 'ไม่พบเนื้อหา',
-      'unavailable': 'เนื้อหาไม่พร้อมใช้งาน'
+      unavailable: 'เนื้อหาไม่พร้อมใช้งาน'
     };
 
-    const errorMessage = contentErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการโหลดเนื้อหา';
-    
+    const errorMessage =
+      contentErrors[error.code] || error.message || 'เกิดข้อผิดพลาดในการโหลดเนื้อหา';
+
     this.captureError(error, {
       type: 'content_error',
       code: error.code,
