@@ -3,7 +3,7 @@
  * Tests for UI utility functions and components
  */
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 
 describe('UI Components', () => {
   beforeEach(() => {

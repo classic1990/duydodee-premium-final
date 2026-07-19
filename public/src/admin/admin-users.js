@@ -84,17 +84,17 @@ async function loadUsers() {
     }
 
     const snap = await getDocs(q);
-    const users = snap.docs.map((doc) => ({ uid: doc.id, ...doc.data() }));
+    const users = snap.docs.map((userDoc) => ({ uid: userDoc.id, ...userDoc.data() }));
 
     userCache.clear();
     users.forEach((u) => userCache.set(u.uid, u));
 
-    if (!snap.empty) {
+    if (snap.empty) {
+      renderUsers([]);
+    } else {
       cursors[currentPage] = snap.docs[snap.docs.length - 1];
       renderUsers(users);
       updatePaginationUI();
-    } else {
-      renderUsers([]);
     }
   } catch (error) {
     console.error('Load Error:', error);
@@ -220,8 +220,8 @@ function setupSearch() {
   }
   input.addEventListener(
     'input',
-    UI.debounce(async (e) => {
-      const term = e.target.value.trim().toLowerCase();
+    UI.debounce(async (event) => {
+      const term = event.target.value.trim().toLowerCase();
       if (!term) {
         isSearchMode = false;
         loadUsers();

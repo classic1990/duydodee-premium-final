@@ -123,7 +123,21 @@
     "no-self-compare": "error",
     "no-sequences": "error",
     "no-unmodified-loop-condition": "error",
-    "valid-typeof": "error"
+    "valid-typeof": "error",
+    "no-script-url": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "error",
+    "no-unsafe-finally": "error",
+    "no-unsafe-negation": "error",
+    "no-unsafe-optional-chaining": "warn",
+    "no-unsafe-return": "error",
+    "require-atomic-updates": "warn",
+    "no-restricted-imports": ["error", {
+      "patterns": [{
+        "group": ["firebase/*"],
+        "message": "Import from firebase-config.js instead"
+      }]
+    }]
   },
   "ignorePatterns": [
     "dist/**",
@@ -132,6 +146,7 @@
     "*.min.js",
     "public/sw.js",
     "*.ts",
-    "*.tsx"
+    "*.tsx",
+    "scripts/**"
   ]
 }

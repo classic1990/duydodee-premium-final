@@ -133,8 +133,6 @@ class PerformanceOptimizer {
     const end = performance.now();
     const duration = end - start;
 
-    console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
-
     // Send to analytics if available
     if (window.errorMonitoring) {
       window.errorMonitoring.trackPerformance(name, duration);
@@ -149,8 +147,6 @@ class PerformanceOptimizer {
       const result = await asyncFn();
       const end = performance.now();
       const duration = end - start;
-
-      console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
 
       if (window.errorMonitoring) {
         window.errorMonitoring.trackPerformance(name, duration);
@@ -312,7 +308,6 @@ class PerformanceOptimizer {
     if ('serviceWorker' in navigator) {
       try {
         const registration = await navigator.serviceWorker.register(swPath);
-        console.log('Service Worker registered:', registration);
 
         // Check for updates
         registration.addEventListener('updatefound', () => {
@@ -320,14 +315,12 @@ class PerformanceOptimizer {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
               // New version available
-              console.log('New content is available; please refresh.');
             }
           });
         });
 
         return registration;
       } catch (error) {
-        console.error('Service Worker registration failed:', error);
         if (window.errorMonitoring) {
           window.errorMonitoring.captureError(error, {
             type: 'service_worker_error'

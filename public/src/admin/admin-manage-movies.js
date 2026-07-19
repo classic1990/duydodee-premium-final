@@ -91,7 +91,7 @@ async function loadMovies() {
 
     if (!snap.empty) {
       cursors[currentPage] = snap.docs[snap.docs.length - 1];
-      renderMovies(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      renderMovies(snap.docs.map((movieDoc) => ({ id: movieDoc.id, ...movieDoc.data() })));
       updatePaginationUI();
     } else if (currentPage > 1) {
       currentPage--;

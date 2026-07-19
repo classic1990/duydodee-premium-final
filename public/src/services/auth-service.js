@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
   addDoc,
   serverTimestamp,
   collection,
@@ -201,13 +202,17 @@ export const AuthService = {
         updatedAt: serverTimestamp()
       };
 
-      if (!snap.exists()) {
+      if (snap.exists()) {
+        // User already exists, just update login time
+        await updateDoc(userRef, {
+          lastLogin: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      } else {
         data.role = SCHEMA.ROLES.MEMBER;
         data.createdAt = serverTimestamp();
         data.isBanned = false;
         await setDoc(userRef, data);
-      } else {
-        await setDoc(userRef, data, { merge: true });
       }
     } catch (err) {
       logger.error('Sync User Error', { error: err.message, userId: user?.uid });

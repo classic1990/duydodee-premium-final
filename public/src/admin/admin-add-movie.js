@@ -83,7 +83,7 @@ class MovieController extends BaseAdminController {
       this.elements.thumbnailOptionsContainer,
       AdminUtils.getThumbnailOptions(videoId),
       thumb,
-      (url, el) => this.selectPoster(url, el)
+      (posterUrl, el) => this.selectPoster(posterUrl, el)
     );
 
     // Check Duplicate & Fetch Info

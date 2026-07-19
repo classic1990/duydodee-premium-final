@@ -13,7 +13,6 @@ class ErrorMonitoringService {
 
   init() {
     if (!this.isEnabled || !this.sentryDSN) {
-      console.log('Error monitoring is disabled');
       return;
     }
 
@@ -39,7 +38,7 @@ class ErrorMonitoringService {
             replaysSessionSampleRate: 0.1, // 10% of sessions for replay
             replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors for replay
 
-            beforeSend(event, hint) {
+            beforeSend(event, _hint) {
               // Filter out sensitive data
               if (event.request) {
                 delete event.request.cookies;
@@ -59,7 +58,6 @@ class ErrorMonitoringService {
             }
           });
 
-          console.log('Sentry initialized successfully');
         }
       };
       script.onerror = () => {
@@ -135,7 +133,6 @@ class ErrorMonitoringService {
 
   captureMessage(message, level = 'info', context = {}) {
     if (!this.isEnabled) {
-      console.log(`[${level.toUpperCase()}] ${message}`, context);
       return;
     }
 
@@ -145,8 +142,6 @@ class ErrorMonitoringService {
           level: level,
           extra: context
         });
-      } else {
-        console.log(`[${level.toUpperCase()}] ${message}`, context);
       }
     } catch (e) {
       console.error('Failed to capture message:', e);
@@ -216,7 +211,6 @@ class ErrorMonitoringService {
   // Performance monitoring
   trackPerformance(metricName, value, tags = {}) {
     if (!this.isEnabled) {
-      console.log(`Performance: ${metricName} = ${value}ms`, tags);
       return;
     }
 

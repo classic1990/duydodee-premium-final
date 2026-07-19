@@ -27,16 +27,15 @@ async function init() {
   try {
     // Explicit email override for admin access
     const { user } = await checkAdminAccess();
-    if (user.email !== 'duyclassic191@gmail.com') {
+    if (user.email === 'duyclassic191@gmail.com') {
+      // Admin access granted
+    } else {
       const { AuthService } = await import('../services/auth-service.js');
       const isAdmin = await AuthService.checkIsAdmin(user);
       if (!isAdmin) {
-        console.error('Access Denied. Role is not Admin.');
         window.location.href = '/';
         return;
       }
-    } else {
-      console.log('Access Granted via Email Override');
     }
 
     UI.setupSidebar(user);
@@ -93,8 +92,8 @@ function setupPaymentForm() {
       const docRef = doc(db, 'site_settings', 'payment_info');
       await updateDoc(docRef, { wallet, name });
       UI.showToast('อัปเดตข้อมูลบัญชีสำเร็จ');
-    } catch (e) {
-      console.error('Error updating payment settings:', e);
+    } catch (error) {
+      console.error('Error updating payment settings:', error);
       UI.showToast('อัปเดตข้อมูลไม่สำเร็จ', 'error');
     }
   };

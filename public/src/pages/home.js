@@ -115,11 +115,6 @@ class HomeController {
       UI.renderSkeleton(container, UI_CONFIG.PAGE_SIZE);
     }
 
-    console.log(
-      `[DEBUG] Loading Page: ${this.pageNumber + 1}, Cursor:`,
-      this.pageCursors[this.pageNumber]
-    );
-
     try {
       const res =
         this.currentType === 'all'
@@ -132,8 +127,6 @@ class HomeController {
             pageSize: UI_CONFIG.PAGE_SIZE,
             lastDoc: this.pageCursors[this.pageNumber]
           });
-
-      console.log(`[DEBUG] Items loaded: ${res.items.length}, NextLastDoc:`, res.lastDoc);
 
       this.isEndOfContent = res.items.length < UI_CONFIG.PAGE_SIZE;
       if (res.items.length > 0 && res.lastDoc) {

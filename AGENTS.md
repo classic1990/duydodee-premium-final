@@ -54,7 +54,9 @@ npm run test:watch       # Run tests in watch mode
 npm run lint             # Run ESLint
 npm run lint:fix         # Fix ESLint issues
 npm run format           # Format code with Prettier
-npm audit                # Run security audit
+npm run security:audit   # Run security audit
+npm run security:fix     # Fix security issues
+npm run health:check     # Run project health check
 ```
 
 #### Deployment
@@ -111,6 +113,8 @@ Required variables (see `.env.example`):
 - Integration tests for services
 - E2E tests for critical user flows
 - Coverage target: 70%+
+- Health check script for project validation
+- CI/CD testing with `npm run test:ci`
 
 ### 🚦 CI/CD Pipeline
 - Automated testing on push

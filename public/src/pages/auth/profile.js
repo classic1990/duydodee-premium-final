@@ -14,7 +14,6 @@ import {
   orderBy,
   limit
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { AuthService } from '../../services/auth-service.js';
 
 class ProfileController extends BaseController {
   setupForm() {

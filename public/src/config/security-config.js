@@ -126,7 +126,6 @@ function applySecurityHeaders() {
 function setupCSP() {
   // CSP is typically set via server headers
   // This is a placeholder for any client-side CSP handling
-  console.log('🔒 CSP initialized');
 }
 
 /**

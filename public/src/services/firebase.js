@@ -4,6 +4,7 @@
 
 import * as FirebaseConfig from './firebase-config.js';
 import { AuthService } from './auth-service.js';
+import { ContentService } from './content-service.js';
 import { SCHEMA as SchemaConstants } from '../constants.js';
 import { UIUtils } from '../utils/ui-utils.js';
 
@@ -56,6 +57,5 @@ export const checkIsAdmin = AuthService.checkIsAdmin;
 export const saveWatchHistory = AuthService.saveWatchHistory;
 export const getWatchHistory = AuthService.getWatchHistory;
 export const updateDailyStats = async (dateId, statData) => {
-  const { ContentService } = await import('./content-service.js');
   return ContentService.updateDailyStats(dateId, statData);
 };

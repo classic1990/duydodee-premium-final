@@ -12,7 +12,6 @@ class AnalyticsService {
 
   init() {
     if (!this.isEnabled || !this.trackingId) {
-      console.log('Analytics is disabled');
       return;
     }
 
@@ -48,7 +47,6 @@ class AnalyticsService {
         cookie_flags: 'samesite=none;secure'
       });
 
-      console.log('Google Analytics initialized');
     } catch (error) {
       console.error('Failed to load Google Analytics:', error);
     }

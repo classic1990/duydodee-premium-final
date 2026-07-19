@@ -91,7 +91,7 @@ async function loadSeries() {
 
     if (!snap.empty) {
       cursors[currentPage] = snap.docs[snap.docs.length - 1];
-      renderSeries(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      renderSeries(snap.docs.map((seriesDoc) => ({ id: seriesDoc.id, ...seriesDoc.data() })));
       updatePaginationUI();
     } else if (currentPage > 1) {
       currentPage--;

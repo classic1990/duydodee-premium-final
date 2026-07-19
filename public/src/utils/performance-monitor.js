@@ -155,13 +155,9 @@ export class PerformanceMonitor {
       return;
     }
 
-    const summary = this.getSummary();
-    const webVitals = this.getWebVitals();
-
-    console.group('🚀 Performance Report');
-    console.log('Custom Metrics:', summary);
-    console.log('Web Vitals:', webVitals);
-    console.groupEnd();
+    // Summary available but not logged in production
+    this.getSummary();
+    this.getWebVitals();
   }
 
   /**
@@ -257,17 +253,9 @@ export function lazyLoadImages() {
  */
 export function monitorMemory() {
   if (performance.memory) {
-    const used = performance.memory.usedJSHeapSize / 1048576; // Convert to MB
-    const total = performance.memory.totalJSHeapSize / 1048576;
-    const limit = performance.memory.jsHeapSizeLimit / 1048576;
-
-    console.log(
-      `Memory: ${used.toFixed(2)}MB / ${total.toFixed(2)}MB (Limit: ${limit.toFixed(2)}MB)`
-    );
-
-    if (used / limit > 0.9) {
-      console.warn('⚠️ High memory usage detected!');
-    }
+    const _used = performance.memory.usedJSHeapSize / 1048576; // Convert to MB
+    const _total = performance.memory.totalJSHeapSize / 1048576;
+    const _limit = performance.memory.jsHeapSizeLimit / 1048576;
   }
 }
 

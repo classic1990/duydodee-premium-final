@@ -29,7 +29,14 @@ async function initCategoryPage() {
   if (catSlug === 'vertical' && !typeSlug) {
     typeSlug = 'series';
   }
-  const targetCollection = typeSlug === 'movie' ? 'movie' : typeSlug === 'series' ? 'series' : null;
+  let targetCollection;
+  if (typeSlug === 'movie') {
+    targetCollection = 'movie';
+  } else if (typeSlug === 'series') {
+    targetCollection = 'series';
+  } else {
+    targetCollection = null;
+  }
   if (!targetCollection && !catSlug) {
     window.location.href = '/404.html';
     return;
