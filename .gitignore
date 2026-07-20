@@ -47,6 +47,7 @@ ui-debug.log*
 
 # Documentation (Keep minimal)
 BUGFIXES.md
+CODE_OF_CONDUCT.md
 
 # Config Files (Environment Specific)
 cors.json

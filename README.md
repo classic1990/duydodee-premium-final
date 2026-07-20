@@ -100,6 +100,9 @@ npm install
 cp .env.example .env.local
 # Edit .env.local with your configuration
 
+# IMPORTANT: Setup Firebase API key
+# See FIREBASE_SETUP.md for detailed instructions
+
 # Run development server
 npm run dev
 ```
@@ -222,9 +225,9 @@ npm run health:check
 - [Deployment Guide](docs/DEPLOYMENT.md) - คู่มือการ Deploy
 - [Backup Strategy](docs/BACKUP_STRATEGY.md) - ยุทธศาสตร์การ Backup
 - [Service Account Setup](SERVICE_ACCOUNT_SETUP.md) - การตั้งค่า Service Account
+- [Firebase Setup Guide](FIREBASE_SETUP.md) - การตั้งค่า Firebase API Key
 - [Contributing Guidelines](CONTRIBUTING.md) - แนวทางการมีส่วนร่วม
 - [Security Guidelines](SECURITY.md) - แนวทางความปลอดภัย
-- [Code of Conduct](CODE_OF_CONDUCT.md) - จรรยาบรรณ
 
 ## 🔒 Security Best Practices
 

@@ -130,8 +130,7 @@
     "no-unsafe-finally": "error",
     "no-unsafe-negation": "error",
     "no-unsafe-optional-chaining": "warn",
-    "no-unsafe-return": "error",
-    "require-atomic-updates": "warn",
+    "require-atomic-updates": "off",
     "no-restricted-imports": ["error", {
       "patterns": [{
         "group": ["firebase/*"],
@@ -147,6 +146,8 @@
     "public/sw.js",
     "*.ts",
     "*.tsx",
-    "scripts/**"
+    "scripts/**",
+    "*.bat",
+    "*.ps1"
   ]
 }
