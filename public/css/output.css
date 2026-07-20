@@ -519,6 +519,7 @@ body{
   -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
     line-height: 1.7;
+    background: linear-gradient(135deg, #050507 0%, #0a0a0f 50%, #050507 100%);
 }
 
 h1, h2, h3, h4, .Thai-font {
@@ -526,13 +527,24 @@ h1, h2, h3, h4, .Thai-font {
   }
 
 h1{
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  --tw-gradient-from: #fff var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: rgb(229 231 235 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), #e5e7eb var(--tw-gradient-via-position), var(--tw-gradient-to);
+  --tw-gradient-to: #E50914 var(--tw-gradient-to-position);
+  -webkit-background-clip: text;
+          background-clip: text;
   font-size: 2.25rem;
   font-weight: 900;
   text-transform: uppercase;
   font-style: italic;
+  line-height: 1.25;
   letter-spacing: -0.05em;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  color: transparent;
 }
 
 @media (min-width: 768px){
@@ -543,12 +555,21 @@ h1{
 }
 
 h2{
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  --tw-gradient-from: #fff var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #d1d5db var(--tw-gradient-to-position);
+  -webkit-background-clip: text;
+          background-clip: text;
   font-size: 1.5rem;
   font-weight: 900;
   text-transform: uppercase;
+  line-height: 1.375;
   letter-spacing: -0.025em;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  color: transparent;
 }
 
 @media (min-width: 768px){
@@ -562,6 +583,7 @@ h3{
   font-size: 1.125rem;
   font-weight: 700;
   text-transform: uppercase;
+  line-height: 1.625;
   letter-spacing: 0.1em;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
@@ -571,6 +593,7 @@ h3{
   font-size: 10px;
   font-weight: 900;
   text-transform: uppercase;
+  line-height: 1.25;
   letter-spacing: 0.2em;
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity, 1));
@@ -579,6 +602,7 @@ h3{
 .text-body{
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1.625;
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity, 1));
 }
@@ -645,14 +669,14 @@ h3{
   max-width: 80rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 @media (min-width: 768px){
 
   .layout-container{
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }
 .glass-premium{
@@ -665,7 +689,8 @@ h3{
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   --tw-backdrop-blur: blur(64px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    background: linear-gradient(135deg, rgba(11, 11, 15, 0.9) 0%, rgba(13, 13, 15, 0.85) 100%);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 0 30px rgba(229, 9, 20, 0.1);
 }
 .nav-glass{
   border-bottom-width: 1px;
@@ -681,8 +706,11 @@ h3{
 /* 🎬 Buttons with Neon Luxury Glow */
 .btn-primary{
   border-radius: 0.75rem;
-  --tw-bg-opacity: 1;
-  background-color: rgb(251 191 36 / var(--tw-bg-opacity, 1));
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  --tw-gradient-from: #fbbf24 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(251 191 36 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #f59e0b var(--tw-gradient-to-position);
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-top: 0.75rem;
@@ -709,16 +737,21 @@ h3{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .btn-primary {
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 4px 15px rgba(251, 191, 36, 0.2);
   }
 .btn-primary:hover {
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 6px 20px rgba(251, 191, 36, 0.3);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%);
   }
 .btn-secondary{
   border-radius: 0.75rem;
   border-width: 1px;
   border-color: rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.05);
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  --tw-gradient-from: rgb(255 255 255 / 0.05) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: rgb(255 255 255 / 0.1) var(--tw-gradient-to-position);
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-top: 0.75rem;
@@ -746,10 +779,14 @@ h3{
 }
 .btn-secondary:hover{
   border-color: rgb(229 9 20 / 0.5);
-  background-color: rgb(255 255 255 / 0.1);
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  --tw-gradient-from: rgb(255 255 255 / 0.1) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: rgb(255 255 255 / 0.15) var(--tw-gradient-to-position);
   --tw-text-opacity: 1;
   color: rgb(229 9 20 / var(--tw-text-opacity, 1));
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2), 0 4px 15px rgba(251, 191, 36, 0.1);
 }
 /* 🎬 Movie Card Modernized */
 .movie-poster-wrapper{
@@ -774,8 +811,14 @@ h3{
   --tw-scale-y: 1.03;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   border-color: rgb(229 9 20 / 0.4);
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
 }
+.movie-poster-wrapper {
+    background: linear-gradient(135deg, #0a0a0f 0%, #121214 100%);
+  }
+.movie-poster-wrapper:hover {
+    box-shadow: 0 0 30px rgba(229, 9, 20, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(229, 9, 20, 0.5);
+  }
 .movie-poster-img{
   position: absolute;
   inset: 0px;
@@ -791,6 +834,9 @@ h3{
   --tw-scale-x: 1.1;
   --tw-scale-y: 1.1;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.movie-poster-wrapper:hover .movie-poster-overlay{
+  opacity: 1;
 }
 /* 📱 Device Player Frame */
 .device-frame{
@@ -888,23 +934,23 @@ h3{
   pointer-events: none;
   position: absolute;
   border-radius: 9999px;
-  opacity: 0.15;
+  opacity: 0.2;
   mix-blend-mode: screen;
-    width: 600px;
-    height: 600px;
-    filter: blur(140px);
-    animation: blob-float 25s infinite alternate ease-in-out;
+    width: 700px;
+    height: 700px;
+    filter: blur(120px);
+    animation: blob-float 20s infinite alternate ease-in-out;
 }
 .blob-1 {
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
-    top: -10%;
-    left: -10%;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.3) 0%, rgba(251, 191, 36, 0.2) 50%, transparent 70%);
+    top: -15%;
+    left: -15%;
   }
 .blob-2 {
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
-    bottom: -10%;
-    right: -10%;
-    animation-delay: -12s;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, rgba(229, 9, 20, 0.15) 50%, transparent 70%);
+    bottom: -15%;
+    right: -15%;
+    animation-delay: -10s;
   }
 @keyframes blob-float {
     0% { transform: translate(0, 0) scale(1); }
@@ -926,9 +972,9 @@ h3{
   position: absolute;
   border-radius: 0.125rem;
     inset: 0;
-    border: 1px solid #fbbf24;
-    box-shadow: 0 0 8px #fbbf24, inset 0 0 4px #fbbf24;
-    animation: border-beam-anim 4s linear infinite;
+    border: 1px solid #E50914;
+    box-shadow: 0 0 8px #E50914, inset 0 0 4px #E50914;
+    animation: border-beam-anim 3s linear infinite;
 }
 @keyframes border-beam-anim {
     0%, 100% { clip-path: inset(0 0 92% 0); }
@@ -936,6 +982,7 @@ h3{
     50% { clip-path: inset(92% 0 0 0); }
     75% { clip-path: inset(0 92% 0 0); }
   }
+/* Premium Glow Effects */
 .sr-only{
   position: absolute;
   width: 1px;
